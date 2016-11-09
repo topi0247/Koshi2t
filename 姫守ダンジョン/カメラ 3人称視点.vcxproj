@@ -91,6 +91,8 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Charactor\CharactorManager.cpp" />
+    <ClCompile Include="Charactor\Player\PlayerManager.cpp" />
+    <ClCompile Include="DebugDraw\D3D11_TEXT.cpp" />
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="Main_Scene.cpp" />
     <ClCompile Include="Mesh\CD3DXMESH_ANIM.cpp" />
@@ -100,7 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CharactorManager.h" />
+    <ClInclude Include="Charactor\CharactorManager.h" />
+    <ClInclude Include="Charactor\Player\PlayerManager.h" />
+    <ClInclude Include="DebugDraw\D3D11_TEXT.h" />
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Main_Scene.h" />
     <ClInclude Include="Mesh\CD3DXMESH_ANIM.h" />

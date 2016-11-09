@@ -5,7 +5,7 @@
 //ヘッダーファイルのインクルード
 #include "Origin.h"
 #include "Main_Scene.h"
-//#include "./Camera.h"
+#include "./Camera.h"
 //
 //
 //
@@ -31,5 +31,5 @@ public:
 
 	Main_Scene* mainScene_;		//ゲームメインシーンクラス
 	//Stage* stageMesh_;
-	//Camera* camera_;
+	Camera* camera_;
 };

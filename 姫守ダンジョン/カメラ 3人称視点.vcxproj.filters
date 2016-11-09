@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="MAIN.cpp" />
+    <ClCompile Include="Mesh\CD3DXMESH_ANIM.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Read\tinyxml2.cpp">
+      <Filter>Read</Filter>
+    </ClCompile>
+    <ClCompile Include="Read\XFileRead.cpp">
+      <Filter>Read</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Main_Scene.cpp" />
+    <ClCompile Include="DebugDraw\D3D11_TEXT.cpp">
+      <Filter>DebugDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\CharactorManager.cpp">
+      <Filter>Charactor</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\PlayerManager.cpp">
+      <Filter>Charactor\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MAIN.h" />
+    <ClInclude Include="Origin.h" />
+    <ClInclude Include="Mesh\CD3DXMESH_ANIM.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Read\tinyxml2.h">
+      <Filter>Read</Filter>
+    </ClInclude>
+    <ClInclude Include="Read\XFileRead.h">
+      <Filter>Read</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Main_Scene.h" />
+    <ClInclude Include="DebugDraw\D3D11_TEXT.h">
+      <Filter>DebugDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\CharactorManager.h">
+      <Filter>Charactor</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\PlayerManager.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{5045c8c2-bd03-4872-8847-de577fa7bdb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charactor">
+      <UniqueIdentifier>{61aeb25a-2e5c-407e-8f73-282c63cb259e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{31141600-4ad4-4b2a-a7d8-a5daaf8d3dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Read">
+      <UniqueIdentifier>{9826b7cb-ab0e-4dc9-98c4-00fd39099b5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugDraw">
+      <UniqueIdentifier>{a8e5d67b-4ee1-44e2-8f02-0fc293af0aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charactor\Player">
+      <UniqueIdentifier>{02a1c571-d0b1-4a0a-94bd-28277ef0801a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

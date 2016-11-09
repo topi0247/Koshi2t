@@ -7,6 +7,7 @@
 #include "./Origin.h"
 #include "./Read/XFileRead.h"
 #include "./Stage/Stage.h"
+#include "./Charactor/CharactorManager.h"
 
 class Main_Scene
 {

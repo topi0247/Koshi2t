@@ -350,7 +350,8 @@ HRESULT CD3DXMESH_ANIM::CreateAppMeshFromD3DXMesh(LPD3DXFRAME p)
 			lstrlenA(pFrame->pMeshContainer->pMaterials[i].pTextureFilename) > 0 )
 		{
 			pAppMesh->Tex=true;
-			strcpy(pAppMesh->pMaterial[i].szTextureName,pFrame->pMeshContainer->pMaterials[i].pTextureFilename);
+			strcpy(pAppMesh->pMaterial[i].szTextureName, "./Model/Textures/");
+			strcat(pAppMesh->pMaterial[i].szTextureName,pFrame->pMeshContainer->pMaterials[i].pTextureFilename);
 			//テクスチャーを作成
 			if(FAILED(D3DX11CreateShaderResourceViewFromFileA(m_pDevice11,
 				pAppMesh->pMaterial[i].szTextureName, NULL, NULL, &pAppMesh->pMaterial[i].pTexture, NULL )))
@@ -734,32 +735,4 @@ void CD3DXMESH_ANIM::DrawPartsMesh(PARTS_MESH* pPartsMesh,D3DXMATRIX World)
 		//プリミティブをレンダリング
 		m_pDeviceContext11->DrawIndexed(pPartsMesh->pMaterial[i].dwNumFace*3 , 0 ,0);
 	}
-}
-//
-//
-//
-void CD3DXMESH_ANIM::MoveForward(float Length)
-{
-	m_vPos+=m_AxisZ*Length;
-}
-//
-//
-//
-void CD3DXMESH_ANIM::MoveBackward(float Length)
-{
-	m_vPos+=m_AxisZ*-Length;
-}
-//
-//
-//
-void CD3DXMESH_ANIM::MoveStepLeft(float Length)
-{
-	m_vPos+=m_AxisX*-Length;
-}
-//
-//
-//
-void CD3DXMESH_ANIM::MoveStepRight(float Length)
-{
-	m_vPos+=m_AxisX*Length;
 }

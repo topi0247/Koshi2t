@@ -11,6 +11,7 @@
 Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
+
 }
 
 //

@@ -27,9 +27,9 @@ Stage::~Stage()
 //	@param (fileName)			Xƒtƒ@ƒCƒ‹–¼
 void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
 {
-	char FileName[30];
+	char FileName[80];
 	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/");
+	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Stage/");
 	strcat_s(FileName, sizeof(FileName), fileName);
 	if (FAILED(stageMesh_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
 	{

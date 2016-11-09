@@ -140,8 +140,4 @@ public:
 	void DrawFrame(LPD3DXFRAME p);
 	void DrawPartsMesh(PARTS_MESH* p,D3DXMATRIX World);
 	void UpdateHierarchyMatrices(D3DXFRAME* p,LPD3DXMATRIX pParentMatrix);
-	void MoveForward(float);
-	void MoveBackward(float);
-	void MoveStepLeft(float);
-	void MoveStepRight(float);
 };
