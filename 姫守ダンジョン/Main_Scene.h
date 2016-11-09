@@ -7,11 +7,12 @@
 #include "./Origin.h"
 #include "./Read/XFileRead.h"
 #include "./Stage/Stage.h"
-#include "./Charactor/CharactorManager.h"
+#include "./Charactor/Player/JobManager.h"
 
 class Main_Scene
 {
-	Stage* stage_;	//ステージ情報
+	Stage* stage_;				//ステージ情報
+	JobManager* virChar_;	//確認用仮キャラクター
 public:
 	Main_Scene();
 	~Main_Scene();

@@ -11,7 +11,7 @@
 Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
-
+	virChar_ = new SwordMan;
 }
 
 //
@@ -20,6 +20,8 @@ Main_Scene::~Main_Scene()
 {
 	delete stage_;
 	stage_ = nullptr;
+	delete virChar_;
+	virChar_ = nullptr;
 }
 
 //
@@ -36,13 +38,18 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//ステージのファイル読み込み
 	XFile* xfile = xfileRead->GetXFile("ステージ");
 	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	//仮キャラファイル読み込み
+	xfile = xfileRead->GetXFile("剣士");
+	virChar_->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
 }
 
 //
 //	@brief	更新
 void Main_Scene::Update()
 {
-
+	//仮キャラ更新
+	virChar_->CharaUpdate();
 }
 
 //
@@ -53,4 +60,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
 	//ステージの描画
 	stage_->Render(mView, mProj);
+
+	//仮キャラ描画
+	virChar_->CharaRender(mView, mProj);
 }

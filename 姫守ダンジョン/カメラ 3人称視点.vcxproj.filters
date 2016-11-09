@@ -25,6 +25,12 @@
     <ClCompile Include="Charactor\Player\PlayerManager.cpp">
       <Filter>Charactor\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Charactor\Player\GamePad.cpp">
+      <Filter>Charactor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\JobManager.cpp">
+      <Filter>Charactor\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -50,6 +56,12 @@
       <Filter>Charactor</Filter>
     </ClInclude>
     <ClInclude Include="Charactor\Player\PlayerManager.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\GamePad.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\JobManager.h">
       <Filter>Charactor\Player</Filter>
     </ClInclude>
   </ItemGroup>

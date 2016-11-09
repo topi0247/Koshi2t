@@ -41,7 +41,9 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 //	@param (fileName)			ì«Ç›çûÇﬁÉLÉÉÉâñº
 void CharactorManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
 {
-	char* FileName = Read(fileName);
+	char FileName[80] = { 0 };
+	memset(FileName, 0, sizeof(FileName));
+	strcpy_s(FileName, sizeof(FileName), Read(fileName));
 	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
 	{
 		return;
