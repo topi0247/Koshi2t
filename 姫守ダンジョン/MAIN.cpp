@@ -234,8 +234,9 @@ void MAIN::DestroyD3D()
 //更新処理
 void MAIN::Update()
 {
-	
+	mainScene_->Update();
 }
+
 //
 //
 //シーンを画面にレンダリング

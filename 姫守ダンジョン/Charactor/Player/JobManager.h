@@ -23,9 +23,8 @@ struct Parameter
 //	E‹ÆŠÇ—ƒNƒ‰ƒX
 class JobManager :public PlayerManager
 {
-	virtual const char* Read(const char* fileName);	//“Ç‚İ‚İ
 public:
-	JobManager();
+	JobManager(Controller controller);
 	virtual ~JobManager();
 	virtual void CharaUpdate();
 };
@@ -37,15 +36,17 @@ protected:
 	virtual void NormalAttack();
 	virtual void SpecialAttack();
 public:
+	SwordMan(Controller controller);
 };
 
 //	–‚“±mƒNƒ‰ƒX
 class Witch :public JobManager
 {
-protected:
+protected:	
 	virtual void NormalAttack();
 	virtual void SpecialAttack();
 public:
+	Witch(Controller controller);
 };
 
 //	‚mƒNƒ‰ƒX
@@ -55,13 +56,17 @@ protected:
 	virtual void NormalAttack();
 	virtual void SpecialAttack();
 public:
+	ShieldMan(Controller controller);
 };
 
 //	”š’emƒNƒ‰ƒX
 class Bomber :public JobManager
 {
+private:
+
 protected:
 	virtual void NormalAttack();
 	virtual void SpecialAttack();
 public:
+	Bomber(Controller controller);
 };

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Models Type="Player">
     <model fileName="Josh_Motion_Walk.x" charName="Œ•Žm"/>
-    <model fileName="Chara.x" charName="–‚“±Žm"/>
-    <model fileName="Chara.x" charName="‚Žm"/>
-    <model fileName="Chara.x" charName="”š’eŽm"/>
+    <model fileName="scale1.x" charName="–‚“±Žm"/>
+    <model fileName="scale1.x" charName="‚Žm"/>
+    <model fileName="scale1.x" charName="”š’eŽm"/>
 </Models>
 <Models Type="Enemy">
     <model fileName="scale1.x" charName="ƒXƒ‰ƒCƒ€"/>

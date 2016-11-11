@@ -12,7 +12,7 @@
 class Main_Scene
 {
 	Stage* stage_;				//ステージ情報
-	JobManager* virChar_;	//確認用仮キャラクター
+	JobManager** virChar_;	//確認用仮キャラクター
 public:
 	Main_Scene();
 	~Main_Scene();

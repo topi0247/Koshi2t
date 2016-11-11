@@ -6,18 +6,23 @@
 #pragma once
 #include "./../CharactorManager.h"
 #include "./GamePad.h"
+#include "./../../DebugDraw/D3D11_TEXT.h"
+
+enum Controller
+{
+	player1 = 0,
+	player2,
+	player3,
+	player4,
+};
 
 class PlayerManager : public CharactorManager
 {
+
+
 protected:
-	enum Controller
-	{
-		player1=0,
-		player2,
-		player3,
-		player4,
-	};
-	Controller controller_;
+
+	Controller controller_;	//Controller”Ô†
 
 	virtual void NormalAttack() = 0;	//’ÊíUŒ‚
 	virtual void SpecialAttack() = 0;	//“ÁêUŒ‚
@@ -25,9 +30,10 @@ protected:
 	virtual void Move(float speed);		//ˆÚ“®ˆ—
 	virtual void Dead();				//€–S
 	virtual void Motion_Update() {};	//ƒ‚[ƒVƒ‡ƒ“XV
-	void Queen_Lite();					//•P‚¿ã‚°
 	void Revival();						//•œŠˆ
 public:
-	PlayerManager();
+	PlayerManager() {};
 	virtual ~PlayerManager() {};
+
+	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);
 };

@@ -13,41 +13,33 @@ CharactorManager::CharactorManager()
 }
 
 //
-//	@brief					ノックバック処理
-//	@param (ownPos)			自身の座標
-//	@param (opponentPos)	相手の座標
-//	@param (distance)		ノックバック距離
-void CharactorManager::KnockBack(D3DXVECTOR3 ownPos, D3DXVECTOR3 opponentPos, float distance)
+//	@brief				ノックバック処理
+//	@param (atkPos)		攻撃が当たった地点の座標
+//	@param (distance)	ノックバックする距離
+void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
 {
+	//方向取得
+	D3DXVECTOR3 dir = m_vPos - atkPos;
 
+	//正規化
+	D3DXVec3Normalize(&dir,&dir);
+
+	//角度を算出
+	float angle = (atan2(dir.z, dir.x)*-1) - (D3DX_PI / 2.0f);
+
+	//ノックバックスピード
+	const float knockBackSpeed = 2.0f;
 }
 
 //
 //	@brief			キャラの回転処理
-//	@param (dieVec)	回転方向
+//	@param (dieVec)	回転の向き
 void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 {
 	//角度を算出
 	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
 	
 	m_fYaw = angel;
-}
-
-//
-//	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			読み込むキャラ名
-void CharactorManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
-{
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), Read(fileName));
-	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
-	{
-		return;
-	}
 }
 
 //

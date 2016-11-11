@@ -31,6 +31,7 @@
     <ClCompile Include="Charactor\Player\JobManager.cpp">
       <Filter>Charactor\Player</Filter>
     </ClCompile>
+    <ClCompile Include="ParameterRead.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -64,6 +65,7 @@
     <ClInclude Include="Charactor\Player\JobManager.h">
       <Filter>Charactor\Player</Filter>
     </ClInclude>
+    <ClInclude Include="ParameterRead.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">

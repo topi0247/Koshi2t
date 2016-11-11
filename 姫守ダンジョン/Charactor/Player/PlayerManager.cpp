@@ -6,10 +6,23 @@
 
 #include "PlayerManager.h"
 
+
 //
-//	@brief	コンストラクタ
-PlayerManager::PlayerManager()
+//	@brief						Xファイル読み込み
+//	@param (m_hWnd)				ウィンドウハンドル
+//	@param (m_pDevice)			デバイス
+//	@param (m_pDeviceContext)	デバイスコンテキスト
+//	@param (fileName)			読み込むキャラ名
+void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
 {
+	char FileName[80] = { 0 };
+	memset(FileName, 0, sizeof(FileName));
+	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
+	strcat_s(FileName, sizeof(FileName), fileName);
+	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
+	{
+		return;
+	}
 }
 
 //
@@ -34,6 +47,7 @@ void PlayerManager::Move(float speed)
 	}
 	m_vPos += D3DXVECTOR3(inputStick.x*sp, 0, inputStick.z*sp);
 
+	GamePad::update();
 }
 
 //
@@ -51,12 +65,6 @@ void PlayerManager::Attack()
 	SpecialAttack();
 }
 
-//
-//	@brief	姫持ち上げ
-void PlayerManager::Queen_Lite()
-{
-
-}
 
 //
 //	@brief	復活

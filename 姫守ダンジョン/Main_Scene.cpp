@@ -11,7 +11,11 @@
 Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
-	virChar_ = new SwordMan;
+	virChar_ = new JobManager * [4];
+	virChar_[player1] = new SwordMan(player1);
+	virChar_[player2] = new Witch(player2);
+	virChar_[player3] = new ShieldMan(player3);
+	virChar_[player4] = new Bomber(player4);
 }
 
 //
@@ -20,7 +24,13 @@ Main_Scene::~Main_Scene()
 {
 	delete stage_;
 	stage_ = nullptr;
-	delete virChar_;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete virChar_[i];
+		virChar_[i] = nullptr;
+	}
+	delete[] virChar_;
 	virChar_ = nullptr;
 }
 
@@ -41,7 +51,16 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	//‰¼ƒLƒƒƒ‰ƒtƒ@ƒCƒ‹“Ç‚Ýž‚Ý
 	xfile = xfileRead->GetXFile("Œ•Žm");
-	virChar_->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	virChar_[player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("–‚“±Žm");
+	virChar_[player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("‚Žm");
+	virChar_[player3]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("”š’eŽm");
+	virChar_[player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
 }
 
 //
@@ -49,7 +68,10 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 void Main_Scene::Update()
 {
 	//‰¼ƒLƒƒƒ‰XV
-	virChar_->CharaUpdate();
+	for (int i = 0; i < 4; i++)
+	{
+		virChar_[i]->CharaUpdate();
+	}
 }
 
 //
@@ -62,5 +84,8 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	stage_->Render(mView, mProj);
 
 	//‰¼ƒLƒƒƒ‰•`‰æ
-	virChar_->CharaRender(mView, mProj);
+	for (int i = 0; i < 4; i++)
+	{
+		virChar_[i]->CharaRender(mView, mProj);
+	}
 }
