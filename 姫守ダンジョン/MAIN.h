@@ -32,4 +32,5 @@ public:
 	Main_Scene* mainScene_;		//ゲームメインシーンクラス
 	//Stage* stageMesh_;
 	Camera* camera_;
+
 };

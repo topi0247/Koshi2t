@@ -178,7 +178,7 @@ Frame Frame_SCENE_ROOT {
      0.000000;0.000000;0.000000;;
      0.000000;0.000000;0.000000;;
      TextureFilename {
-      "./Model/Textures/pattern.bmp";
+      "pattern.bmp";
      }
     }
    }
