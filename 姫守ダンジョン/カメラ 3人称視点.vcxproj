@@ -91,6 +91,8 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Charactor\CharactorManager.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Charactor\Player\GamePad.cpp" />
     <ClCompile Include="Charactor\Player\JobManager.cpp" />
     <ClCompile Include="Charactor\Player\PlayerManager.cpp" />
@@ -106,6 +108,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Charactor\CharactorManager.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyJobManager.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyManager.h" />
     <ClInclude Include="Charactor\Player\GamePad.h" />
     <ClInclude Include="Charactor\Player\JobManager.h" />
     <ClInclude Include="Charactor\Player\PlayerManager.h" />

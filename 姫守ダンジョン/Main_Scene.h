@@ -8,11 +8,13 @@
 #include "./Read/XFileRead.h"
 #include "./Stage/Stage.h"
 #include "./Charactor/Player/JobManager.h"
+#include "./Charactor/Enemy/EnemyJobManager.h"
 
 class Main_Scene
 {
 	Stage* stage_;				//ステージ情報
 	JobManager** virChar_;	//確認用仮キャラクター
+	EnemyJobManager** virEnemy_;	//確認用仮キャラクター
 public:
 	Main_Scene();
 	~Main_Scene();

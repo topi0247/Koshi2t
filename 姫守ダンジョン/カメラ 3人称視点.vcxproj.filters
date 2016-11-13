@@ -32,6 +32,12 @@
       <Filter>Charactor\Player</Filter>
     </ClCompile>
     <ClCompile Include="ParameterRead.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyManager.cpp">
+      <Filter>Charactor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp">
+      <Filter>Charactor\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -66,6 +72,12 @@
       <Filter>Charactor\Player</Filter>
     </ClInclude>
     <ClInclude Include="ParameterRead.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyManager.h">
+      <Filter>Charactor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Enemy\EnemyJobManager.h">
+      <Filter>Charactor\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">
@@ -85,6 +97,9 @@
     </Filter>
     <Filter Include="Charactor\Player">
       <UniqueIdentifier>{02a1c571-d0b1-4a0a-94bd-28277ef0801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charactor\Enemy">
+      <UniqueIdentifier>{eee23a96-f9a4-41a4-ae5f-d6cbb075ee85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

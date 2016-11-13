@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Models Type="Player">
     <model fileName="Josh_Motion_Walk.x" charName="Œ•Žm"/>
-    <model fileName="scale1.x" charName="–‚“±Žm"/>
-    <model fileName="scale1.x" charName="‚Žm"/>
-    <model fileName="scale1.x" charName="”š’eŽm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="–‚“±Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="‚Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="”š’eŽm"/>
 </Models>
 <Models Type="Enemy">
-    <model fileName="scale1.x" charName="ƒXƒ‰ƒCƒ€"/>
-    <model fileName="scale1.x" charName="ƒSƒuƒŠƒ“"/>
-    <model fileName="scale1.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
+    <model fileName="slim2.x" charName="ƒXƒ‰ƒCƒ€"/>
+    <model fileName="Nbox.x" charName="ƒSƒuƒŠƒ“"/>
+    <model fileName="Nbox.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
 </Models>
 <Models Type="Queen">
     <model fileName="scale1.x" charName="•P"/>

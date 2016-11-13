@@ -1,6 +1,6 @@
 //
 //	@file	JobManager.h
-//	@brief	E‹Æ–ˆ‚Ìˆ—
+//	@brief	E‹Æ‚²‚Æ‚Ìˆ—
 //	@date	2016/11/10
 //	@outher	m‰È•c
 
@@ -62,8 +62,6 @@ public:
 //	”š’emƒNƒ‰ƒX
 class Bomber :public JobManager
 {
-private:
-
 protected:
 	virtual void NormalAttack();
 	virtual void SpecialAttack();
