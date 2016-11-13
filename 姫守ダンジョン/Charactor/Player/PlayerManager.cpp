@@ -36,7 +36,11 @@ void PlayerManager::Move(float speed)
 	inputStick.z = GamePad::getAnalogValue(controller_, GamePad::AnalogName::AnalogName_LeftStick_Y);
 
 	//‰ñ“]ˆ—
-	Rotation(inputStick);
+	const float rotEpsilon = 0.3;
+	if (fabsf(inputStick.x) > rotEpsilon|| fabsf(inputStick.z) > rotEpsilon)
+	{
+		Rotation(inputStick);
+	}
 
 	//ˆÚ“®
 	const float moveEpsilon = 0.2;	//Œëì–h~—p

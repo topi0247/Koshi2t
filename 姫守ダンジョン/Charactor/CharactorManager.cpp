@@ -49,4 +49,5 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 void CharactorManager::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
 	Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
+
 }

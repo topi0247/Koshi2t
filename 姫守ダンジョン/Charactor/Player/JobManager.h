@@ -23,6 +23,7 @@ struct Parameter
 //	E‹ÆŠÇ—ƒNƒ‰ƒX
 class JobManager :public PlayerManager
 {
+	virtual void Motion_Update();
 public:
 	JobManager(Controller controller);
 	virtual ~JobManager();

@@ -72,6 +72,7 @@ void Main_Scene::Update()
 	{
 		virChar_[i]->CharaUpdate();
 	}
+
 }
 
 //

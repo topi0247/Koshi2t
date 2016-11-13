@@ -17,7 +17,26 @@ JobManager::~JobManager()
 
 void JobManager::CharaUpdate()
 {
+	Motion_Update();
 	Move(0.05);
+}
+
+void JobManager::Motion_Update()
+{
+	m_pAnimController->AdvanceTime(0.001, NULL);
+
+	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	{
+		ChangeMotion(walkM);
+		//motionNo_ = waitM;
+	}
+
+	if (GamePad::checkInput(controller_, GamePad::InputName::B))
+	{
+		ChangeMotion(waitM);
+		//motionNo_ = walkM;
+	}
+	//ChangeMotion(motionNo_);
 }
 
 //////////////////////////////////////////////

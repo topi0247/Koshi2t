@@ -234,6 +234,7 @@ void MAIN::DestroyD3D()
 //更新処理
 void MAIN::Update()
 {
+	camera_->Update();
 	mainScene_->Update();
 }
 
@@ -274,7 +275,7 @@ void MAIN::Render()
 	D3DXMATRIX mView = camera_->GetView();
 	D3DXMATRIX mProj = camera_->GetProj();
 	mainScene_->Render(mView, mProj);
-
+	
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
 }

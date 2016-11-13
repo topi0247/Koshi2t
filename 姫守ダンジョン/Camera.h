@@ -14,6 +14,10 @@ class Camera
 	D3DXMATRIX mProj_;
 	D3DXVECTOR3 movePow_;	//移動量
 	D3DXVECTOR3 gazePoint_;	//注視点
+	D3DXMATRIX oriMat_, tran_, yaw_;
+
+	float zoom;
+	void DebugMove();		//デバッグ用カメラ移動
 public:
 	Camera();
 	~Camera();
