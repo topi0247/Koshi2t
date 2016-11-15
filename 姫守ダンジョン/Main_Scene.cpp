@@ -165,7 +165,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "wall : %d", virChar_[player1]->GetWallHitFlg());
+	sprintf(str, "axis : %f", virChar_[player1]->m_AxisZ.z);
 	debugText_->Render(str, 0, 50);
 
 }

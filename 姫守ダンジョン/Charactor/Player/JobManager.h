@@ -7,6 +7,7 @@
 #pragma once
 #include "./../Player/PlayerManager.h"
 #include "./../../Read/ParameterRead.h"
+#include "./../../Collision.h"
 
 //	パラメータ
 struct PlayerParameter
@@ -25,7 +26,13 @@ struct PlayerParameter
 //	職業管理クラス
 class JobManager :public PlayerManager
 {
+protected:
+	unsigned int timeCount_;	//攻撃時間
+	unsigned int timeEnd_;		//攻撃終了時間
 	//void Motion_Update();
+
+	Collision* col_;
+
 public:
 	JobManager(Controller controller);
 	virtual ~JobManager();
@@ -35,17 +42,22 @@ public:
 //	剣士クラス
 class SwordMan :public JobManager
 {
-protected:
+private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
+	void Normal_Attack_Collision();
 public:
 	SwordMan(Controller controller);
+
+	//デバッグ用
+	float dist;
+	D3DXVECTOR3 nor;
 };
 
 //	魔導士クラス
 class Witch :public JobManager
 {
-protected:	
+private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
@@ -55,7 +67,7 @@ public:
 //	盾士クラス
 class ShieldMan :public JobManager
 {
-protected:
+private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
@@ -66,8 +78,6 @@ public:
 class Bomber :public JobManager
 {
 private:
-
-protected:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:

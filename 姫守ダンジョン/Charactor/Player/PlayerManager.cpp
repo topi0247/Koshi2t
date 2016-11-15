@@ -72,7 +72,6 @@ void PlayerManager::Move(float speed)
 	{
 		m_vPos -= D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 	}
-
 }
 
 //
@@ -91,7 +90,7 @@ void PlayerManager::Attack()
 		++attackCount_;
 		atkNo_ = waitAtk;
 	}
-	else if(atkNo_==waitAtk)
+	else if(atkNo_!=noAtk)
 	{
 		//unsigned int inputTime = playerParam_.chargeTime_;
 		unsigned int inputTime = 40;
@@ -105,7 +104,9 @@ void PlayerManager::Attack()
 			atkNo_ = specialAtk;
 			Special_Attack();
 		}
-
+	}
+	else if (atkNo_ == noAtk)
+	{
 		attackCount_ = 0;
 	}
 	//char str[256];
@@ -141,12 +142,12 @@ void PlayerManager::Revival()
 	aliveFlg_ = true;
 }
 
-//
-//	@brief	•PŒÄ‚Ñ
-D3DXVECTOR3 PlayerManager::Princess_Call()
-{
-	return m_vPos;
-}
+////
+////	@brief	•PŒÄ‚Ñ
+//D3DXVECTOR3 PlayerManager::Princess_Call()
+//{
+//	return m_vPos;
+//}
 
 //
 //	@brief	¶‘¶ƒtƒ‰ƒOæ“¾
