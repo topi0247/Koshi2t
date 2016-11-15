@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Models Type="Player">
-    <model fileName="RobotA_1motion_2truck.x" charName="Œ•Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="Œ•Žm"/>
     <model fileName="Josh_Motion_Walk.x" charName="–‚“±Žm"/>
     <model fileName="Josh_Motion_Walk.x" charName="‚Žm"/>
     <model fileName="Josh_Motion_Walk.x" charName="”š’eŽm"/>
 </Models>
 <Models Type="Enemy">
-    <model fileName="scale1.x" charName="ƒXƒ‰ƒCƒ€"/>
+    <model fileName="slim2.x" charName="ƒXƒ‰ƒCƒ€"/>
     <model fileName="scale1.x" charName="ƒSƒuƒŠƒ“"/>
     <model fileName="scale1.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
 </Models>
@@ -14,5 +14,5 @@
     <model fileName="scale1.x" charName="•P"/>
 </Models>
 <Models Type="Stage">
-    <model fileName="sky_city.x" charName="ƒXƒe[ƒW"/>
+    <model fileName="mabase.x" charName="ƒXƒe[ƒW"/>
 </Models>
