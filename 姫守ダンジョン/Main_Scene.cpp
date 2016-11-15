@@ -101,6 +101,8 @@ void Main_Scene::Update()
 	virEnemy_[0]->CheckNearPlayer(virChar_[player1]->GetOwnPos());
 	virEnemy_[0]->CharaUpdate();
 
+
+
 	//仮キャラ更新
 	for (int i = 0; i < 4; i++)
 	{
@@ -115,10 +117,22 @@ void Main_Scene::Update()
 //	@brief	衝突判定管理
 void Main_Scene::CollisionControl()
 {
-	//床との衝突判定
-
+	//当たり判定
+	float fDistance=0;
+	D3DXVECTOR3 vNormal;
 	//壁との衝突判定
+	
+	if (ray_->RayIntersect(virChar_[player1], stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
+	{
+		//当たり状態なので、滑らせる
+		virChar_[player1]->m_Dir = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
 
+		//滑りベクトル先の壁とのレイ判定 ２重に判定	
+		if (ray_->RayIntersect(virChar_[player1], stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+		{
+			virChar_[player1]->m_Dir = D3DXVECTOR3(0, 0, 0);//止める
+		}
+	}
 	//キャラクター同士の衝突判定
 
 }

@@ -34,7 +34,7 @@ void JobManager::CharaUpdate()
 	Motion_Update();
 
 	//ˆÚ“®
-	Move(0.05);
+	Move(0.5);
 }
 
 ////

@@ -94,10 +94,12 @@ class CD3DXMESH_ANIM
 {
 public:
 	//Data
+	D3DXMATRIX m_World;
 	HWND m_hWnd;
 	DWORD m_dwNumMaterial;
 	LPD3DXMESH m_pMesh;
 	D3DXVECTOR3 m_vPos;
+	D3DXVECTOR3 m_Dir;
 	float m_fYaw, m_fPitch, m_fRoll;
 	float m_fScale;
 	D3DXMATRIX m_View;
