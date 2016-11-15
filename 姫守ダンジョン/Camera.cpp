@@ -12,12 +12,21 @@ Camera::Camera()
 {
 	movePow_ = D3DXVECTOR3(0, 48, -40);
 	gazePoint_ = D3DXVECTOR3(0,0,0);
+	zoom = 4;
+
 }
 
 //
 //	@brief	デストラクタ
 Camera::~Camera()
 {
+}
+
+//
+//	@brief	更新
+void Camera::Update()
+{
+	DebugMove();
 }
 
 //
@@ -30,22 +39,44 @@ Camera::~Camera()
 void Camera::Render()
 {
 	// ３人称視点処理　ビュートランスフォーム カメラをキャラの後ろに配置するだけ
-	static D3DXVECTOR3 camPos=movePow_;
-	static D3DXVECTOR3 lookPos=gazePoint_;
+	D3DXVECTOR3 camPos=movePow_;
+	D3DXVECTOR3 lookPos=gazePoint_;
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置
 
-	//視点と注視点の両方をキャラの姿勢（回転と位置）行列で曲げて移動すればいい
-	
-	D3DXMATRIX OriMat, Tran, Yaw;
-	D3DXMatrixTranslation(&Tran, 0, 0, 0);
-	D3DXMatrixRotationY(&Yaw, 0);
-	OriMat = Yaw*Tran;
+	D3DXMatrixTranslation(&tran_, 0, 0, 0);
+	D3DXMatrixRotationY(&yaw_, 0);
+	oriMat_ = yaw_*tran_;
 
-	D3DXVec3TransformCoord(&camPos, &camPos, &OriMat);
-	D3DXVec3TransformCoord(&lookPos, &lookPos, &OriMat);
+	D3DXVec3TransformCoord(&camPos, &camPos, &oriMat_);
+	D3DXVec3TransformCoord(&lookPos, &lookPos, &oriMat_);
 
 	D3DXMatrixLookAtLH(&mView_, &camPos, &lookPos, &vUpVec);
 
 	// プロジェクショントランスフォーム（射影変換）
-	D3DXMatrixPerspectiveFovLH(&mProj_, D3DX_PI / 4, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
+	D3DXMatrixPerspectiveFovLH(&mProj_, D3DX_PI / zoom, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
+}
+
+//
+//	@brief	デバッグ用カメラ移動	
+void Camera::DebugMove()
+{
+	static float Yaw = 0, Roll = -11;
+	Yaw += -(GetKeyState(VK_LEFT) & 0x80)*0.0005 + (GetKeyState(VK_RIGHT) & 0x80)*0.0005;
+	Roll += -(GetKeyState(VK_DOWN) & 0x80)*0.001 + (GetKeyState(VK_UP) & 0x80)*0.001;
+	D3DXMatrixRotationY(&yaw_, Yaw);
+	gazePoint_ = D3DXVECTOR3(0, Roll, 10);
+	D3DXVec3TransformCoord(&gazePoint_, &gazePoint_, &yaw_);
+
+	movePow_.x += -(GetKeyState('A') & 0x80)*0.001 + (GetKeyState('D') & 0x80)*0.001;
+	movePow_.y += -(GetKeyState('Q') & 0x80)*0.001 + (GetKeyState('E') & 0x80)*0.001;
+	movePow_.z += -(GetKeyState('S') & 0x80)*0.001 + (GetKeyState('W') & 0x80)*0.001;
+
+	//リセット
+	if (GetKeyState(VK_SPACE) & 0x80)
+	{
+		movePow_ = D3DXVECTOR3(0, 48, -40);
+		Yaw = 0;
+		Roll = -11;
+	}
+
 }

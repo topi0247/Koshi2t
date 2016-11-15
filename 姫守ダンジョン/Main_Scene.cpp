@@ -11,7 +11,11 @@
 Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
-
+	virChar_ = new JobManager *[4];
+	virChar_[player1] = new SwordMan(player1);
+	virChar_[player2] = new Witch(player2);
+	virChar_[player3] = new ShieldMan(player3);
+	virChar_[player4] = new Bomber(player4);
 }
 
 //
@@ -20,6 +24,17 @@ Main_Scene::~Main_Scene()
 {
 	delete stage_;
 	stage_ = nullptr;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete virChar_[i];
+		virChar_[i] = nullptr;
+	}
+	delete[] virChar_;
+	virChar_ = nullptr;
+	
+	delete debugText_;
+	debugText_ = nullptr;
 }
 
 //
@@ -36,12 +51,57 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//ステージのファイル読み込み
 	XFile* xfile = xfileRead->GetXFile("ステージ");
 	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	//仮キャラファイル読み込み
+	xfile = xfileRead->GetXFile("剣士");
+	virChar_[player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("魔導士");
+	virChar_[player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("盾士");
+	virChar_[player3]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+
+	xfile = xfileRead->GetXFile("爆弾士");
+	virChar_[player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+}
+
+//
+//	@brief	デバッグ用初期化
+HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
+{
+	debugText_ = new D3D11_TEXT;
+	D3DXVECTOR4 vColor(1, 1, 1, 1);
+	if (FAILED(debugText_->Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
+	{
+		return E_FAIL;
+	}
+	return S_OK;
 }
 
 //
 //	@brief	更新
 void Main_Scene::Update()
 {
+	//仮キャラ更新
+	for (int i = 0; i < 4; i++)
+	{
+		virChar_[i]->CharaUpdate();
+	}
+
+	//衝突判定の更新
+	CollisionControl();
+}
+
+//
+//	@brief	衝突判定管理
+void Main_Scene::CollisionControl()
+{
+	//床との衝突判定
+
+	//壁との衝突判定
+
+	//キャラクター同士の衝突判定
 
 }
 
@@ -53,4 +113,21 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
 	//ステージの描画
 	stage_->Render(mView, mProj);
+
+	//仮キャラ描画
+	for (int i = 0; i < 4; i++)
+	{
+		virChar_[i]->CharaRender(mView, mProj);
+	}
+
+
+	//デバッグ描画
+	char str[256];
+	sprintf(str, "Atk(n-1 | s-2) : %d", virChar_[player1]->atk);
+	debugText_->Render(str, 0, 10);
+	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
+	debugText_->Render(str, 0, 30);
+	sprintf(str, "Rot : %d", (int)virChar_[player1]->GetYaw());
+	debugText_->Render(str, 0, 50);
+
 }

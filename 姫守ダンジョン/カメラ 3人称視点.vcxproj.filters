@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="MAIN.cpp" />
-    <ClCompile Include="Mesh\CD3DXMESH_ANIM.cpp">
-      <Filter>Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Read\tinyxml2.cpp">
       <Filter>Read</Filter>
     </ClCompile>
@@ -25,13 +22,22 @@
     <ClCompile Include="Charactor\Player\PlayerManager.cpp">
       <Filter>Charactor\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Charactor\Player\GamePad.cpp">
+      <Filter>Charactor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\JobManager.cpp">
+      <Filter>Charactor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\CD3DXMESH_ANIM.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Read\ParameterRead.cpp">
+      <Filter>Read</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Origin.h" />
-    <ClInclude Include="Mesh\CD3DXMESH_ANIM.h">
-      <Filter>Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Read\tinyxml2.h">
       <Filter>Read</Filter>
     </ClInclude>
@@ -51,6 +57,21 @@
     </ClInclude>
     <ClInclude Include="Charactor\Player\PlayerManager.h">
       <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\GamePad.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\JobManager.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\CD3DXMESH_ANIM.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Read\ParameterRead.h">
+      <Filter>Read</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\CharactorCreator.h">
+      <Filter>Charactor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -71,8 +71,8 @@ namespace GamePad
 	// 関数 //
 	//------//
 
-	//どっかで呼んでおく
-	void update();	//更新
+	//更新
+	void update();	
 
 	//判定用
 	bool checkInput(int,InputName);		//入力してればtrueを返す

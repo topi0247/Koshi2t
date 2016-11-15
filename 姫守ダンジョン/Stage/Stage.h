@@ -16,4 +16,6 @@ public:
 
 	void Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext,const char* fileName);		//èâä˙âª
 	void Render(D3DXMATRIX mView,D3DXMATRIX mProj);		//ï`âÊ
+
+	CD3DXMESH_ANIM* GetMeshInfo()const { return stageMesh_; };
 };

@@ -3,15 +3,23 @@
 //	@brief	メインクラス
 
 //ヘッダーファイルのインクルード
-#include "Origin.h"
-#include "Main_Scene.h"
+#include <io.h>
+#include <fcntl.h>
+#include "./Origin.h"
+#include "./Main_Scene.h"
 #include "./Camera.h"
 //
 //
 //
 class MAIN
 {
+
+	int hConsole = 0;
 public:
+	//デバッグ用コンソールウィンドウ
+	void CreateConsoleWindow();
+	void CloseConsoleWindow();
+
 	HRESULT InitWindow(HINSTANCE,INT,INT,INT,INT,LPCWSTR);	//ウィンドウ初期化
 	HRESULT InitD3D();										//初期化
 	LRESULT MsgProc(HWND,UINT,WPARAM,LPARAM);				//ウィンドウプロシージャ
@@ -32,4 +40,5 @@ public:
 	Main_Scene* mainScene_;		//ゲームメインシーンクラス
 	//Stage* stageMesh_;
 	Camera* camera_;
+
 };

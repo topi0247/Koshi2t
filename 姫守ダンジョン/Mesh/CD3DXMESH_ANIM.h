@@ -29,7 +29,7 @@ struct MY_MATERIAL
 	DWORD dwNumFace;//そのマテリアルであるポリゴン数
 	MY_MATERIAL()
 	{
-		ZeroMemory(this,sizeof(MY_MATERIAL));
+		ZeroMemory(this, sizeof(MY_MATERIAL));
 	}
 	~MY_MATERIAL()
 	{
@@ -61,30 +61,30 @@ struct PARTS_MESH
 	bool Tex;
 };
 //派生フレーム構造体
-struct MYFRAME: public D3DXFRAME
+struct MYFRAME : public D3DXFRAME
 {
 	D3DXMATRIXA16 CombinedTransformationMatrix;
 	PARTS_MESH* pPartsMesh;
 	MYFRAME()
 	{
-		ZeroMemory(this,sizeof(MYFRAME));
+		ZeroMemory(this, sizeof(MYFRAME));
 	}
 };
 //メッシュコンテナー構造体 フレーム内で使用
-struct MYMESHCONTAINER: public D3DXMESHCONTAINER
+struct MYMESHCONTAINER : public D3DXMESHCONTAINER
 {
 	LPDIRECT3DTEXTURE9*  ppTextures;
 };
 //Xファイル内のアニメーション階層を読み下すクラス。
-class MY_HIERARCHY: public ID3DXAllocateHierarchy
+class MY_HIERARCHY : public ID3DXAllocateHierarchy
 {
 public:
-	MY_HIERARCHY(){}
-	STDMETHOD(CreateFrame)(THIS_ LPCSTR , LPD3DXFRAME *);
-	STDMETHOD(CreateMeshContainer)(THIS_ LPCSTR ,CONST D3DXMESHDATA* ,CONST D3DXMATERIAL* , 
-		CONST D3DXEFFECTINSTANCE* , DWORD , CONST DWORD *, LPD3DXSKININFO , LPD3DXMESHCONTAINER *);
-	STDMETHOD(DestroyFrame)(THIS_ LPD3DXFRAME );
-	STDMETHOD(DestroyMeshContainer)(THIS_ LPD3DXMESHCONTAINER );
+	MY_HIERARCHY() {}
+	STDMETHOD(CreateFrame)(THIS_ LPCSTR, LPD3DXFRAME *);
+	STDMETHOD(CreateMeshContainer)(THIS_ LPCSTR, CONST D3DXMESHDATA*, CONST D3DXMATERIAL*,
+		CONST D3DXEFFECTINSTANCE*, DWORD, CONST DWORD *, LPD3DXSKININFO, LPD3DXMESHCONTAINER *);
+	STDMETHOD(DestroyFrame)(THIS_ LPD3DXFRAME);
+	STDMETHOD(DestroyMeshContainer)(THIS_ LPD3DXMESHCONTAINER);
 };
 
 //
@@ -98,7 +98,7 @@ public:
 	DWORD m_dwNumMaterial;
 	LPD3DXMESH m_pMesh;
 	D3DXVECTOR3 m_vPos;
-	float m_fYaw,m_fPitch,m_fRoll;
+	float m_fYaw, m_fPitch, m_fRoll;
 	float m_fScale;
 	D3DXMATRIX m_View;
 	D3DXMATRIX m_Proj;
@@ -127,17 +127,21 @@ public:
 	ID3D11Buffer* m_pConstantBuffer1;
 	ID3D11SamplerState* m_pSampleLinear;//テクスチャーのサンプラー
 
-	//Method
+	LPD3DXANIMATIONSET m_pAnimSet[100];//100個までのアニメーションセットに対応
+
+									   //Method
 	CD3DXMESH_ANIM();
 	~CD3DXMESH_ANIM();
-	HRESULT Init(HWND hWnd,ID3D11Device*,ID3D11DeviceContext*,LPSTR);
+	HRESULT Init(HWND hWnd, ID3D11Device*, ID3D11DeviceContext*, LPSTR);
 	HRESULT InitDx9();
 	HRESULT InitShader();
-	void Render(D3DXMATRIX& mView,D3DXMATRIX& mProj,D3DXVECTOR3& vLight,D3DXVECTOR3& vEye);
+	void Render(D3DXMATRIX& mView, D3DXMATRIX& mProj, D3DXVECTOR3& vLight, D3DXVECTOR3& vEye);
 	HRESULT LoadXAnimMesh(LPSTR FileName);
 	void BuildAllMesh(D3DXFRAME* pFrame);
 	HRESULT CreateAppMeshFromD3DXMesh(LPD3DXFRAME pFrame);
 	void DrawFrame(LPD3DXFRAME p);
-	void DrawPartsMesh(PARTS_MESH* p,D3DXMATRIX World);
-	void UpdateHierarchyMatrices(D3DXFRAME* p,LPD3DXMATRIX pParentMatrix);
+	void DrawPartsMesh(PARTS_MESH* p, D3DXMATRIX World);
+	void UpdateHierarchyMatrices(D3DXFRAME* p, LPD3DXMATRIX pParentMatrix);
+
+	void ChangeMotion(int index);	//アニメーションモーション変更
 };
