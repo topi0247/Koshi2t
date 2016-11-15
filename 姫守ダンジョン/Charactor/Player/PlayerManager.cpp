@@ -63,15 +63,14 @@ void PlayerManager::Move(float speed)
 			ChangeMotion(walkM);
 		}
 	}
-	m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
 	GamePad::update();
 
-	//ê≥ñ Ç…ï«Ç™Ç†Ç¡ÇΩÇÁ
-	if (hitWall_==true)
-	{
-		m_vPos -= D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
-	}
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
 }
 
 //

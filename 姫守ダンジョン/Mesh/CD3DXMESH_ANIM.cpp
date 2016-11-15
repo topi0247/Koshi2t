@@ -2,6 +2,7 @@
 //本項より前のサンプルでは、このクラスは読み込みのみ行なうものだったが、
 //本サンプルでは、アニメーション行列作成にも関連する。
 
+
 //
 //
 //
@@ -273,6 +274,15 @@ HRESULT CD3DXMESH_ANIM::InitDx9()
 // Xファイルからメッシュをロードする
 HRESULT CD3DXMESH_ANIM::LoadXAnimMesh(LPSTR FileName)
 {
+	LPD3DXBUFFER pD3DXMtrlBuffer = NULL;
+	if (FAILED(D3DXLoadMeshFromXA(FileName, D3DXMESH_SYSTEMMEM | D3DXMESH_32BIT,
+		m_pDevice9, NULL, &pD3DXMtrlBuffer, NULL,
+		&m_dwNumMaterial, &m_pMesh)))
+	{
+		MessageBoxA(NULL, "Xファイルの読み込みに失敗しました", NULL, MB_OK);
+		return E_FAIL;
+	}
+
 	m_pHierarchy = new MY_HIERARCHY;
 	if (FAILED(D3DXLoadMeshHierarchyFromXA(FileName, D3DXMESH_MANAGED, m_pDevice9,
 		m_pHierarchy, NULL, &m_pFrameRoot, &m_pAnimController)))
@@ -280,11 +290,22 @@ HRESULT CD3DXMESH_ANIM::LoadXAnimMesh(LPSTR FileName)
 		MessageBoxA(NULL, "Xファイルの読み込みに失敗しました", NULL, MB_OK);
 		return E_FAIL;
 	}
+	//あとは、そこから必要な情報をとりだしつつ、かくフレームごとにアプリ独自のメッシュを構築していく
+	BuildAllMesh(m_pFrameRoot);
+
+	//D3DXMESHの場合、ロックしないとD3DXインデックスバッファーから取り出せないのでロックする。
+	int* pIndex = NULL;
+	m_pMesh->LockIndexBuffer(D3DLOCK_READONLY, (void**)&pIndex);
+	m_pMesh->UnlockIndexBuffer();
+
+	//D3DXMESHの場合、ロックしないとD3DXバーテックスバッファーから取り出せないのでロックする。
+	LPDIRECT3DVERTEXBUFFER9 pVB = NULL;
+	m_pMesh->GetVertexBuffer(&pVB);
+	DWORD dwStride = m_pMesh->GetNumBytesPerVertex();
+
 	//この時点で、ファイルから取り出した全フレームがm_pFrameRootに入っている、
 	//またアニメーションをコントロールするにはm_pAnimControllerが初期化されているはずなので、それを使う。
 
-	//あとは、そこから必要な情報をとりだしつつ、かくフレームごとにアプリ独自のメッシュを構築していく
-	BuildAllMesh(m_pFrameRoot);
 
 	//アニメーショントラックを得る 　本サンプル添付のXファイルの場合は2セットだけだが100個までに対応できる
 	if (m_pAnimController != NULL) {

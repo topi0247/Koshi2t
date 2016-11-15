@@ -36,7 +36,7 @@ void JobManager::CharaUpdate()
 	Motion_Update();
 
 	//ˆÚ“®
-	Move(0.5);
+	Move(0.1);
 }
 
 ////
@@ -67,10 +67,7 @@ SwordMan::SwordMan(Controller controller):JobManager(controller)
 
 void SwordMan::Normal_Attack()
 {
-	D3DXVECTOR3 range(3, 0, 3);
-	D3DXVECTOR3 startPoint = D3DXVECTOR3(m_AxisX.x - range.x, m_AxisY.y, m_AxisZ.z + range.z);
-	D3DXVECTOR3 endPoint = D3DXVECTOR3(m_AxisX.x + range.x, m_AxisY.y, m_AxisZ.z + range.z);
-	
+
 
 
 	timeEnd_ = 10;

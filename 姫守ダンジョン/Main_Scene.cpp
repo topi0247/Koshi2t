@@ -98,10 +98,8 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 void Main_Scene::Update()
 {
 
-	virEnemy_[0]->CheckNearPlayer(virChar_[player1]->GetOwnPos());
+	virEnemy_[0]->CheckNearPlayer(virChar_[player1]->m_vPos);
 	virEnemy_[0]->CharaUpdate();
-
-
 
 	//仮キャラ更新
 	for (int i = 0; i < 4; i++)
@@ -111,6 +109,9 @@ void Main_Scene::Update()
 
 	//衝突判定の更新
 	CollisionControl();
+
+	//キャラの移動
+	virChar_[player1]->m_vPos += virChar_[player1]->m_Dir;
 }
 
 //
@@ -122,20 +123,22 @@ void Main_Scene::CollisionControl()
 	D3DXVECTOR3 vNormal;
 	//壁との衝突判定
 	
-	bool wallFlg = false;
+	//bool wallFlg = false;
 	if (ray_->RayIntersect(virChar_[player1], stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 	{
-		wallFlg = true;
+		
 		//当たり状態なので、滑らせる
-		virChar_[player1]->m_Dir = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
-
+		//virChar_[player1]->m_vPos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
+		virChar_[player1]->SlipMove(ray_->Slip(virChar_[player1]->m_Dir, vNormal));
 		//滑りベクトル先の壁とのレイ判定 ２重に判定	
 		if (ray_->RayIntersect(virChar_[player1], stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
 		{
-			virChar_[player1]->m_Dir = D3DXVECTOR3(0, 0, 0);//止める
+			//virChar_[player1]->m_vPos = D3DXVECTOR3(0, 0, 0);//止める
+			virChar_[player1]->StopMove();
+			//wallFlg = true;
 		}
 	}
-	virChar_[player1]->SetHitWall(wallFlg);
+	//virChar_[player1]->SetHitWall(wallFlg);
 
 	//キャラクター同士の衝突判定
 
