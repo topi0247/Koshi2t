@@ -157,7 +157,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "Atk(n-1 | s-2) : %d", virChar_[player1]->atk);
+	sprintf(str, "Atk(n-1 | s-2) : %d", virChar_[player1]->GetAtkState());
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);

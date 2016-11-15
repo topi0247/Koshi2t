@@ -8,7 +8,19 @@
 #include "./../Player/PlayerManager.h"
 #include "./../../Read/ParameterRead.h"
 
-
+//	パラメータ
+struct PlayerParameter
+{
+	char* name_;	//職業名
+	unsigned int hp_;			//HP
+	unsigned int normalAtk_;	//通常攻撃力
+	unsigned int specialAtk_;	//特殊攻撃力
+	unsigned int def_;			//守備力
+	unsigned int waitTime_;		//待機時間
+	float speed_;				//移動速度
+	float weight_;				//重さ
+	float chargeTime_;			//チャージタイム
+};
 
 //	職業管理クラス
 class JobManager :public PlayerManager

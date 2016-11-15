@@ -64,13 +64,13 @@ SwordMan::SwordMan(Controller controller):JobManager(controller)
 
 void SwordMan::Normal_Attack()
 {
-	atk = 1;
+	atkNo_ = noAtk;
 	
 }
 
 void SwordMan::Special_Attack()
 {
-	atk = 2;
+	atkNo_ = specialAtk;
 }
 
 //////////////////////////////////////////////

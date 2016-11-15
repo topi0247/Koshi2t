@@ -1,18 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <Models Type="Player">
     <model fileName="Josh_Motion_Walk.x" charName="Œ•m"/>
     <model fileName="Josh_Motion_Walk.x" charName="–‚“±m"/>
+=======
+
+<Models Type="Player">
+    <model fileName="Josh_Motion_Walk.x" charName="Œ•m"/>
+
+    <model fileName="Josh_Motion_Walk.x" charName="–‚“±m"/>
+
+>>>>>>> ea9af8b9cfa9301052f8109e51a5e3adbd510e10
     <model fileName="Josh_Motion_Walk.x" charName="‚m"/>
+
     <model fileName="Josh_Motion_Walk.x" charName="”š’em"/>
+
 </Models>
+<<<<<<< HEAD
 <Models Type="Enemy">
     <model fileName="slim2.x" charName="ƒXƒ‰ƒCƒ€"/>
     <model fileName="scale1.x" charName="ƒSƒuƒŠƒ“"/>
+=======
+
+<Models Type="Enemy">
+
+    <model fileName="slim2.x" charName="ƒXƒ‰ƒCƒ€"/>
+
+    <model fileName="scale1.x" charName="ƒSƒuƒŠƒ“"/>
+
+>>>>>>> ea9af8b9cfa9301052f8109e51a5e3adbd510e10
     <model fileName="scale1.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
+
 </Models>
+
 <Models Type="Queen">
+
     <model fileName="scale1.x" charName="•P"/>
+
 </Models>
+<<<<<<< HEAD
 <Models Type="Stage">
     <model fileName="mabase.x" charName="ƒXƒe[ƒW"/>
+=======
+
+<Models Type="Stage">
+
+    <model fileName="mabase.x" charName="ƒXƒe[ƒW"/>
+
+>>>>>>> ea9af8b9cfa9301052f8109e51a5e3adbd510e10
 </Models>
