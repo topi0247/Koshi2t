@@ -22,6 +22,7 @@ class JobParameter
 	float waitTime_;			//待機時間
 	float moveSpeed_;			//移動速度
 	float weight_;				//重さ
+	float chargeTime_;			//チャージタイム
 public:
 	JobParameter(std::string str);
 	const char* GetName()const { return name_; };		//名前取得
@@ -32,7 +33,7 @@ public:
 	float GetWaitTime()const { return waitTime_; };		//待機時間取得
 	float GetMoveSpeed()const { return moveSpeed_; };	//移動速度取得
 	float GetWeight()const { return weight_; };			//重さ取得
-
+	float GetChargeTime()const { return chargeTime_; };	//チャージタイム
 };
 
 //

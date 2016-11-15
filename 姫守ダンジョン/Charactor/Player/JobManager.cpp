@@ -17,12 +17,12 @@ JobManager::~JobManager()
 
 void JobManager::CharaUpdate()
 {
-
 	//çUåÇ
-	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	Attack();
+	/*if (GamePad::checkInput(controller_, GamePad::InputName::A))
 	{
 		Attack();
-	}
+	}*/
 	
 	//ïPåƒÇ—
 	if (GamePad::checkInput(controller_, GamePad::InputName::B))
@@ -64,10 +64,13 @@ SwordMan::SwordMan(Controller controller):JobManager(controller)
 
 void SwordMan::Normal_Attack()
 {
+	atk = 1;
+	
 }
 
 void SwordMan::Special_Attack()
 {
+	atk = 2;
 }
 
 //////////////////////////////////////////////
@@ -78,6 +81,7 @@ Witch::Witch(Controller controller):JobManager(controller)
 
 void Witch::Normal_Attack()
 {
+
 }
 
 void Witch::Special_Attack()

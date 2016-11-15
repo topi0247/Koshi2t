@@ -67,6 +67,12 @@ JobParameter::JobParameter(string str)
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
 	weight_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//移動スピード取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	chargeTime_= atof(pull.c_str());
 }
 
 //=====================================================================//

@@ -24,9 +24,11 @@
 #pragma comment(lib,"d3dCompiler.lib")
 
 //定数定義
-#define WINDOW_WIDTH 1920 //ウィンドウ幅
+#define WINDOW_WIDTH 1920	//ウィンドウ幅
 #define WINDOW_HEIGHT 1080 //ウィンドウ高さ
-#define APP_NAME L"Xから階層アニメーションメッシュ 完全版"
+#define APP_NAME L"姫守ダンジョン"	//ゲームタイトル
+const int FPS = 60;				//FPS
+
 
 //マクロ
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}

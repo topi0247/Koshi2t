@@ -9,6 +9,7 @@
 //
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
+	:opponentWeight_(0)
 {
 }
 
@@ -16,25 +17,9 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
-	//デバッグ描画解放
-	delete debugText_;
-	debugText_ = nullptr;
+	
 }
 
-//
-//	@breif	デバッグ初期化
-HRESULT CharactorManager::DebugTextInit(ID3D11DeviceContext* m_pDeviceContext)
-{
-	//文字列レンダリングの初期化
-	debugText_ = new D3D11_TEXT;
-	D3DXVECTOR4 vColor(1, 1, 1, 1);
-	if (FAILED(debugText_->Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
-	{
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
 
 //
 //	@brief				ノックバック処理
@@ -64,6 +49,21 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
 	
 	m_fYaw = angel;
+}
+
+//
+//	@brief				周辺にいるキャラクターをリストに追加
+//	@param (charactor)	周辺にいるキャラクター
+void CharactorManager::SetAroundChara(CharactorManager* charactor)
+{
+	aroundCharaList_.push_back(charactor);
+}
+
+//
+//	@brief	進行方向にいるキャラクターの重さセット
+void CharactorManager::SetOppWeight(float weight)
+{
+	opponentWeight_ = weight;
 }
 
 //

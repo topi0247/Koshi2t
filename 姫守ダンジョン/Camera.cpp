@@ -61,8 +61,8 @@ void Camera::Render()
 void Camera::DebugMove()
 {
 	static float Yaw = 0, Roll = -11;
-	Yaw += -(GetKeyState(VK_LEFT) & 0x80)*0.00005 + (GetKeyState(VK_RIGHT) & 0x80)*0.00005;
-	Roll += -(GetKeyState(VK_DOWN) & 0x80)*0.0001 + (GetKeyState(VK_UP) & 0x80)*0.0001;
+	Yaw += -(GetKeyState(VK_LEFT) & 0x80)*0.0005 + (GetKeyState(VK_RIGHT) & 0x80)*0.0005;
+	Roll += -(GetKeyState(VK_DOWN) & 0x80)*0.001 + (GetKeyState(VK_UP) & 0x80)*0.001;
 	D3DXMatrixRotationY(&yaw_, Yaw);
 	gazePoint_ = D3DXVECTOR3(0, Roll, 10);
 	D3DXVec3TransformCoord(&gazePoint_, &gazePoint_, &yaw_);

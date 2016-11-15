@@ -5,6 +5,7 @@
 #include "MAIN.h"
 //グローバル変数
 MAIN* g_pMain = NULL;
+
 //関数プロトタイプの宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -19,12 +20,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 		if (SUCCEEDED(g_pMain->InitWindow(hInstance, 0, 0, WINDOW_WIDTH,
 			WINDOW_HEIGHT, APP_NAME)))
 		{
+			g_pMain->CreateConsoleWindow();
 			if (SUCCEEDED(g_pMain->InitD3D()))
 			{
 				g_pMain->Loop();
 			}
 		}
 		//アプリ終了
+		g_pMain->CloseConsoleWindow();
 		g_pMain->DestroyD3D();
 		delete g_pMain;
 	}
@@ -106,14 +109,17 @@ void MAIN::Loop()
 	//メッシュ作成　終わり
 
 	//初期化
-	mainScene_ = new Main_Scene;
 	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
+
+
 
 	// メッセージループ
 	MSG msg = { 0 };
+	long start = timeGetTime();
 	ZeroMemory(&msg, sizeof(msg));
 	while (msg.message != WM_QUIT)
 	{
+
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -123,6 +129,13 @@ void MAIN::Loop()
 		{
 			//アプリケーションの処理はここから飛ぶ。
 			App();
+
+			//FPS調整
+			while (timeGetTime() - start < 1000 / FPS)
+			{
+				Sleep(1);
+			}
+			start = timeGetTime();
 		}
 	}
 	//アプリケーションの終了
@@ -211,6 +224,10 @@ HRESULT MAIN::InitD3D()
 	m_pDeviceContext->RSSetState(pIr);
 	SAFE_RELEASE(pIr);
 
+	//初期化
+	mainScene_ = new Main_Scene;
+	mainScene_->DebugInit(m_pDeviceContext);
+
 	return S_OK;
 }
 //
@@ -269,7 +286,6 @@ void MAIN::Render()
 
 	//// プロジェクショントランスフォーム（射影変換）
 	//D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI / 4, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
-	
 	//レンダリング
 	camera_->Render();
 	D3DXMATRIX mView = camera_->GetView();
@@ -278,4 +294,21 @@ void MAIN::Render()
 	
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
+}
+
+//
+//	@brief	デバック用コンソールウィンドウ表示
+void MAIN::CreateConsoleWindow()
+{
+	//AllocConsole();
+	//hConsole = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+	//*stdout = *_fdopen(hConsole, "w");
+	//setvbuf(stdout, NULL, _IONBF, 0);
+}
+
+//
+//	@brief	デバッグ用コンソールウィンドウ終了
+void MAIN::CloseConsoleWindow()
+{
+	//_close(hConsole);
 }
