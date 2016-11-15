@@ -15,27 +15,16 @@ enum Controller
 	player4,
 };
 
-//	パラメータ
-struct PlayerParameter
-{
-	char* name_;	//職業名
-	unsigned int hp_;			//HP
-	unsigned int normalAtk_;	//通常攻撃力
-	unsigned int specialAtk_;	//特殊攻撃力
-	unsigned int def_;			//守備力
-	unsigned int waitTime_;		//待機時間
-	float speed_;				//移動速度
-	float weight_;				//重さ
-	float chargeTime_;			//チャージタイム
-};
+
 
 class PlayerManager : public CharactorManager
 {
 protected:
 
+	//モーション番号
 	enum MotionNo
 	{
-		waitM=0,
+		waitM = 0,
 		walkM,
 		normalAtkM,
 		spcialAtkM,
@@ -43,9 +32,18 @@ protected:
 		revivalM,
 	};
 
+	//攻撃状態番号
+	enum AttackState
+	{
+		noAtk = 0,	//攻撃していない
+		waitAtk,	//攻撃待機
+		normalAtk,	//通常攻撃
+		specialAtk,	//特殊攻撃
+	};
+
 	MotionNo motionNo_;		//モーション番号
+	AttackState atkNo_;		//攻撃状態番号
 	Controller controller_;	//コントローラー番号
-	PlayerParameter playerParam_;	//プレイヤーパラメータ
 
 	bool aliveFlg_;			//生存フラグ
 	int attackCount_;		//攻撃ボタンカウント
@@ -70,6 +68,6 @@ public:
 
 	//デバッグ用
 	int GetAtkCnt() { return attackCount_; };
-	int atk;
+	AttackState GetAtkState() { return atkNo_; };
 	float GetYaw() { return m_fYaw; };
 };

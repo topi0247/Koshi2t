@@ -83,18 +83,20 @@ void PlayerManager::Attack()
 	if (GamePad::checkInput(controller_, GamePad::InputName::A))
 	{
 		++attackCount_;
-		atk = 0;
+		atkNo_ = waitAtk;
 	}
-	else
+	else if(atkNo_==waitAtk)
 	{
 		//unsigned int inputTime = playerParam_.chargeTime_;
 		unsigned int inputTime = 40;
 		if (1 < attackCount_&& attackCount_ < inputTime)
 		{
+			atkNo_=normalAtk,
 			Normal_Attack();
 		}
 		else if (inputTime < attackCount_)
 		{
+			atkNo_ = specialAtk;
 			Special_Attack();
 		}
 
