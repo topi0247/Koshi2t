@@ -106,7 +106,6 @@ void MAIN::Loop()
 	//メッシュ作成　終わり
 
 	//初期化
-	mainScene_ = new Main_Scene;
 	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
 
 	// メッセージループ
@@ -211,6 +210,9 @@ HRESULT MAIN::InitD3D()
 	m_pDeviceContext->RSSetState(pIr);
 	SAFE_RELEASE(pIr);
 
+	mainScene_ = new Main_Scene;
+	mainScene_->DebugInit(m_pDeviceContext);
+
 	return S_OK;
 }
 //
@@ -234,8 +236,9 @@ void MAIN::DestroyD3D()
 //更新処理
 void MAIN::Update()
 {
-	
+	mainScene_->Update();
 }
+
 //
 //
 //シーンを画面にレンダリング
