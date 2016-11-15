@@ -122,8 +122,10 @@ void Main_Scene::CollisionControl()
 	D3DXVECTOR3 vNormal;
 	//壁との衝突判定
 	
+	bool wallFlg = false;
 	if (ray_->RayIntersect(virChar_[player1], stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 	{
+		wallFlg = true;
 		//当たり状態なので、滑らせる
 		virChar_[player1]->m_Dir = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
 
@@ -133,6 +135,8 @@ void Main_Scene::CollisionControl()
 			virChar_[player1]->m_Dir = D3DXVECTOR3(0, 0, 0);//止める
 		}
 	}
+	virChar_[player1]->SetHitWall(wallFlg);
+
 	//キャラクター同士の衝突判定
 
 }
@@ -161,7 +165,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "Rot : %d", (int)virChar_[player1]->GetYaw());
+	sprintf(str, "wall : %d", virChar_[player1]->GetWallHitFlg());
 	debugText_->Render(str, 0, 50);
 
 }

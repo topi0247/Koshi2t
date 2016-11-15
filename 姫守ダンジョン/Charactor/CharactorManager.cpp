@@ -67,6 +67,14 @@ void CharactorManager::SetOppWeight(float weight)
 }
 
 //
+//	@brief				壁にぶつかっているかどうかのフラグ更新
+//	@param (wallHitFlg)	壁との衝突判定
+void CharactorManager::SetHitWall(bool wallHitFlg)
+{
+	hitWall_ = wallHitFlg;
+}
+
+//
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
