@@ -67,6 +67,12 @@ void PlayerManager::Move(float speed)
 
 	GamePad::update();
 
+	//ê≥ñ Ç…ï«Ç™Ç†Ç¡ÇΩÇÁ
+	if (hitWall_==true)
+	{
+		m_vPos -= D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+	}
+
 }
 
 //
