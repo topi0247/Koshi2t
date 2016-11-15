@@ -91,9 +91,12 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Charactor\CharactorManager.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Charactor\Player\GamePad.cpp" />
     <ClCompile Include="Charactor\Player\JobManager.cpp" />
     <ClCompile Include="Charactor\Player\PlayerManager.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugDraw\D3D11_TEXT.cpp" />
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="Main_Scene.cpp" />
@@ -107,9 +110,12 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Charactor\CharactorCreator.h" />
     <ClInclude Include="Charactor\CharactorManager.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyJobManager.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyManager.h" />
     <ClInclude Include="Charactor\Player\GamePad.h" />
     <ClInclude Include="Charactor\Player\JobManager.h" />
     <ClInclude Include="Charactor\Player\PlayerManager.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="DebugDraw\D3D11_TEXT.h" />
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Main_Scene.h" />

@@ -16,6 +16,11 @@ Main_Scene::Main_Scene()
 	virChar_[player2] = new Witch(player2);
 	virChar_[player3] = new ShieldMan(player3);
 	virChar_[player4] = new Bomber(player4);
+
+
+	ray_ = new Collision;
+	virEnemy_ = new EnemyJobManager *[3];
+	virEnemy_[0] = new Slim;
 }
 
 //
@@ -24,6 +29,12 @@ Main_Scene::~Main_Scene()
 {
 	delete stage_;
 	stage_ = nullptr;
+
+	delete ray_;
+	ray_ = nullptr;
+
+	delete virEnemy_[0];
+	virEnemy_[0] = nullptr;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -64,6 +75,9 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	xfile = xfileRead->GetXFile("爆弾士");
 	virChar_[player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	
+	xfile = xfileRead->GetXFile("スライム");
+	virEnemy_[0]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
 }
 
 //
@@ -83,6 +97,10 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 //	@brief	更新
 void Main_Scene::Update()
 {
+
+	virEnemy_[0]->CheckNearPlayer(virChar_[player1]->GetOwnPos());
+	virEnemy_[0]->CharaUpdate();
+
 	//仮キャラ更新
 	for (int i = 0; i < 4; i++)
 	{
@@ -113,6 +131,8 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
 	//ステージの描画
 	stage_->Render(mView, mProj);
+
+	virEnemy_[0]->CharaRender(mView, mProj);
 
 	//仮キャラ描画
 	for (int i = 0; i < 4; i++)

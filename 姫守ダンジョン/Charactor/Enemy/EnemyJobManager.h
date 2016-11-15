@@ -8,9 +8,9 @@
 #include "./../Enemy/EnemyManager.h"
 
 //	ƒpƒ‰ƒ[ƒ^
-struct EnemyParameter
+struct EnemyParam
 {
-	unsigned char name_[30];	//“G‚Ì–¼
+	const char* name_;	//“G‚Ì–¼
 	unsigned int hp_;			//HP
 	unsigned int normalAtk_;	//’ÊíUŒ‚—Í
 	unsigned int def_;			//ç”õ—Í

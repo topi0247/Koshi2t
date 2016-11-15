@@ -34,6 +34,13 @@
     <ClCompile Include="Read\ParameterRead.cpp">
       <Filter>Read</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp">
+      <Filter>Charactor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Enemy\EnemyManager.cpp">
+      <Filter>Charactor\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -73,6 +80,13 @@
     <ClInclude Include="Charactor\CharactorCreator.h">
       <Filter>Charactor</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Charactor\Enemy\EnemyManager.h">
+      <Filter>Charactor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Enemy\EnemyJobManager.h">
+      <Filter>Charactor\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">
@@ -92,6 +106,9 @@
     </Filter>
     <Filter Include="Charactor\Player">
       <UniqueIdentifier>{02a1c571-d0b1-4a0a-94bd-28277ef0801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charactor\Enemy">
+      <UniqueIdentifier>{508b2f76-05d6-4fa9-a683-dbb11d957149}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

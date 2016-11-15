@@ -65,6 +65,7 @@ public:
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);	//初期化と読み込み
 	void Revival();									//復活
 	D3DXVECTOR3 Princess_Call();	//姫呼び
+	D3DXVECTOR3 GetOwnPos()const { return m_vPos; };
 	bool GetAliveFlg()const;	//生存フラグ取得
 
 	//デバッグ用

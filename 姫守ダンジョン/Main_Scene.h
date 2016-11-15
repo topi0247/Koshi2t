@@ -10,12 +10,16 @@
 #include "./Stage/Stage.h"
 #include "./Charactor/Player/JobManager.h"
 #include "./Charactor/CharactorCreator.h"
+#include "./Charactor/Enemy/EnemyJobManager.h"
+#include "./Collision.h"
 #include "./DebugDraw/D3D11_TEXT.h"
 
 class Main_Scene
 {
 	Stage* stage_;				//ステージ情報
-	JobManager** virChar_;		//確認用仮キャラクター
+	Collision* ray_;
+	JobManager** virChar_;	//確認用仮キャラクター
+	EnemyJobManager** virEnemy_;	//確認用仮キャラクター
 
 	void CollisionControl();	//衝突判定管理
 
