@@ -9,6 +9,7 @@
 
 EnemyJobManager::EnemyJobManager()
 {
+	m_vPos = D3DXVECTOR3(0, -0.05, 0);
 }
 
 EnemyJobManager::~EnemyJobManager()
@@ -17,7 +18,7 @@ EnemyJobManager::~EnemyJobManager()
 
 void EnemyJobManager::CharaUpdate()
 {
-	Move(0.5);
+	Move(0.05);
 }
 
 //=======ƒXƒ‰ƒCƒ€=======//
