@@ -23,6 +23,8 @@ void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11Device
 	{
 		return;
 	}
+
+
 }
 
 //
@@ -37,7 +39,7 @@ void PlayerManager::Move(float speed)
 
 	//‰ñ“]ˆ—
 	const float rotEpsilon = 0.3;
-	if (fabsf(inputStick.x) > rotEpsilon|| fabsf(inputStick.z) > rotEpsilon)
+	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
 	{
 		Rotation(inputStick);
 	}
@@ -48,6 +50,19 @@ void PlayerManager::Move(float speed)
 	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
 	{
 		sp = speed;
+		if (motionNo_ != waitM)
+		{
+			motionNo_ = waitM;
+			ChangeMotion(waitM);
+		}
+	}
+	else
+	{
+		if (motionNo_ != walkM)
+		{
+			motionNo_ = walkM;
+			ChangeMotion(walkM);
+		}
 	}
 	m_vPos += D3DXVECTOR3(inputStick.x*sp, 0, inputStick.z*sp);
 
@@ -65,8 +80,31 @@ void PlayerManager::Dead()
 //	@brief	
 void PlayerManager::Attack()
 {
-	NormalAttack();
-	SpecialAttack();
+	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	{
+		Normal_Attack();
+		Special_Attack();
+	}
+}
+
+//
+//	@brief	ƒ‚[ƒVƒ‡ƒ“XV
+void PlayerManager::Motion_Update()
+{
+	const float speed = 0.01;
+	m_pAnimController->AdvanceTime(speed, NULL);
+
+	////UŒ‚
+	//if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	//{
+	//	//ChangeMotion(waitM);
+	//}
+
+	////•PŒÄ‚Ñ
+	//if (GamePad::checkInput(controller_, GamePad::InputName::B))
+	//{
+	//	//ChangeMotion(walkM);
+	//}
 }
 
 
@@ -74,4 +112,5 @@ void PlayerManager::Attack()
 //	@brief	•œŠˆ
 void PlayerManager::Revival()
 {
+	aliveFlg_ = true;
 }

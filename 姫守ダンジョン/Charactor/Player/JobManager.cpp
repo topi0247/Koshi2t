@@ -17,27 +17,44 @@ JobManager::~JobManager()
 
 void JobManager::CharaUpdate()
 {
+
+	//çUåÇ
+	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	{
+		Attack();
+	}
+	
+	//ïPåƒÇ—
+	if (GamePad::checkInput(controller_, GamePad::InputName::B))
+	{
+		Princess_Call();
+	}
+
+	//ÉÇÅ[ÉVÉáÉìïœçX
 	Motion_Update();
+
+	//à⁄ìÆ
 	Move(0.05);
 }
 
-void JobManager::Motion_Update()
-{
-	m_pAnimController->AdvanceTime(0.001, NULL);
-
-	if (GamePad::checkInput(controller_, GamePad::InputName::A))
-	{
-		ChangeMotion(walkM);
-		//motionNo_ = waitM;
-	}
-
-	if (GamePad::checkInput(controller_, GamePad::InputName::B))
-	{
-		ChangeMotion(waitM);
-		//motionNo_ = walkM;
-	}
-	//ChangeMotion(motionNo_);
-}
+////
+////	@brief	ÉÇÅ[ÉVÉáÉìçXêV
+//void JobManager::Motion_Update()
+//{
+//	m_pAnimController->AdvanceTime(0.001, NULL);
+//
+//	//çUåÇ
+//	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+//	{
+//		ChangeMotion(waitM);
+//	}
+//
+//	//ïPåƒÇ—
+//	if (GamePad::checkInput(controller_, GamePad::InputName::B))
+//	{
+//		ChangeMotion(walkM);
+//	}
+//}
 
 //////////////////////////////////////////////
 SwordMan::SwordMan(Controller controller):JobManager(controller)
@@ -45,11 +62,11 @@ SwordMan::SwordMan(Controller controller):JobManager(controller)
 	controller_ = controller;
 }
 
-void SwordMan::NormalAttack()
+void SwordMan::Normal_Attack()
 {
 }
 
-void SwordMan::SpecialAttack()
+void SwordMan::Special_Attack()
 {
 }
 
@@ -59,11 +76,11 @@ Witch::Witch(Controller controller):JobManager(controller)
 	controller_ = controller;
 }
 
-void Witch::NormalAttack()
+void Witch::Normal_Attack()
 {
 }
 
-void Witch::SpecialAttack()
+void Witch::Special_Attack()
 {
 }
 
@@ -73,11 +90,11 @@ ShieldMan::ShieldMan(Controller controller) :JobManager(controller)
 	controller_ = controller;
 }
 
-void ShieldMan::NormalAttack()
+void ShieldMan::Normal_Attack()
 {
 }
 
-void ShieldMan::SpecialAttack()
+void ShieldMan::Special_Attack()
 {
 }
 
@@ -86,10 +103,10 @@ Bomber::Bomber(Controller controller) :JobManager(controller)
 {
 	controller_ = controller;
 }
-void Bomber::NormalAttack()
+void Bomber::Normal_Attack()
 {
 }
 
-void Bomber::SpecialAttack()
+void Bomber::Special_Attack()
 {
 }

@@ -64,6 +64,13 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 }
 
 //
+//	@brief	デバッグ用初期化
+HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
+{
+	return S_OK;
+}
+
+//
 //	@brief	更新
 void Main_Scene::Update()
 {

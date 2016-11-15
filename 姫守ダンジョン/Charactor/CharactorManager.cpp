@@ -13,6 +13,30 @@ CharactorManager::CharactorManager()
 }
 
 //
+//	@brief	デストラクタ
+CharactorManager::~CharactorManager()
+{
+	//デバッグ描画解放
+	delete debugText_;
+	debugText_ = nullptr;
+}
+
+//
+//	@breif	デバッグ初期化
+HRESULT CharactorManager::DebugTextInit(ID3D11DeviceContext* m_pDeviceContext)
+{
+	//文字列レンダリングの初期化
+	debugText_ = new D3D11_TEXT;
+	D3DXVECTOR4 vColor(1, 1, 1, 1);
+	if (FAILED(debugText_->Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
+	{
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+//
 //	@brief				ノックバック処理
 //	@param (atkPos)		攻撃が当たった地点の座標
 //	@param (distance)	ノックバックする距離

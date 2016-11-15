@@ -6,9 +6,10 @@
 
 #pragma once
 #include "./../Player/PlayerManager.h"
+#include "./../../Read/ParameterRead.h"
 
 //	パラメータ
-struct Parameter
+struct PlayerParameter
 {
 	unsigned char name_[30];	//職業名
 	unsigned int hp_;			//HP
@@ -23,7 +24,7 @@ struct Parameter
 //	職業管理クラス
 class JobManager :public PlayerManager
 {
-	virtual void Motion_Update();
+	//void Motion_Update();
 public:
 	JobManager(Controller controller);
 	virtual ~JobManager();
@@ -34,8 +35,8 @@ public:
 class SwordMan :public JobManager
 {
 protected:
-	virtual void NormalAttack();
-	virtual void SpecialAttack();
+	virtual void Normal_Attack();
+	virtual void Special_Attack();
 public:
 	SwordMan(Controller controller);
 };
@@ -44,8 +45,8 @@ public:
 class Witch :public JobManager
 {
 protected:	
-	virtual void NormalAttack();
-	virtual void SpecialAttack();
+	virtual void Normal_Attack();
+	virtual void Special_Attack();
 public:
 	Witch(Controller controller);
 };
@@ -54,8 +55,8 @@ public:
 class ShieldMan :public JobManager
 {
 protected:
-	virtual void NormalAttack();
-	virtual void SpecialAttack();
+	virtual void Normal_Attack();
+	virtual void Special_Attack();
 public:
 	ShieldMan(Controller controller);
 };
@@ -66,8 +67,8 @@ class Bomber :public JobManager
 private:
 
 protected:
-	virtual void NormalAttack();
-	virtual void SpecialAttack();
+	virtual void Normal_Attack();
+	virtual void Special_Attack();
 public:
 	Bomber(Controller controller);
 };
