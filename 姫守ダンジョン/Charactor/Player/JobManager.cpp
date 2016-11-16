@@ -38,6 +38,7 @@ void JobManager::CharaUpdate()
 	//ˆÚ“®
 <<<<<<< HEAD
 	Move(0.5);
+=======
 	Move(0.1);
 >>>>>>> origin/HimemoriBranchi1
 }
