@@ -7,6 +7,7 @@
 #include "JobManager.h"
 
 JobManager::JobManager(Controller controller)
+	:timeCount_(0)
 {
 }
 
@@ -27,14 +28,18 @@ void JobManager::CharaUpdate()
 	//•PŒÄ‚Ñ
 	if (GamePad::checkInput(controller_, GamePad::InputName::B))
 	{
-		Princess_Call();
+		callFlg_ = true;
+		//Princess_Call();
 	}
 
 	//ƒ‚[ƒVƒ‡ƒ“•ÏX
 	Motion_Update();
 
 	//ˆÚ“®
+<<<<<<< HEAD
 	Move(0.5);
+	Move(0.1);
+>>>>>>> origin/HimemoriBranchi1
 }
 
 ////
@@ -60,17 +65,25 @@ void JobManager::CharaUpdate()
 SwordMan::SwordMan(Controller controller):JobManager(controller)
 {
 	controller_ = controller;
+	col_ = new Collision();
 }
 
 void SwordMan::Normal_Attack()
 {
-	atk = 1;
-	
+
+
+
+	timeEnd_ = 10;
+	if (++timeCount_>timeEnd_)
+	{
+		atkNo_ = noAtk;
+		timeCount_ = 0;
+	}
 }
 
 void SwordMan::Special_Attack()
 {
-	atk = 2;
+	atkNo_ = noAtk;
 }
 
 //////////////////////////////////////////////

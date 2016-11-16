@@ -80,7 +80,7 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	m_pDevice->CreateSamplerState( &SamDesc, &m_pSampleLinear);
 	//フォントのテクスチャーを作成
-	if(FAILED(D3DX11CreateShaderResourceViewFromFile(m_pDevice, L"./texture/ascii.png", NULL, NULL, &m_pAsciiTexture, NULL )))
+	if(FAILED(D3DX11CreateShaderResourceViewFromFile(m_pDevice, L"./DebugDraw/ascii.png", NULL, NULL, &m_pAsciiTexture, NULL )))
 	{
 		return E_FAIL;
 	}
@@ -88,7 +88,7 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 	ID3DBlob *pCompiledShader=NULL;
 	ID3DBlob *pErrors=NULL;
 	//ブロブからバーテックスシェーダー作成
-	if(FAILED(D3DX11CompileFromFile(L"D3D11_TEXT.hlsl",NULL,NULL,"VS","vs_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+	if(FAILED(D3DX11CompileFromFile(L"./DebugDraw/D3D11_TEXT.hlsl",NULL,NULL,"VS","vs_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
 	{
 		MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
 		return E_FAIL;
@@ -113,7 +113,7 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 	if( FAILED( m_pDevice->CreateInputLayout( layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout ) ) )
 		return FALSE;
 	//ブロブからピクセルシェーダー作成
-	if(FAILED(D3DX11CompileFromFile(L"D3D11_TEXT.hlsl",NULL,NULL,"PS","ps_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+	if(FAILED(D3DX11CompileFromFile(L"./DebugDraw/D3D11_TEXT.hlsl",NULL,NULL,"PS","ps_5_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
 	{
 		MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
 		return E_FAIL;

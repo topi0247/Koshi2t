@@ -52,6 +52,28 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 }
 
 //
+//	@brief	壁滑り用移動
+void CharactorManager::SlipMove(D3DXVECTOR3 slipVec)
+{
+	m_Dir = slipVec;
+
+}
+
+//
+//	@brief	静止用
+void CharactorManager::StopMove()
+{
+	m_Dir = D3DXVECTOR3(0, 0, 0);
+}
+
+//
+//	@brief	移動の更新
+void CharactorManager::Move_Update()
+{
+	m_vPos += m_Dir;
+}
+
+//
 //	@brief				周辺にいるキャラクターをリストに追加
 //	@param (charactor)	周辺にいるキャラクター
 void CharactorManager::SetAroundChara(CharactorManager* charactor)
@@ -64,6 +86,14 @@ void CharactorManager::SetAroundChara(CharactorManager* charactor)
 void CharactorManager::SetOppWeight(float weight)
 {
 	opponentWeight_ = weight;
+}
+
+//
+//	@brief				壁にぶつかっているかどうかのフラグ更新
+//	@param (wallHitFlg)	壁との衝突判定
+void CharactorManager::SetHitWall(bool wallHitFlg)
+{
+	hitWall_ = wallHitFlg;
 }
 
 //
