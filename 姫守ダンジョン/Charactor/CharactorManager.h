@@ -35,6 +35,7 @@ public:
 	//void CharaDestroy();										//解放
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
+	void Move_Update();											//移動の更新
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット

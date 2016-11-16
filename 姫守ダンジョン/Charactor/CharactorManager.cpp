@@ -67,6 +67,13 @@ void CharactorManager::StopMove()
 }
 
 //
+//	@brief	移動の更新
+void CharactorManager::Move_Update()
+{
+	m_vPos += m_Dir;
+}
+
+//
 //	@brief				周辺にいるキャラクターをリストに追加
 //	@param (charactor)	周辺にいるキャラクター
 void CharactorManager::SetAroundChara(CharactorManager* charactor)
