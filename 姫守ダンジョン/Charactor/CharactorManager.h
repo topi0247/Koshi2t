@@ -8,6 +8,7 @@
 #include <vector>
 #include "./../Origin.h"
 #include "./../Mesh/CD3DXMESH_ANIM.h"
+#include "./../Read/ParameterRead.h"
 
 //#include "./../DebugDraw/D3D11_TEXT.h"
 
@@ -23,8 +24,7 @@ class CharactorManager:public CD3DXMESH_ANIM
 protected:
 	MIME mime_;
 	float opponentWeight_;	//進行方向にいるキャラの重さ
-	bool hitWall_;			//壁にぶつかっているかどうか
-
+	bool aliveFlg_;			//生存フラグ
 	std::vector<CharactorManager*> aroundCharaList_;
 
 	virtual void Move(float speed) = 0;					//移動
@@ -47,9 +47,5 @@ public:
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
-	//void SetHitWall(bool wallHitFlg);					//壁にぶつかっているかどうかの更新
-
-	//デバッグ用
-	bool GetWallHitFlg()const { return hitWall_; };
 };
 

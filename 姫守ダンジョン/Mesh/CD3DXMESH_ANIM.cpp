@@ -647,13 +647,14 @@ void CD3DXMESH_ANIM::Render(D3DXMATRIX& mView, D3DXMATRIX& mProj, D3DXVECTOR3& v
 	//プリミティブ・トポロジーをセット
 	m_pDeviceContext11->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	D3DXMATRIX World, Tran, Rot;
+	D3DXMATRIX World, Tran, Rot,Scale;
 	D3DXMatrixTranslation(&Tran, m_vPos.x, m_vPos.y, m_vPos.z);
 	D3DXMatrixRotationY(&Rot, m_fYaw);
+	D3DXMatrixScaling(&Scale, m_fScale, m_fScale, m_fScale);
 	D3DXVec3TransformCoord(&m_AxisX, &D3DXVECTOR3(1, 0, 0), &Rot);
 	D3DXVec3TransformCoord(&m_AxisY, &D3DXVECTOR3(0, 1, 0), &Rot);
 	D3DXVec3TransformCoord(&m_AxisZ, &D3DXVECTOR3(0, 0, 1), &Rot);
-	World = Rot*Tran;
+	World = Scale*Rot*Tran;
 	m_World = World;
 	UpdateHierarchyMatrices(m_pFrameRoot, &World);
 	DrawFrame(m_pFrameRoot);

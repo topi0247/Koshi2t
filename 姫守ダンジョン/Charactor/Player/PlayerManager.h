@@ -45,7 +45,6 @@ protected:
 	AttackState atkNo_;		//攻撃状態番号
 	Controller controller_;	//コントローラー番号
 
-	bool aliveFlg_;			//生存フラグ
 	bool callFlg_;			//姫呼びフラグ
 	int attackCount_;		//攻撃ボタンカウント
 
