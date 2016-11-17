@@ -80,38 +80,38 @@ void PlayerManager::Dead()
 
 }
 
-//
-//	@brief	攻撃処理
-void PlayerManager::Attack()
-{
-	if (GamePad::checkInput(controller_, GamePad::InputName::A))
-	{
-		++attackCount_;
-		atkNo_ = waitAtk;
-	}
-	else if(atkNo_!=noAtk)
-	{
-		//unsigned int inputTime = playerParam_.chargeTime_;
-		unsigned int inputTime = 40;
-		if (1 < attackCount_&& attackCount_ < inputTime)
-		{
-			atkNo_=normalAtk,
-			Normal_Attack();
-		}
-		else if (inputTime < attackCount_)
-		{
-			atkNo_ = specialAtk;
-			Special_Attack();
-		}
-	}
-	else if (atkNo_ == noAtk)
-	{
-		attackCount_ = 0;
-	}
-	//char str[256];
-	//sprintf(str, "A : %d", attackCount_);
-	//debugText_->Render(str, 0, 10);
-}
+////
+////	@brief	攻撃処理
+//void PlayerManager::Attack()
+//{
+//	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+//	{
+//		++attackCount_;
+//		atkNo_ = waitAtk;
+//	}
+//	else if(atkNo_!=noAtk)
+//	{
+//		//unsigned int inputTime = playerParam_.chargeTime_;
+//		unsigned int inputTime = 40;
+//		if (1 < attackCount_&& attackCount_ < inputTime)
+//		{
+//			atkNo_=normalAtk,
+//			Normal_Attack();
+//		}
+//		else if (inputTime < attackCount_)
+//		{
+//			atkNo_ = specialAtk;
+//			Special_Attack();
+//		}
+//	}
+//	else if (atkNo_ == noAtk)
+//	{
+//		attackCount_ = 0;
+//	}
+//	//char str[256];
+//	//sprintf(str, "A : %d", attackCount_);
+//	//debugText_->Render(str, 0, 10);
+//}
 
 //
 //	@brief	モーション更新

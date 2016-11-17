@@ -48,7 +48,7 @@ private:
 	void Normal_Attack_Collision();
 public:
 	SwordMan(Controller controller);
-
+	virtual void Attack();
 	//デバッグ用
 	float dist;
 	D3DXVECTOR3 nor;
@@ -62,6 +62,7 @@ private:
 	virtual void Special_Attack();
 public:
 	Witch(Controller controller);
+	virtual void Attack();
 };
 
 //	盾士クラス
@@ -72,6 +73,7 @@ private:
 	virtual void Special_Attack();
 public:
 	ShieldMan(Controller controller);
+	virtual void Attack();
 };
 
 //	爆弾士クラス
@@ -82,4 +84,5 @@ private:
 	virtual void Special_Attack();
 public:
 	Bomber(Controller controller);
+	virtual void Attack();
 };

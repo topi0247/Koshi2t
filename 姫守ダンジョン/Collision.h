@@ -14,7 +14,7 @@ class Collision
 public:
 	~Collision();
 	Collision();
-	bool RayIntersect(CD3DXMESH_ANIM* Mesh_a, CD3DXMESH_ANIM* Mesh_b ,float* pfDistance, D3DXVECTOR3* pvNormal/*,float* pfDistance*/);
+	bool RayIntersect(CD3DXMESH_ANIM* pMeshA, CD3DXMESH_ANIM* pMeshB,float* pfDistance, D3DXVECTOR3* pvNormal/*,float* pfDistance*/);
 	D3DXVECTOR3 Slip(D3DXVECTOR3 L, D3DXVECTOR3 N);
 	HRESULT FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXVECTOR3* pvVertices);
 };

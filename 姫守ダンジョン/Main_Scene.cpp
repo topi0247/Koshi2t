@@ -72,6 +72,8 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
 	virChar_[player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	virChar_[player1]->m_fScale = 0.2f;
+
 
 	xfile = xfileRead->GetXFile("魔導士");
 	virChar_[player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
@@ -137,6 +139,7 @@ void Main_Scene::CollisionControl()
 	//bool wallFlg = false;
 	for (auto chara : charList_)
 	{
+		//壁との衝突判定
 		if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 		{
 			//当たり状態なので、滑らせる
@@ -150,6 +153,7 @@ void Main_Scene::CollisionControl()
 				//wallFlg = true;
 			}
 		}
+
 	}
 	//virChar_[player1]->SetHitWall(wallFlg);
 

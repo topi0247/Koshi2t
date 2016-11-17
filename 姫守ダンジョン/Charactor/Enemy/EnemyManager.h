@@ -34,6 +34,6 @@ public:
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);		//èâä˙âªÅEì«Ç›çûÇ›
 
 	void CheckNearPlayer(D3DXVECTOR3 position);	//ãﬂÇ≠Ç…Ç¢ÇÈÇ©îªï 
-	D3DXVECTOR3 GetOwnPos()const { return m_vPos; };
+	//D3DXVECTOR3 GetOwnPos()const { return m_vPos; };
 };
 

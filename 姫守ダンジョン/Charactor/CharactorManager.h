@@ -11,9 +11,17 @@
 
 //#include "./../DebugDraw/D3D11_TEXT.h"
 
+enum MIME
+{
+	player=0,
+	queen,
+	enemy,
+};
+
 class CharactorManager:public CD3DXMESH_ANIM
 {
 protected:
+	MIME mime_;
 	float opponentWeight_;	//進行方向にいるキャラの重さ
 	bool hitWall_;			//壁にぶつかっているかどうか
 
@@ -39,7 +47,7 @@ public:
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
-	void SetHitWall(bool wallHitFlg);					//壁にぶつかっているかどうかの更新
+	//void SetHitWall(bool wallHitFlg);					//壁にぶつかっているかどうかの更新
 
 	//デバッグ用
 	bool GetWallHitFlg()const { return hitWall_; };

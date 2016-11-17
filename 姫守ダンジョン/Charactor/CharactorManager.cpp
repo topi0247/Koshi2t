@@ -10,6 +10,7 @@
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
 	:opponentWeight_(0)
+	,aroundCharaList_(0)
 {
 }
 
@@ -88,13 +89,13 @@ void CharactorManager::SetOppWeight(float weight)
 	opponentWeight_ = weight;
 }
 
-//
-//	@brief				壁にぶつかっているかどうかのフラグ更新
-//	@param (wallHitFlg)	壁との衝突判定
-void CharactorManager::SetHitWall(bool wallHitFlg)
-{
-	hitWall_ = wallHitFlg;
-}
+////
+////	@brief				壁にぶつかっているかどうかのフラグ更新
+////	@param (wallHitFlg)	壁との衝突判定
+//void CharactorManager::SetHitWall(bool wallHitFlg)
+//{
+//	hitWall_ = wallHitFlg;
+//}
 
 //
 //	@brief			描画
