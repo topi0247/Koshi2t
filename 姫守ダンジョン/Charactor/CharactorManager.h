@@ -8,14 +8,18 @@
 #include <vector>
 #include "./../Origin.h"
 #include "./../Mesh/CD3DXMESH_ANIM.h"
+#include "./../Collision.h"
 
 //#include "./../DebugDraw/D3D11_TEXT.h"
 
 class CharactorManager:public CD3DXMESH_ANIM
 {
 protected:
-	float opponentWeight_;	//進行方向にいるキャラの重さ
+	Collision* collision_;
 
+	float opponentWeight_;	//進行方向にいるキャラの重さ
+	
+	bool aliveFlg_;		//生存フラグ
 
 	std::vector<CharactorManager*> aroundCharaList_;
 
@@ -25,7 +29,6 @@ protected:
 	virtual void Motion_Update()=0;						//モーション更新
 	void KnockBack(D3DXVECTOR3 atkPos, float distance);	//ノックバック
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
-	
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
@@ -34,8 +37,14 @@ public:
 	virtual void CharaUpdate()=0;								//更新
 	void CharaRender(D3DXMATRIX mView,D3DXMATRIX mProj);		//描画
 	//void CharaDestroy();										//解放
+	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
+	void StopMove();											//静止用
+	void Move_Update();											//移動の更新
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
+	void SetHitWall(bool wallHitFlg);					//壁にぶつかっているかどうかの更新
+
+	bool GetAliveFlg() { return aliveFlg_; };
 };
 

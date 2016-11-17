@@ -23,6 +23,10 @@ class Main_Scene
 
 	void CollisionControl();	//衝突判定管理
 
+	std::vector<CharactorManager*> charList_;	//ステージ上に存在するキャラクター
+	std::vector<EnemyJobManager*> enemyList_;	//ステージ上に存在するエネミー
+
+
 	//デバック
 	D3D11_TEXT* debugText_;
 public:

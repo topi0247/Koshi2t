@@ -63,10 +63,14 @@ void PlayerManager::Move(float speed)
 			ChangeMotion(walkM);
 		}
 	}
-	m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
 	GamePad::update();
 
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
 }
 
 //
@@ -83,21 +87,25 @@ void PlayerManager::Attack()
 	if (GamePad::checkInput(controller_, GamePad::InputName::A))
 	{
 		++attackCount_;
-		atk = 0;
+		atkNo_ = waitAtk;
 	}
-	else
+	else if(atkNo_!=noAtk)
 	{
 		//unsigned int inputTime = playerParam_.chargeTime_;
 		unsigned int inputTime = 40;
 		if (1 < attackCount_&& attackCount_ < inputTime)
 		{
+			atkNo_=normalAtk,
 			Normal_Attack();
 		}
 		else if (inputTime < attackCount_)
 		{
+			atkNo_ = specialAtk;
 			Special_Attack();
 		}
-
+	}
+	else if (atkNo_ == noAtk)
+	{
 		attackCount_ = 0;
 	}
 	//char str[256];
@@ -133,12 +141,12 @@ void PlayerManager::Revival()
 	aliveFlg_ = true;
 }
 
-//
-//	@brief	•PŒÄ‚Ñ
-D3DXVECTOR3 PlayerManager::Princess_Call()
-{
-	return m_vPos;
-}
+////
+////	@brief	•PŒÄ‚Ñ
+//D3DXVECTOR3 PlayerManager::Princess_Call()
+//{
+//	return m_vPos;
+//}
 
 //
 //	@brief	¶‘¶ƒtƒ‰ƒOŽæ“¾

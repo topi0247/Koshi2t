@@ -15,27 +15,16 @@ enum Controller
 	player4,
 };
 
-//	パラメータ
-struct PlayerParameter
-{
-	char* name_;	//職業名
-	unsigned int hp_;			//HP
-	unsigned int normalAtk_;	//通常攻撃力
-	unsigned int specialAtk_;	//特殊攻撃力
-	unsigned int def_;			//守備力
-	unsigned int waitTime_;		//待機時間
-	float speed_;				//移動速度
-	float weight_;				//重さ
-	float chargeTime_;			//チャージタイム
-};
+
 
 class PlayerManager : public CharactorManager
 {
 protected:
 
+	//モーション番号
 	enum MotionNo
 	{
-		waitM=0,
+		waitM = 0,
 		walkM,
 		normalAtkM,
 		spcialAtkM,
@@ -43,11 +32,20 @@ protected:
 		revivalM,
 	};
 
-	MotionNo motionNo_;		//モーション番号
-	Controller controller_;	//コントローラー番号
-	PlayerParameter playerParam_;	//プレイヤーパラメータ
+	//攻撃状態番号
+	enum AttackState
+	{
+		noAtk = 0,	//攻撃していない
+		waitAtk,	//攻撃待機
+		normalAtk,	//通常攻撃
+		specialAtk,	//特殊攻撃
+	};
 
-	bool aliveFlg_;			//生存フラグ
+	MotionNo motionNo_;		//モーション番号
+	AttackState atkNo_;		//攻撃状態番号
+	Controller controller_;	//コントローラー番号
+
+	bool callFlg_;			//姫呼びフラグ
 	int attackCount_;		//攻撃ボタンカウント
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
@@ -64,12 +62,11 @@ public:
 
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);	//初期化と読み込み
 	void Revival();									//復活
-	D3DXVECTOR3 Princess_Call();	//姫呼び
-	D3DXVECTOR3 GetOwnPos()const { return m_vPos; };
-	bool GetAliveFlg()const;	//生存フラグ取得
+	//D3DXVECTOR3 Princess_Call();					//姫呼び
+	bool GetAliveFlg()const;						//生存フラグ取得
 
 	//デバッグ用
 	int GetAtkCnt() { return attackCount_; };
-	int atk;
+	AttackState GetAtkState() { return atkNo_; };
 	float GetYaw() { return m_fYaw; };
 };

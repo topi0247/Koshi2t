@@ -53,6 +53,22 @@ Collision::~Collision()
 //
 // L:入射ベクトル（レイ） N:ポリゴンの法線
 
+bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
+{
+
+	if (pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2) >= distance)
+	{
+		hitCount_ = 0;
+		return false;
+	}
+	else
+	{
+		hitCount_++;
+		return true;
+	}
+}
+
+
 bool Collision::RayIntersect(CD3DXMESH_ANIM* pMeshA, CD3DXMESH_ANIM* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {
 	BOOL boHit = false;
@@ -90,9 +106,9 @@ D3DXVECTOR3 Collision::Slip(D3DXVECTOR3 L, D3DXVECTOR3 N)
 {
 	D3DXVECTOR3 S; //滑りベクトル（滑る方向）
 
-				   //滑りベクトル S=L-(N * L)/(|N|^2)*N
+	//滑りベクトル S=L-(N * L)/(|N|^2)*N
 	S = L - ((D3DXVec3Dot(&N, &L)) / (pow(D3DXVec3Length(&N), 2)))*N;
-
+	S.y = 0;
 	return S;
 }
 //

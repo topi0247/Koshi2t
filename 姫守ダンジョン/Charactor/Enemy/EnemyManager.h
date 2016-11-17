@@ -8,6 +8,8 @@
 #include "./../CharactorManager.h"
 #include "./../../DebugDraw/D3D11_TEXT.h"
 
+
+
 class EnemyManager : public CharactorManager
 {
 private:
@@ -17,23 +19,26 @@ private:
 		princess = 0,
 		player,
 	};
-	TargetObject targetObj;
+	TargetObject targetObj_;
+	
 protected:
+	Collision* collision_;
 
+	CharactorManager* targetChar_;
+	D3DXVECTOR3 getpos_;
 	virtual void NormalAttack() = 0;	//通常攻撃
 	virtual void Attack();				//攻撃
 	virtual void Move(float speed);		//移動処理
 	virtual void Dead();				//死亡
 	virtual void Motion_Update() {};	//モーション更新
-	void Spawn();						//敵スポーン
 
 public:
-	EnemyManager() { m_vPos.z = 10; };
-	virtual ~EnemyManager() {};
+	EnemyManager() ;
+	virtual ~EnemyManager();
 	
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);		//初期化・読み込み
 
-	void CheckNearPlayer(D3DXVECTOR3 position);	//近くにいるか判別
-	D3DXVECTOR3 GetOwnPos()const { return m_vPos; };
+	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
+	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
 };
 
