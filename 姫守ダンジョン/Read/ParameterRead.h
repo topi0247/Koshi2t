@@ -99,4 +99,3 @@ public:
 	EnemyParameter* GetEnemyParamList(const char* name)const;				//敵パラメータ呼び出し
 
 };
-

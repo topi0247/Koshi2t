@@ -70,28 +70,40 @@ SwordMan::SwordMan(Controller controller) :JobManager(controller)
 //	@brief	çUåÇ
 void SwordMan::Attack()
 {
-	if (GamePad::checkInput(controller_, GamePad::InputName::A))
+	if (GamePad::checkInput(controller_, GamePad::InputName::A)
+		|| GetKeyState('1') & 0x80)
 	{
 		++attackCount_;
-		atkNo_ = waitAtk;
+		atkNo_ = normalAtk;
 	}
-	else if (atkNo_ == specialAtk)
+	else if (atkNo_ == normalAtk)
 	{
 		attackCount_ = 0;
-		Special_Attack();
+		//atkNo_ = noAtk;
+		//Special_Attack();
+	}
+	else if (atkNo_ == charge)
+	{
+		attackCount_ = 0;
+		atkNo_ = specialAtk;
 
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = 40;
-	if (1 < attackCount_&& attackCount_ < inputTime)
+
+	if (inputTime < attackCount_)
 	{
-		atkNo_ = noAtk;
+		atkNo_ = charge;
+	}
+	else if (atkNo_ == normalAtk)
+	{
 		Normal_Attack();
 	}
-	else if (inputTime < attackCount_)
+
+	if (atkNo_ == specialAtk)
 	{
-		atkNo_ = specialAtk;
+		Special_Attack();
 	}
 }
 
@@ -99,11 +111,11 @@ void SwordMan::Attack()
 //	@breif	í èÌçUåÇ
 void SwordMan::Normal_Attack()
 {
-	timeEnd_ = 10;
+	timeEnd_ = 30;
 	if (++timeCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
-		attackCount_ = 0;
+		//attackCount_ = 0;
 		timeCount_ = 0;
 	}
 }
@@ -112,6 +124,8 @@ void SwordMan::Normal_Attack()
 //	@brief	í èÌçUåÇìñÇΩÇËîªíË
 void SwordMan::Normal_Attack_Collision()
 {
+
+
 	if (aroundCharaList_[0] != nullptr)
 	{
 		for (auto chara : aroundCharaList_)
@@ -126,6 +140,13 @@ void SwordMan::Normal_Attack_Collision()
 void SwordMan::Special_Attack()
 {
 	//atkNo_ = noAtk;
+	timeEnd_ = 30;
+	if (++timeCount_ > timeEnd_)
+	{
+		atkNo_ = noAtk;
+		//attackCount_ = 0;
+		timeCount_ = 0;
+	}
 }
 
 //////////////////////////////////////////////
@@ -149,8 +170,8 @@ void Witch::Attack()
 		unsigned int inputTime = 40;
 		if (1 < attackCount_&& attackCount_ < inputTime)
 		{
-			atkNo_ = normalAtk,
-				Normal_Attack();
+			atkNo_ = normalAtk;
+			Normal_Attack();
 		}
 		else if (inputTime < attackCount_)
 		{

@@ -207,7 +207,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "axis : %f", virChar_[player1]->m_AxisZ.z);
+	sprintf(str, "degree : %f", D3DXToDegree(virChar_[player1]->m_fYaw));
 	debugText_->Render(str, 0, 50);
 	sprintf(str, "count : %i", ray_->GetHitCnt());
 	debugText_->Render(str, 0, 70);

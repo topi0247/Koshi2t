@@ -38,6 +38,7 @@ protected:
 		noAtk = 0,	//攻撃していない
 		waitAtk,	//攻撃待機
 		normalAtk,	//通常攻撃
+		charge,		//チャージ
 		specialAtk,	//特殊攻撃
 	};
 
