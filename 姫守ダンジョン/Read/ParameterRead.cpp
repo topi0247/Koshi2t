@@ -12,12 +12,16 @@ using namespace std;
 //	@brief	JobParameterコンストラクタ
 JobParameter::JobParameter(string str)
 	:hp_(0)
-	,normalAtk_(0)
-	,specialAtk_(0)
-	,def_(0)
-	,waitTime_(0)
-	,moveSpeed_(0)
-	,weight_(0)
+	, normalAtk_(0)
+	, specialAtk_(0)
+	, def_(0)
+	, chargeTime_(0)
+	, specialAttackTime_(0)
+	, moveSpeed_(0)
+	, specialMoveSpeed_(0)
+	, weight_(0)
+	, attackReach_(0)
+	, scale_(0)
 {
 	//職業名の取得
 	string temp = str;
@@ -45,16 +49,22 @@ JobParameter::JobParameter(string str)
 	specialAtk_ = atoi(pull.c_str());
 	temp = temp.substr(comma + 1);
 
+	//特殊攻撃時間
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	specialAttackTime_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//チャージタイム取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	chargeTime_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
 	//守備力取得
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
 	def_ = atoi(pull.c_str());
-	temp = temp.substr(comma + 1);
-
-	//待機時間取得
-	comma = temp.find(',');
-	pull = temp.substr(0, comma);
-	waitTime_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
 	//移動スピード取得
@@ -63,16 +73,29 @@ JobParameter::JobParameter(string str)
 	moveSpeed_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
+	//特殊移動スピード取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	specialMoveSpeed_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
 	//重さ取得
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
 	weight_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
-	//移動スピード取得
+	//攻撃リーチ取得
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
-	chargeTime_= atof(pull.c_str());
+	attackReach_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//スケール取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	scale_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
 }
 
 //=====================================================================//
@@ -81,7 +104,7 @@ JobParameter::JobParameter(string str)
 //	@brief	姫パラメータ読み込み
 PrincessParameter::PrincessParameter(string str)
 	:moveSpeed_(0)
-	,weight_(0)
+	, weight_(0)
 {
 	//職業名の取得
 	string temp = str;
@@ -141,6 +164,18 @@ EnemyParameter::EnemyParameter(string str)
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
 	weight_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//攻撃リーチ取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	attackReach_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//スケール取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	scale_ = atof(pull.c_str());
 }
 
 //=======================================================================//
@@ -149,9 +184,9 @@ EnemyParameter::EnemyParameter(string str)
 //	@brief	ParameterReadコンストラクタ	
 ParameterRead::ParameterRead()
 	:jobParamList_(0)
-	,enemyParamList_(0)
-	,jobCount_(0)
-	,enemyCount_(0)
+	, enemyParamList_(0)
+	, jobCount_(0)
+	, enemyCount_(0)
 {
 }
 
@@ -280,7 +315,7 @@ JobParameter* ParameterRead::GetJobParamList(const char* name)const
 {
 	for (int i = 0; i < jobCount_; i++)
 	{
-		if (strcmp(name,jobParamList_[i]->GetName()) == 0)
+		if (strcmp(name, jobParamList_[i]->GetName()) == 0)
 		{
 			return jobParamList_[i];
 		}

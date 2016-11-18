@@ -27,7 +27,7 @@ protected:
 		waitM = 0,
 		walkM,
 		normalAtkM,
-		spcialAtkM,
+		specialAtkM,
 		deadM,
 		revivalM,
 	};
@@ -50,7 +50,7 @@ protected:
 
 	virtual void Normal_Attack() = 0;	//’ÊíUŒ‚
 	virtual void Special_Attack() = 0;	//“ÁêUŒ‚
-	virtual void Attack();				//UŒ‚
+	//virtual void Attack();				//UŒ‚
 	virtual void Move(float speed);		//ˆÚ“®ˆ—
 	virtual void Dead();				//€–S
 	virtual void Motion_Update();		//ƒ‚[ƒVƒ‡ƒ“XV

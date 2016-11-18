@@ -10,6 +10,7 @@
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
 	:opponentWeight_(0)
+	,aroundCharaList_(0)
 {
 	collision_ = new Collision;
 }
