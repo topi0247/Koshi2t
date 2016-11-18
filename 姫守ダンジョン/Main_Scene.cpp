@@ -110,10 +110,10 @@ void Main_Scene::Update()
 	//エネミースポーン処理
 
 
-	for (int i = 0; i < 3; i++)
+	/*for (int i = 0; i < 3; i++)
 	{
 		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
-	}
+	}*/
 	//virEnemy_[0]->CharaUpdate();
 
 

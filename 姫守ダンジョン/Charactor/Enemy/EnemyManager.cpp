@@ -39,53 +39,53 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 //
 //	@brief　			ターゲットポジションの更新
 //	@param (position)	座標
-void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
-{
-	/*if (targetObj_ != player)
-	{
-		float range = 1.0f;
-		double checkDist = range*range;
-		if (collision_->CharaNear(m_vPos,position,checkDist))
-		{
-			targetObj_ = player;
-		}
-		else
-		{
-			virPos = D3DXVECTOR3(0, 0, 0);
-		}
-	}
-	
-	targetPos_ = virPos;*/
-	//現在のターゲットとチェックするプレイヤーが一致するか
-	if (targetChar_ == checkChar)
-	{
-		//チェックする(現在ターゲットのプレイヤー）が生存しているか
-		if (checkChar->GetAliveFlg())
-		{
-			//ターゲット更新
-			targetChar_ = checkChar;
-		}
-		else        //しんどるやーん
-		{
-			//ターゲットを姫に変更
-			targetChar_ = princess;
-		}
-	}
-	else if (targetChar_ == princess || targetChar_ == nullptr)       //現在のターゲットが姫
-	{
-		//近くに生きとるプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
-		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_vPos, checkChar->m_vPos, 50.0))
-		{
-			//ターゲットをプレイヤーに変更
-			targetChar_ = checkChar;
-		}
-		else         //近くに生きとるプレイヤーがおらんがな(チェックするプレイヤーが生きていない 又は 距離遠いやんけ)
-		{
-			//ターゲット更新
-			targetChar_ = princess;
-		}
-	}
-}
+//void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
+//{
+//	/*if (targetObj_ != player)
+//	{
+//		float range = 1.0f;
+//		double checkDist = range*range;
+//		if (collision_->CharaNear(m_vPos,position,checkDist))
+//		{
+//			targetObj_ = player;
+//		}
+//		else
+//		{
+//			virPos = D3DXVECTOR3(0, 0, 0);
+//		}
+//	}
+//	
+//	targetPos_ = virPos;*/
+//	//現在のターゲットとチェックするプレイヤーが一致するか
+//	if (targetChar_ == checkChar)
+//	{
+//		//チェックする(現在ターゲットのプレイヤー）が生存しているか
+//		if (checkChar->GetAliveFlg())
+//		{
+//			//ターゲット更新
+//			targetChar_ = checkChar;
+//		}
+//		else        //しんどるやーん
+//		{
+//			//ターゲットを姫に変更
+//			targetChar_ = princess;
+//		}
+//	}
+//	else if (targetChar_ == princess || targetChar_ == nullptr)       //現在のターゲットが姫
+//	{
+//		//近くに生きとるプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
+//		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_vPos, checkChar->m_vPos, 50.0))
+//		{
+//			//ターゲットをプレイヤーに変更
+//			targetChar_ = checkChar;
+//		}
+//		else         //近くに生きとるプレイヤーがおらんがな(チェックするプレイヤーが生きていない 又は 距離遠いやんけ)
+//		{
+//			//ターゲット更新
+//			targetChar_ = princess;
+//		}
+//	}
+//}
 
 //
 //	@brief			移動処理
