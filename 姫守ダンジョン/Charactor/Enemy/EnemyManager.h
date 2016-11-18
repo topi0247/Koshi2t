@@ -37,7 +37,7 @@ public:
 	
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);		//初期化・読み込み
 
-	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
+	//void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
 	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
 };
 
