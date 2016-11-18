@@ -109,11 +109,19 @@ void Main_Scene::Update()
 {
 	//エネミースポーン処理
 
+
 	for (int i = 0; i < 3; i++)
 	{
-		virEnemy_[0]->SetTargetChar(virChar_[i],virChar_[player4]);
+		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
 	}
 	//virEnemy_[0]->CharaUpdate();
+
+
+
+	//virEnemy_[0]->CheckNearPlayer(virChar_[player1]->m_vPos);
+	//virEnemy_[0]->CharaUpdate();
+
+
 
 	/*ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);*/
 
@@ -137,6 +145,9 @@ void Main_Scene::Update()
 //	@brief	衝突判定管理
 void Main_Scene::CollisionControl()
 {
+
+	//当たり判定
+
 	float fDistance = 0;
 	D3DXVECTOR3 vNormal;
 	//壁との衝突判定
@@ -170,10 +181,8 @@ void Main_Scene::CollisionControl()
 			}
 		}
 	}
-	//virChar_[player1]->SetHitWall(wallFlg);
 
-	//キャラクター同士の衝突判定
-	}
+}
 
 //
 //	@brief			描画
@@ -202,7 +211,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 50);
 	sprintf(str, "count : %i", ray_->GetHitCnt());
 	debugText_->Render(str, 0, 70);
-	sprintf(str, "pos x : %f :pos z : %f", virEnemy_[0]->GetTargetPos().x, virEnemy_[0]->GetTargetPos().z );
+	sprintf(str, "pos x : %f :pos z : %f", virEnemy_[0]->GetTargetPos().x, virEnemy_[0]->GetTargetPos().z);
 	debugText_->Render(str, 0, 90);
 
 }

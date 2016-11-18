@@ -109,6 +109,7 @@ D3DXVECTOR3 Collision::Slip(D3DXVECTOR3 L, D3DXVECTOR3 N)
 	//ŠŠ‚èƒxƒNƒgƒ‹ S=L-(N * L)/(|N|^2)*N
 	S = L - ((D3DXVec3Dot(&N, &L)) / (pow(D3DXVec3Length(&N), 2)))*N;
 	S.y = 0;
+
 	return S;
 }
 //

@@ -15,6 +15,7 @@
 class CharactorManager:public CD3DXMESH_ANIM
 {
 protected:
+
 	Collision* collision_;
 
 	float opponentWeight_;	//進行方向にいるキャラの重さ
@@ -43,8 +44,8 @@ public:
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
-	void SetHitWall(bool wallHitFlg);					//壁にぶつかっているかどうかの更新
 
 	bool GetAliveFlg() { return aliveFlg_; };
+
 };
 

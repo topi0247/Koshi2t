@@ -22,7 +22,6 @@ private:
 	TargetObject targetObj_;
 	
 protected:
-	Collision* collision_;
 
 	CharactorManager* targetChar_;
 	D3DXVECTOR3 getpos_;
