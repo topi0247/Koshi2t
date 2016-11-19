@@ -8,6 +8,7 @@
 
 JobManager::JobManager(Controller controller)
 	:timeCount_(0)
+	,hit(0)
 	//,mime_(player)
 {
 }
@@ -111,12 +112,14 @@ void SwordMan::Attack()
 //	@breif	’ÊíUŒ‚
 void SwordMan::Normal_Attack()
 {
+	Normal_Attack_Collision();
 	timeEnd_ = 30;
 	if (++timeCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
 		timeCount_ = 0;
+		hit = 0;
 	}
 }
 
@@ -124,13 +127,25 @@ void SwordMan::Normal_Attack()
 //	@brief	’ÊíUŒ‚“–‚½‚è”»’è
 void SwordMan::Normal_Attack_Collision()
 {
+	float degree = D3DXToDegree(m_fYaw);
 
-
-	if (aroundCharaList_[0] != nullptr)
+	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)
 		{
+			D3DXVECTOR3 vec = chara->m_vPos - m_vPos;
+			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+			angle = D3DXToDegree(angle);
 
+			float hitAngle = 45;
+			if (fabsf(degree - angle) <= 45)
+			{
+				hit = true;
+			}
+			else
+			{
+				hit = false;
+			}
 		}
 	}
 }

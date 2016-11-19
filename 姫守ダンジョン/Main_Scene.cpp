@@ -176,8 +176,11 @@ void Main_Scene::CollisionControl()
 				//chara‚Æopp‚Ì‹——£‚ğ”»’è
 
 				//‹ß‚©‚Á‚½‚ç
-				chara->SetAroundChara(opp);
-				opp->SetAroundChara(chara);
+				if (ray_->CharaNear(chara->m_vPos, opp->m_vPos, 5))
+				{
+					chara->SetAroundChara(opp);
+					opp->SetAroundChara(chara);
+				}
 			}
 		}
 	}
@@ -207,11 +210,12 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "degree : %f", D3DXToDegree(virChar_[player1]->m_fYaw));
+	sprintf(str, "radian : %f",virChar_[player1]->m_fYaw);
 	debugText_->Render(str, 0, 50);
 	sprintf(str, "count : %i", ray_->GetHitCnt());
 	debugText_->Render(str, 0, 70);
 	sprintf(str, "pos x : %f :pos z : %f", virEnemy_[0]->GetTargetPos().x, virEnemy_[0]->GetTargetPos().z);
 	debugText_->Render(str, 0, 90);
-
+	sprintf(str, "hit : %d", virChar_[player1]->hit);
+	debugText_->Render(str, 0, 110);
 }

@@ -43,6 +43,7 @@ void PlayerManager::Move(float speed)
 		Rotation(inputStick);
 	}
 
+
 	//ˆÚ“®
 	const float moveEpsilon = 0.2;	//Œëì–h~—p
 	float sp = 0;

@@ -38,6 +38,8 @@ public:
 	JobManager(Controller controller);
 	virtual ~JobManager();
 	virtual void CharaUpdate();
+
+	bool hit;//デバッグ用
 };
 
 //	剣士クラス

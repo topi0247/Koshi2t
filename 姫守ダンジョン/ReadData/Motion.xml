@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Job name="Œ•Žm">
+    <motion name="wait" id="0"/>
+    <motion name="walk" id="1"/>
+    <motion name="dead" id="2"/>
+    <motion name="alive" id="3"/>
+    <motion name="call" id="4"/>
+    <motion name="attack1" id="5"/>
+    <motion name="attack2" id="6"/>
+    <motion name="charge" id="7"/>
+    <motion name="special" id="8"/>
+</Job>
+<Job name="–‚“±Žm">
+    <motion name="wait" id="0"/>
+    <motion name="walk" id="1"/>
+    <motion name="dead" id="2"/>
+    <motion name="alive" id="3"/>
+    <motion name="call" id="4"/>
+    <motion name="attack" id="5"/>
+    <motion name="charge" id="6"/>
+    <motion name="special" id="7"/>
+</Job>
+<Job name="‚Žm">
+    <motion name="wait" id="0"/>
+    <motion name="walk" id="1"/>
+    <motion name="dead" id="2"/>
+    <motion name="alive" id="3"/>
+    <motion name="call" id="4"/>
+    <motion name="attack1" id="5"/>
+    <motion name="special" id="6"/>
+    <motion name="specialWalk" id="7"/>
+</Job>
+<Job name="”š’eŽm">
+    <motion name="wait" id="0"/>
+    <motion name="walk" id="1"/>
+    <motion name="dead" id="2"/>
+    <motion name="alive" id="3"/>
+    <motion name="call" id="4"/>
+    <motion name="attack" id="5"/>
+    <motion name="special" id="6"/>
+</Job>

@@ -25,6 +25,7 @@ class JobParameter
 	float specialMoveSpeed_;	//特殊移動速度
 	float weight_;				//重さ
 	float attackReach_;			//攻撃リーチ
+	float attackRange_;			//攻撃範囲
 	float scale_;				//スケール
 public:
 	JobParameter(std::string str);

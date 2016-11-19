@@ -22,6 +22,7 @@ JobParameter::JobParameter(string str)
 	, weight_(0)
 	, attackReach_(0)
 	, scale_(0)
+	, attackRange_(0)
 {
 	//E‹Æ–¼‚Ìæ“¾
 	string temp = str;
@@ -89,6 +90,12 @@ JobParameter::JobParameter(string str)
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
 	attackReach_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//UŒ‚”ÍˆÍæ“¾
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	attackRange_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
 	//ƒXƒP[ƒ‹æ“¾
