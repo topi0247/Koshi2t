@@ -81,7 +81,38 @@ void CharactorManager::Move_Update()
 //	@param (charactor)	周辺にいるキャラクター
 void CharactorManager::SetAroundChara(CharactorManager* charactor)
 {
+	for (auto list : aroundCharaList_)
+	{
+		if (list == charactor)
+		{
+			return;
+		}
+	}
+
 	aroundCharaList_.push_back(charactor);
+}
+
+//
+//	@brief	周辺にいるキャラクターがまだ周辺にいるかどうかのチェック
+void CharactorManager::ArouncCharaCheck()
+{
+	float dist = 10;
+	int count = 0;
+	for (auto list : aroundCharaList_)
+	{
+		if (!collision_->CharaNear(m_vPos, list->m_vPos, dist))
+		{
+			//いなかったら削除
+			aroundCharaList_.erase(aroundCharaList_.begin());
+			--count;
+
+			if (aroundCharaList_.empty())
+			{
+				break;
+			}
+		}
+		++count;
+	}
 }
 
 //

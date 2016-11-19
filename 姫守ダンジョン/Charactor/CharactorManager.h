@@ -30,6 +30,7 @@ protected:
 	virtual void Motion_Update()=0;						//モーション更新
 	void KnockBack(D3DXVECTOR3 atkPos, float distance);	//ノックバック
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
+	void ArouncCharaCheck();							//周辺にいるキャラがまだ周辺にいるかのチェック
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
@@ -47,5 +48,6 @@ public:
 
 	bool GetAliveFlg() { return aliveFlg_; };
 
+	int GetCount()const { return aroundCharaList_.size(); };	//デバッグ用キャラカウント
 };
 

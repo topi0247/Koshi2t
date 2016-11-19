@@ -20,6 +20,9 @@ JobManager::~JobManager()
 
 void JobManager::CharaUpdate()
 {
+	//é¸ï”Ç…Ç¢ÇÈÉLÉÉÉâÉ`ÉFÉbÉN
+	ArouncCharaCheck();
+
 	//çUåÇ
 	Attack();
 	/*if (GamePad::checkInput(controller_, GamePad::InputName::A))
@@ -75,11 +78,13 @@ void SwordMan::Attack()
 		|| GetKeyState('1') & 0x80)
 	{
 		++attackCount_;
-		atkNo_ = normalAtk;
 	}
 	else if (atkNo_ == normalAtk)
 	{
 		attackCount_ = 0;
+		//atkNo_ = noAtk;
+		//Normal_Attack();
+		//hit = false;
 		//atkNo_ = noAtk;
 		//Special_Attack();
 	}
@@ -87,22 +92,26 @@ void SwordMan::Attack()
 	{
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
-
+		hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = 40;
 
-	if (inputTime < attackCount_)
+	if (0 < attackCount_ && attackCount_ < inputTime)
+	{
+		atkNo_ = normalAtk;
+	}
+	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
 	}
-	else if (atkNo_ == normalAtk)
+
+	if (atkNo_ == normalAtk)
 	{
 		Normal_Attack();
 	}
-
-	if (atkNo_ == specialAtk)
+	else if (atkNo_ == specialAtk)
 	{
 		Special_Attack();
 	}
@@ -119,7 +128,7 @@ void SwordMan::Normal_Attack()
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
 		timeCount_ = 0;
-		hit = 0;
+		hit = false;
 	}
 }
 
@@ -133,18 +142,21 @@ void SwordMan::Normal_Attack_Collision()
 	{
 		for (auto chara : aroundCharaList_)
 		{
-			D3DXVECTOR3 vec = chara->m_vPos - m_vPos;
-			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-			angle = D3DXToDegree(angle);
+			if (collision_->CharaNear(m_vPos, chara->m_vPos, 5))
+			{
+				D3DXVECTOR3 vec = chara->m_vPos - m_vPos;
+				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+				angle = D3DXToDegree(angle);
 
-			float hitAngle = 45;
-			if (fabsf(degree - angle) <= 45)
-			{
-				hit = true;
-			}
-			else
-			{
-				hit = false;
+				float hitAngle = 45;
+				if (fabsf(degree - angle) <= 45)
+				{
+					hit = true;
+				}
+				else
+				{
+					hit = false;
+				}
 			}
 		}
 	}
@@ -154,13 +166,30 @@ void SwordMan::Normal_Attack_Collision()
 //	@brief	ì¡éÍçUåÇ
 void SwordMan::Special_Attack()
 {
-	//atkNo_ = noAtk;
+	Special_Attack_Collision();
 	timeEnd_ = 30;
 	if (++timeCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
 		timeCount_ = 0;
+		hit = false;
+	}
+}
+
+//
+//	@brief	ì¡éÍçUåÇìñÇΩÇËîªíË
+void SwordMan::Special_Attack_Collision()
+{
+	if (!aroundCharaList_.empty())
+	{
+		for (auto chara : aroundCharaList_)
+		{
+			if (collision_->CharaNear(m_vPos, chara->m_vPos, 5))
+			{
+				hit = true;
+			}
+		}
 	}
 }
 

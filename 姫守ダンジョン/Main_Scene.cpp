@@ -214,7 +214,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 50);
 	sprintf(str, "count : %i", ray_->GetHitCnt());
 	debugText_->Render(str, 0, 70);
-	sprintf(str, "pos x : %f :pos z : %f", virEnemy_[0]->GetTargetPos().x, virEnemy_[0]->GetTargetPos().z);
+	sprintf(str, "charaCount : %d",virChar_[player1]->GetCount());
 	debugText_->Render(str, 0, 90);
 	sprintf(str, "hit : %d", virChar_[player1]->hit);
 	debugText_->Render(str, 0, 110);

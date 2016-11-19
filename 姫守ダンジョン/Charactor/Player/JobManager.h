@@ -46,9 +46,11 @@ public:
 class SwordMan :public JobManager
 {
 private:
+	void Normal_Attack_Collision();
+	void Special_Attack_Collision();
+private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
-	void Normal_Attack_Collision();
 public:
 	SwordMan(Controller controller);
 	virtual void Attack();
