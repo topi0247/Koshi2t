@@ -9,7 +9,6 @@
 JobManager::JobManager(Controller controller)
 	:timeCount_(0)
 	,hit(0)
-	//,mime_(player)
 {
 }
 
@@ -152,6 +151,9 @@ void SwordMan::Normal_Attack_Collision()
 				if (fabsf(degree - angle) <= 45)
 				{
 					hit = true;
+					chara->SetKnockBackFlg();
+					chara->SetKnockBackPos(m_vPos);
+					chara->SetKnockBackDis(5);
 				}
 				else
 				{
@@ -188,6 +190,9 @@ void SwordMan::Special_Attack_Collision()
 			if (collision_->CharaNear(m_vPos, chara->m_vPos, 5))
 			{
 				hit = true;
+				chara->SetKnockBackFlg();
+				chara->SetKnockBackPos(m_vPos);
+				chara->SetKnockBackDis(5);
 			}
 		}
 	}

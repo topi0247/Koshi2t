@@ -10,7 +10,10 @@
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
 	:opponentWeight_(0)
-	,aroundCharaList_(0)
+	, aroundCharaList_(0)
+	, knockBackFlg_(0)
+	,knockBackPos_(0,0,0)
+	,knockBackDis_(0)
 {
 	collision_ = new Collision;
 }
@@ -34,13 +37,22 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
 	D3DXVECTOR3 dir = m_vPos - atkPos;
 
 	//正規化
-	D3DXVec3Normalize(&dir,&dir);
+	D3DXVec3Normalize(&dir, &dir);
 
 	//角度を算出
 	float angle = (atan2(dir.z, dir.x)*-1) - (D3DX_PI / 2.0f);
 
 	//ノックバックスピード
-	const float knockBackSpeed = 2.0f;
+	const float knockBackSpeed = 1.0f;
+
+	m_Dir = D3DXVECTOR3(knockBackSpeed*dir.x, 0, knockBackSpeed*dir.z);
+
+	m_vPos += m_Dir;
+
+	if (!collision_->CharaNear(m_vPos, atkPos, distance))
+	{
+		knockBackFlg_ = false;
+	}
 }
 
 //
@@ -50,7 +62,7 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 {
 	//角度を算出
 	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
-	
+
 	m_fYaw = angel;
 }
 
@@ -73,7 +85,14 @@ void CharactorManager::StopMove()
 //	@brief	移動の更新
 void CharactorManager::Move_Update()
 {
-	m_vPos += m_Dir;
+	if (knockBackFlg_ == false)
+	{
+		m_vPos += m_Dir;
+	}
+	else
+	{
+		KnockBack(knockBackPos_,knockBackDis_);
+	}
 }
 
 //
@@ -103,7 +122,7 @@ void CharactorManager::ArouncCharaCheck()
 		if (!collision_->CharaNear(m_vPos, list->m_vPos, dist))
 		{
 			//いなかったら削除
-			aroundCharaList_.erase(aroundCharaList_.begin());
+			aroundCharaList_.erase(aroundCharaList_.begin() + count);
 			--count;
 
 			if (aroundCharaList_.empty())

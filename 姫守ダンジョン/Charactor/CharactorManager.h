@@ -21,6 +21,10 @@ protected:
 	float opponentWeight_;	//進行方向にいるキャラの重さ
 	
 	bool aliveFlg_;		//生存フラグ
+	bool knockBackFlg_;
+	float knockBackDis_;	
+	D3DXVECTOR3 knockBackPos_;
+
 
 	std::vector<CharactorManager*> aroundCharaList_;
 
@@ -45,7 +49,9 @@ public:
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
-
+	void SetKnockBackFlg() { knockBackFlg_ = true; };
+	void SetKnockBackPos(D3DXVECTOR3 pos) { knockBackPos_ = pos; };
+	void SetKnockBackDis(float dist) { knockBackDis_ = dist; };
 	bool GetAliveFlg() { return aliveFlg_; };
 
 	int GetCount()const { return aroundCharaList_.size(); };	//デバッグ用キャラカウント
