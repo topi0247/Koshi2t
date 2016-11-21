@@ -66,8 +66,9 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	xfileRead->ReadXFilePath();
 
 	//ステージのファイル読み込み
-	XFile* xfile = xfileRead->GetXFile("ステージ");
-	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	XFile* xfile = xfileRead->GetXFile("ステージ1_floor1");
+	XFile* xfile2= xfileRead->GetXFile("ステージ1_wall1");
+	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName(),xfile2->GetFileName());
 
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
@@ -76,7 +77,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	xfile = xfileRead->GetXFile("魔導士");
 	virChar_[player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player2]->m_vPos = D3DXVECTOR3(26, 0, -11);
+	virChar_[player2]->m_vPos = D3DXVECTOR3(20, 0, -11);
 
 	xfile = xfileRead->GetXFile("盾士");
 	virChar_[player3]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
@@ -84,7 +85,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	xfile = xfileRead->GetXFile("爆弾士");
 	virChar_[player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player4]->m_vPos = D3DXVECTOR3(-26, 0, -11);
+	virChar_[player4]->m_vPos = D3DXVECTOR3(-20, 0, -11);
 
 	xfile = xfileRead->GetXFile("スライム");
 	virEnemy_[0]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
@@ -110,10 +111,10 @@ void Main_Scene::Update()
 	//エネミースポーン処理
 
 
-	/*for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
-	}*/
+	}
 	//virEnemy_[0]->CharaUpdate();
 
 
@@ -123,7 +124,7 @@ void Main_Scene::Update()
 
 
 
-	/*ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);*/
+	ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);
 
 	//仮キャラ更新
 	for (auto chara : charList_)
@@ -155,13 +156,13 @@ void Main_Scene::CollisionControl()
 	//bool wallFlg = false;
 	for (auto chara : charList_)
 	{
-		if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
+		if (ray_->RayIntersect(chara, stage_->GetMeshWallInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 		{
 			//当たり状態なので、滑らせる
 			//virChar_[player1]->m_vPos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
 			chara->SlipMove(ray_->Slip(chara->m_Dir, vNormal));
 			//滑りベクトル先の壁とのレイ判定 ２重に判定	
-			if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+			if (ray_->RayIntersect(chara, stage_->GetMeshWallInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
 			{
 				//virChar_[player1]->m_vPos = D3DXVECTOR3(0, 0, 0);//止める
 				chara->StopMove();
