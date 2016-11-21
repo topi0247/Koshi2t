@@ -20,6 +20,7 @@ class Main_Scene
 	Collision* ray_;
 	JobManager** virChar_;	//確認用仮キャラクター
 	EnemyJobManager** virEnemy_;	//確認用仮キャラクター
+	/*EnemyJobManager* virEnemy_;*/
 
 	void CollisionControl();	//衝突判定管理
 

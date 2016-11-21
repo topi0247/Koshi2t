@@ -11,10 +11,22 @@
 #include "./../Collision.h"
 
 //#include "./../DebugDraw/D3D11_TEXT.h"
+enum CharaType
+{
+	Queen = 0,
+	Player1,
+	Player2,
+	Player3,
+	Player4,
+	Enemy,
+};
 
 class CharactorManager:public CD3DXMESH_ANIM
 {
 protected:
+
+	
+	CharaType charaType_;
 
 	Collision* collision_;
 
@@ -46,6 +58,6 @@ public:
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
 
 	bool GetAliveFlg() { return aliveFlg_; };
-
+	CharaType GetCharaType()const;
 };
 

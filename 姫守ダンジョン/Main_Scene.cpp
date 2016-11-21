@@ -12,21 +12,27 @@ Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
 	virChar_ = new JobManager *[4];
-	virChar_[player1] = new SwordMan(player1);
-	virChar_[player2] = new Witch(player2);
-	virChar_[player3] = new ShieldMan(player3);
-	virChar_[player4] = new Bomber(player4);
+	virChar_[player1] = new SwordMan(Controller::player1,CharaType::Player1);
+	virChar_[player2] = new Witch(Controller::player2, CharaType::Player2);
+	virChar_[player3] = new ShieldMan(Controller::player3, CharaType::Player3);
+	virChar_[player4] = new Bomber(Controller::player4, CharaType::Player4);
 
 	for (int i = 0; i < 4; i++)
 	{
 		charList_.push_back(virChar_[i]);
 	}
 
-	ray_ = new Collision;
-	virEnemy_ = new EnemyJobManager *[3];
-	virEnemy_[0] = new Slim;
 
-	charList_.push_back(virEnemy_[0]);
+	/*virEnemy_ = new Slim;*/
+	virEnemy_ = new EnemyJobManager*[10];
+	for (int i = 0; i < 10;i++)
+	{
+		virEnemy_[i] = new Slim;
+		//enemyList_.push_back(virEnemy_[i]);
+	}
+	ray_ = new Collision;
+
+	//charList_.push_back(virEnemy_[0]);
 }
 
 //
@@ -38,10 +44,7 @@ Main_Scene::~Main_Scene()
 
 	delete ray_;
 	ray_ = nullptr;
-
-	delete virEnemy_[0];
-	virEnemy_[0] = nullptr;
-
+	
 	for (int i = 0; i < 4; i++)
 	{
 		delete virChar_[i];
@@ -49,6 +52,20 @@ Main_Scene::~Main_Scene()
 	}
 	delete[] virChar_;
 	virChar_ = nullptr;
+
+	//for (auto chara : charList_)
+	//{
+	//	delete chara;
+	//	chara = nullptr;
+	//}
+	for (int i = 0; i < 10; i++)
+	{
+		delete virEnemy_[i];
+		virEnemy_[i] = nullptr;
+	}
+	delete[] virEnemy_;
+	virEnemy_ = nullptr;
+	
 
 	delete debugText_;
 	debugText_ = nullptr;
@@ -88,7 +105,15 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	virChar_[player4]->m_vPos = D3DXVECTOR3(-20, 0, -11);
 
 	xfile = xfileRead->GetXFile("スライム");
-	virEnemy_[0]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	for (int i = 0; i < 10; i++)
+	{
+		virEnemy_[i]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	}
+
+	/*for (auto enemy : enemyList_)
+	{
+		enemy->SetTarget(virChar_[4]);
+	}*/
 }
 
 //
@@ -109,11 +134,38 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 void Main_Scene::Update()
 {
 	//エネミースポーン処理
+	static int enemyCount = 0;
+	if ((GetKeyState(VK_F1) & 0x80) && enemyCount<10)
+	{
+		charList_.push_back(virEnemy_[enemyCount]);
+		enemyList_.push_back(virEnemy_[enemyCount]);
+		enemyList_[enemyCount]->SetTarget(virChar_[player4]);
+		++enemyCount;
+		//for (auto enemy : enemyList_)
+		//{
+		//	enemy->SetTarget(virChar_[4]);
+		//}
+	}
 
 
-	for (int i = 0; i < 3; i++)
+
+	/*for (int i = 0; i < 3; i++)
 	{
 		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
+	}*/
+	if(!enemyList_.empty())
+	for (auto enemy : enemyList_)
+	{
+		//プレイヤーループ
+		//for (int i = 0; i < 4; i++)
+		//{
+			//プレイヤーとエネミーが一定の距離内
+			float dist = 5.0;
+			if (ray_->CharaNear(enemy->m_vPos, virChar_[player1]->m_vPos, dist))
+			{
+				enemy->Target_Update(virChar_[player1], virChar_[player4]);
+			}
+		//}
 	}
 	//virEnemy_[0]->CharaUpdate();
 
@@ -124,7 +176,7 @@ void Main_Scene::Update()
 
 
 
-	ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);
+	//ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);
 
 	//仮キャラ更新
 	for (auto chara : charList_)
@@ -194,12 +246,16 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	//ステージの描画
 	stage_->Render(mView, mProj);
 
-	virEnemy_[0]->CharaRender(mView, mProj);
+	//virEnemy_->CharaRender(mView, mProj);
 
 	//仮キャラ描画
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		virChar_[i]->CharaRender(mView, mProj);
+	}*/
+	for (auto chara : charList_)
+	{
+		chara->CharaRender(mView, mProj);
 	}
 
 	//デバッグ描画
@@ -210,9 +266,16 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 30);
 	sprintf(str, "axis : %f", virChar_[player1]->m_AxisZ.z);
 	debugText_->Render(str, 0, 50);
-	sprintf(str, "count : %i", ray_->GetHitCnt());
+	sprintf(str, "count : %d", enemyList_.size());
 	debugText_->Render(str, 0, 70);
-	sprintf(str, "pos x : %f :pos z : %f", virEnemy_[0]->GetTargetPos().x, virEnemy_[0]->GetTargetPos().z);
+	float dist = pow(virEnemy_[0]->m_vPos.x - virChar_[player1]->m_vPos.x, 2) + pow(virEnemy_[0]->m_vPos.z - virChar_[player1]->m_vPos.z, 2);
+	sprintf(str, "dist: %f", dist);
 	debugText_->Render(str, 0, 90);
+	/*sprintf(str, "count : %i", ray_->GetHitCnt());
+	debugText_->Render(str, 0, 70);*/
+	//sprintf(str, "pos x : %f :pos z : %f", virEnemy_->GetTargetPos().x, virEnemy_->GetTargetPos().z);
+	//debugText_->Render(str, 0, 70);
+	//sprintf(str, "pos x : %f :pos z : %f", virEnemy_->m_vPos.x, virEnemy_->m_vPos.z);
+	//debugText_->Render(str, 0, 90);
 
 }

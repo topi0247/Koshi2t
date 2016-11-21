@@ -35,7 +35,7 @@ protected:
 	Collision* col_;
 
 public:
-	JobManager(Controller controller);
+	JobManager(Controller controller,CharaType charatype);
 	virtual ~JobManager();
 	virtual void CharaUpdate();
 };
@@ -48,7 +48,7 @@ private:
 	virtual void Special_Attack();
 	void Normal_Attack_Collision();
 public:
-	SwordMan(Controller controller);
+	SwordMan(Controller controller, CharaType charatype);
 	virtual void Attack();
 	//デバッグ用
 	float dist;
@@ -62,7 +62,7 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
-	Witch(Controller controller);
+	Witch(Controller controller, CharaType charatype);
 	virtual void Attack();
 };
 
@@ -73,7 +73,7 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
-	ShieldMan(Controller controller);
+	ShieldMan(Controller controller, CharaType charatype);
 	virtual void Attack();
 };
 
@@ -84,6 +84,6 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
-	Bomber(Controller controller);
+	Bomber(Controller controller, CharaType charatype);
 	virtual void Attack();
 };
