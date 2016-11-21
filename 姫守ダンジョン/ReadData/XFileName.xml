@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <Models Type="Player">
-    <model fileName="t01.X" charName="Œ•Žm"/>
-
-
-
-    <model fileName="t01.X" charName="–‚“±Žm"/>
-    <model fileName="t01.X" charName="‚Žm"/>
-
-
-    <model fileName="t01.X" charName="”š’eŽm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="Œ•Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="–‚“±Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="‚Žm"/>
+    <model fileName="Josh_Motion_Walk.x" charName="”š’eŽm"/>
 </Models>
 <Models Type="Enemy">
-
-
     <model fileName="slim2.x" charName="ƒXƒ‰ƒCƒ€"/>
-
-
     <model fileName="scale1.x" charName="ƒSƒuƒŠƒ“"/>
-
     <model fileName="scale1.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
-
-
 </Models>
-
-
 <Models Type="Queen">
-
-
     <model fileName="scale1.x" charName="•P"/>
-
-
 </Models>
-
 <Models Type="Stage">
-
-    <model fileName="mabase.x" charName="ƒXƒe[ƒW"/>
-
-
+    <model fileName="stage3_floor.x" charName="ƒXƒe[ƒW1_floor1"/>
+    <model fileName="stage3_wall.x" charName="ƒXƒe[ƒW1_wall1"/>
 </Models>

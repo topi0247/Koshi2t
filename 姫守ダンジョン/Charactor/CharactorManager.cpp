@@ -153,6 +153,13 @@ void CharactorManager::SetOppWeight(float weight)
 }
 
 //
+//	@brief	キャラクター体分取得
+CharaType CharactorManager::GetCharaType()const
+{
+	return charaType_;
+}
+
+//
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス

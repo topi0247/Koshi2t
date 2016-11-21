@@ -9,14 +9,16 @@
 //	@brief	コンストラクタ
 Stage::Stage()
 {
-	stageMesh_ = new CD3DXMESH;
+	stageMeshFloor_ = new CD3DXMESH_ANIM;
+	stageMeshWall_ = new CD3DXMESH_ANIM;
 }
 
 //
 //	@brief デストラクタ
 Stage::~Stage()
 {
-	SAFE_DELETE(stageMesh_);
+	SAFE_DELETE(stageMeshFloor_);
+	SAFE_DELETE(stageMeshWall_);
 }
 
 //
@@ -24,14 +26,24 @@ Stage::~Stage()
 //	@param (m_hWnd)				ウィンドウハンドル
 //	@param (m_pDevice)			デバイス
 //	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			Xファイル名
-void Stage::Read(HWND m_phWnd,ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
+//	@param (FloorName)			床のXファイル名
+//	@param (WallName)			壁のXファイル名
+void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* FloorName, const char* WallName)
 {
-	char FileName[80];
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Stage/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-	if (FAILED(stageMesh_->Init(m_phWnd,m_pDevice, m_pDeviceContext, FileName)))
+	char FileNameF[80];
+	memset(FileNameF, 0, sizeof(FileNameF));
+	strcpy_s(FileNameF, sizeof(FileNameF), "./Model/XFiles/Stage/");
+	strcat_s(FileNameF, sizeof(FileNameF), FloorName);
+	if (FAILED(stageMeshFloor_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileNameF)))
+	{
+		return;
+	}
+	
+	char FileNameW[80];
+	memset(FileNameW, 0, sizeof(FileNameW));
+	strcpy_s(FileNameW, sizeof(FileNameW), "./Model/XFiles/Stage/");
+	strcat_s(FileNameW, sizeof(FileNameW), WallName);
+	if (FAILED(stageMeshWall_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileNameW)))
 	{
 		return;
 	}
@@ -43,5 +55,6 @@ void Stage::Read(HWND m_phWnd,ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pD
 //	@param (mProj)	射影変換用マトリックス
 void Stage::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
-	stageMesh_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
+	stageMeshFloor_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
+	stageMeshWall_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
 }

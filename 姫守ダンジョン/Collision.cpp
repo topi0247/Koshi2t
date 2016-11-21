@@ -56,15 +56,15 @@ Collision::~Collision()
 bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 {
 
-	if (pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2) >= distance)
+	if (pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2) <= distance*distance)
 	{
 		hitCount_ = 0;
-		return false;
+		return true;
 	}
 	else
 	{
 		hitCount_++;
-		return true;
+		return false;
 	}
 }
 
