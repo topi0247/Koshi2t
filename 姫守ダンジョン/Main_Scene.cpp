@@ -23,10 +23,10 @@ Main_Scene::Main_Scene()
 	}
 
 	ray_ = new Collision;
-	virEnemy_ = new EnemyJobManager *[3];
-	virEnemy_[0] = new Slim;
+	//virEnemy_ = new EnemyJobManager *[3];
+	//virEnemy_[0] = new Slim;
 
-	charList_.push_back(virEnemy_[0]);
+	//charList_.push_back(virEnemy_[0]);
 }
 
 //
@@ -39,8 +39,8 @@ Main_Scene::~Main_Scene()
 	delete ray_;
 	ray_ = nullptr;
 
-	delete virEnemy_[0];
-	virEnemy_[0] = nullptr;
+	//delete virEnemy_[0];
+	//virEnemy_[0] = nullptr;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -67,27 +67,28 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	//ステージのファイル読み込み
 	XFile* xfile = xfileRead->GetXFile("ステージ");
-	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	stage_->Read(m_hWnd,m_pDevice, m_pDeviceContext, xfile->GetFileName());
 
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
 	virChar_[player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player1]->m_vPos = D3DXVECTOR3(26, 0, 11);
+	
+	virChar_[player1]->m_Pos = D3DXVECTOR3(26, 0, 11);
 
 	xfile = xfileRead->GetXFile("魔導士");
 	virChar_[player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player2]->m_vPos = D3DXVECTOR3(26, 0, -11);
+	virChar_[player2]->m_Pos = D3DXVECTOR3(26, 0, -11);
 
 	xfile = xfileRead->GetXFile("盾士");
 	virChar_[player3]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player3]->m_vPos = D3DXVECTOR3(-26, 0, 11);
+	virChar_[player3]->m_Pos = D3DXVECTOR3(-26, 0, 11);
 
 	xfile = xfileRead->GetXFile("爆弾士");
 	virChar_[player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[player4]->m_vPos = D3DXVECTOR3(-26, 0, -11);
+	virChar_[player4]->m_Pos = D3DXVECTOR3(-26, 0, -11);
 
-	xfile = xfileRead->GetXFile("スライム");
-	virEnemy_[0]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	//xfile = xfileRead->GetXFile("スライム");
+	//virEnemy_[0]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
 }
 
 //
@@ -118,12 +119,12 @@ void Main_Scene::Update()
 
 
 
-	//virEnemy_[0]->CheckNearPlayer(virChar_[player1]->m_vPos);
+	//virEnemy_[0]->CheckNearPlayer(virChar_[player1]->m_Pos);
 	//virEnemy_[0]->CharaUpdate();
 
 
 
-	/*ray_->CharaNear(virChar_[player1]->m_vPos, virEnemy_[0]->m_vPos, 50.0);*/
+	/*ray_->CharaNear(virChar_[player1]->m_Pos, virEnemy_[0]->m_Pos, 50.0);*/
 
 	//仮キャラ更新
 	for (auto chara : charList_)
@@ -158,12 +159,12 @@ void Main_Scene::CollisionControl()
 		if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 		{
 			//当たり状態なので、滑らせる
-			//virChar_[player1]->m_vPos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
+			//virChar_[player1]->m_Pos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
 			chara->SlipMove(ray_->Slip(chara->m_Dir, vNormal));
 			//滑りベクトル先の壁とのレイ判定 ２重に判定	
 			if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
 			{
-				//virChar_[player1]->m_vPos = D3DXVECTOR3(0, 0, 0);//止める
+				//virChar_[player1]->m_Pos = D3DXVECTOR3(0, 0, 0);//止める
 				chara->StopMove();
 				//wallFlg = true;
 			}
@@ -176,14 +177,17 @@ void Main_Scene::CollisionControl()
 				//charaとoppの距離を判定
 
 				//近かったら
-				if (ray_->CharaNear(chara->m_vPos, opp->m_vPos, 5))
+				if (ray_->CharaNear(chara->m_Pos, opp->m_Pos, 5))
 				{
 					chara->SetAroundChara(opp);
-					opp->SetAroundChara(chara);
+					//opp->SetAroundChara(chara);
 				}
 			}
 		}
 	}
+
+	//爆弾と魔法の衝突判定更新
+	
 
 }
 
@@ -196,7 +200,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	//ステージの描画
 	stage_->Render(mView, mProj);
 
-	virEnemy_[0]->CharaRender(mView, mProj);
+	//virEnemy_[0]->CharaRender(mView, mProj);
 
 	//仮キャラ描画
 	for (int i = 0; i < 4; i++)
@@ -210,7 +214,7 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 10);
 	sprintf(str, "AtkCount : %d", virChar_[player1]->GetAtkCnt());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "radian : %f",virChar_[player1]->m_fYaw);
+	sprintf(str, "radian : %f",virChar_[player1]->m_Yaw);
 	debugText_->Render(str, 0, 50);
 	sprintf(str, "count : %i", ray_->GetHitCnt());
 	debugText_->Render(str, 0, 70);

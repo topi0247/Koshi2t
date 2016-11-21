@@ -34,7 +34,7 @@ CharactorManager::~CharactorManager()
 void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
 {
 	//方向取得
-	D3DXVECTOR3 dir = m_vPos - atkPos;
+	D3DXVECTOR3 dir = m_Pos - atkPos;
 
 	//正規化
 	D3DXVec3Normalize(&dir, &dir);
@@ -47,9 +47,9 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
 
 	m_Dir = D3DXVECTOR3(knockBackSpeed*dir.x, 0, knockBackSpeed*dir.z);
 
-	m_vPos += m_Dir;
+	m_Pos += m_Dir;
 
-	if (!collision_->CharaNear(m_vPos, atkPos, distance))
+	if (!collision_->CharaNear(m_Pos, atkPos, distance))
 	{
 		knockBackFlg_ = false;
 	}
@@ -63,7 +63,7 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 	//角度を算出
 	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
 
-	m_fYaw = angel;
+	m_Yaw = angel;
 }
 
 //
@@ -82,12 +82,23 @@ void CharactorManager::StopMove()
 }
 
 //
+//	@brief			ノックバック
+//	@param (pos)	攻撃者の座標
+//	@param (dist)	ノックバック距離
+void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist)
+{
+	knockBackFlg_ = true;
+	knockBackPos_ = pos;
+	knockBackDis_ = dist;
+}
+
+//
 //	@brief	移動の更新
 void CharactorManager::Move_Update()
 {
 	if (knockBackFlg_ == false)
 	{
-		m_vPos += m_Dir;
+		m_Pos += m_Dir;
 	}
 	else
 	{
@@ -119,7 +130,7 @@ void CharactorManager::ArouncCharaCheck()
 	int count = 0;
 	for (auto list : aroundCharaList_)
 	{
-		if (!collision_->CharaNear(m_vPos, list->m_vPos, dist))
+		if (!collision_->CharaNear(m_Pos, list->m_Pos, dist))
 		{
 			//いなかったら削除
 			aroundCharaList_.erase(aroundCharaList_.begin() + count);
@@ -147,6 +158,7 @@ void CharactorManager::SetOppWeight(float weight)
 //	@param (mProj)	射影変換用マトリックス
 void CharactorManager::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
 {
-	Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
-
+	m_View = mView;
+	m_Proj = mProj;
+	Render();
 }

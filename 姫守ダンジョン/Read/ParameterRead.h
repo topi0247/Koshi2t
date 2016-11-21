@@ -95,8 +95,10 @@ public:
 	void SetPriceccParameter(const char* filePath);	//姫パラメータ読み込み
 	void SetEnemyParameter(const char* filePath);	//敵パラメータ読み込み
 
+	int GetJobCount()const;
+	int GetEnemyCount()const;
 	JobParameter* GetJobParamList(const char* name)const;					//職業パラメータ呼び出し
 	PrincessParameter* GetPrincessParam()const { return princessParam_; };	//姫パラメータ呼び出し
 	EnemyParameter* GetEnemyParamList(const char* name)const;				//敵パラメータ呼び出し
-
+	 
 };

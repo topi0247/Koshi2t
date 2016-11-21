@@ -316,6 +316,20 @@ void ParameterRead::SetEnemyParameter(const char* filePath)
 }
 
 //
+//	@brief	職業数の読み込み
+int ParameterRead::GetJobCount()const
+{
+	return jobCount_;
+}
+
+//
+//	@brief	エネミー数の読み込み
+int ParameterRead::GetEnemyCount()const
+{
+	return enemyCount_;
+}
+
+//
 //	@brief			職業パラメータ取得
 //	@param (name)	職業名
 JobParameter* ParameterRead::GetJobParamList(const char* name)const

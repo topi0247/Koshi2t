@@ -28,9 +28,6 @@
     <ClCompile Include="Charactor\Player\JobManager.cpp">
       <Filter>Charactor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh\CD3DXMESH_ANIM.cpp">
-      <Filter>Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Read\ParameterRead.cpp">
       <Filter>Read</Filter>
     </ClCompile>
@@ -40,6 +37,27 @@
     </ClCompile>
     <ClCompile Include="Charactor\Enemy\EnemyManager.cpp">
       <Filter>Charactor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\CD3DXSKINMESH.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\CD3DXMESH.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\Job\SwordMan.cpp">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\Job\WeaponBall.cpp">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\Job\Witch.cpp">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\Job\ShieldMan.cpp">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\Player\Job\Bomber.cpp">
+      <Filter>Charactor\Player\Job</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +89,6 @@
     <ClInclude Include="Charactor\Player\JobManager.h">
       <Filter>Charactor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh\CD3DXMESH_ANIM.h">
-      <Filter>Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Read\ParameterRead.h">
       <Filter>Read</Filter>
     </ClInclude>
@@ -86,6 +101,30 @@
     </ClInclude>
     <ClInclude Include="Charactor\Enemy\EnemyJobManager.h">
       <Filter>Charactor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\CD3DXSKINMESH.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\CD3DXMESH.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\Job\WeaponBall.h">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\Job\SwordMan.h">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\Job\Witch.h">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\Job\ShieldMan.h">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\Job\Bomber.h">
+      <Filter>Charactor\Player\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\PlayerCommon.h">
+      <Filter>Charactor\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +148,9 @@
     </Filter>
     <Filter Include="Charactor\Enemy">
       <UniqueIdentifier>{508b2f76-05d6-4fa9-a683-dbb11d957149}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charactor\Player\Job">
+      <UniqueIdentifier>{901bdccf-b2de-46f9-8457-e1c2a8bcdb21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

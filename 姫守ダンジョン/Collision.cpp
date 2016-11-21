@@ -69,13 +69,13 @@ bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 }
 
 
-bool Collision::RayIntersect(CD3DXMESH_ANIM* pMeshA, CD3DXMESH_ANIM* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
+bool Collision::RayIntersect(SKINMESH::CD3DXSKINMESH* pMeshA, STATICMESH::CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {
 	BOOL boHit = false;
 	D3DXMATRIX Inv;
 	D3DXVECTOR3 vStart, vEnd, vDirection;
 	//レイを出すメッシュの位置・回転をレイに適用
-	vStart = pMeshA->m_vPos;
+	vStart = pMeshA->m_Pos;
 	vDirection = pMeshA->m_Dir;
 	//レイを当てるメッシュが動いていたり回転している場合でも対象のワールド行列の逆行列を用いれば正しくレイが当たる
 	D3DXMatrixInverse(&Inv, NULL, &pMeshB->m_World);

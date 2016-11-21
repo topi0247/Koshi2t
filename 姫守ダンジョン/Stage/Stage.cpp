@@ -9,7 +9,7 @@
 //	@brief	コンストラクタ
 Stage::Stage()
 {
-	stageMesh_ = new CD3DXMESH_ANIM;
+	stageMesh_ = new CD3DXMESH;
 }
 
 //
@@ -25,13 +25,13 @@ Stage::~Stage()
 //	@param (m_pDevice)			デバイス
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 //	@param (fileName)			Xファイル名
-void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
+void Stage::Read(HWND m_phWnd,ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
 {
 	char FileName[80];
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Stage/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	if (FAILED(stageMesh_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
+	if (FAILED(stageMesh_->Init(m_phWnd,m_pDevice, m_pDeviceContext, FileName)))
 	{
 		return;
 	}

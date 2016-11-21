@@ -51,7 +51,7 @@ protected:
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
 	virtual void Special_Attack() = 0;	//特殊攻撃
-	//virtual void Attack();				//攻撃
+	//virtual void Attack();			//攻撃
 	virtual void Move(float speed);		//移動処理
 	virtual void Dead();				//死亡
 	virtual void Motion_Update();		//モーション更新
@@ -69,5 +69,5 @@ public:
 	//デバッグ用
 	int GetAtkCnt() { return attackCount_; };
 	AttackState GetAtkState() { return atkNo_; };
-	float GetYaw() { return m_fYaw; };
+	float GetYaw() { return m_Yaw; };
 };

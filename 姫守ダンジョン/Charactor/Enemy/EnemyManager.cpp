@@ -8,7 +8,7 @@
 
 EnemyManager::EnemyManager()
 {
-	m_vPos = { 0,0,0 };
+	m_Pos = { 0,0,0 };
 	collision_ = new Collision;
 }
 
@@ -30,10 +30,10 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Enemy/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
-	{
-		return;
-	}
+	CD3DXSKINMESH_INIT si;
+	si = { m_hWnd,m_pDevice,m_pDeviceContext };
+	Init(&si);
+	CreateFromX(FileName);
 }
 
 //
@@ -93,8 +93,8 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 void EnemyManager::Move(float speed)
 {
 	D3DXVECTOR3 E_Lock;
-	E_Lock.x = targetPos_.x - m_vPos.x;
-	E_Lock.z = targetPos_.z - m_vPos.z;
+	E_Lock.x = targetPos_.x - m_Pos.x;
+	E_Lock.z = targetPos_.z - m_Pos.z;
 
 	//âÒì]èàóù
 	Rotation(E_Lock);

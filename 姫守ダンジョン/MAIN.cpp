@@ -227,7 +227,6 @@ HRESULT MAIN::InitD3D()
 	//‰Šú‰»
 	mainScene_ = new Main_Scene;
 	mainScene_->DebugInit(m_pDeviceContext);
-
 	return S_OK;
 }
 //

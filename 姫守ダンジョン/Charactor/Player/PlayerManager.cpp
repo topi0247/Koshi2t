@@ -19,11 +19,13 @@ void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11Device
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
-	{
-		return;
-	}
-
+	CD3DXSKINMESH_INIT si;
+	si.hWnd = m_hWnd;
+	si.pDevice = m_pDevice;
+	si.pDeviceContext = m_pDeviceContext;
+	Init(&si);
+	CreateFromX(FileName);
+	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 }
 
 //
@@ -53,7 +55,8 @@ void PlayerManager::Move(float speed)
 		if (motionNo_ != waitM)
 		{
 			motionNo_ = waitM;
-			ChangeMotion(waitM);
+			m_pD3dxMesh->ChangeAnimSet(waitM);
+			//ChangeMotion(waitM);
 		}
 	}
 	else
@@ -61,7 +64,8 @@ void PlayerManager::Move(float speed)
 		if (motionNo_ != walkM)
 		{
 			motionNo_ = walkM;
-			ChangeMotion(walkM);
+			m_pD3dxMesh->ChangeAnimSet(walkM);
+			//ChangeMotion(walkM);
 		}
 	}
 
@@ -119,7 +123,8 @@ void PlayerManager::Dead()
 void PlayerManager::Motion_Update()
 {
 	const float speed = 0.01;
-	m_pAnimController->AdvanceTime(speed, NULL);
+
+	//m_pAnimController->AdvanceTime(speed, NULL);
 
 	////UŒ‚
 	//if (GamePad::checkInput(controller_, GamePad::InputName::A))

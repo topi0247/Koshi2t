@@ -6,7 +6,7 @@
 
 #pragma once
 #include "./../Origin.h"
-#include "./../Mesh/CD3DXMesh_Anim.h"
+#include "./../Mesh/CD3DXSKINMESH.h"
 #include "./tinyxml2.h"
 
 using namespace tinyxml2;

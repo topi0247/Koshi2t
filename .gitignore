@@ -27,3 +27,6 @@
 *.pdb
 *.log
 *.exe
+*.tlog
+*.xml
+*.lastcodeanalysissucceeded

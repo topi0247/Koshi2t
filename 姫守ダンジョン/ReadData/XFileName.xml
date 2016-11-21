@@ -2,14 +2,15 @@
 
 
 <Models Type="Player">
-    <model fileName="Josh_Motion_Walk.x" charName="Œ•Žm"/>
+    <model fileName="t01.X" charName="Œ•Žm"/>
 
 
-    <model fileName="Josh_Motion_Walk.x" charName="–‚“±Žm"/>
-    <model fileName="Josh_Motion_Walk.x" charName="‚Žm"/>
+
+    <model fileName="t01.X" charName="–‚“±Žm"/>
+    <model fileName="t01.X" charName="‚Žm"/>
 
 
-    <model fileName="Josh_Motion_Walk.x" charName="”š’eŽm"/>
+    <model fileName="t01.X" charName="”š’eŽm"/>
 </Models>
 <Models Type="Enemy">
 
