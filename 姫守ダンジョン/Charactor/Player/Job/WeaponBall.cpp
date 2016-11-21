@@ -59,6 +59,8 @@ void WeaponBall::Move_Weapon(float dist)
 	{
 		delFlg_ = true;
 	}
+	
+	Hit();
 }
 
 //
@@ -76,11 +78,17 @@ void WeaponBall::Time_Del_Weapon(int frame)
 //
 //	@brief			被弾する可能性のあるキャラクターリスト
 //	@param (chara)	ダメージを食らうキャラ
-void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara)
+void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType cType)
 {
 	for (auto c : chara)
 	{
-		damageList_.push_back(c);
+		if (c->GetCharaType() != cType)
+		{
+			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, range_))
+			{
+				damageList_.push_back(c);
+			}
+		}
 	}
 }
 
@@ -110,13 +118,15 @@ D3DXVECTOR3 WeaponBall::GetPosition()const
 //	@brief	攻撃ヒット
 void WeaponBall::Hit()
 {
-	range_ = 8;
-	dist_ = 10;
-	for (auto c : damageList_)
+	if (!damageList_.empty())
 	{
-		if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, range_))
+		for (auto c : damageList_)
 		{
-			c->SetKnockBack(weaponBall_->m_vPos, 10);
+			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, range_))
+			{
+				c->SetKnockBack(weaponBall_->m_vPos, 10);
+				delFlg_ = true;
+			}
 		}
 	}
 }

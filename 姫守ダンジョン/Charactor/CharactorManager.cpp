@@ -9,7 +9,7 @@
 //
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
-	:opponentWeight_(0)
+	:opponentWeight_(1)
 	, aroundCharaList_(0)
 	, knockBackFlg_(0)
 	,knockBackPos_(0,0,0)
@@ -124,24 +124,59 @@ void CharactorManager::SetAroundChara(CharactorManager* charactor)
 
 //
 //	@brief	周辺にいるキャラクターがまだ周辺にいるかどうかのチェック
-void CharactorManager::ArouncCharaCheck()
+void CharactorManager::AroundCharaCheck()
 {
 	float dist = 10;
 	int count = 0;
-	for (auto list : aroundCharaList_)
-	{
-		if (!collision_->CharaNear(m_Pos, list->m_Pos, dist))
-		{
-			//いなかったら削除
-			aroundCharaList_.erase(aroundCharaList_.begin() + count);
-			--count;
 
-			if (aroundCharaList_.empty())
+	for (size_t i = 0; i < aroundCharaList_.size(); i++)
+	{
+		//for (auto list : aroundCharaList_)
+		//{
+			if (!collision_->CharaNear(m_Pos, aroundCharaList_[count]->m_Pos, dist))
+			{
+				//いなかったら削除
+				aroundCharaList_.erase(aroundCharaList_.begin() + count);
+				--count;
+
+			}
+
+			/*if (aroundCharaList_.empty())
 			{
 				break;
+			}*/
+			++count;
+		//}
+	}
+}
+
+//
+//	@brief	移動方向にキャラクターがいるか
+//	@note	移動方向にキャラクターがいたら、そのキャラクターの重さを取得
+void CharactorManager::MoveCharaHit()
+{
+	float dist = 2;
+	float degree = D3DXToDegree(m_Yaw);
+	CharactorManager* opp = nullptr;
+	for (auto c : aroundCharaList_)
+	{
+		if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
+		{
+			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
+			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+			angle = D3DXToDegree(angle);
+
+			float hitAngle = 45/2;
+			if (fabsf(degree - angle) <= hitAngle)
+			{
+				opponentWeight_ = c->ownWright_;
+				opp = c;
 			}
 		}
-		++count;
+	}
+	if (opp == nullptr)
+	{
+		opponentWeight_ = 1;
 	}
 }
 
@@ -153,10 +188,17 @@ void CharactorManager::SetOppWeight(float weight)
 }
 
 //
-//	@brief	キャラクター体分取得
+//	@brief	キャラクタータイプ取得
 CharaType CharactorManager::GetCharaType()const
 {
 	return charaType_;
+}
+
+//
+//	@brief	全キャラクターセット
+void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
+{
+	allCharaList_ = list;
 }
 
 //

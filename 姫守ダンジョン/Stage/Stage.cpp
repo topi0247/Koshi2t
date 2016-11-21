@@ -9,8 +9,8 @@
 //	@brief	コンストラクタ
 Stage::Stage()
 {
-	stageMeshFloor_ = new CD3DXMESH_ANIM;
-	stageMeshWall_ = new CD3DXMESH_ANIM;
+	stageMeshFloor_ = new CD3DXMESH;
+	stageMeshWall_ = new CD3DXMESH;
 }
 
 //

@@ -1,20 +1,23 @@
 #include "./SwordMan.h"
 
 
-SwordMan::SwordMan(Controller controller) :JobManager(controller)
+SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 {
-	controller_ = controller;
+	charaType_ = charaType;
 	col_ = new Collision();
 
-	//ƒpƒ‰ƒ[ƒ^ƒZƒbƒg
-	JobParameter* p = paramRead_->GetJobParamList("Œ•Žm");
+}
+
+SwordMan::~SwordMan()
+{
+
 }
 
 //
 //	@brief	UŒ‚
 void SwordMan::Attack()
 {
-	if (GamePad::checkInput(controller_, GamePad::InputName::A)
+	if (GamePad::checkInput(charaType_,GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
@@ -36,7 +39,7 @@ void SwordMan::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = 40;
+	unsigned int inputTime = param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ < inputTime)
 	{
@@ -77,8 +80,9 @@ void SwordMan::Normal_Attack()
 void SwordMan::Normal_Attack_Collision()
 {
 	float degree = D3DXToDegree(m_Yaw);
-	float atkDist = 5;
-	float backDist = 1;
+	float atkDist = param_->attackReach_;
+	float hitAngle = param_->attackRange_;
+	float backDist = param_->attackReach_;
 
 	if (!aroundCharaList_.empty())
 	{
@@ -90,7 +94,7 @@ void SwordMan::Normal_Attack_Collision()
 				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 				angle = D3DXToDegree(angle);
 
-				float hitAngle = 45;
+
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
@@ -124,8 +128,8 @@ void SwordMan::Special_Attack()
 //	@brief	“ÁŽêUŒ‚“–‚½‚è”»’è
 void SwordMan::Special_Attack_Collision()
 {
-	float atkRange = 5;
-	float backDist = 5;
+	float atkRange = param_->attackRange_;
+	float backDist = param_->attackReach_;
 	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)

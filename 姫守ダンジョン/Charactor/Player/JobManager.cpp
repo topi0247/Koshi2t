@@ -8,12 +8,11 @@
 
 //	
 //	@brief	コンストラクタ
-JobManager::JobManager(Controller controller)
+JobManager::JobManager(CharaType charaType)
 	:timeCount_(0)
 	, hit(0)
 {
 	atkNo_ = noAtk;
-	SetParameter();
 }
 
 //
@@ -24,12 +23,26 @@ JobManager::~JobManager()
 
 //	
 //	@brief	パラメータセット
-void JobManager::SetParameter()
+void JobManager::SetParameter(JobParameter* param)
 {
-	paramRead_ = new ParameterRead;
-	paramRead_->SetJobParameter("./ReadDate/JobParameterData.csv");
+	memset(param_->name_,0, sizeof(param_->name_));
+	strcpy_s(param_->name_, sizeof(param_->name_), param->GetName());
 
-	//for(int i=0;i<paramRead_->get)
+	param_->hp_ = param->GetHP();
+	param_->normalAtk_ = param->GetNormalAtk();
+	param_->specialAtk_ = param->GetSpAtk();
+	param_->def_ = param->GetDefense();
+	param_->specialAttackTime_ = param->GetWaitTime();
+	param_->hp_ = param->GetChargeTime();
+	param_->moveSpeed_ = param->GetMoveSpeed();
+	param_->specialMoveSpeed_ = param->GetSpMoveSpeed();
+	param_->weight_ = param->GetWeight();
+	param_->attackReach_ = param->GetAttackReach_();
+	param_->attackRange_ = param->GetAttackRange_();
+	param_->scale_ = param->GetScale();
+
+	ownWright_ = param_->weight_;
+	hp_ = param_->hp_;
 }
 
 //
@@ -38,7 +51,7 @@ void JobManager::CharaUpdate()
 {
 	m_pD3dxMesh->m_pAnimController->AdvanceTime(0.1, NULL);
 	//周辺にいるキャラチェック
-	ArouncCharaCheck();
+	AroundCharaCheck();
 
 	//攻撃
 	Attack();
@@ -48,7 +61,7 @@ void JobManager::CharaUpdate()
 	}*/
 
 	//姫呼び
-	if (GamePad::checkInput(controller_, GamePad::InputName::B))
+	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
 	{
 		callFlg_ = true;
 		//Princess_Call();

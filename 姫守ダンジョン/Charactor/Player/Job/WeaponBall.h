@@ -24,7 +24,7 @@ public:
 	void SetScale(float scale);
 	void Move_Weapon(float dist);
 	void Time_Del_Weapon(int frame);
-	void SetDamageList(std::vector<CharactorManager*> chara);
+	void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType);
 	void SetDamageChara(CharactorManager* chara);
 	void SetHitRangeKnockBackDist(float range, float dist);
 	void Render(D3DXMATRIX mView, D3DXMATRIX mProj);

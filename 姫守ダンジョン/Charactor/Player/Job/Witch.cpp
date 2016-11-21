@@ -1,11 +1,16 @@
 #include "./Witch.h"
 
 
-Witch::Witch(Controller controller) :JobManager(controller)
+Witch::Witch(CharaType charaType) :JobManager(charaType)
 {
-	controller_ = controller;
+	charaType_ = charaType;
 	magicFlg_ = false;
-	magicBall_ = nullptr;
+	atkNo_ = noAtk;
+	attackCount_ = 0;
+}
+
+Witch::~Witch()
+{
 }
 
 //
@@ -13,7 +18,7 @@ Witch::Witch(Controller controller) :JobManager(controller)
 void Witch::Attack()
 {
 	//atkNo_ = noAtk;
-	if (magicFlg_ == false && GamePad::checkInput(controller_, GamePad::InputName::A)
+	if (magicFlg_ == false && GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
@@ -31,7 +36,7 @@ void Witch::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = 40;
+	unsigned int inputTime =param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ < inputTime)
 	{
@@ -47,25 +52,23 @@ void Witch::Attack()
 		Special_Attack();
 	}
 
-	if (magicFlg_ == true && magicBall_ != nullptr)
+	if (magicFlg_ == true && !magicBall_.empty())
 	{
-		static int count = 0;
-		for (int i = 0; i < magicBallCount_; i++)
+		int count = 0;
+		for (size_t i = 0; i < magicBall_.size(); i++)
 		{
-			if (magicBall_[i] != nullptr && magicBall_[i]->GetDelFlg())
+			if (magicBall_[i]->GetDelFlg())
 			{
-				delete magicBall_[i];
-				magicBall_[i] = nullptr;
+				magicBall_.erase(magicBall_.begin() + count);
 				atkNo_ = noAtk;
-				++count;
+				--count;
 			}
+			++count;
 		}
-		if (count == magicBallCount_)
+		if (magicBall_.empty())
 		{
-			delete[] magicBall_;
-			magicBall_ = nullptr;
+			magicBall_.clear();
 			magicFlg_ = false;
-			count = 0;
 		}
 	}
 }
@@ -74,18 +77,26 @@ void Witch::Attack()
 //	@brief	’ÊíUŒ‚
 void Witch::Normal_Attack()
 {
-	float dist = 30;
+	float dist = param_->attackReach_;
+	float kRange = param_->attackRange_;
+	float kDist = param_->attackReach_;
 	magicBallCount_ = 1;
 	if (magicFlg_)
 	{
-		magicBall_[0]->Move_Weapon(dist);
+		for (auto m : magicBall_)
+		{
+			m->Move_Weapon(dist);
+		}
 	}
 	else
 	{
-		magicBall_ = new WeaponBall*[magicBallCount_];
-		magicBall_[0] = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+		WeaponBall* magic= new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+
 		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-		magicBall_[0]->SetDir(vec);
+		magic->SetDir(vec);
+		magic->SetDamageList(allCharaList_, charaType_);
+		magic->SetHitRangeKnockBackDist(kRange, kDist);
+		magicBall_.push_back(magic);
 		magicFlg_ = true;
 	}
 }
@@ -94,28 +105,32 @@ void Witch::Normal_Attack()
 //	@brief	“ÁŽêUŒ‚
 void Witch::Special_Attack()
 {
-	float dist = 30;
+	float dist = param_->attackReach_;
+	float kRange = param_->attackRange_;
+	float kDist = param_->attackReach_;
 	magicBallCount_ = 3;
 	if (magicFlg_)
 	{
-		for (int i = 0; i < magicBallCount_; i++)
+		for (auto m : magicBall_)
 		{
-			magicBall_[i]->Move_Weapon(dist);
+			m->Move_Weapon(dist);
 		}
 	}
 	else
 	{
-		magicBall_ = new WeaponBall*[magicBallCount_];
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)
 		{
-			magicBall_[i] = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+			WeaponBall* magic = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
 			int degree = 90 / (magicBallCount_ / 2 + 1);
 			float temp = angle - 90 + degree + degree*i;
 			temp = D3DXToRadian(temp);
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
-			magicBall_[i]->SetDir(vec);
-			magicBall_[i]->SetScale(0.5);
+			magic->SetDir(vec);
+			magic->SetScale(0.5);
+			magic->SetDamageList(allCharaList_, charaType_);
+			magic->SetHitRangeKnockBackDist(kRange, kDist);
+			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;
 	}
@@ -128,14 +143,11 @@ void Witch::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
 	m_View = mView;
 	m_Proj = mProj;
 	Render();
-	if (magicBall_ != nullptr)
+	if (!magicBall_.empty())
 	{
-		for (int i = 0; i < magicBallCount_; i++)
+		for (auto m:magicBall_)
 		{
-			if (magicBall_[i] != nullptr)
-			{
-				magicBall_[i]->Render(mView, mProj);
-			}
+			m->Render(mView, mProj);
 		}
 	}
 }

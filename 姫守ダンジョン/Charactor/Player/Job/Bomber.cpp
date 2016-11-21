@@ -1,19 +1,24 @@
 #include "./Bomber.h"
 
-Bomber::Bomber(Controller controller) :JobManager(controller)
+Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 {
-	controller_ = controller;
+	charaType_ = charaType;
 	bombFlg_ = false;
 	bomb_.clear();
 	bombScale_ = 1;
 	bombCount_ = 1;
 }
 
+Bomber::~Bomber()
+{
+
+}
+
 //
 //	@brief	攻撃
 void Bomber::Attack()
 {
-	if (GamePad::checkInput(controller_, GamePad::InputName::A)
+	if (GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
@@ -31,7 +36,7 @@ void Bomber::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = 40;
+	unsigned int inputTime = param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ < inputTime)
 	{
@@ -49,6 +54,7 @@ void Bomber::Attack()
 
 	if (!bomb_.empty())
 	{
+		bombFlg_ = true;
 		//static int count = 0;
 		//int count = 0;
 		for (auto b : bomb_)
@@ -69,6 +75,7 @@ void Bomber::Attack()
 		if (bomb_.empty())
 		{
 			bomb_.clear();
+			bombFlg_= false;
 			//count = 0;
 		}
 
@@ -86,11 +93,14 @@ void Bomber::Attack()
 void Bomber::Normal_Attack()
 {
 	size_t size = 2;
+	float range = param_->attackRange_;
+	float dist = param_->attackReach_;
 	if (bomb_.empty() || bomb_.size() < size)
 	{
 		WeaponBall* bomb = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+		bomb->SetDamageList(allCharaList_, charaType_);
+		bomb->SetHitRangeKnockBackDist(range, dist);
 		bomb_.push_back(bomb);
-		bomb->SetDamageList(aroundCharaList_);
 	}
 	atkNo_ = noAtk;
 }
@@ -99,27 +109,13 @@ void Bomber::Normal_Attack()
 //	@brief	特殊攻撃
 void Bomber::Special_Attack()
 {
-	atkNo_ = noAtk;
-}
-
-//
-//	@brief	被弾するキャラリストのセット
-void Bomber::SetForBombCharaList(std::vector<CharactorManager*> list)
-{
-	if (!bomb_.empty())
+	if (++timeCount_ % (FPS * 3) == 0)
 	{
-		for (auto c : list)
-		{
-			for (auto b : bomb_)
-			{
-				if (collision_->CharaNear(b->GetPosition(), c->m_Pos, b->GetHitRange()))
-				{
-					b->SetDamageChara(c);
-				}
-			}
-		}
+		atkNo_ = noAtk;
+		timeCount_ = 0;
 	}
 }
+
 
 //
 //	@brief	描画

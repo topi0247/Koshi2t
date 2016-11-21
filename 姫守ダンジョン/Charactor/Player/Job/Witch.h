@@ -8,12 +8,14 @@ class Witch :public JobManager
 {
 	bool magicFlg_;	//‹Z‚ª”­“®’†‚©‚Ç‚¤‚©
 	int magicBallCount_;
-	WeaponBall** magicBall_;
+	//WeaponBall** magicBall_;
+	std::vector<WeaponBall*> magicBall_;
 private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
-	Witch(Controller controller);
+	Witch(CharaType charaType);
+	virtual ~Witch();
 	virtual void Attack();
 	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);
 };

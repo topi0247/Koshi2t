@@ -35,23 +35,21 @@ struct PlayerParameter
 class JobManager :public PlayerManager
 {
 protected:
-	ParameterRead* paramRead_;
 	unsigned int timeCount_;	//攻撃時間
 	unsigned int timeEnd_;		//攻撃終了時間
-	PlayerParameter param_;
+	PlayerParameter* param_;
 
 	//void Motion_Update();
 
 	Collision* col_;
 
 public:
-	JobManager(Controller controller);
+	JobManager(CharaType charaType);
 	virtual ~JobManager();
 	virtual void CharaUpdate();
 	//template<class> p;
-	void SetParameter();
-
-	PlayerParameter GetParam()const;
+	void SetParameter(JobParameter* param);
+	//PlayerParameter GetParam()const;
 	bool hit;//デバッグ用
 };
 

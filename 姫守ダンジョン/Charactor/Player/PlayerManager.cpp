@@ -26,6 +26,7 @@ void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11Device
 	Init(&si);
 	CreateFromX(FileName);
 	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	ownWright_ = 0.001f;
 }
 
 //
@@ -35,8 +36,8 @@ void PlayerManager::Move(float speed)
 {
 	//スティックの傾き取得
 	D3DXVECTOR3 inputStick;
-	inputStick.x = GamePad::getAnalogValue(controller_, GamePad::AnalogName::AnalogName_LeftStick_X);
-	inputStick.z = GamePad::getAnalogValue(controller_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
 
 	//回転処理
 	const float rotEpsilon = 0.3;
@@ -69,7 +70,10 @@ void PlayerManager::Move(float speed)
 		}
 	}
 
-	m_Dir = D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+	opponentWeight_ = 1;
+	MoveCharaHit();
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
 	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
 	GamePad::update();

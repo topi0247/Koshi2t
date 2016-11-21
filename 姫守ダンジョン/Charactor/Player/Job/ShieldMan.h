@@ -15,6 +15,7 @@ private:
 	virtual void Special_Attack();
 	virtual void Move_Update();
 public:
-	ShieldMan(Controller controller);
+	ShieldMan(CharaType charaType);
+	virtual ~ShieldMan();
 	virtual void Attack();
 };

@@ -17,7 +17,7 @@ EnemyJobManager::~EnemyJobManager()
 
 void EnemyJobManager::CharaUpdate()
 {
-	float speed = 0.5;
+	float speed = 0.05;
 	Move(speed);
 }
 

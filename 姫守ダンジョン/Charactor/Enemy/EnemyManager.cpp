@@ -8,7 +8,7 @@
 
 EnemyManager::EnemyManager()
 {
-	m_vPos = { 0,0,0 };
+	m_Pos = { 0,0,0 };
 	//targetPos_ = D3DXVECTOR3(0, 0, 0);
 	collision_ = new Collision;
 }
@@ -31,10 +31,13 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Enemy/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	if (FAILED(Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
-	{
-		return;
-	}
+	CD3DXSKINMESH_INIT si;
+	si.hWnd = m_hWnd;
+	si.pDevice = m_pDevice;
+	si.pDeviceContext = m_pDeviceContext;
+	Init(&si);
+	CreateFromX(FileName);
+	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 }
 
 //
@@ -43,7 +46,7 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 void EnemyManager::SetTarget(CharactorManager* chara)
 {
 	targetChar_ = chara;
-	targetPos_ = targetChar_->m_vPos;
+	targetPos_ = targetChar_->m_Pos;
 }
 
 //
@@ -80,7 +83,7 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 	{
 		float range = 1.0f;
 		double checkDist = range*range;
-		if (collision_->CharaNear(m_vPos,position,checkDist))
+		if (collision_->CharaNear(m_Pos,position,checkDist))
 		{
 			targetObj_ = player;
 		}
@@ -99,29 +102,29 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 		{
 			//ターゲット更新
 			targetChar_ = checkChar;
-			targetPos_ = targetChar_->m_vPos;
+			targetPos_ = targetChar_->m_Pos;
 		}
 		else        //しんどるやーん
 		{
 			//ターゲットを姫に変更
 			targetChar_ = princess;
-			targetPos_ = targetChar_->m_vPos;
+			targetPos_ = targetChar_->m_Pos;
 		}
 	}
 	else if (targetChar_ == princess || targetChar_ == nullptr)       //現在のターゲットが姫
 	{
 		//近くに生きとるプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
-		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_vPos, checkChar->m_vPos, 50.0))
+		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
 		{
 			//ターゲットをプレイヤーに変更
 			targetChar_ = checkChar;
-			targetPos_ = targetChar_->m_vPos;
+			targetPos_ = targetChar_->m_Pos;
 		}
 		else         //近くに生きとるプレイヤーがおらんがな(チェックするプレイヤーが生きていない 又は 距離遠いやんけ)
 		{
 			//ターゲット更新
 			targetChar_ = princess;
-			targetPos_ = targetChar_->m_vPos;
+			targetPos_ = targetChar_->m_Pos;
 		}
 	}
 }
@@ -132,8 +135,8 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 void EnemyManager::Move(float speed)
 {
 	D3DXVECTOR3 E_Lock;
-	E_Lock.x = targetPos_.x - m_vPos.x;
-	E_Lock.z = targetPos_.z - m_vPos.z;
+	E_Lock.x = targetPos_.x - m_Pos.x;
+	E_Lock.z = targetPos_.z - m_Pos.z;
 
 	D3DXVec3Normalize(&E_Lock, &E_Lock);
 
@@ -141,7 +144,7 @@ void EnemyManager::Move(float speed)
 	Rotation(E_Lock);
 
 	//向いている角度から単位ベクトルを取得
-	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_fYaw)*-0.1, 0, cosf(m_fYaw)*-0.1);
+	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 
 	float sp = speed;
 	

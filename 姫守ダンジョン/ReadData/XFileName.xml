@@ -1,19 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Models Type="Player">
-    <model fileName="Josh_Motion_Walk.x" charName="剣士"/>
-    <model fileName="Josh_Motion_Walk.x" charName="魔導士"/>
-    <model fileName="Josh_Motion_Walk.x" charName="盾士"/>
-    <model fileName="Josh_Motion_Walk.x" charName="爆弾士"/>
+
+    <model fileName="t01.X" charName="剣士"/>
+
+    <model fileName="t01.X" charName="魔導士"/>
+
+    <model fileName="t01.X" charName="盾士"/>
+
+    <model fileName="t01.X" charName="爆弾士"/>
+
 </Models>
+
 <Models Type="Enemy">
-    <model fileName="slim2.x" charName="スライム"/>
-    <model fileName="scale1.x" charName="ゴブリン"/>
-    <model fileName="scale1.x" charName="スケルトン"/>
+
+    <model fileName="t01.X" charName="スライム"/>
+
+    <model fileName="t01.X" charName="ゴブリン"/>
+
+    <model fileName="t01.X" charName="スケルトン"/>
 </Models>
+
 <Models Type="Queen">
-    <model fileName="scale1.x" charName="姫"/>
+
+    <model fileName="t01.X" charName="姫"/>
+
 </Models>
+
 <Models Type="Stage">
-    <model fileName="stage3_floor.x" charName="ステージ1_floor1"/>
-    <model fileName="stage3_wall.x" charName="ステージ1_wall1"/>
+    <model fileName="mabase.x" charName="ステージ0"/>
+    <model fileName="stage1_floor.x" charName="ステージ1_floor1"/>
+
+    <model fileName="stage1_wall.x" charName="ステージ1_wall1"/>
+    <model fileName="stage2_floor.x" charName="ステージ2_floor2"/>
+
+    <model fileName="stage2_wall.x" charName="ステージ2_wall2"/>
+    <model fileName="stage3_floor.x" charName="ステージ3_floor3"/>
+
+    <model fileName="stage3_wall.x" charName="ステージ3_wall3"/>
+    <model fileName="stage4_floor.x" charName="ステージ4_floor4"/>
+
+    <model fileName="stage4_wall.x" charName="ステージ4_wall4"/>
+    <model fileName="stage5_floor.x" charName="ステージ5_floor5"/>
+
+    <model fileName="stage5_wall.x" charName="ステージ5_wall5"/>
+
 </Models>

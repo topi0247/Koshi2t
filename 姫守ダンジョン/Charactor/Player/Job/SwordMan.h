@@ -11,9 +11,7 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 public:
-	SwordMan(Controller controller);
+	SwordMan(CharaType charaType);
+	virtual ~SwordMan();
 	virtual void Attack();
-	//デバッグ用
-	float dist;
-	D3DXVECTOR3 nor;
 };

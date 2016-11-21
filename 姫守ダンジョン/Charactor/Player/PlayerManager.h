@@ -7,16 +7,6 @@
 #include "./../CharactorManager.h"
 #include "./GamePad.h"
 
-enum Controller
-{
-	player1 = 0,
-	player2,
-	player3,
-	player4,
-};
-
-
-
 class PlayerManager : public CharactorManager
 {
 protected:
@@ -44,7 +34,6 @@ protected:
 
 	MotionNo motionNo_;		//モーション番号
 	AttackState atkNo_;		//攻撃状態番号
-	Controller controller_;	//コントローラー番号
 
 	bool callFlg_;			//姫呼びフラグ
 	int attackCount_;		//攻撃ボタンカウント

@@ -1,15 +1,20 @@
 #include "ShieldMan.h"
 
-ShieldMan::ShieldMan(Controller controller) :JobManager(controller)
+ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
-	controller_ = controller;
+	charaType_ = charaType;
+}
+
+ShieldMan::~ShieldMan()
+{
+
 }
 
 //
 //	@brief	UŒ‚
 void ShieldMan::Attack()
 {
-	if (GamePad::checkInput(controller_, GamePad::InputName::A)
+	if (GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
@@ -28,11 +33,11 @@ void ShieldMan::Attack()
 		attackCount_ = 0;
 		atkNo_ = noAtk;
 		hit = false;
-		spMove_ = D3DXVECTOR3(1, 1, 1);
+		spMove_ = D3DXVECTOR3(1, 0, 1);
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = 40;
+	unsigned int inputTime = param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ < inputTime)
 	{
@@ -73,8 +78,9 @@ void ShieldMan::Normal_Attack()
 void ShieldMan::Normal_Attack_Collision()
 {
 	float degree = D3DXToDegree(m_Yaw);
-	float atkDist = 5;
-	float backDist = 1;
+	float hitAngle = param_->attackRange_;
+	float atkDist = param_->attackReach_;
+	float backDist = param_->attackReach_;
 
 	if (!aroundCharaList_.empty())
 	{
@@ -86,7 +92,6 @@ void ShieldMan::Normal_Attack_Collision()
 				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 				angle = D3DXToDegree(angle);
 
-				float hitAngle = 45;
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
@@ -105,7 +110,7 @@ void ShieldMan::Normal_Attack_Collision()
 //	@brief	“ÁŽêUŒ‚
 void ShieldMan::Special_Attack()
 {
-	spMove_ = D3DXVECTOR3(0.5, 0.5, 0.5);
+	spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
 	Special_Attack_Collision();
 }
 
@@ -113,8 +118,8 @@ void ShieldMan::Special_Attack()
 //	@brief	“ÁŽêUŒ‚“–‚½‚è”»’è
 void ShieldMan::Special_Attack_Collision()
 {
-	float atkRange = 5;
-	float backDist = 5;
+	float atkRange = param_->attackRange_;
+	float backDist = param_->attackReach_;
 	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)

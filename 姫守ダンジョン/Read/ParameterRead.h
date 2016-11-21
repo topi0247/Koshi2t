@@ -37,8 +37,10 @@ public:
 	float GetChargeTime()const { return chargeTime_; };			//チャージタイム取得
 	float GetWaitTime()const { return specialAttackTime_; };	//待機時間取得
 	float GetMoveSpeed()const { return moveSpeed_; };			//移動速度取得
+	float GetSpMoveSpeed()const { return specialMoveSpeed_; };	//特殊移動速度取得
 	float GetWeight()const { return weight_; };					//重さ取得
 	float GetAttackReach_()const { return attackReach_; };		//攻撃リーチ取得
+	float GetAttackRange_()const { return attackRange_; };		//攻撃範囲取得
 	float GetScale()const { return scale_; };					//スケール取得
 };
 
