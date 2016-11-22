@@ -122,9 +122,9 @@ void WeaponBall::Hit()
 	{
 		for (auto c : damageList_)
 		{
-			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, range_))
+			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
 			{
-				c->SetKnockBack(weaponBall_->m_vPos, 10);
+				c->SetKnockBack(weaponBall_->m_vPos, dist_);
 				delFlg_ = true;
 			}
 		}

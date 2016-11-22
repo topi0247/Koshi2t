@@ -231,8 +231,7 @@ HRESULT D3DXPARSER::LoadMeshFromX(LPDIRECT3DDEVICE9 pDevice9,LPSTR FileName)
 {
 	// Xファイルからアニメーションメッシュを読み込み作成する
 	m_pHierarchy=new MY_HIERARCHY;
-	if( FAILED( 
-	D3DXLoadMeshHierarchyFromXA(FileName, D3DXMESH_MANAGED, pDevice9, m_pHierarchy,
+	if( FAILED( D3DXLoadMeshHierarchyFromXA(FileName, D3DXMESH_MANAGED, pDevice9, m_pHierarchy,
 												 NULL, &m_pFrameRoot, &m_pAnimController)))
 	{
 			MessageBoxA(NULL, "Xファイルの読み込みに失敗しました",FileName, MB_OK);

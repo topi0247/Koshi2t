@@ -148,7 +148,7 @@ void EnemyManager::Move(float speed)
 
 	float sp = speed;
 	
-	m_Dir = D3DXVECTOR3(vec.x*sp,0, vec.z*sp);
+	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_,0, vec.z*sp*opponentWeight_);
 }
 
 //

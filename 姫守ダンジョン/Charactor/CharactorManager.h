@@ -33,6 +33,7 @@ protected:
 	float opponentWeight_;	//進行方向にいるキャラの重さ
 	float ownWright_;		//自身の重さ
 	bool aliveFlg_;			//生存フラグ
+	bool moveAbleFlg_;		//移動可能フラグ
 	D3DXVECTOR3 ownPush_;	//自分を押している方向ベクトル
 
 	float knockBackDis_;
@@ -49,6 +50,7 @@ protected:
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
 	void AroundCharaCheck();
 	void MoveCharaHit();
+	void DamageCalc(unsigned int atk);					//ダメージ計算
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
@@ -59,7 +61,7 @@ public:
 	//void CharaDestroy();										//解放
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
-	void Move_Update();											//移動の更新
+	virtual void Move_Update();											//移動の更新
 
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetAllCharaList(std::vector<CharactorManager*> list);

@@ -53,19 +53,19 @@ void PlayerManager::Move(float speed)
 	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
 	{
 		sp = speed;
-		if (motionNo_ != waitM)
+		if (motionNo_ != walkM)
 		{
-			motionNo_ = waitM;
-			m_pD3dxMesh->ChangeAnimSet(waitM);
+			motionNo_ = walkM;
+			m_pD3dxMesh->ChangeAnimSet(walkM);
 			//ChangeMotion(waitM);
 		}
 	}
 	else
 	{
-		if (motionNo_ != walkM)
+		if (motionNo_ != waitM)
 		{
-			motionNo_ = walkM;
-			m_pD3dxMesh->ChangeAnimSet(walkM);
+			motionNo_ = waitM;
+			m_pD3dxMesh->ChangeAnimSet(0);
 			//ChangeMotion(walkM);
 		}
 	}

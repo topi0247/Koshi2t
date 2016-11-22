@@ -116,6 +116,19 @@ void Bomber::Special_Attack()
 	}
 }
 
+//
+//	@brief	”š’em—pˆÚ“®ˆ—
+void Bomber::Move_Update()
+{
+	if (knockBackFlg_ == false && atkNo_ !=normalAtk)
+	{
+		m_Pos += m_Dir;
+	}
+	else if (knockBackFlg_ == true && atkNo_ != specialAtk)
+	{
+		KnockBack(knockBackPos_, knockBackDis_);
+	}
+}
 
 //
 //	@brief	•`‰æ

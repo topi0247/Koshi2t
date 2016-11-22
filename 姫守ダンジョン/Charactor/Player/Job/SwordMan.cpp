@@ -4,7 +4,6 @@
 SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
-	col_ = new Collision();
 
 }
 
@@ -17,10 +16,20 @@ SwordMan::~SwordMan()
 //	@brief	UŒ‚
 void SwordMan::Attack()
 {
+	if (atkNo_ == noAtk)
+	{
+		moveAbleFlg_ = true;
+	}
+	else
+	{
+		moveAbleFlg_ = false;
+	}
+
 	if (GamePad::checkInput(charaType_,GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
+		atkNo_ = waitAtk;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -65,7 +74,7 @@ void SwordMan::Attack()
 void SwordMan::Normal_Attack()
 {
 	Normal_Attack_Collision();
-	timeEnd_ = 30;
+	timeEnd_ = 40;
 	if (++timeCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
@@ -91,6 +100,7 @@ void SwordMan::Normal_Attack_Collision()
 			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
 			{
 				D3DXVECTOR3 vec = chara->m_Pos - m_Pos;
+				D3DXVec3Normalize(&vec, &vec);
 				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 				angle = D3DXToDegree(angle);
 
@@ -129,12 +139,13 @@ void SwordMan::Special_Attack()
 void SwordMan::Special_Attack_Collision()
 {
 	float atkRange = param_->attackRange_;
+	float atkDist = param_->attackReach_;
 	float backDist = param_->attackReach_;
 	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)
 		{
-			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkRange))
+			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
 			{
 				hit = true;
 				chara->SetKnockBack(m_Pos, backDist);

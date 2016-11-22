@@ -96,11 +96,11 @@ void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist)
 //	@brief	移動の更新
 void CharactorManager::Move_Update()
 {
-	if (knockBackFlg_ == false)
+	if (knockBackFlg_ == false && moveAbleFlg_==true)
 	{
 		m_Pos += m_Dir;
 	}
-	else
+	else if(knockBackFlg_==true)
 	{
 		KnockBack(knockBackPos_,knockBackDis_);
 	}
@@ -166,10 +166,11 @@ void CharactorManager::MoveCharaHit()
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
 
-			float hitAngle = 45/2;
+			float hitAngle = 90/2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
-				opponentWeight_ = c->ownWright_;
+				/*opponentWeight_ = c->ownWright_;*/
+				opponentWeight_ = 0;
 				opp = c;
 			}
 		}
@@ -199,6 +200,13 @@ CharaType CharactorManager::GetCharaType()const
 void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
 {
 	allCharaList_ = list;
+}
+
+//
+//	@brief	ダメージ計算
+void CharactorManager::DamageCalc(unsigned int atk)
+{
+	/*hp-=*/
 }
 
 //

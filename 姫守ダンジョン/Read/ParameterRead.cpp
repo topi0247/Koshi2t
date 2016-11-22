@@ -27,7 +27,7 @@ JobParameter::JobParameter(string str)
 	//職業名の取得
 	string temp = str;
 	size_t comma = temp.find(',');
-	string pull = temp.substr(0, comma + 1);
+	string pull = temp.substr(0, comma);
 	name_ = new char[comma + 1];
 	memcpy(name_, pull.c_str(), comma + 1);
 	temp = temp.substr(comma + 1);
@@ -59,7 +59,7 @@ JobParameter::JobParameter(string str)
 	//チャージタイム取得
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
-	chargeTime_ = atof(pull.c_str());
+	chargeTime_ = atoi(pull.c_str());
 	temp = temp.substr(comma + 1);
 
 	//守備力取得
@@ -192,6 +192,7 @@ EnemyParameter::EnemyParameter(string str)
 ParameterRead::ParameterRead()
 	:jobParamList_(0)
 	, enemyParamList_(0)
+	,princessParam_(0)
 	, jobCount_(0)
 	, enemyCount_(0)
 {
@@ -201,19 +202,28 @@ ParameterRead::ParameterRead()
 //	@brief	ParameterReadデストラクタ	
 ParameterRead::~ParameterRead()
 {
-	delete princessParam_;
-	princessParam_ = nullptr;
-
-	for (int i = 0; i < jobCount_; i++)
+	if (princessParam_ != nullptr)
 	{
-		delete jobParamList_[i];
-		jobParamList_[i] = nullptr;
+		delete princessParam_;
+		princessParam_ = nullptr;
 	}
 
-	for (int j = 0; j < enemyCount_; j++)
+	if (jobParamList_ != nullptr)
 	{
-		delete enemyParamList_[j];
-		enemyParamList_[j] = nullptr;
+		for (int i = 0; i < jobCount_; i++)
+		{
+			delete jobParamList_[i];
+			jobParamList_[i] = nullptr;
+		}
+	}
+
+	if (enemyParamList_ != nullptr)
+	{
+		for (int j = 0; j < enemyCount_; j++)
+		{
+			delete enemyParamList_[j];
+			enemyParamList_[j] = nullptr;
+		}
 	}
 }
 

@@ -12,9 +12,9 @@ Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
 	virChar_ = new JobManager *[4];
-	virChar_[Player2] = new SwordMan(CharaType::Player2);
-	virChar_[Player1] = new Witch(CharaType::Player1);
-	virChar_[Player3] = new ShieldMan( CharaType::Player3);
+	virChar_[Player1] = new SwordMan(CharaType::Player1);
+	virChar_[Player2] = new Witch(CharaType::Player2);
+	virChar_[Player3] = new ShieldMan(CharaType::Player3);
 	virChar_[Player4] = new Bomber(CharaType::Player4);
 
 	for (int i = 0; i < 4; i++)
@@ -85,6 +85,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//読み込みパラメータデータの情報を読み込む
 	ParameterRead* parameter = new ParameterRead;
 	parameter->SetJobParameter("./ReadData/JobParameterData.csv");
+	JobParameter* job = parameter->GetJobParamList("剣士");
 
 	//ステージのファイル読み込み
 	XFile* xfile = xfileRead->GetXFile("ステージ0");
@@ -93,7 +94,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
 	virChar_[Player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[Player1]->SetParameter(parameter->GetJobParamList("剣士"));
+	virChar_[Player1]->SetParameter(job);
 	virChar_[Player1]->m_Pos = D3DXVECTOR3(10, 0, -10);
 
 	xfile = xfileRead->GetXFile("魔導士");
@@ -151,30 +152,30 @@ void Main_Scene::Update()
 {
 	//エネミースポーン処理
 	static int enemyCount = 0;
-	//if ((GetKeyState(VK_F1) & 0x80))
-	//{
-	/*if (++time_ % (FPS * 3)==0)
+	if ((GetKeyState(VK_F1) & 0x80))
 	{
-		EnemyJobManager* slim = new Slim;
-		slim = virEnemy_;
-		slim->m_Pos = D3DXVECTOR3(0, 0, 0);
-		charList_.push_back(slim);
-		enemyList_.push_back(slim);
-		enemyList_[enemyCount]->SetTarget(virChar_[player4]);
-		++enemyCount;
+		//if (++time_ % (FPS * 3) == 0)
+		//{
+			EnemyJobManager* slim = new Slim;
+			slim = virEnemy_;
+			//slim->m_Pos = D3DXVECTOR3(0, 0, 0);
+			charList_.push_back(slim);
+			enemyList_.push_back(slim);
+			enemyList_[enemyCount]->SetTarget(virChar_[Player4]);
+			++enemyCount;
+		//}
+	/*	for (auto enemy : enemyList_)
+		{
+			enemy->SetTarget(virChar_[4]);
+		}*/
+	}
+
+
+
+	/*for (int i = 0; i < 3; i++)
+	{
+		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
 	}*/
-	//for (auto enemy : enemyList_)
-	//{
-	//	enemy->SetTarget(virChar_[4]);
-	//}
-//}
-
-
-
-/*for (int i = 0; i < 3; i++)
-{
-	virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
-}*/
 	if (!enemyList_.empty())
 	{
 		for (auto enemy : enemyList_)
@@ -284,14 +285,38 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "Atk(n-1 | s-2) : %d", virChar_[Player1]->GetAtkState());
+	sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player1]->GetAtkState());
 	debugText_->Render(str, 0, 10);
-	sprintf(str, "AtkCount : %d", virChar_[Player1]->GetAtkCnt());
+	sprintf(str, "hp_ : %d", virChar_[Player1]->GetParam()->hp_);
 	debugText_->Render(str, 0, 30);
+	sprintf(str, "normalAtk_ : %d", virChar_[Player1]->GetParam()->normalAtk_);
+	debugText_->Render(str, 0, 50);
+	sprintf(str, "specialAtk_ : %d", virChar_[Player1]->GetParam()->specialAtk_);
+	debugText_->Render(str, 0, 70);
+	sprintf(str, "def_ : %d", virChar_[Player1]->GetParam()->def_);
+	debugText_->Render(str, 0, 90);
+	sprintf(str, "specialAttackTime_ : %f", virChar_[Player1]->GetParam()->specialAttackTime_);
+	debugText_->Render(str, 0, 110);
+	sprintf(str, "chargeTime_ : %d", virChar_[Player1]->GetParam()->chargeTime_);
+	debugText_->Render(str, 0, 130);
+	sprintf(str, "moveSpeed_ : %f", virChar_[Player1]->GetParam()->moveSpeed_);
+	debugText_->Render(str, 0, 150);
+	sprintf(str, "specialMoveSpeed_ : %f", virChar_[Player1]->GetParam()->specialMoveSpeed_);
+	debugText_->Render(str, 0, 170);
+	sprintf(str, "weight_ : %f", virChar_[Player1]->GetParam()->weight_);
+	debugText_->Render(str, 0, 190);
+	sprintf(str, "attackReach_ : %f", virChar_[Player1]->GetParam()->attackReach_);
+	debugText_->Render(str, 0, 210);
+	sprintf(str, "attackRange_ : %f", virChar_[Player1]->GetParam()->attackRange_);
+	debugText_->Render(str, 0, 230);
+	sprintf(str, "scale_ : %f", virChar_[Player1]->GetParam()->scale_);
+	debugText_->Render(str, 0, 250);
+	sprintf(str, "x : %f y :%f", virChar_[Player1]->m_Pos.x, virChar_[Player1]->m_Pos.z);
+	debugText_->Render(str, 0, 270);
 	if (!enemyList_.empty())
 	{
 		sprintf(str, "count : %d", enemyList_.size());
-		debugText_->Render(str, 0, 70);
+		debugText_->Render(str, 0, 270);
 	}
 	//float dist = pow(enemyList_[0]->m_Pos.x - virChar_[player1]->m_Pos.x, 2) + pow(virEnemy_->m_Pos.z - virChar_[player1]->m_Pos.z, 2);
 	//sprintf(str, "dist: %f", dist);

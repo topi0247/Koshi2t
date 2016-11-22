@@ -36,7 +36,6 @@ protected:
 	AttackState atkNo_;		//攻撃状態番号
 
 	bool callFlg_;			//姫呼びフラグ
-	int attackCount_;		//攻撃ボタンカウント
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
 	virtual void Special_Attack() = 0;	//特殊攻撃
@@ -56,7 +55,7 @@ public:
 	bool GetAliveFlg()const;						//生存フラグ取得
 
 	//デバッグ用
-	int GetAtkCnt() { return attackCount_; };
+	//int GetAtkCnt() { return attackCount_; };
 	AttackState GetAtkState() { return atkNo_; };
 	float GetYaw() { return m_Yaw; };
 };

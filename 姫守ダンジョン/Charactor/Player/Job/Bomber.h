@@ -17,5 +17,6 @@ public:
 	Bomber(CharaType charaType);
 	virtual ~Bomber();
 	virtual void Attack();
+	virtual void Move_Update();
 	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);
 };

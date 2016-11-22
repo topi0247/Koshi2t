@@ -21,8 +21,8 @@ struct PlayerParameter
 	unsigned int normalAtk_;	//通常攻撃力
 	unsigned int specialAtk_;	//特殊攻撃力
 	unsigned int def_;			//守備力
+	unsigned int chargeTime_;	//チャージタイム
 	float specialAttackTime_;	//待機時間
-	float chargeTime_;			//チャージタイム
 	float moveSpeed_;			//移動速度
 	float specialMoveSpeed_;	//特殊移動速度
 	float weight_;				//重さ
@@ -37,6 +37,8 @@ class JobManager :public PlayerManager
 protected:
 	unsigned int timeCount_;	//攻撃時間
 	unsigned int timeEnd_;		//攻撃終了時間
+	int attackCount_;			//攻撃ボタンカウント
+	
 	PlayerParameter* param_;
 
 	//void Motion_Update();
@@ -51,5 +53,10 @@ public:
 	void SetParameter(JobParameter* param);
 	//PlayerParameter GetParam()const;
 	bool hit;//デバッグ用
+
+	int GetAtkCnt() { return attackCount_; };
+
+	//デバック用
+	PlayerParameter* GetParam()const { return param_; };
 };
 

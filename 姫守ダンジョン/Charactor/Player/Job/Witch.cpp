@@ -17,6 +17,15 @@ Witch::~Witch()
 //	@brief	çUåÇ
 void Witch::Attack()
 {
+	if (atkNo_ == noAtk)
+	{
+		moveAbleFlg_ = true;
+	}
+	else
+	{
+		moveAbleFlg_ = false;
+	}
+
 	//atkNo_ = noAtk;
 	if (magicFlg_ == false && GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
@@ -55,8 +64,10 @@ void Witch::Attack()
 	if (magicFlg_ == true && !magicBall_.empty())
 	{
 		int count = 0;
+		float kDist = 10;
 		for (size_t i = 0; i < magicBall_.size(); i++)
 		{
+			magicBall_[i]->Move_Weapon(kDist);
 			if (magicBall_[i]->GetDelFlg())
 			{
 				magicBall_.erase(magicBall_.begin() + count);
@@ -77,18 +88,18 @@ void Witch::Attack()
 //	@brief	í èÌçUåÇ
 void Witch::Normal_Attack()
 {
-	float dist = param_->attackReach_;
-	float kRange = param_->attackRange_;
+	//float dist = param_->attackReach_;
+	float kRange = param_->attackReach_;
 	float kDist = param_->attackReach_;
 	magicBallCount_ = 1;
-	if (magicFlg_)
-	{
-		for (auto m : magicBall_)
-		{
-			m->Move_Weapon(dist);
-		}
-	}
-	else
+	//if (magicFlg_)
+	//{
+	//	for (auto m : magicBall_)
+	//	{
+	//		m->Move_Weapon(dist);
+	//	}
+	//}
+	if(!magicFlg_)
 	{
 		WeaponBall* magic= new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
 
@@ -105,18 +116,18 @@ void Witch::Normal_Attack()
 //	@brief	ì¡éÍçUåÇ
 void Witch::Special_Attack()
 {
-	float dist = param_->attackReach_;
-	float kRange = param_->attackRange_;
+	//float dist = param_->attackReach_;
+	float kRange = param_->attackReach_+1;
 	float kDist = param_->attackReach_;
 	magicBallCount_ = 3;
-	if (magicFlg_)
+	/*if (magicFlg_)
 	{
 		for (auto m : magicBall_)
 		{
 			m->Move_Weapon(dist);
 		}
-	}
-	else
+	}*/
+	if(!magicFlg_)
 	{
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)

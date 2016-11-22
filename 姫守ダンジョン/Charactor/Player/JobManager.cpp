@@ -11,27 +11,34 @@
 JobManager::JobManager(CharaType charaType)
 	:timeCount_(0)
 	, hit(0)
+	,attackCount_(0)
 {
 	atkNo_ = noAtk;
+
+	//パラメータ初期化
+	param_ = new PlayerParameter;
 }
 
 //
 //	@brief	デストラクタ
 JobManager::~JobManager()
 {
+	delete param_;
+	param_ = nullptr;
 }
 
 //	
 //	@brief	パラメータセット
 void JobManager::SetParameter(JobParameter* param)
 {
-	memset(param_->name_,0, sizeof(param_->name_));
-	strcpy_s(param_->name_, sizeof(param_->name_), param->GetName());
+	//memset(param_->name_,0, sizeof(param_->name_));
+	//strcpy_s(param_->name_, sizeof(param_->name_), param->GetName());
 
 	param_->hp_ = param->GetHP();
 	param_->normalAtk_ = param->GetNormalAtk();
 	param_->specialAtk_ = param->GetSpAtk();
 	param_->def_ = param->GetDefense();
+	param_->chargeTime_ = param->GetChargeTime();
 	param_->specialAttackTime_ = param->GetWaitTime();
 	param_->hp_ = param->GetChargeTime();
 	param_->moveSpeed_ = param->GetMoveSpeed();
@@ -49,7 +56,7 @@ void JobManager::SetParameter(JobParameter* param)
 //	@brief	キャラの更新
 void JobManager::CharaUpdate()
 {
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(0.1, NULL);
+	m_pD3dxMesh->m_pAnimController->AdvanceTime(0.01, NULL);
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
@@ -60,18 +67,27 @@ void JobManager::CharaUpdate()
 		Attack();
 	}*/
 
-	//姫呼び
-	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
-	{
-		callFlg_ = true;
-		//Princess_Call();
-	}
+	////姫呼び
+	//if (GamePad::checkInput(charaType_, GamePad::InputName::B))
+	//{
+	//	callFlg_ = true;
+	//	//Princess_Call();
+	//}
 
 	//モーション変更
 	Motion_Update();
 
 	//移動
-	Move(0.1);
+	float speed = param_->moveSpeed_;
+	//if (atkNo_ == noAtk)
+	//{
+		Move(speed);
+		//moveAbleFlg_ = true;
+	//}
+	//else
+	//{
+		//moveAbleFlg_ = false;
+	//}
 }
 
 ////
