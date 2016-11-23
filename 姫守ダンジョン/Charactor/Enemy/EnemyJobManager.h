@@ -11,6 +11,7 @@
 //	E‹ÆŠÇ—ƒNƒ‰ƒX
 class EnemyJobManager :public EnemyManager
 {
+protected:
 public:
 	EnemyJobManager();
 	virtual ~EnemyJobManager();

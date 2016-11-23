@@ -6,6 +6,13 @@
 
 #include "PlayerManager.h"
 
+//
+//	@brief	コンストラクタ
+PlayerManager::PlayerManager()
+{
+	revivalFlg_ = false;
+	callTiming_ = 0;
+}
 
 //
 //	@brief						Xファイル読み込み
@@ -87,22 +94,21 @@ void PlayerManager::Move(float speed)
 void PlayerManager::DamageCalc(unsigned int atk)
 {
 	float damage = atk / (1 + ((float)param_->def_ / 100));
+	hp_ -= damage;
 
-	if (hp_ <= damage)
+	if (hp_ <= 0)
 	{
 		hp_ = 0;
+		aliveFlg_ = false;
 	}
-	else
-	{
-		hp_ -= damage;
-	}
+
 }
 
 //
 //	@brief	死亡処理
 void PlayerManager::Dead()
 {
-	
+	//aliveFlg_ = false;
 }
 
 //
@@ -112,19 +118,6 @@ void PlayerManager::Motion_Update()
 	const float speed = 0.01;
 	m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
-	//m_pAnimController->AdvanceTime(speed, NULL);
-
-	////攻撃
-	//if (GamePad::checkInput(controller_, GamePad::InputName::A))
-	//{
-	//	//ChangeMotion(waitM);
-	//}
-
-	////姫呼び
-	//if (GamePad::checkInput(controller_, GamePad::InputName::B))
-	//{
-	//	//ChangeMotion(walkM);
-	//}
 }
 
 
@@ -132,7 +125,10 @@ void PlayerManager::Motion_Update()
 //	@brief	復活
 void PlayerManager::Revival()
 {
+
 	aliveFlg_ = true;
+	hp_ = param_->hp_;
+	revivalFlg_ = false;
 }
 
 //
@@ -142,7 +138,15 @@ void PlayerManager::Princess_Call()
 	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
 	{
 		moveAbleFlg_ = false;
+		callTiming_ = clock();
 	}
+}
+
+//
+//	@breif	復活フラグセット
+void PlayerManager::SetRevivalFlg()
+{
+	revivalFlg_ = true;
 }
 
 //
@@ -150,4 +154,12 @@ void PlayerManager::Princess_Call()
 bool PlayerManager::GetAliveFlg()const
 {
 	return aliveFlg_;
+}
+
+
+//
+//	@brief	姫を呼んだクロック時間取得
+double PlayerManager::GetCallTiming()const
+{
+	return callTiming_;
 }

@@ -12,12 +12,13 @@ CharactorManager::CharactorManager()
 	:opponentWeight_(1)
 	, aroundCharaList_(0)
 	, knockBackFlg_(0)
-	,knockBackPos_(0,0,0)
-	,knockBackDis_(0)
+	, knockBackPos_(0, 0, 0)
+	, knockBackDis_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
-	opponentWeight_ = 1;
+	moveAbleFlg_ = true;
+	//opponentWeight_ = 1;
 }
 
 //
@@ -138,19 +139,19 @@ void CharactorManager::AroundCharaCheck()
 	{
 		//for (auto list : aroundCharaList_)
 		//{
-			if (!collision_->CharaNear(m_Pos, aroundCharaList_[count]->m_Pos, dist))
-			{
-				//Ç¢Ç»Ç©Ç¡ÇΩÇÁçÌèú
-				aroundCharaList_.erase(aroundCharaList_.begin() + count);
-				--count;
+		if (!collision_->CharaNear(m_Pos, aroundCharaList_[count]->m_Pos, dist))
+		{
+			//Ç¢Ç»Ç©Ç¡ÇΩÇÁçÌèú
+			aroundCharaList_.erase(aroundCharaList_.begin() + count);
+			--count;
 
-			}
+		}
 
-			/*if (aroundCharaList_.empty())
-			{
-				break;
-			}*/
-			++count;
+		/*if (aroundCharaList_.empty())
+		{
+			break;
+		}*/
+		++count;
 		//}
 	}
 }
@@ -171,7 +172,7 @@ void CharactorManager::MoveCharaHit()
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
 
-			float hitAngle = 90/2;
+			float hitAngle = 90 / 2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
 				/*opponentWeight_ = c->ownWright_;*/

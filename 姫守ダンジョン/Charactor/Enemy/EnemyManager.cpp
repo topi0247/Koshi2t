@@ -62,6 +62,7 @@ void EnemyManager::SetParameter(EnemyParameter* param)
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
+	hp_ = 10000;
 }
 
 //
@@ -80,21 +81,29 @@ void EnemyManager::SetTarget(CharactorManager* chara)
 void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * princess)
 {
 	CharactorManager* temp = chara;
+	float dist = 5;
+
 	if (targetChar_->GetCharaType() != temp->GetCharaType())
 	{
 		temp = targetChar_;
 	}
+
 	//現在のターゲットが姫
 	if (targetChar_->GetCharaType() == princess->GetCharaType())
 	{
-		temp = chara;
+		if (collision_->CharaNear(m_Pos, chara->m_Pos, dist))
+		{
+			temp = chara;
+		}
 	}
-	////現在のターゲットが死んでいる
-	//if (!targetChar_->GetAliveFlg())
-	//{
-	//	targetChar_ = princess;
-	//}
 
+	//ターゲットが死んでいる
+	if (!temp->GetAliveFlg())
+	{
+		temp = princess;
+	}
+
+	//ターゲットの更新
 	SetTarget(temp);
 }
 
@@ -103,54 +112,45 @@ void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * pr
 //	@param (position)	座標
 void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
 {
-	/*if (targetObj_ != player)
-	{
-		float range = 1.0f;
-		double checkDist = range*range;
-		if (collision_->CharaNear(m_Pos,position,checkDist))
-		{
-			targetObj_ = player;
-		}
-		else
-		{
-			virPos = D3DXVECTOR3(0, 0, 0);
-		}
-	}
-	
-	targetPos_ = virPos;*/
-	//現在のターゲットとチェックするプレイヤーが一致するか
-	if (targetChar_ == checkChar)
-	{
-		//チェックする(現在ターゲットのプレイヤー）が生存しているか
-		if (checkChar->GetAliveFlg())
-		{
-			//ターゲット更新
-			targetChar_ = checkChar;
-			targetPos_ = targetChar_->m_Pos;
-		}
-		else
-		{
-			//ターゲットを姫に変更
-			targetChar_ = princess;
-			targetPos_ = targetChar_->m_Pos;
-		}
-	}
-	else if (targetChar_ == princess/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
-	{
-		//近くに生きとるプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
-		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
-		{
-			//ターゲットをプレイヤーに変更
-			targetChar_ = checkChar;
-			targetPos_ = targetChar_->m_Pos;
-		}
-		else         //近くに生きているプレイヤーがいない
-		{
-			//ターゲット更新
-			targetChar_ = princess;
-			targetPos_ = targetChar_->m_Pos;
-		}
-	}
+	////現在のターゲットとチェックするプレイヤーが一致するか
+	//if (targetChar_->GetCharaType() == checkChar->GetCharaType())
+	//{
+	//	//チェックする(現在ターゲットのプレイヤー）が生存しているか
+	//	if (checkChar->GetAliveFlg())
+	//	{
+	//		//ターゲット更新
+	//		targetChar_ = checkChar;
+	//		targetPos_ = targetChar_->m_Pos;
+	//	}
+	//	else
+	//	{
+	//		//ターゲットを姫に変更
+	//		targetChar_ = princess;
+	//		targetPos_ = targetChar_->m_Pos;
+	//	}
+	//}
+	//else if (targetChar_->GetCharaType() == princess->GetCharaType()/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
+	//{
+	//	//近くに生きているプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
+	//	if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
+	//	{
+	//		//ターゲットをプレイヤーに変更
+	//		targetChar_ = checkChar;
+	//		targetPos_ = targetChar_->m_Pos;
+	//	}
+	//	else         //近くに生きているプレイヤーがいない
+	//	{
+	//		//ターゲット更新
+	//		targetChar_ = princess;
+	//		targetPos_ = targetChar_->m_Pos;
+	//	}
+	//}
+
+	////if (!targetChar_->GetAliveFlg())
+	////{
+	////	targetChar_ = princess;
+	////	targetPos_ = targetChar_->m_Pos;
+	////}
 }
 
 //
@@ -171,8 +171,8 @@ void EnemyManager::Move(float speed)
 	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
 	//D3DXVECTOR3 vec = E_Lock;
 	float sp = speed;
-	opponentWeight_ = 1;
-	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_,0, vec.z*sp*opponentWeight_);
+	//opponentWeight_ = 1;
+	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 }
 
 //
@@ -202,5 +202,24 @@ void EnemyManager::Dead()
 //	@brief	敵通常攻撃
 void EnemyManager::Attack()
 {
-	NormalAttack();
+	float atkableDist = 2;//param_->attackReach_;
+	int time = 3;
+
+	if (collision_->CharaNear(m_Pos, targetPos_, atkableDist))
+	{
+		if (++atkWaitTime_ % (FPS*time) == 0)
+		{
+			moveAbleFlg_ = false;
+			NormalAttack();
+		}
+		else
+		{
+			moveAbleFlg_ = true;
+		}
+	}
+	else
+	{
+		moveAbleFlg_ = true;
+		atkWaitTime_ = 0;
+	}
 }

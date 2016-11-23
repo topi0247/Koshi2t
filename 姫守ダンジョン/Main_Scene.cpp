@@ -12,17 +12,19 @@ Main_Scene::Main_Scene()
 {
 	stage_ = new Stage;
 	virChar_ = new JobManager *[4];
-	virChar_[Player1] = new SwordMan(CharaType::Player1);
-	virChar_[Player2] = new Witch(CharaType::Player2);
-	virChar_[Player3] = new ShieldMan(CharaType::Player3);
-	virChar_[Player4] = new Bomber(CharaType::Player4);
+	virChar_[Player1] = new SwordMan(Player1);
+	virChar_[Player2] = new Witch(Player2);
+	virChar_[Player3] = new ShieldMan(Player3);
+	virChar_[Player4] = new Bomber(Player4);
+	princess_ = new Princess;
 
 	for (int i = 0; i < 4; i++)
 	{
 		charList_.push_back(virChar_[i]);
 	}
+	charList_.push_back(princess_);
+	scene_ = StartS;
 	//virEnemy_ = new Slim;
-
 }
 
 //
@@ -31,6 +33,7 @@ Main_Scene::~Main_Scene()
 {
 	delete stage_;
 	stage_ = nullptr;
+
 
 	//delete ray_;
 	//ray_ = nullptr;
@@ -42,6 +45,9 @@ Main_Scene::~Main_Scene()
 	}
 	delete[] virChar_;
 	virChar_ = nullptr;
+
+	delete princess_;
+	princess_ = nullptr;
 
 	//for (auto chara : charList_)
 	//{
@@ -111,9 +117,13 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	virChar_[Player4]->SetParameter(parameter->GetJobParamList("爆弾士"));
 	virChar_[Player4]->m_Pos = D3DXVECTOR3(-10, 0, -10);
 
+	xfile = xfileRead->GetXFile("姫");
+	princess_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
+	princess_->m_Pos = D3DXVECTOR3(0, 0, -5);
+
 	//エネミーの読み込み
 	parameter->SetEnemyParameter("./ReadData/EnemyParameterData.csv");
-	
+
 
 	time_ = 0;
 
@@ -144,40 +154,77 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 //	@brief	更新
 void Main_Scene::Update()
 {
+	switch (scene_)
+	{
+	case MainS:
+		GameMain();
+		break;
+	case EndS:
+		GameEnd();
+		break;
+	case StartS:
+		GameStart();
+		break;
+	default:
+		break;
+	}
+}
+
+//
+//	@brief	ゲーム開始
+void Main_Scene::GameStart()
+{
+	//int count = 5;
+	//if (++time_ % (FPS * count) == 0)
+	//{
+	//	scene_ = MainS;
+	//}
+	if (GetKeyState(VK_RETURN) & 0x80)
+	{
+		scene_ = MainS;
+	}
+}
+
+//
+//	@brief	ゲームメイン
+void Main_Scene::GameMain()
+{
 	//エネミースポーン処理
 	//if ((GetKeyState(VK_F1) & 0x80))
 	//{
-	//if (enemyCount < 1)
-	if (++time_ % (FPS * 3) == 0)
-	{
-		auto virEnemy_ = new Slim;
-		xfile = xfileRead->GetXFile("スライム");
-		clock_t start = clock();
-		virEnemy_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
-		clock_t end1 = clock();
-		virEnemy_->SetParameter(parameter->GetEnemyParamList("スライム"));
-		virEnemy_->SetTarget(virChar_[Player4]);
-		clock_t end2 = clock();
-		charList_.push_back(virEnemy_);
-		enemyList_.push_back(virEnemy_);
-		insTime_ = (double)(end1 - start) / CLOCKS_PER_SEC;
-		pushTime_= (double)(end2 - start) / CLOCKS_PER_SEC;
-	}
+	static int count = 0;
+	if (count == 0)
+		if (++time_ % (FPS * 3) == 0)
+		{
+			auto virEnemy_ = new Slim;
+			xfile = xfileRead->GetXFile("スライム");
+			clock_t start = clock();
+			virEnemy_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
+			clock_t end1 = clock();
+			virEnemy_->SetParameter(parameter->GetEnemyParamList("スライム"));
+			virEnemy_->SetTarget(princess_);
+			clock_t end2 = clock();
+			charList_.push_back(virEnemy_);
+			enemyList_.push_back(virEnemy_);
+			insTime_ = (double)(end1 - start) / CLOCKS_PER_SEC;
+			pushTime_ = (double)(end2 - start) / CLOCKS_PER_SEC;
+			++count;
+		}
 
-	//エネミーターゲット更新
+		//エネミーターゲット更新
 	if (!enemyList_.empty())
 	{
 		for (auto enemy : enemyList_)
 		{
 			//プレイヤーループ
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
-				//プレイヤーとエネミーが一定の距離内
-				float dist = 5.0;
-				if (ray_->CharaNear(enemy->m_Pos, virChar_[i]->m_Pos, dist))
-				{
-					enemy->Target_Update(virChar_[i], virChar_[Player4]);
-				}
+				////プレイヤーとエネミーが一定の距離内
+				//float dist = 5.0;
+				//if (ray_->CharaNear(enemy->m_Pos, virChar_[i]->m_Pos, dist))
+				//{
+				enemy->Target_Update(virChar_[i], princess_);
+				//}
 			}
 		}
 	}
@@ -188,6 +235,25 @@ void Main_Scene::Update()
 		chara->CharaUpdate();
 		chara->SetAllCharaList(charList_);
 	}
+
+	//姫の目的地更新
+	D3DXVECTOR3 pos = princess_->m_Pos;
+	CharaType no = PrincessT;
+	double timing = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (timing < virChar_[i]->GetCallTiming())
+		{
+			timing = virChar_[i]->GetCallTiming();
+			no = virChar_[i]->GetCharaType();
+		}
+	}
+	if (no != PrincessT)
+	{
+		pos = virChar_[no]->m_Pos;
+	}
+
+	princess_->SetDestination(pos);
 
 	//衝突判定の更新
 	CollisionControl();
@@ -200,6 +266,33 @@ void Main_Scene::Update()
 
 	//エネミー死亡処理更新
 	EnemyDestroy();
+
+	//死亡プレイヤー更新
+	int deadCount = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (!virChar_[i]->GetAliveFlg())
+		{
+			princess_->SetDeadCharaList(virChar_[i]);
+			++deadCount;
+		}
+	}
+
+	//ゲーム終了(姫死亡 又は プレイヤー全滅 又はクリア)
+	if (!(princess_->GetAliveFlg() || deadCount == 4))
+	{
+		scene_ = EndS;
+	}
+}
+
+//
+//	@brief	ゲーム終了
+void Main_Scene::GameEnd()
+{
+	if (GetKeyState(VK_RETURN) & 0x80)
+	{
+		scene_ = StartS;
+	}
 }
 
 //
@@ -223,16 +316,16 @@ void Main_Scene::EnemyDestroy()
 		{
 			//キャラリストから探す
 			auto cl = std::find(std::begin(charList_), std::end(charList_), c);
-			
+
 			//エネミーリストから探す
-			auto el = std::find(std::begin(enemyList_), std::end(enemyList_), c);			
-			
+			auto el = std::find(std::begin(enemyList_), std::end(enemyList_), c);
+
 			//　オブジェクトの終了処理
 			delete (*cl);
 			//	リストから外す
 			charList_.erase(cl);
 			enemyList_.erase(el);
-			
+
 			//　オブジェクトの終了処理
 			//delete (*el);
 		}
@@ -303,11 +396,19 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 		chara->CharaRender(mView, mProj);
 	}
 
+	//PlayerDebug();
+	EnemyDebug();
+}
+
+void Main_Scene::PlayerDebug()
+{
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player1]->GetAtkState());
+	//sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player1]->GetAtkState());
+	//debugText_->Render(str, 0, 10);
+	sprintf(str, "alive : %d", virChar_[Player1]->GetAliveFlg());
 	debugText_->Render(str, 0, 10);
-	sprintf(str, "hp_ : %d", virChar_[Player1]->GetParam()->hp_);
+	sprintf(str, "hp_ : %d", virChar_[Player1]->GetHP());
 	debugText_->Render(str, 0, 30);
 	sprintf(str, "normalAtk_ : %d", virChar_[Player1]->GetParam()->normalAtk_);
 	debugText_->Render(str, 0, 50);
@@ -333,8 +434,30 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	debugText_->Render(str, 0, 250);
 	sprintf(str, "x : %f y :%f", virChar_[Player1]->m_Pos.x, virChar_[Player1]->m_Pos.z);
 	debugText_->Render(str, 0, 270);
+}
+
+void Main_Scene::EnemyDebug()
+{
+	char str[256];
 	if (!enemyList_.empty())
 	{
+		EnemyJobManager* obj = enemyList_[0];
+		sprintf(str, "alive : %d", obj->GetAliveFlg());
+		debugText_->Render(str, 0, 10);
+		sprintf(str, "hp_ : %d", obj->GetHP());
+		debugText_->Render(str, 0, 30);
+		sprintf(str, "atk_ : %d", obj->GetParam()->atk_);
+		debugText_->Render(str, 0, 50);
+		sprintf(str, "reach : %d", obj->GetParam()->attackReach_);
+		debugText_->Render(str, 0, 70);
+		sprintf(str, "def_ : %d", obj->GetParam()->def_);
+		debugText_->Render(str, 0, 90);
+		sprintf(str, "moveSpeed: %f", obj->GetParam()->moveSpeed_);
+		debugText_->Render(str, 0, 110);
+		sprintf(str, "targetAlive: %d", obj->GetTarget()->GetAliveFlg());
+		debugText_->Render(str, 0, 130);
+		sprintf(str, "targetType: %d", obj->GetTarget()->GetCharaType());
+		debugText_->Render(str, 0, 150);
 		sprintf(str, "count : %d", enemyList_.size());
 		debugText_->Render(str, 0, 350);
 		sprintf(str, "ins : %f", insTime_);
@@ -342,14 +465,4 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 		sprintf(str, "push : %f", pushTime_);
 		debugText_->Render(str, 0, 390);
 	}
-	//float dist = pow(enemyList_[0]->m_Pos.x - virChar_[player1]->m_Pos.x, 2) + pow(virEnemy_->m_Pos.z - virChar_[player1]->m_Pos.z, 2);
-	//sprintf(str, "dist: %f", dist);
-	//debugText_->Render(str, 0, 90);
-	/*sprintf(str, "count : %i", ray_->GetHitCnt());
-	debugText_->Render(str, 0, 70);*/
-	//sprintf(str, "pos x : %f :pos z : %f", virEnemy_->GetTargetPos().x, virEnemy_->GetTargetPos().z);
-	//debugText_->Render(str, 0, 70);
-	//sprintf(str, "pos x : %f :pos z : %f", virEnemy_->m_Pos.x, virEnemy_->m_Pos.z);
-	//debugText_->Render(str, 0, 90);
-
 }

@@ -248,10 +248,15 @@ HRESULT D3DXPARSER::LoadMeshFromX(LPDIRECT3DDEVICE9 pDevice9,LPSTR FileName)
 	{
 		m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pMeshContainer;
 	}
-	else//もしもこれ以上深いノードのXファイルの場合は、適宜この部分を追加すること
+	else
 	{
-		m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pFrameFirstChild->pMeshContainer;
+		m_pContainer = (MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pFrameFirstChild->pMeshContainer;
 	}
+	//else//もしもこれ以上深いノードのXファイルの場合は、適宜この部分を追加すること
+	//{
+	//	m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pFrameFirstChild->pMeshContainer;
+	//}
+
 	//アニメーショントラックを得る 　本サンプル添付のXファイルの場合は2セットだけだが100個までに対応できる
 	if (m_pAnimController!=NULL)
 	{

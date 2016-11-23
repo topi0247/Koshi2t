@@ -7,6 +7,7 @@ class Bomber :public JobManager
 {
 private:
 	bool bombFlg_;	//”š’e‚ª”­“®’†‚©‚Ç‚¤‚©
+	bool invincibleFlg_;	//–³“G’†‚©‚Ç‚¤‚©
 	int bombCount_;
 	float bombScale_;
 	//WeaponBall** bomb_;
@@ -18,5 +19,6 @@ public:
 	virtual ~Bomber();
 	virtual void Attack();
 	virtual void Move_Update();
+	virtual void DamageCalc(unsigned int atk);					//ƒ_ƒ[ƒWŒvZ
 	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);
 };

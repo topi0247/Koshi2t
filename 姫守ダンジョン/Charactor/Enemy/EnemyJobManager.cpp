@@ -20,6 +20,8 @@ void EnemyJobManager::CharaUpdate()
 	float speed = param_->moveSpeed_;
 	MoveCharaHit();
 	Move(speed);
+
+	Attack();
 }
 
 //=======ƒXƒ‰ƒCƒ€=======//
@@ -29,4 +31,7 @@ void EnemyJobManager::CharaUpdate()
 
 void Slim::NormalAttack()
 {
+	float dist = 3;
+	targetChar_->DamageCalc(param_->atk_);
+	targetChar_->KnockBack(m_Pos,dist);
 }

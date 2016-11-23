@@ -13,11 +13,20 @@
 #include "./Charactor/Player/PlayerCommon.h"
 #include "./Charactor/CharactorCreator.h"
 #include "./Charactor/Enemy/EnemyJobManager.h"
+#include "./Charactor/Princess.h"
 #include "./Collision.h"
 #include "./DebugDraw/D3D11_TEXT.h"
 
 class Main_Scene
 {
+	enum scene
+	{
+		StartS=0,
+		MainS,
+		EndS,
+	};
+	scene scene_;
+
 	XFileRead* xfileRead;
 	XFile* xfile;
 	ParameterRead* parameter;
@@ -29,6 +38,7 @@ class Main_Scene
 	Stage* stage_;				//ステージ情報
 	Collision* ray_;
 	JobManager** virChar_;	//確認用仮キャラクター
+	Princess* princess_;	//姫
 	//EnemyJobManager* virEnemy_;	//確認用仮キャラクター
 	/*EnemyJobManager* virEnemy_;*/
 
@@ -39,11 +49,18 @@ class Main_Scene
 	std::vector<EnemyJobManager*> killList_;	//死亡エネミーリスト
 	unsigned int time_;
 
+	void GameStart();	//ゲーム開始導入部分
+	void GameMain();	//ゲームメイン
+	void GameEnd();		//ゲーム終了
+
 	void EnemyDestroy();	//エネミー死亡処理
 
 	//デバック
 	D3D11_TEXT* debugText_;
 	double insTime_,pushTime_;
+
+	void PlayerDebug();
+	void EnemyDebug();
 public:
 	Main_Scene();
 	~Main_Scene();

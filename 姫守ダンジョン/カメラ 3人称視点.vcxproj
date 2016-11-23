@@ -101,6 +101,7 @@
     <ClCompile Include="Charactor\Player\Job\WeaponBall.cpp" />
     <ClCompile Include="Charactor\Player\Job\Witch.cpp" />
     <ClCompile Include="Charactor\Player\PlayerManager.cpp" />
+    <ClCompile Include="Charactor\Princess.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugDraw\D3D11_TEXT.cpp" />
     <ClCompile Include="MAIN.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Charactor\Player\Job\Witch.h" />
     <ClInclude Include="Charactor\Player\PlayerCommon.h" />
     <ClInclude Include="Charactor\Player\PlayerManager.h" />
+    <ClInclude Include="Charactor\Princess.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DebugDraw\D3D11_TEXT.h" />
     <ClInclude Include="MAIN.h" />

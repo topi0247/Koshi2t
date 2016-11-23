@@ -7,6 +7,7 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	bomb_.clear();
 	bombScale_ = 1;
 	bombCount_ = 1;
+	invincibleFlg_ = false;
 }
 
 Bomber::~Bomber()
@@ -32,6 +33,7 @@ void Bomber::Attack()
 	{
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
+		invincibleFlg_ = true;
 		//hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
@@ -47,7 +49,7 @@ void Bomber::Attack()
 		atkNo_ = charge;
 	}
 
-	if (atkNo_ == specialAtk)
+	if (invincibleFlg_)
 	{
 		Special_Attack();
 	}
@@ -109,11 +111,13 @@ void Bomber::Normal_Attack()
 //	@brief	“ÁŽêUŒ‚
 void Bomber::Special_Attack()
 {
-	if (++timeCount_ % (FPS * 3) == 0)
+	int invincibleTime = 3;
+	if (++timeCount_ % (FPS * invincibleTime) == 0)
 	{
-		atkNo_ = noAtk;
+		invincibleFlg_ = false;
 		timeCount_ = 0;
 	}
+	atkNo_ = noAtk;
 }
 
 //
@@ -122,15 +126,36 @@ void Bomber::Move_Update()
 {
 	if (aliveFlg_ == true)
 	{
-		if (knockBackFlg_ == false && atkNo_ != normalAtk)
+		if (knockBackFlg_ == false)
 		{
 			m_Pos += m_Dir;
 		}
-		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
+		else if (knockBackFlg_ == true && invincibleFlg_==false)
 		{
 			KnockBack(knockBackPos_, knockBackDis_);
 		}
 	}
+}
+
+
+//
+//	@brief			ƒ_ƒ[ƒWŒvŽZ
+//	@param (atk)	UŒ‚ŽÒ‚ÌUŒ‚—Í
+void Bomber::DamageCalc(unsigned int atk)
+{
+	float damage = 0;
+	if (invincibleFlg_==false)
+	{
+		damage = atk / (1 + ((float)param_->def_ / 100));
+	}
+
+	hp_ -= damage;
+	if (hp_ <= 0)
+	{
+		hp_ = 0;
+		aliveFlg_ = false;
+	}
+
 }
 
 //

@@ -35,6 +35,8 @@ private:
 	TargetObject targetObj_;
 	
 protected:
+	unsigned int atkWaitTime_;	//攻撃する間隔
+
 	EnemyParam* param_;
 	CharactorManager* targetChar_;
 	D3DXVECTOR3 getpos_;
@@ -54,6 +56,9 @@ public:
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 
 	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
+	
 	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
+	EnemyParam* GetParam() { return param_; };
+	CharactorManager* GetTarget() { return targetChar_; };
 };
 

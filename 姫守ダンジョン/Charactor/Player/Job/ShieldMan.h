@@ -18,4 +18,5 @@ public:
 	ShieldMan(CharaType charaType);
 	virtual ~ShieldMan();
 	virtual void Attack();
+	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
 };

@@ -50,6 +50,7 @@ void JobManager::SetParameter(JobParameter* param)
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
+	hp_ = 1000;
 }
 
 //
@@ -59,20 +60,33 @@ void JobManager::CharaUpdate()
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
-	//攻撃
-	Attack();
-
 	//モーション変更
 	Motion_Update();
 
-	//移動
-	float speed = param_->moveSpeed_;
-	Move(speed);
+	//生存
+	if (aliveFlg_ == true)
+	{
+		//移動
+		float speed = param_->moveSpeed_;
+		Move(speed);
 
+		//攻撃
+		Attack();
+
+		//姫呼び
+		Princess_Call();
+	}
 	//死亡
-	if (aliveFlg_ == false)
+	else
 	{
 		Dead();
+
 	}
+
+	if (revivalFlg_ == true)
+	{
+		Revival();
+	}
+
 }
 

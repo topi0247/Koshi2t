@@ -4,6 +4,7 @@
 //	@date	2016/11/09
 //	@outher	仁科香苗
 #pragma once
+#include <time.h>
 #include "./../CharactorManager.h"
 #include "./GamePad.h"
 
@@ -27,6 +28,8 @@ struct PlayerParameter
 
 class PlayerManager : public CharactorManager
 {
+private:
+	double callTiming_;		//姫を呼んだクロック時間
 protected:
 
 	//モーション番号
@@ -54,7 +57,7 @@ protected:
 	AttackState atkNo_;		//攻撃状態番号
 	PlayerParameter* param_;
 
-	bool callFlg_;			//姫呼びフラグ
+	bool revivalFlg_;		//復活フラグ
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
 	virtual void Special_Attack() = 0;	//特殊攻撃
@@ -62,17 +65,18 @@ protected:
 	virtual void Move(float speed);		//移動処理
 	virtual void Dead();				//死亡
 	virtual void Motion_Update();		//モーション更新
-
+	void Revival();						//復活
 
 public:
-	PlayerManager() {};
+	PlayerManager();
 	virtual ~PlayerManager() {};
 
 	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);	//初期化と読み込み
 	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
-	void Revival();									//復活
-	void Princess_Call();					//姫呼び
+	void Princess_Call();										//姫呼び
+	void SetRevivalFlg();
 	bool GetAliveFlg()const;						//生存フラグ取得
+	double GetCallTiming()const;
 
 	//デバッグ用
 	//int GetAtkCnt() { return attackCount_; };

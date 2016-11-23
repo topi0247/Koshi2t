@@ -2,13 +2,13 @@
 
 <Models Type="Player">
 
-    <model fileName="t01.X" charName="Œ•Žm"/>
+    <model fileName="shield.X" charName="Œ•Žm"/>
 
-    <model fileName="t01.X" charName="–‚“±Žm"/>
+    <model fileName="shield.X" charName="–‚“±Žm"/>
 
     <model fileName="shield.X" charName="‚Žm"/>
 
-    <model fileName="t01.X" charName="”š’eŽm"/>
+    <model fileName="shield.X" charName="”š’eŽm"/>
 
 </Models>
 
@@ -23,7 +23,7 @@
 
 <Models Type="Queen">
 
-    <model fileName="t01.X" charName="•P"/>
+    <model fileName="shield.X" charName="•P"/>
 
 </Models>
 

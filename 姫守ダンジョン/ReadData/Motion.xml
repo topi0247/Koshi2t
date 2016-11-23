@@ -12,24 +12,24 @@
     <motion name="special" id="8" frame="30"/>
 </Job>
 <Job name="–‚“±Žm">
-    <motion name="wait" id="0" frame="30"/>
-    <motion name="walk" id="1" frame="30"/>
-    <motion name="dead" id="2" frame="30"/>
-    <motion name="alive" id="3" frame="30"/>
-    <motion name="call" id="4" frame="30"/>
-    <motion name="attack" id="5" frame="30"/>
-    <motion name="charge" id="6" frame="30"/>
-    <motion name="special" id="7" frame="30"/>
+    <motion name="wait" id="0" frame="45"/>
+    <motion name="walk" id="1" frame="40"/>
+    <motion name="attack" id="2" frame="40"/>
+    <motion name="charge" id="3" frame="50"/>
+    <motion name="special" id="4" frame="50"/>
+    <motion name="call" id="5" frame="50"/>
+    <motion name="dead" id="6" frame="60"/>
+    <motion name="alive" id="7" frame="100"/>
 </Job>
 <Job name="‚Žm">
-    <motion name="wait" id="0" frame="30"/>
-    <motion name="walk" id="1" frame="30"/>
-    <motion name="dead" id="2" frame="30"/>
-    <motion name="alive" id="3" frame="30"/>
-    <motion name="call" id="4" frame="30"/>
-    <motion name="attack1" id="5" frame="30"/>
-    <motion name="special" id="6" frame="30"/>
-    <motion name="specialWalk" id="7" frame="30"/>
+    <motion name="wait" id="0" frame="37"/>
+    <motion name="walk" id="1" frame="40"/>
+    <motion name="attack1" id="2" frame="35"/>
+    <motion name="special" id="3" frame="50"/>
+    <motion name="specialWalk" id="4" frame="40"/>
+    <motion name="call" id="5" frame="40"/>
+    <motion name="dead" id="6" frame="40"/>
+    <motion name="alive" id="7" frame="65"/>
 </Job>
 <Job name="”š’eŽm">
     <motion name="wait" id="0" frame="30"/>

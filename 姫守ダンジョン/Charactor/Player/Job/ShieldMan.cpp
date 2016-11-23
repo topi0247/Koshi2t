@@ -152,6 +152,30 @@ void ShieldMan::Special_Attack_Collision()
 }
 
 //
+//	@brief	ダメージ計算
+void ShieldMan::DamageCalc(unsigned int atk)
+{
+	float damage = 0;
+	float constant = 1;
+	if (atkNo_ != specialAtk)
+	{
+		damage = atk / (1 + ((float)param_->def_ / 100));
+	}
+	else
+	{
+		damage = constant;
+	}
+
+	hp_ -= damage;
+	if (hp_ <= 0)
+	{
+		hp_ = 0;
+		aliveFlg_ = false;
+	}
+
+}
+
+//
 //	@breif	盾士用移動処理
 void ShieldMan::Move_Update()
 {

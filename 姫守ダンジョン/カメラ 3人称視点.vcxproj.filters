@@ -59,6 +59,9 @@
     <ClCompile Include="Charactor\Player\Job\Bomber.cpp">
       <Filter>Charactor\Player\Job</Filter>
     </ClCompile>
+    <ClCompile Include="Charactor\Princess.cpp">
+      <Filter>Charactor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -79,9 +82,6 @@
     </ClInclude>
     <ClInclude Include="Charactor\CharactorManager.h">
       <Filter>Charactor</Filter>
-    </ClInclude>
-    <ClInclude Include="Charactor\Player\PlayerManager.h">
-      <Filter>Charactor\Player</Filter>
     </ClInclude>
     <ClInclude Include="Charactor\Player\GamePad.h">
       <Filter>Charactor\Player</Filter>
@@ -124,6 +124,12 @@
       <Filter>Charactor\Player\Job</Filter>
     </ClInclude>
     <ClInclude Include="Charactor\Player\PlayerCommon.h">
+      <Filter>Charactor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Princess.h">
+      <Filter>Charactor</Filter>
+    </ClInclude>
+    <ClInclude Include="Charactor\Player\PlayerManager.h">
       <Filter>Charactor\Player</Filter>
     </ClInclude>
   </ItemGroup>

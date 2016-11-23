@@ -4,7 +4,6 @@
 SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
-
 }
 
 SwordMan::~SwordMan()
