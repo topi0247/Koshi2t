@@ -7,17 +7,6 @@
 #pragma once
 #include "./../Enemy/EnemyManager.h"
 
-//	パラメータ
-struct EnemyParam
-{
-	const char* name_;	//敵の名
-	unsigned int hp_;			//HP
-	unsigned int normalAtk_;	//通常攻撃力
-	unsigned int def_;			//守備力
-	unsigned int waitTime_;		//待機時間
-	float speed_;				//移動速度
-	float weight_;				//重さ
-};
 
 //	職業管理クラス
 class EnemyJobManager :public EnemyManager

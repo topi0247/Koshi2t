@@ -11,7 +11,7 @@
 JobManager::JobManager(CharaType charaType)
 	:timeCount_(0)
 	, hit(0)
-	,attackCount_(0)
+	, attackCount_(0)
 {
 	atkNo_ = noAtk;
 
@@ -31,13 +31,13 @@ JobManager::~JobManager()
 //	@brief	パラメータセット
 void JobManager::SetParameter(JobParameter* param)
 {
-	//memset(param_->name_,0, sizeof(param_->name_));
-	//strcpy_s(param_->name_, sizeof(param_->name_), param->GetName());
+	memset(param_->name_,0, sizeof(param_->name_));
+	memcpy(param_->name_, param->GetName(), sizeof(param_->name_));
 
 	param_->hp_ = param->GetHP();
 	param_->normalAtk_ = param->GetNormalAtk();
 	param_->specialAtk_ = param->GetSpAtk();
-	param_->def_ = param->GetDefense();
+	param_->def_ = param->GetDefence();
 	param_->chargeTime_ = param->GetChargeTime();
 	param_->specialAttackTime_ = param->GetWaitTime();
 	param_->hp_ = param->GetChargeTime();
@@ -56,62 +56,23 @@ void JobManager::SetParameter(JobParameter* param)
 //	@brief	キャラの更新
 void JobManager::CharaUpdate()
 {
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(0.01, NULL);
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
 	//攻撃
 	Attack();
-	/*if (GamePad::checkInput(controller_, GamePad::InputName::A))
-	{
-		Attack();
-	}*/
-
-	////姫呼び
-	//if (GamePad::checkInput(charaType_, GamePad::InputName::B))
-	//{
-	//	callFlg_ = true;
-	//	//Princess_Call();
-	//}
 
 	//モーション変更
 	Motion_Update();
 
 	//移動
 	float speed = param_->moveSpeed_;
-	//if (atkNo_ == noAtk)
-	//{
-		Move(speed);
-		//moveAbleFlg_ = true;
-	//}
-	//else
-	//{
-		//moveAbleFlg_ = false;
-	//}
+	Move(speed);
+
+	//死亡
+	if (aliveFlg_ == false)
+	{
+		Dead();
+	}
 }
 
-////
-////	@brief	モーション更新
-//void JobManager::Motion_Update()
-//{
-//	m_pAnimController->AdvanceTime(0.001, NULL);
-//
-//	//攻撃
-//	if (GamePad::checkInput(controller_, GamePad::InputName::A))
-//	{
-//		ChangeMotion(waitM);
-//	}
-//
-//	//姫呼び
-//	if (GamePad::checkInput(controller_, GamePad::InputName::B))
-//	{
-//		ChangeMotion(walkM);
-//	}
-//}
-
-//
-//	@brief	パラメータ取得
-//PlayerParameter JobManager::GetParam()const
-//{
-//	//return playerParm_;
-//}

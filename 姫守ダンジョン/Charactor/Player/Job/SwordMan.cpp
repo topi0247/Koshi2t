@@ -109,6 +109,10 @@ void SwordMan::Normal_Attack_Collision()
 				{
 					hit = true;
 					chara->SetKnockBack(m_Pos, backDist);
+					if (chara->GetCharaType() == Enemy)
+					{
+						chara->DamageCalc(param_->normalAtk_);
+					}
 				}
 				else
 				{
@@ -149,6 +153,10 @@ void SwordMan::Special_Attack_Collision()
 			{
 				hit = true;
 				chara->SetKnockBack(m_Pos, backDist);
+				if (chara->GetCharaType() == Enemy)
+				{
+					chara->DamageCalc(param_->specialAtk_);
+				}
 			}
 		}
 	}

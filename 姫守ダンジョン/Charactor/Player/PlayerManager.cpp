@@ -26,7 +26,7 @@ void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11Device
 	Init(&si);
 	CreateFromX(FileName);
 	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	ownWright_ = 0.001f;
+	//ownWright_ = 0.001f;
 }
 
 //
@@ -70,7 +70,7 @@ void PlayerManager::Move(float speed)
 		}
 	}
 
-	opponentWeight_ = 1;
+	//opponentWeight_ = 1;
 	MoveCharaHit();
 
 	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
@@ -83,50 +83,34 @@ void PlayerManager::Move(float speed)
 }
 
 //
+//	@brief	ダメージ計算
+void PlayerManager::DamageCalc(unsigned int atk)
+{
+	float damage = atk / (1 + ((float)param_->def_ / 100));
+
+	if (hp_ <= damage)
+	{
+		hp_ = 0;
+	}
+	else
+	{
+		hp_ -= damage;
+	}
+}
+
+//
 //	@brief	死亡処理
 void PlayerManager::Dead()
 {
-
+	
 }
-
-////
-////	@brief	攻撃処理
-//void PlayerManager::Attack()
-//{
-//	if (GamePad::checkInput(controller_, GamePad::InputName::A))
-//	{
-//		++attackCount_;
-//		atkNo_ = waitAtk;
-//	}
-//	else if(atkNo_!=noAtk)
-//	{
-//		//unsigned int inputTime = playerParam_.chargeTime_;
-//		unsigned int inputTime = 40;
-//		if (1 < attackCount_&& attackCount_ < inputTime)
-//		{
-//			atkNo_=normalAtk,
-//			Normal_Attack();
-//		}
-//		else if (inputTime < attackCount_)
-//		{
-//			atkNo_ = specialAtk;
-//			Special_Attack();
-//		}
-//	}
-//	else if (atkNo_ == noAtk)
-//	{
-//		attackCount_ = 0;
-//	}
-//	//char str[256];
-//	//sprintf(str, "A : %d", attackCount_);
-//	//debugText_->Render(str, 0, 10);
-//}
 
 //
 //	@brief	モーション更新
 void PlayerManager::Motion_Update()
 {
 	const float speed = 0.01;
+	m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 	//m_pAnimController->AdvanceTime(speed, NULL);
 
@@ -151,12 +135,15 @@ void PlayerManager::Revival()
 	aliveFlg_ = true;
 }
 
-////
-////	@brief	姫呼び
-//D3DXVECTOR3 PlayerManager::Princess_Call()
-//{
-//	return m_vPos;
-//}
+//
+//	@brief	姫呼び
+void PlayerManager::Princess_Call()
+{
+	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
+	{
+		moveAbleFlg_ = false;
+	}
+}
 
 //
 //	@brief	生存フラグ取得

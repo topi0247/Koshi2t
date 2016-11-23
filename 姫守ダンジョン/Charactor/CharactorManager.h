@@ -29,7 +29,7 @@ class CharactorManager:public CD3DXSKINMESH
 protected:
 	CharaType charaType_;
 	Collision* collision_;
-	int hp_;
+	unsigned int hp_;
 	float opponentWeight_;	//進行方向にいるキャラの重さ
 	float ownWright_;		//自身の重さ
 	bool aliveFlg_;			//生存フラグ
@@ -50,7 +50,6 @@ protected:
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
 	void AroundCharaCheck();
 	void MoveCharaHit();
-	void DamageCalc(unsigned int atk);					//ダメージ計算
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
@@ -62,7 +61,7 @@ public:
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
 	virtual void Move_Update();											//移動の更新
-
+	virtual void DamageCalc(unsigned int atk) = 0;		//ダメージ計算
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetAllCharaList(std::vector<CharactorManager*> list);
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット

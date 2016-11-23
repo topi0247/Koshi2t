@@ -12,6 +12,7 @@ private:
 	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
 	bool delFlg_;
 	int delCount_;
+	unsigned int atk_;
 	float range_;
 	float dist_;
 	D3DXVECTOR3 startPos_;
@@ -26,6 +27,7 @@ public:
 	void Time_Del_Weapon(int frame);
 	void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType);
 	void SetDamageChara(CharactorManager* chara);
+	void SetAttack(unsigned int atk);
 	void SetHitRangeKnockBackDist(float range, float dist);
 	void Render(D3DXMATRIX mView, D3DXMATRIX mProj);
 	bool GetDelFlg()const;

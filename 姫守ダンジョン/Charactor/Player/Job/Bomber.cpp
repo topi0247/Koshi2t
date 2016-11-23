@@ -120,13 +120,16 @@ void Bomber::Special_Attack()
 //	@brief	îöíeémópà⁄ìÆèàóù
 void Bomber::Move_Update()
 {
-	if (knockBackFlg_ == false && atkNo_ !=normalAtk)
+	if (aliveFlg_ == true)
 	{
-		m_Pos += m_Dir;
-	}
-	else if (knockBackFlg_ == true && atkNo_ != specialAtk)
-	{
-		KnockBack(knockBackPos_, knockBackDis_);
+		if (knockBackFlg_ == false && atkNo_ != normalAtk)
+		{
+			m_Pos += m_Dir;
+		}
+		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
+		{
+			KnockBack(knockBackPos_, knockBackDis_);
+		}
 	}
 }
 

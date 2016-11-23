@@ -3,7 +3,6 @@
 ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
-	m_Pitch = D3DXToRadian(90);
 }
 
 ShieldMan::~ShieldMan()
@@ -93,6 +92,10 @@ void ShieldMan::Normal_Attack_Collision()
 				{
 					hit = true;
 					chara->SetKnockBack(m_Pos, backDist);
+					if (chara->GetCharaType() == Enemy)
+					{
+						chara->DamageCalc(param_->normalAtk_);
+					}
 				}
 				else
 				{
@@ -134,7 +137,10 @@ void ShieldMan::Special_Attack_Collision()
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
-					chara->SetKnockBack(m_Pos, backDist);
+					if (chara->GetCharaType() == Enemy)
+					{
+						chara->DamageCalc(param_->specialAtk_);
+					}
 				}
 				else
 				{
@@ -149,17 +155,20 @@ void ShieldMan::Special_Attack_Collision()
 //	@breif	‚Žm—pˆÚ“®ˆ—
 void ShieldMan::Move_Update()
 {
-	if (knockBackFlg_ == false && atkNo_ ==(!normalAtk || !specialAtk))
+	if (aliveFlg_ == true)
 	{
-		m_Pos += m_Dir;
-	}
-	else if(knockBackFlg_==true && atkNo_!=specialAtk)
-	{
-		KnockBack(knockBackPos_, knockBackDis_);
-	}
-	else if (atkNo_ == specialAtk)
-	{
-		float sp = param_->specialMoveSpeed_;
-		m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
+		if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
+		{
+			m_Pos += m_Dir;
+		}
+		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
+		{
+			KnockBack(knockBackPos_, knockBackDis_);
+		}
+		else if (atkNo_ == specialAtk)
+		{
+			float sp = param_->specialMoveSpeed_;
+			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
+		}
 	}
 }

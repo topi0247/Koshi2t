@@ -13,24 +13,6 @@
 #include "./../../Read/ParameterRead.h"
 
 
-//	パラメータ
-struct PlayerParameter
-{
-	char* name_;				//職業名
-	unsigned int hp_;			//HP
-	unsigned int normalAtk_;	//通常攻撃力
-	unsigned int specialAtk_;	//特殊攻撃力
-	unsigned int def_;			//守備力
-	unsigned int chargeTime_;	//チャージタイム
-	float specialAttackTime_;	//待機時間
-	float moveSpeed_;			//移動速度
-	float specialMoveSpeed_;	//特殊移動速度
-	float weight_;				//重さ
-	float attackReach_;			//攻撃リーチ
-	float attackRange_;			//攻撃範囲
-	float scale_;				//スケール
-};
-
 //	職業管理クラス
 class JobManager :public PlayerManager
 {
@@ -39,7 +21,6 @@ protected:
 	unsigned int timeEnd_;		//攻撃終了時間
 	int attackCount_;			//攻撃ボタンカウント
 	
-	PlayerParameter* param_;
 
 	//void Motion_Update();
 

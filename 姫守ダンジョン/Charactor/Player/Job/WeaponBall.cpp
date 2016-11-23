@@ -46,6 +46,13 @@ void WeaponBall::SetScale(float scale)
 }
 
 //
+//	@brief	攻撃力セット
+void WeaponBall::SetAttack(unsigned int atk)
+{
+	atk_ = atk;
+}
+
+//
 //	@brief			飛び道具の移動更新
 //	@param (dist)	移動終了距離
 void WeaponBall::Move_Weapon(float dist)
@@ -126,6 +133,11 @@ void WeaponBall::Hit()
 			{
 				c->SetKnockBack(weaponBall_->m_vPos, dist_);
 				delFlg_ = true;
+
+				if (c->GetCharaType() == Enemy)
+				{
+					c->DamageCalc(atk_);
+				}
 			}
 		}
 	}

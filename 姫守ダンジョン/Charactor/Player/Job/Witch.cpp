@@ -107,6 +107,7 @@ void Witch::Normal_Attack()
 		magic->SetDir(vec);
 		magic->SetDamageList(allCharaList_, charaType_);
 		magic->SetHitRangeKnockBackDist(kRange, kDist);
+		magic->SetAttack(param_->normalAtk_);
 		magicBall_.push_back(magic);
 		magicFlg_ = true;
 	}
@@ -141,6 +142,7 @@ void Witch::Special_Attack()
 			magic->SetScale(0.5);
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetHitRangeKnockBackDist(kRange, kDist);
+			magic->SetAttack(param_->specialAtk_);
 			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;

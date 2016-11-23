@@ -8,9 +8,14 @@
 
 EnemyManager::EnemyManager()
 {
+	charaType_ = Enemy;
 	m_Pos = { 0,0,0 };
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	opponentWeight_ = 1;
 	//targetPos_ = D3DXVECTOR3(0, 0, 0);
 	collision_ = new Collision;
+	param_ = new EnemyParam;
 }
 
 EnemyManager::~EnemyManager()
@@ -38,6 +43,25 @@ void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceC
 	Init(&si);
 	CreateFromX(FileName);
 	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+}
+
+//
+//	@brief	パラメータセット
+void EnemyManager::SetParameter(EnemyParameter* param)
+{
+	memset(param_->name_, 0, sizeof(param_->name_));
+	memcpy(param_->name_, param->GetName(), sizeof(param_->name_));
+
+	param_->hp_ = param->GetHP();
+	param_->atk_ = param->GetAtk();
+	param_->def_ = param->GetDefence();
+	param_->moveSpeed_ = param->GetMoveSpeed();
+	param_->weight_ = param->GetWeight();
+	param_->attackReach_ = param->GetAttackReach();
+	param_->scale_ = param->GetScale();
+
+	ownWright_ = param_->weight_;
+	hp_ = param_->hp_;
 }
 
 //
@@ -104,14 +128,14 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 			targetChar_ = checkChar;
 			targetPos_ = targetChar_->m_Pos;
 		}
-		else        //しんどるやーん
+		else
 		{
 			//ターゲットを姫に変更
 			targetChar_ = princess;
 			targetPos_ = targetChar_->m_Pos;
 		}
 	}
-	else if (targetChar_ == princess || targetChar_ == nullptr)       //現在のターゲットが姫
+	else if (targetChar_ == princess/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
 	{
 		//近くに生きとるプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
 		if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
@@ -120,7 +144,7 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 			targetChar_ = checkChar;
 			targetPos_ = targetChar_->m_Pos;
 		}
-		else         //近くに生きとるプレイヤーがおらんがな(チェックするプレイヤーが生きていない 又は 距離遠いやんけ)
+		else         //近くに生きているプレイヤーがいない
 		{
 			//ターゲット更新
 			targetChar_ = princess;
@@ -144,11 +168,28 @@ void EnemyManager::Move(float speed)
 	Rotation(E_Lock);
 
 	//向いている角度から単位ベクトルを取得
-	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-
+	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
+	//D3DXVECTOR3 vec = E_Lock;
 	float sp = speed;
-	
+	opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_,0, vec.z*sp*opponentWeight_);
+}
+
+//
+//	@brief	ダメージ計算
+void EnemyManager::DamageCalc(unsigned int atk)
+{
+	float damage = atk / (1 + ((float)param_->def_ / 100));
+
+	if (hp_ <= damage)
+	{
+		hp_ = 0;
+		aliveFlg_ = false;
+	}
+	else
+	{
+		hp_ -= damage;
+	}
 }
 
 //

@@ -21,18 +21,8 @@ Main_Scene::Main_Scene()
 	{
 		charList_.push_back(virChar_[i]);
 	}
-	virEnemy_ = new Slim;
+	//virEnemy_ = new Slim;
 
-	/*virEnemy_ = new Slim;*/
-	//virEnemy_ = new EnemyJobManager*[10];
-	//for (int i = 0; i < 10;i++)
-	//{
-		//virEnemy_[i] = new Slim;
-		//enemyList_.push_back(virEnemy_[i]);
-	//}
-	//ray_ = new Collision;
-
-	//charList_.push_back(virEnemy_[0]);
 }
 
 //
@@ -60,8 +50,8 @@ Main_Scene::~Main_Scene()
 	//}
 	//for (int i = 0; i < 10; i++)
 	//{
-	delete virEnemy_;
-	virEnemy_ = nullptr;
+	//delete virEnemy_;
+	//virEnemy_ = nullptr;
 	//}
 	//delete[] virEnemy_;
 	//virEnemy_ = nullptr;
@@ -69,6 +59,11 @@ Main_Scene::~Main_Scene()
 
 	delete debugText_;
 	debugText_ = nullptr;
+
+	delete xfile;
+	xfile = nullptr;
+	delete parameter;
+	parameter = nullptr;
 }
 
 //
@@ -78,58 +73,56 @@ Main_Scene::~Main_Scene()
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext)
 {
+	wnd_ = m_hWnd;
+	device_ = m_pDevice;
+	//deviceContext_ = m_pDeviceContext;
+
 	//読み込むXファイルの情報を読み込む
-	XFileRead* xfileRead = new XFileRead;
+	xfileRead = new XFileRead;
 	xfileRead->ReadXFilePath();
 
 	//読み込みパラメータデータの情報を読み込む
-	ParameterRead* parameter = new ParameterRead;
+	parameter = new ParameterRead;
 	parameter->SetJobParameter("./ReadData/JobParameterData.csv");
-	JobParameter* job = parameter->GetJobParamList("剣士");
+	//JobParameter* job = parameter->GetJobParamList("剣士");
 
 	//ステージのファイル読み込み
-	XFile* xfile = xfileRead->GetXFile("ステージ0");
-	stage_->Read(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName(), xfile->GetFileName());
+	xfile = xfileRead->GetXFile("ステージ0");
+	stage_->Read(wnd_, device_, deviceContext_, xfile->GetFileName(), xfile->GetFileName());
 
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
-	virChar_[Player1]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	virChar_[Player1]->SetParameter(job);
+	virChar_[Player1]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
+	virChar_[Player1]->SetParameter(parameter->GetJobParamList("剣士"));
 	virChar_[Player1]->m_Pos = D3DXVECTOR3(10, 0, -10);
 
 	xfile = xfileRead->GetXFile("魔導士");
-	virChar_[Player2]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	virChar_[Player2]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player2]->SetParameter(parameter->GetJobParamList("魔導士"));
 	virChar_[Player2]->m_Pos = D3DXVECTOR3(5, 0, -10);
 
 	xfile = xfileRead->GetXFile("盾士");
-	virChar_[Player3]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	virChar_[Player3]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player3]->SetParameter(parameter->GetJobParamList("盾士"));
 	virChar_[Player3]->m_Pos = D3DXVECTOR3(-5, 0, -10);
 
 	xfile = xfileRead->GetXFile("爆弾士");
-	virChar_[Player4]->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
+	virChar_[Player4]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player4]->SetParameter(parameter->GetJobParamList("爆弾士"));
 	virChar_[Player4]->m_Pos = D3DXVECTOR3(-10, 0, -10);
 
-	xfile = xfileRead->GetXFile("スライム");
-	//for (int i = 0; i < 10; i++)
-	//{
-	virEnemy_->CharaInit(m_hWnd, m_pDevice, m_pDeviceContext, xfile->GetFileName());
-	//}
+	//エネミーの読み込み
+	parameter->SetEnemyParameter("./ReadData/EnemyParameterData.csv");
+	
 
-	/*for (auto enemy : enemyList_)
-	{
-		enemy->SetTarget(virChar_[4]);
-	}*/
 	time_ = 0;
 
 
 	//データの解放
-	delete xfile;
+	/*delete xfile;
 	xfile = nullptr;
 	delete parameter;
-	parameter = nullptr;
+	parameter = nullptr;*/
 
 }
 
@@ -138,8 +131,9 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 {
 	debugText_ = new D3D11_TEXT;
+	deviceContext_ = m_pDeviceContext;
 	D3DXVECTOR4 vColor(1, 1, 1, 1);
-	if (FAILED(debugText_->Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
+	if (FAILED(debugText_->Init(deviceContext_, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
 	{
 		return E_FAIL;
 	}
@@ -151,59 +145,44 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 void Main_Scene::Update()
 {
 	//エネミースポーン処理
-	static int enemyCount = 0;
-	if ((GetKeyState(VK_F1) & 0x80))
+	//if ((GetKeyState(VK_F1) & 0x80))
+	//{
+	//if (enemyCount < 1)
+	if (++time_ % (FPS * 3) == 0)
 	{
-		//if (++time_ % (FPS * 3) == 0)
-		//{
-			EnemyJobManager* slim = new Slim;
-			slim = virEnemy_;
-			//slim->m_Pos = D3DXVECTOR3(0, 0, 0);
-			charList_.push_back(slim);
-			enemyList_.push_back(slim);
-			enemyList_[enemyCount]->SetTarget(virChar_[Player4]);
-			++enemyCount;
-		//}
-	/*	for (auto enemy : enemyList_)
-		{
-			enemy->SetTarget(virChar_[4]);
-		}*/
+		auto virEnemy_ = new Slim;
+		xfile = xfileRead->GetXFile("スライム");
+		clock_t start = clock();
+		virEnemy_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
+		clock_t end1 = clock();
+		virEnemy_->SetParameter(parameter->GetEnemyParamList("スライム"));
+		virEnemy_->SetTarget(virChar_[Player4]);
+		clock_t end2 = clock();
+		charList_.push_back(virEnemy_);
+		enemyList_.push_back(virEnemy_);
+		insTime_ = (double)(end1 - start) / CLOCKS_PER_SEC;
+		pushTime_= (double)(end2 - start) / CLOCKS_PER_SEC;
 	}
 
-
-
-	/*for (int i = 0; i < 3; i++)
-	{
-		virEnemy_[0]->SetTargetChar(virChar_[i], virChar_[player4]);
-	}*/
+	//エネミーターゲット更新
 	if (!enemyList_.empty())
 	{
 		for (auto enemy : enemyList_)
 		{
 			//プレイヤーループ
-			//for (int i = 0; i < 4; i++)
-			//{
-				//プレイヤーとエネミーが一定の距離内
-			float dist = 5.0;
-			if (ray_->CharaNear(enemy->m_Pos, virChar_[Player1]->m_Pos, dist))
+			for (int i = 0; i < 3; i++)
 			{
-				enemy->Target_Update(virChar_[Player1], virChar_[Player4]);
+				//プレイヤーとエネミーが一定の距離内
+				float dist = 5.0;
+				if (ray_->CharaNear(enemy->m_Pos, virChar_[i]->m_Pos, dist))
+				{
+					enemy->Target_Update(virChar_[i], virChar_[Player4]);
+				}
 			}
-			//}
 		}
 	}
-	//virEnemy_[0]->CharaUpdate();
 
-
-
-	//virEnemy_[0]->CheckNearPlayer(virChar_[player1]->m_Pos);
-	//virEnemy_[0]->CharaUpdate();
-
-
-
-	//ray_->CharaNear(virChar_[player1]->m_Pos, virEnemy_[0]->m_Pos, 50.0);
-
-	//仮キャラ更新
+	//キャラ更新
 	for (auto chara : charList_)
 	{
 		chara->CharaUpdate();
@@ -217,6 +196,47 @@ void Main_Scene::Update()
 	for (auto chara : charList_)
 	{
 		chara->Move_Update();
+	}
+
+	//エネミー死亡処理更新
+	EnemyDestroy();
+}
+
+//
+//	@brief	エネミー死亡処理
+void Main_Scene::EnemyDestroy()
+{
+	if (!enemyList_.empty())
+	{
+		for (auto c : enemyList_)
+		{
+			if (!c->GetAliveFlg())
+			{
+				killList_.push_back(c);
+			}
+		}
+	}
+
+	if (!killList_.empty())
+	{
+		for (auto c : killList_)
+		{
+			//キャラリストから探す
+			auto cl = std::find(std::begin(charList_), std::end(charList_), c);
+			
+			//エネミーリストから探す
+			auto el = std::find(std::begin(enemyList_), std::end(enemyList_), c);			
+			
+			//　オブジェクトの終了処理
+			delete (*cl);
+			//	リストから外す
+			charList_.erase(cl);
+			enemyList_.erase(el);
+			
+			//　オブジェクトの終了処理
+			//delete (*el);
+		}
+		killList_.clear();
 	}
 }
 
@@ -316,7 +336,11 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 	if (!enemyList_.empty())
 	{
 		sprintf(str, "count : %d", enemyList_.size());
-		debugText_->Render(str, 0, 270);
+		debugText_->Render(str, 0, 350);
+		sprintf(str, "ins : %f", insTime_);
+		debugText_->Render(str, 0, 370);
+		sprintf(str, "push : %f", pushTime_);
+		debugText_->Render(str, 0, 390);
 	}
 	//float dist = pow(enemyList_[0]->m_Pos.x - virChar_[player1]->m_Pos.x, 2) + pow(virEnemy_->m_Pos.z - virChar_[player1]->m_Pos.z, 2);
 	//sprintf(str, "dist: %f", dist);

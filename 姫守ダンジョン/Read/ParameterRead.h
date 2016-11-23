@@ -33,7 +33,7 @@ public:
 	unsigned int GetHP()const { return hp_; };					//HP取得
 	unsigned int GetNormalAtk()const { return normalAtk_; };	//通常攻撃力取得
 	unsigned int GetSpAtk()const { return specialAtk_; };		//特殊攻撃力取得
-	unsigned int GetDefense()const { return def_; };			//守備力取得
+	unsigned int GetDefence()const { return def_; };			//守備力取得
 	float GetChargeTime()const { return chargeTime_; };			//チャージタイム取得
 	float GetWaitTime()const { return specialAttackTime_; };	//待機時間取得
 	float GetMoveSpeed()const { return moveSpeed_; };			//移動速度取得
@@ -62,7 +62,7 @@ class EnemyParameter
 {
 	char* name_;				//敵の名前
 	unsigned int hp_;			//HP
-	unsigned int normalAtk_;	//通常攻撃
+	unsigned int atk_;			//通常攻撃
 	unsigned int def_;			//守備力
 	float moveSpeed_;			//移動スピード
 	float weight_;				//重さ
@@ -72,7 +72,8 @@ public:
 	EnemyParameter(std::string str);
 	const char* GetName()const { return name_; };				//名前取得
 	unsigned int GetHP()const { return hp_; };					//HP取得
-	unsigned int GetNormalAtk()const { return normalAtk_; };	//通常攻撃力取得
+	unsigned int GetAtk()const { return atk_; };				//通常攻撃力取得
+	unsigned int GetDefence()const { return def_; };			//守備力取得
 	float GetMoveSpeed()const { return moveSpeed_; };			//移動スピード取得
 	float GetWeight()const { return weight_; };					//重さ取得
 	float GetAttackReach()const {return attackReach_; };		//攻撃リーチ取得

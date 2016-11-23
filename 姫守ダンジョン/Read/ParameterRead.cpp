@@ -135,10 +135,10 @@ PrincessParameter::PrincessParameter(string str)
 //	@brief	EnemyParameterƒRƒ“ƒXƒgƒ‰ƒNƒ^
 EnemyParameter::EnemyParameter(string str)
 {
-	//E‹Æ–¼‚ÌŽæ“¾
+	//–¼‘O‚ÌŽæ“¾
 	string temp = str;
 	size_t comma = temp.find(',');
-	string pull = temp.substr(0, comma + 1);
+	string pull = temp.substr(0, comma);
 	name_ = new char[comma + 1];
 	memcpy(name_, pull.c_str(), comma + 1);
 	temp = temp.substr(comma + 1);
@@ -149,10 +149,10 @@ EnemyParameter::EnemyParameter(string str)
 	hp_ = atoi(pull.c_str());
 	temp = temp.substr(comma + 1);
 
-	//’ÊíUŒ‚Žæ“¾
+	//UŒ‚Žæ“¾
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
-	normalAtk_ = atoi(pull.c_str());
+	atk_ = atoi(pull.c_str());
 	temp = temp.substr(comma + 1);
 
 	//Žç”õ—ÍŽæ“¾
@@ -192,7 +192,7 @@ EnemyParameter::EnemyParameter(string str)
 ParameterRead::ParameterRead()
 	:jobParamList_(0)
 	, enemyParamList_(0)
-	,princessParam_(0)
+	, princessParam_(0)
 	, jobCount_(0)
 	, enemyCount_(0)
 {
@@ -308,16 +308,16 @@ void ParameterRead::SetEnemyParameter(const char* filePath)
 	while (getline(ifs, str))
 	{
 		EnemyParameter* temp = new EnemyParameter(str);
-		EnemyParameter** newList = new EnemyParameter*[jobCount_ + 1];
+		EnemyParameter** newList = new EnemyParameter*[enemyCount_ + 1];
 
-		if (jobCount_ > 0)
+		if (enemyCount_ > 0)
 		{
-			memcpy(newList, jobParamList_, sizeof(EnemyParameter**)*jobCount_);
+			memcpy(newList, enemyParamList_, sizeof(EnemyParameter**)*enemyCount_);
 		}
 
 		newList[enemyCount_] = temp;
-		++jobCount_;
-		delete[] jobParamList_;
+		++enemyCount_;
+		delete[] enemyParamList_;
 		enemyParamList_ = newList;
 	}
 
