@@ -448,27 +448,28 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 		}
 	}
 
-	//PlayerDebug();
+	PlayerDebug();
 	//EnemyDebug();
 
 	camera_->Render();
-	char str[256];
-	sprintf(str, "%f",camera_->GetDist());
-	debugText_->Render(str, 0, 10);
-	sprintf(str, "zoom : %f", virChar_[Player2]->m_Pos.x);
-	debugText_->Render(str, 0, 30);
-	sprintf(str, "y : %f",camera_->GetPos().y);
-	debugText_->Render(str, 0, 50);
+
+	//char str[256];
+	//sprintf(str, "%f",camera_->GetDist());
+	//debugText_->Render(str, 0, 10);
+	//sprintf(str, "zoom : %f", virChar_[Player2]->m_Pos.x);
+	//debugText_->Render(str, 0, 30);
+	//sprintf(str, "y : %f",camera_->GetPos().y);
+	//debugText_->Render(str, 0, 50);
 }
 
 void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-	//sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player1]->GetAtkState());
-	//debugText_->Render(str, 0, 10);
-	sprintf(str, "alive : %d", virChar_[Player1]->GetAliveFlg());
+	sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player1]->GetAtkState());
 	debugText_->Render(str, 0, 10);
+	//sprintf(str, "alive : %d", virChar_[Player1]->GetAliveFlg());
+	//debugText_->Render(str, 0, 10);
 	sprintf(str, "hp_ : %d", virChar_[Player1]->GetHP());
 	debugText_->Render(str, 0, 30);
 	sprintf(str, "normalAtk_ : %d", virChar_[Player1]->GetParam()->normalAtk_);

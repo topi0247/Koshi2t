@@ -47,7 +47,7 @@ void Witch::Attack()
 
 	unsigned int inputTime =param_->chargeTime_;
 
-	if (0 < attackCount_ && attackCount_ < inputTime)
+	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
 		atkNo_ = normalAtk;
 	}

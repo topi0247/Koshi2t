@@ -163,7 +163,7 @@ void CharactorManager::AroundCharaCheck()
 //	@note	移動方向にキャラクターがいたら、そのキャラクターの重さを取得
 void CharactorManager::MoveCharaHit()
 {
-	float dist = 2;
+	float dist = 1;
 	float degree = D3DXToDegree(m_Yaw);
 	CharactorManager* opp = nullptr;
 	for (auto c : aroundCharaList_)

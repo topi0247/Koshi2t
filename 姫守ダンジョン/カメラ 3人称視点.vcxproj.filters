@@ -65,6 +65,9 @@
     <ClCompile Include="Stage\Spawn.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh\MeshManager.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Stage\Spawn.h">
       <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\MeshManager.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
