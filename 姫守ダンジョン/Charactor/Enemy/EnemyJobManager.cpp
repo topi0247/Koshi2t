@@ -32,6 +32,46 @@ void EnemyJobManager::CharaUpdate()
 void Slim::NormalAttack()
 {
 	float dist = 3;
+	float speed = 1;
 	targetChar_->DamageCalc(param_->atk_);
-	targetChar_->KnockBack(m_Pos,dist);
+	targetChar_->KnockBack(m_Pos,dist,speed);
+}
+
+//=======ゴブリン========//
+void Goblin::NormalAttack()
+{
+	float dist = 3;
+	float speed = 1;
+	targetChar_->DamageCalc(param_->atk_);
+	targetChar_->KnockBack(m_Pos, dist, speed);
+}
+
+//=======スケルトン======//
+void Skeleton::NormalAttack()
+{
+	float dist = 1;
+	float speed = 1;
+	WeaponBall* atkBall=new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
+	atkBall->SetDir(vec);
+	atkBall->SetDamageList(allCharaList_, charaType_);
+	atkBall->SetKnockBack(dist, param_->attackReach_,speed);
+	atkBall->SetAttack(param_->atk_);
+	atkList_.push_back(atkBall);
+}
+
+
+void Skeleton::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
+{
+	m_View = mView;
+	m_Proj = mProj;
+	Render();
+
+	if (!atkList_.empty())
+	{
+		for (auto a : atkList_)
+		{
+			a->Render(mView, mProj);
+		}
+	}
 }

@@ -103,7 +103,7 @@ void MAIN::Loop()
 	//XFileRead* xfileRead = new XFileRead;
 	//xfileRead->ReadXFilePath();
 	//XFile* xfile = xfileRead->GetXFile("ステージ");
-	camera_ = new Camera;
+	/*camera_ = new Camera;*/
 	//stageMesh_ = new Stage;
 	//stageMesh_->Read(m_hWnd, m_pDevice, m_pDeviceContext,xfile->GetFileName());
 	//メッシュ作成　終わり
@@ -234,8 +234,8 @@ HRESULT MAIN::InitD3D()
 //
 void MAIN::DestroyD3D()
 {
-	delete camera_;
-	camera_ = nullptr;
+	//delete camera_;
+	//camera_ = nullptr;
 	delete mainScene_;
 	mainScene_ = nullptr;
 	SAFE_RELEASE(m_pSwapChain);
@@ -250,7 +250,7 @@ void MAIN::DestroyD3D()
 //更新処理
 void MAIN::Update()
 {
-	camera_->Update();
+	//camera_->Update();
 	mainScene_->Update();
 }
 
@@ -286,10 +286,10 @@ void MAIN::Render()
 	//// プロジェクショントランスフォーム（射影変換）
 	//D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI / 4, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
 	//レンダリング
-	camera_->Render();
-	D3DXMATRIX mView = camera_->GetView();
-	D3DXMATRIX mProj = camera_->GetProj();
-	mainScene_->Render(mView, mProj);
+	//camera_->Render();
+	/*D3DXMATRIX mView = camera_->GetView();
+	D3DXMATRIX mProj = camera_->GetProj();*/
+	mainScene_->Render(/*mView, mProj*/);
 	
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);

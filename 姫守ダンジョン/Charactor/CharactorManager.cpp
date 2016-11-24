@@ -34,7 +34,7 @@ CharactorManager::~CharactorManager()
 //	@brief				ノックバック処理
 //	@param (atkPos)		攻撃が当たった地点の座標
 //	@param (distance)	ノックバックする距離
-void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
+void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance, float speed)
 {
 	//方向取得
 	D3DXVECTOR3 dir = m_Pos - atkPos;
@@ -46,7 +46,7 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance)
 	float angle = (atan2(dir.z, dir.x)*-1) - (D3DX_PI / 2.0f);
 
 	//ノックバックスピード
-	const float knockBackSpeed = 1.0f;
+	const float knockBackSpeed = speed;
 
 	m_Dir = D3DXVECTOR3(knockBackSpeed*dir.x, 0, knockBackSpeed*dir.z);
 
@@ -88,11 +88,13 @@ void CharactorManager::StopMove()
 //	@brief			ノックバック
 //	@param (pos)	攻撃者の座標
 //	@param (dist)	ノックバック距離
-void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist)
+//	@oaram (speed)	ノックバックスピード
+void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist,float speed)
 {
 	knockBackFlg_ = true;
 	knockBackPos_ = pos;
 	knockBackDis_ = dist;
+	knockBackSpeed_ = speed;
 }
 
 //
@@ -107,7 +109,7 @@ void CharactorManager::Move_Update()
 		}
 		else if (knockBackFlg_ == true)
 		{
-			KnockBack(knockBackPos_, knockBackDis_);
+			KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
 		}
 	}
 }

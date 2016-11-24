@@ -13,9 +13,11 @@
 #include "./Charactor/Player/PlayerCommon.h"
 #include "./Charactor/CharactorCreator.h"
 #include "./Charactor/Enemy/EnemyJobManager.h"
+#include "./Stage/Spawn.h"
 #include "./Charactor/Princess.h"
 #include "./Collision.h"
 #include "./DebugDraw/D3D11_TEXT.h"
+#include "./Camera.h"
 
 class Main_Scene
 {
@@ -39,6 +41,10 @@ class Main_Scene
 	Collision* ray_;
 	JobManager** virChar_;	//確認用仮キャラクター
 	Princess* princess_;	//姫
+	Camera* camera_;
+
+	int spawnAmount_;	//スポーンゲートの数
+	Spawn** spawn_;
 	//EnemyJobManager* virEnemy_;	//確認用仮キャラクター
 	/*EnemyJobManager* virEnemy_;*/
 
@@ -70,6 +76,7 @@ public:
 	HRESULT DebugInit(ID3D11DeviceContext* m_pDeviceContext);								//デバッグ描画初期化
 	
 	void Update();																			//更新
-	void Render(D3DXMATRIX mView, D3DXMATRIX mProj);										//描画
+	/*void Render(D3DXMATRIX mView, D3DXMATRIX mProj);*/										//描画
+	void Render();
 };
 

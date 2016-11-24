@@ -34,6 +34,11 @@ void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pD
 	memset(FileNameF, 0, sizeof(FileNameF));
 	strcpy_s(FileNameF, sizeof(FileNameF), "./Model/XFiles/Stage/");
 	strcat_s(FileNameF, sizeof(FileNameF), FloorName);
+	stageMeshFloor_->m_hWnd = m_hWnd;
+	stageMeshFloor_->m_pDevice11 = m_pDevice;
+	stageMeshFloor_->m_pDeviceContext11 = m_pDeviceContext;
+	stageMeshFloor_->InitDx9();
+	stageMeshFloor_->InitShader();
 	if (FAILED(stageMeshFloor_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileNameF)))
 	{
 		return;
@@ -47,6 +52,7 @@ void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pD
 	{
 		return;
 	}
+
 }
 
 //

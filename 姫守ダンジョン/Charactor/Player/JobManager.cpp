@@ -38,19 +38,26 @@ void JobManager::SetParameter(JobParameter* param)
 	param_->normalAtk_ = param->GetNormalAtk();
 	param_->specialAtk_ = param->GetSpAtk();
 	param_->def_ = param->GetDefence();
+	param_->chainWeapon_ = param->GetChainWeapon();
+	param_->specialAttackTime_ = param->GetSpAtkTime();
+	param_->invisibleTime_ = param->GetInvisivleTime();
+	param_->weaponDelTime_ = param->GetWeaponDelTime();
 	param_->chargeTime_ = param->GetChargeTime();
-	param_->specialAttackTime_ = param->GetWaitTime();
-	param_->hp_ = param->GetChargeTime();
 	param_->moveSpeed_ = param->GetMoveSpeed();
 	param_->specialMoveSpeed_ = param->GetSpMoveSpeed();
 	param_->weight_ = param->GetWeight();
-	param_->attackReach_ = param->GetAttackReach_();
-	param_->attackRange_ = param->GetAttackRange_();
+	param_->attackReach_ = param->GetAttackReach();
+	param_->attackRange_ = param->GetAttackRange();
+	param_->specialAtkRange_ = param->GetSpAtkRange();
 	param_->scale_ = param->GetScale();
+	param_->knockbackSpeed_ = param->GetKnockBackSpeed();
+	param_->knockbackDist_ = param->GetKnockBackDist();
+	param_->weaponScale_ = param->GetWeaponScale();
+	param_->weaponHitReach_ = param->GetWeaponHitReach();
+	param_->weaponDelDist_ = param->GetWeaponDelDist();
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
-	hp_ = 1000;
 }
 
 //

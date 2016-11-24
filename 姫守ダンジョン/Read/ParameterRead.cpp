@@ -15,14 +15,23 @@ JobParameter::JobParameter(string str)
 	, normalAtk_(0)
 	, specialAtk_(0)
 	, def_(0)
-	, chargeTime_(0)
+	, chainWeapon_(0)
+	, spChainWeapon_(0)
 	, specialAttackTime_(0)
+	, invisibleTime_(0)
+	, weaponDelTime_(0)
+	, chargeTime_(0)
 	, moveSpeed_(0)
 	, specialMoveSpeed_(0)
 	, weight_(0)
 	, attackReach_(0)
-	, scale_(0)
 	, attackRange_(0)
+	, scale_(0)
+	, knockbackSpeed_(0)
+	, knockbackDist_(0)
+	, weaponScale_(0)
+	, weaponHitReach_(0)
+	, weaponDelDist_(0)
 {
 	//職業名の取得
 	string temp = str;
@@ -53,7 +62,7 @@ JobParameter::JobParameter(string str)
 	//特殊攻撃時間
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
-	specialAttackTime_ = atof(pull.c_str());
+	specialAttackTime_ = atoi(pull.c_str());
 	temp = temp.substr(comma + 1);
 
 	//チャージタイム取得
@@ -86,6 +95,12 @@ JobParameter::JobParameter(string str)
 	weight_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
+	//スケール取得
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	scale_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
 	//攻撃リーチ取得
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
@@ -98,11 +113,65 @@ JobParameter::JobParameter(string str)
 	attackRange_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
 
-	//スケール取得
+	//特殊攻撃範囲
 	comma = temp.find(',');
 	pull = temp.substr(0, comma);
-	scale_ = atof(pull.c_str());
+	specialAtkRange_ = atof(pull.c_str());
 	temp = temp.substr(comma + 1);
+
+	//ノックバック速度
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	knockbackSpeed_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//ノックバック距離
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	knockbackDist_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//無敵時間
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	invisibleTime_ = atoi(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//通常時飛び道具連続発動回数
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	chainWeapon_ = atoi(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//特殊時飛び道具連続発動回数
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	spChainWeapon_ = atoi(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//飛び道具スケール
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	weaponScale_= atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//飛び道具衝突距離
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	weaponHitReach_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//飛び道具消滅距離
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	weaponDelDist_ = atof(pull.c_str());
+	temp = temp.substr(comma + 1);
+
+	//飛び道具消滅時間
+	comma = temp.find(',');
+	pull = temp.substr(0, comma);
+	weaponDelTime_ = atoi(pull.c_str());
+	//temp = temp.substr(comma + 1);
 }
 
 //=====================================================================//
@@ -326,14 +395,14 @@ void ParameterRead::SetEnemyParameter(const char* filePath)
 }
 
 //
-//	@brief	職業数の読み込み
+//	@brief	職業数の取得
 int ParameterRead::GetJobCount()const
 {
 	return jobCount_;
 }
 
 //
-//	@brief	エネミー数の読み込み
+//	@brief	エネミー数の取得
 int ParameterRead::GetEnemyCount()const
 {
 	return enemyCount_;

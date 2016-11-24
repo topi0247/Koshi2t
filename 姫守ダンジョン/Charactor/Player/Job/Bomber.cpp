@@ -59,10 +59,10 @@ void Bomber::Attack()
 		bombFlg_ = true;
 		//static int count = 0;
 		//int count = 0;
+		float delTime = FPS*param_->weaponDelTime_;
 		for (auto b : bomb_)
 		{
-			int frame = FPS*1.5;
-			b->Time_Del_Weapon(frame);
+			b->Time_Del_Weapon(delTime);
 		}
 		if (/*b != nullptr &&*/ bomb_[0]->GetDelFlg())
 		{
@@ -77,7 +77,7 @@ void Bomber::Attack()
 		if (bomb_.empty())
 		{
 			bomb_.clear();
-			bombFlg_= false;
+			bombFlg_ = false;
 			//count = 0;
 		}
 
@@ -94,14 +94,16 @@ void Bomber::Attack()
 //	@brief	’ÊíUŒ‚
 void Bomber::Normal_Attack()
 {
-	size_t size = 2;
+	size_t size = param_->chainWeapon_;
 	float range = param_->attackRange_;
 	float dist = param_->attackReach_;
+	float kSpeed = param_->knockbackSpeed_;
+
 	if (bomb_.empty() || bomb_.size() < size)
 	{
 		WeaponBall* bomb = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
 		bomb->SetDamageList(allCharaList_, charaType_);
-		bomb->SetHitRangeKnockBackDist(range, dist);
+		bomb->SetKnockBack(range, dist, kSpeed);
 		bomb_.push_back(bomb);
 	}
 	atkNo_ = noAtk;
@@ -111,7 +113,7 @@ void Bomber::Normal_Attack()
 //	@brief	“ÁŽêUŒ‚
 void Bomber::Special_Attack()
 {
-	int invincibleTime = 3;
+	int invincibleTime = param_->specialAttackTime_;
 	if (++timeCount_ % (FPS * invincibleTime) == 0)
 	{
 		invincibleFlg_ = false;
@@ -124,15 +126,16 @@ void Bomber::Special_Attack()
 //	@brief	”š’eŽm—pˆÚ“®ˆ—
 void Bomber::Move_Update()
 {
+	float kSpeed = param_->knockbackSpeed_;
 	if (aliveFlg_ == true)
 	{
 		if (knockBackFlg_ == false)
 		{
 			m_Pos += m_Dir;
 		}
-		else if (knockBackFlg_ == true && invincibleFlg_==false)
+		else if (knockBackFlg_ == true && invincibleFlg_ == false)
 		{
-			KnockBack(knockBackPos_, knockBackDis_);
+			KnockBack(knockBackPos_, knockBackDis_, kSpeed);
 		}
 	}
 }
@@ -144,7 +147,7 @@ void Bomber::Move_Update()
 void Bomber::DamageCalc(unsigned int atk)
 {
 	float damage = 0;
-	if (invincibleFlg_==false)
+	if (invincibleFlg_ == false)
 	{
 		damage = atk / (1 + ((float)param_->def_ / 100));
 	}

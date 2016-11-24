@@ -137,6 +137,7 @@ namespace SKINMESH {
 		LPD3DXANIMATIONCONTROLLER m_pAnimController;
 		LPD3DXANIMATIONSET m_pAnimSet[100];//100個までのアニメーションセットに対応
 		HRESULT LoadMeshFromX(LPDIRECT3DDEVICE9, LPSTR);
+		void D3DXPARSER::BuildAllMesh(D3DXFRAME* pFrame);
 		HRESULT AllocateBoneMatrix(LPD3DXMESHCONTAINER);
 		HRESULT AllocateAllBoneMatrices(LPD3DXFRAME);
 		VOID UpdateFrameMatrices(LPD3DXFRAME, LPD3DXMATRIX);

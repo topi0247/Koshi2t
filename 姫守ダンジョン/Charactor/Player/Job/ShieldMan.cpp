@@ -76,7 +76,8 @@ void ShieldMan::Normal_Attack_Collision()
 	float degree = D3DXToDegree(m_Yaw);
 	float hitAngle = param_->attackRange_;
 	float atkDist = param_->attackReach_;
-	float backDist = param_->attackReach_;
+	float backDist = param_->knockbackDist_;
+	float backSpeed = param_->knockbackSpeed_;
 
 	if (!aroundCharaList_.empty())
 	{
@@ -91,7 +92,7 @@ void ShieldMan::Normal_Attack_Collision()
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
-					chara->SetKnockBack(m_Pos, backDist);
+					chara->SetKnockBack(m_Pos, backDist,backSpeed);
 					if (chara->GetCharaType() == Enemy)
 					{
 						chara->DamageCalc(param_->normalAtk_);
@@ -121,7 +122,7 @@ void ShieldMan::Special_Attack_Collision()
 	float degree = D3DXToDegree(m_Yaw);
 	float hitAngle = param_->attackRange_;
 	float atkDist = param_->attackReach_;
-	float backDist = param_->attackReach_;
+	float backDist = param_->knockbackDist_;
 
 	if (!aroundCharaList_.empty())
 	{
@@ -179,6 +180,8 @@ void ShieldMan::DamageCalc(unsigned int atk)
 //	@breif	‚Žm—pˆÚ“®ˆ—
 void ShieldMan::Move_Update()
 {
+	float backSpeed = param_->knockbackSpeed_;
+
 	if (aliveFlg_ == true)
 	{
 		if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
@@ -187,7 +190,7 @@ void ShieldMan::Move_Update()
 		}
 		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
 		{
-			KnockBack(knockBackPos_, knockBackDis_);
+			KnockBack(knockBackPos_, knockBackDis_,backSpeed);
 		}
 		else if (atkNo_ == specialAtk)
 		{

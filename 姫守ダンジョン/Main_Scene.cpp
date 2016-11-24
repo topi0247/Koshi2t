@@ -25,6 +25,8 @@ Main_Scene::Main_Scene()
 	charList_.push_back(princess_);
 	scene_ = StartS;
 	//virEnemy_ = new Slim;
+
+	camera_ = new Camera;
 }
 
 //
@@ -70,6 +72,9 @@ Main_Scene::~Main_Scene()
 	xfile = nullptr;
 	delete parameter;
 	parameter = nullptr;
+
+	delete camera_;
+	camera_ = nullptr;
 }
 
 //
@@ -82,6 +87,9 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	wnd_ = m_hWnd;
 	device_ = m_pDevice;
 	//deviceContext_ = m_pDeviceContext;
+	//
+	////Direct3Dとシェーダーの初期化
+	//STATICMESH::CD3DXMESH::InitDx9();
 
 	//読み込むXファイルの情報を読み込む
 	xfileRead = new XFileRead;
@@ -93,33 +101,42 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//JobParameter* job = parameter->GetJobParamList("剣士");
 
 	//ステージのファイル読み込み
-	xfile = xfileRead->GetXFile("ステージ0");
-	stage_->Read(wnd_, device_, deviceContext_, xfile->GetFileName(), xfile->GetFileName());
+	XFile* xfile2;
+	xfile = xfileRead->GetXFile("ステージ5_floor5");
+	xfile2 = xfileRead->GetXFile("ステージ5_wall5");
+	stage_->Read(wnd_, device_, deviceContext_, xfile->GetFileName(), xfile2->GetFileName());
 
 	//仮キャラファイル読み込み
 	xfile = xfileRead->GetXFile("剣士");
 	virChar_[Player1]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player1]->SetParameter(parameter->GetJobParamList("剣士"));
-	virChar_[Player1]->m_Pos = D3DXVECTOR3(10, 0, -10);
+	virChar_[Player1]->m_Pos = D3DXVECTOR3(0, 0, -10);
 
 	xfile = xfileRead->GetXFile("魔導士");
 	virChar_[Player2]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player2]->SetParameter(parameter->GetJobParamList("魔導士"));
-	virChar_[Player2]->m_Pos = D3DXVECTOR3(5, 0, -10);
+	virChar_[Player2]->m_Pos = D3DXVECTOR3(0, 0, -10);
 
 	xfile = xfileRead->GetXFile("盾士");
 	virChar_[Player3]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player3]->SetParameter(parameter->GetJobParamList("盾士"));
-	virChar_[Player3]->m_Pos = D3DXVECTOR3(-5, 0, -10);
+	virChar_[Player3]->m_Pos = D3DXVECTOR3(0, 0, -10);
 
 	xfile = xfileRead->GetXFile("爆弾士");
 	virChar_[Player4]->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	virChar_[Player4]->SetParameter(parameter->GetJobParamList("爆弾士"));
-	virChar_[Player4]->m_Pos = D3DXVECTOR3(-10, 0, -10);
+	virChar_[Player4]->m_Pos = D3DXVECTOR3(0, 0, -10);
 
 	xfile = xfileRead->GetXFile("姫");
 	princess_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 	princess_->m_Pos = D3DXVECTOR3(0, 0, -5);
+
+	//スポーンの設定
+	xfile = xfileRead->GetXFile("スポーン1");
+	spawnAmount_ = 1;
+	spawn_ = new Spawn*[spawnAmount_];
+	spawn_[0] = new Spawn;
+	spawn_[0]->SpawnInit(wnd_, device_, deviceContext_, xfile->GetFileName());
 
 	//エネミーの読み込み
 	parameter->SetEnemyParameter("./ReadData/EnemyParameterData.csv");
@@ -168,6 +185,13 @@ void Main_Scene::Update()
 	default:
 		break;
 	}
+
+	//カメラの更新
+	for (int i = 0; i < 4; i++)
+	{
+		camera_->SetPlayerPos(virChar_[i]->m_Pos);
+	}
+	camera_->Update();
 }
 
 //
@@ -192,7 +216,7 @@ void Main_Scene::GameMain()
 	//エネミースポーン処理
 	//if ((GetKeyState(VK_F1) & 0x80))
 	//{
-	static int count = 0;
+	/*static int count = 0;
 	if (count == 0)
 		if (++time_ % (FPS * 3) == 0)
 		{
@@ -209,9 +233,22 @@ void Main_Scene::GameMain()
 			insTime_ = (double)(end1 - start) / CLOCKS_PER_SEC;
 			pushTime_ = (double)(end2 - start) / CLOCKS_PER_SEC;
 			++count;
-		}
+		}*/
 
-		//エネミーターゲット更新
+	/*if (++time_ % (FPS * 3) == 0)
+	{
+		spawn_[0]->ListSet(parameter, princess_);
+		std::vector<EnemyJobManager*> temp = spawn_[0]->EnemySpawn();
+		for (auto e : temp)
+		{
+			enemyList_.push_back(e);
+			charList_.push_back(e);
+		}
+		spawn_[0]->ListReset();
+		temp.clear();
+	}*/
+
+	//エネミーターゲット更新
 	if (!enemyList_.empty())
 	{
 		for (auto enemy : enemyList_)
@@ -283,6 +320,8 @@ void Main_Scene::GameMain()
 	{
 		scene_ = EndS;
 	}
+
+
 }
 
 //
@@ -379,8 +418,10 @@ void Main_Scene::CollisionControl()
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
-void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
+void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 {
+	D3DXMATRIX mView = camera_->GetView();
+	D3DXMATRIX mProj = camera_->GetProj();
 	//ステージの描画
 	stage_->Render(mView, mProj);
 
@@ -396,8 +437,28 @@ void Main_Scene::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
 		chara->CharaRender(mView, mProj);
 	}
 
+	if (spawn_ != nullptr)
+	{
+		for (int i = 0; i < spawnAmount_; i++)
+		{
+			if (spawn_[i] != nullptr)
+			{
+				spawn_[i]->SpawnRender(mView, mProj);
+			}
+		}
+	}
+
 	//PlayerDebug();
-	EnemyDebug();
+	//EnemyDebug();
+
+	camera_->Render();
+	char str[256];
+	sprintf(str, "%f",camera_->GetDist());
+	debugText_->Render(str, 0, 10);
+	sprintf(str, "zoom : %f", virChar_[Player2]->m_Pos.x);
+	debugText_->Render(str, 0, 30);
+	sprintf(str, "y : %f",camera_->GetPos().y);
+	debugText_->Render(str, 0, 50);
 }
 
 void Main_Scene::PlayerDebug()

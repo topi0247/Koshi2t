@@ -4,7 +4,7 @@
 
     <model fileName="shield.X" charName="剣士"/>
 
-    <model fileName="shield.X" charName="魔導士"/>
+    <model fileName="witch.x" charName="魔導士"/>
 
     <model fileName="shield.X" charName="盾士"/>
 
@@ -21,7 +21,7 @@
     <model fileName="t01.X" charName="スケルトン"/>
 </Models>
 
-<Models Type="Queen">
+<Models Type="Princess">
 
     <model fileName="shield.X" charName="姫"/>
 
@@ -44,5 +44,10 @@
     <model fileName="stage5_floor.x" charName="ステージ5_floor5"/>
 
     <model fileName="stage5_wall.x" charName="ステージ5_wall5"/>
+
+</Models>
+<Models Type="Spawn">
+
+    <model fileName="spowner.x" charName="スポーン1"/>
 
 </Models>

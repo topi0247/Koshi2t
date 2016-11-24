@@ -111,6 +111,7 @@ HRESULT MY_HIERARCHY::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA* pMesh
 
 	return S_OK;
 }
+
 //
 //HRESULT MY_HIERARCHY::DestroyFrame(LPD3DXFRAME pFrameToFree) 
 //フレームを破棄する
@@ -131,6 +132,7 @@ HRESULT MY_HIERARCHY::DestroyFrame(LPD3DXFRAME pFrameToFree)
 
     return S_OK; 
 }
+
 //
 //HRESULT MY_HIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 //メッシュコンテナーを破棄する
@@ -196,6 +198,7 @@ HRESULT D3DXPARSER::AllocateBoneMatrix( LPD3DXMESHCONTAINER pMeshContainerBase )
 	}
 	return S_OK;
 }
+
 //
 //
 //
@@ -224,6 +227,7 @@ HRESULT D3DXPARSER::AllocateAllBoneMatrices( LPD3DXFRAME pFrame )
 	}
 	return S_OK;
 }
+
 //
 //
 //
@@ -240,33 +244,33 @@ HRESULT D3DXPARSER::LoadMeshFromX(LPDIRECT3DDEVICE9 pDevice9,LPSTR FileName)
 	//ボーンメモリ割りあて
 	AllocateAllBoneMatrices(m_pFrameRoot);
 	//メッシュコンテナーを得る
-	if(m_pFrameRoot->pMeshContainer)
-	{
-		m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pMeshContainer;
-	}
-	else if(m_pFrameRoot->pFrameFirstChild->pMeshContainer)
-	{
-		m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pMeshContainer;
-	}
-	else
-	{
-		m_pContainer = (MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pFrameFirstChild->pMeshContainer;
-	}
-	//else//もしもこれ以上深いノードのXファイルの場合は、適宜この部分を追加すること
-	//{
-	//	m_pContainer=(MYMESHCONTAINER*)m_pFrameRoot->pFrameFirstChild->pFrameFirstChild->pMeshContainer;
-	//}
-
+	BuildAllMesh(m_pFrameRoot);
 	//アニメーショントラックを得る 　本サンプル添付のXファイルの場合は2セットだけだが100個までに対応できる
-	if (m_pAnimController!=NULL)
+	for (DWORD i = 0; i < m_pAnimController->GetNumAnimationSets(); i++)
 	{
-		for (DWORD i = 0; i < m_pAnimController->GetNumAnimationSets(); i++)
-		{
-			m_pAnimController->GetAnimationSet(i, &m_pAnimSet[i]);
-		}
+		m_pAnimController->GetAnimationSet(i, &m_pAnimSet[i]);
 	}
 	return S_OK;
 }
+
+void D3DXPARSER::BuildAllMesh(D3DXFRAME* pFrame)
+{
+	if (pFrame && pFrame->pMeshContainer)
+	{
+		m_pContainer = (MYMESHCONTAINER*)pFrame->pMeshContainer;
+	}
+
+	if (pFrame->pFrameSibling != NULL)
+	{
+		BuildAllMesh(pFrame->pFrameSibling);
+	}
+
+	if (pFrame->pFrameFirstChild != NULL)
+	{
+		BuildAllMesh(pFrame->pFrameFirstChild);
+	}
+}
+
 //
 //VOID UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix)
 //フレーム内のメッシュ毎にワールド変換行列を更新する
@@ -291,6 +295,7 @@ VOID D3DXPARSER::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParen
 		UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);
 	}
 }
+
 //
 //
 //
@@ -298,6 +303,7 @@ int D3DXPARSER::GetNumVertices()
 {
 	return m_pContainer->MeshData.pMesh->GetNumVertices();
 }
+
 //
 //
 //
@@ -305,6 +311,7 @@ int D3DXPARSER::GetNumFaces()
 {
 	return m_pContainer->MeshData.pMesh->GetNumFaces();
 }
+
 //
 //
 //
@@ -312,6 +319,7 @@ int D3DXPARSER::GetNumMaterials()
 {
 	return m_pContainer->NumMaterials;
 }
+
 //
 //
 //
@@ -319,6 +327,7 @@ int D3DXPARSER::GetNumUVs()
 {
 	return m_pContainer->MeshData.pMesh->GetNumVertices();
 }
+
 //
 //
 //指定されたボーンが影響を及ぼす頂点数を返す
@@ -326,6 +335,7 @@ int D3DXPARSER::GetNumBoneVertices(int iBoneIndex)
 {	
 	return m_pContainer->pSkinInfo->GetNumBoneInfluences(iBoneIndex);
 }
+
 //
 //
 //指定されたボーンが影響を及ぼす頂点のインデックスを返す 第2引数は、影響を受ける頂点のインデックスグループ内のインデックス（インデックスが若い順）
@@ -743,6 +753,7 @@ HRESULT CD3DXSKINMESH::Init(CD3DXSKINMESH_INIT* si)
 
 	return S_OK;
 }
+
 //
 //HRESULT CD3DXSKINMESH::ReadSkinInfo(KFbxMesh* pFbxMesh,MY_SKINVERTEX* pvVB)
 //Xからスキン関連の情報を読み出す　

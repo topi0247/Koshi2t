@@ -12,6 +12,7 @@
 class EnemyJobManager :public EnemyManager
 {
 protected:
+
 public:
 	EnemyJobManager();
 	virtual ~EnemyJobManager();
@@ -21,9 +22,32 @@ public:
 //	スライムクラス
 class Slim :public EnemyJobManager
 {
-protected:
+private:
 	virtual void NormalAttack();
 public:
 	//Slim() {};
 	virtual ~Slim() {};
+};
+
+//	ゴブリンクラス
+class Goblin :public EnemyJobManager
+{
+private:
+	virtual void NormalAttack();
+public:
+	virtual ~Goblin() {};
+};
+
+
+#include "./../Player/Job/WeaponBall.h"
+//	スケルトンクラス
+class Skeleton :public EnemyJobManager
+{
+private:
+	virtual void NormalAttack();
+	std::vector<WeaponBall*> atkList_;
+public:
+	virtual ~Skeleton() {};
+	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);		//描画
+
 };

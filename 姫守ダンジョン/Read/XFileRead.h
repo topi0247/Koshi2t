@@ -42,4 +42,3 @@ public:
 	//void ReadXFile(CD3DXMESH_ANIM* mesh,const char* name);			//Xƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	int GetCount()const { return count_; };
 };
-

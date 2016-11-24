@@ -10,10 +10,13 @@
 //	@brief	コンストラクタ
 Camera::Camera()
 {
-	movePow_ = D3DXVECTOR3(0, 48, -40);
-	gazePoint_ = D3DXVECTOR3(0,0,0);
-	zoom = 4;
-
+	movePow_ = D3DXVECTOR3(0, 27, -35);
+	gazePoint_ = D3DXVECTOR3(0, 0, 0);
+	zoom = 6;
+	farPlayerPos_ = movePow_;
+	//dist_ = zoom;
+	dist_ = 0;
+	temp_ = 27;
 }
 
 //
@@ -23,28 +26,77 @@ Camera::~Camera()
 }
 
 //
-//	@brief	更新
-void Camera::Update()
+//	@brief	プレイヤーポジションセット	
+void Camera::SetPlayerPos(D3DXVECTOR3 pos)
 {
-	DebugMove();
+	D3DXVECTOR3 pPos = pos;
+	float distx = powf(pos.x - gazePoint_.x, 2) + powf(pos.z - gazePoint_.z, 2);
+
+	if (dist_ <= distx)
+	{
+		farPlayerPos_ = pos;
+		dist_ = distx;
+		//temp_ = dist_;
+	}
 }
 
 //
-//	@brief	更新処理
-//	@param (pos)	
-//
+//	@brief	更新
+void Camera::Update()
+{
+	//float dist = pow(movePow_.y- gazePoint_.y, 2);
+	//if (dist_ >= dist)
+	//{
+	//	movePow_.y -= 0.01;
+	//}
+
+	//movePow_.y -= 0.01;
+	/*if (movePow_.y < 27)
+	{
+		movePow_.y += 0.01f;
+	}
+*/
+	if (dist_ > temp_ && movePow_.y<58)
+	{
+		movePow_.y += 0.1;
+		temp_ = dist_;
+	}
+	
+	if (dist_<temp_ && movePow_.y>35)
+	{
+		movePow_.y -= 0.1;
+		temp_ = dist_;
+	}
+	//if (temp_ < dist_)
+	//{
+	//	//if (zoom <= 1)
+	//	zoom -= 0.01;
+	//	temp_ = dist_;
+	//}
+	//if (temp_ > dist_)
+	//{
+	//	//if(dist_>=500)
+	//	zoom += 0.01;
+	//	temp_ = dist_;
+	//}
+
+	DebugMove();
+}
+
+
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
 void Camera::Render()
 {
 	// ３人称視点処理　ビュートランスフォーム カメラをキャラの後ろに配置するだけ
-	D3DXVECTOR3 camPos=movePow_;
-	D3DXVECTOR3 lookPos=gazePoint_;
+	D3DXVECTOR3 camPos = movePow_;
+	D3DXVECTOR3 lookPos = gazePoint_;
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置
 
 	D3DXMatrixTranslation(&tran_, 0, 0, 0);
 	D3DXMatrixRotationY(&yaw_, 0);
+	//D3DXMatrixRotationZ(&pitch_, gazePoint_.z);
 	oriMat_ = yaw_*tran_;
 
 	D3DXVec3TransformCoord(&camPos, &camPos, &oriMat_);

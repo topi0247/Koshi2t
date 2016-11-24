@@ -40,9 +40,9 @@ protected:
 	EnemyParam* param_;
 	CharactorManager* targetChar_;
 	D3DXVECTOR3 getpos_;
-	virtual void NormalAttack() = 0;	//’ÊíUŒ‚
-	virtual void Attack();				//UŒ‚
 	virtual void Move(float speed);		//ˆÚ“®ˆ—
+	virtual void Attack();
+	virtual void NormalAttack() = 0;
 	virtual void Dead();				//€–S
 	virtual void Motion_Update() {};	//ƒ‚[ƒVƒ‡ƒ“XV
 	virtual void DamageCalc(unsigned int atk);

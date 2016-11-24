@@ -37,6 +37,7 @@ protected:
 	D3DXVECTOR3 ownPush_;	//自分を押している方向ベクトル
 
 	float knockBackDis_;
+	float knockBackSpeed_;
 	bool knockBackFlg_;
 	D3DXVECTOR3 knockBackPos_;
 
@@ -58,14 +59,14 @@ public:
 	virtual void CharaRender(D3DXMATRIX mView,D3DXMATRIX mProj);		//描画
 	virtual void Move_Update();											//移動の更新
 	virtual void DamageCalc(unsigned int atk) = 0;		//ダメージ計算
-	void KnockBack(D3DXVECTOR3 atkPos, float distance);	//ノックバック
+	void KnockBack(D3DXVECTOR3 atkPos, float distance,float speed);	//ノックバック
 
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
 	void SetAroundChara(CharactorManager* charactor);	//周辺にいるキャラクターをリストにセット
 	void SetAllCharaList(std::vector<CharactorManager*> list);
 	void SetOppWeight(float weight);					//進行方向にいるキャラクターの重さセット
-	void SetKnockBack(D3DXVECTOR3 pos, float dist);
+	void SetKnockBack(D3DXVECTOR3 pos, float dist,float speed);
 	bool GetAliveFlg() { return aliveFlg_; };
 	CharaType GetCharaType()const;
 

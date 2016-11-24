@@ -64,10 +64,11 @@ void Witch::Attack()
 	if (magicFlg_ == true && !magicBall_.empty())
 	{
 		int count = 0;
-		float kDist = 10;
+		float kDist = param_->weaponDelDist_;
+		float kSpeed = param_->knockbackSpeed_;
 		for (size_t i = 0; i < magicBall_.size(); i++)
 		{
-			magicBall_[i]->Move_Weapon(kDist);
+			magicBall_[i]->Move_Weapon(kDist,kSpeed);
 			if (magicBall_[i]->GetDelFlg())
 			{
 				magicBall_.erase(magicBall_.begin() + count);
@@ -89,9 +90,10 @@ void Witch::Attack()
 void Witch::Normal_Attack()
 {
 	//float dist = param_->attackReach_;
-	float kRange = param_->attackReach_;
-	float kDist = param_->attackReach_;
-	magicBallCount_ = 1;
+	float kRange = param_->weaponHitReach_;
+	float kDist = param_->knockbackDist_;
+	float kSpeed = param_->knockbackSpeed_;
+	magicBallCount_ = param_->chainWeapon_;
 	//if (magicFlg_)
 	//{
 	//	for (auto m : magicBall_)
@@ -106,7 +108,7 @@ void Witch::Normal_Attack()
 		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 		magic->SetDir(vec);
 		magic->SetDamageList(allCharaList_, charaType_);
-		magic->SetHitRangeKnockBackDist(kRange, kDist);
+		magic->SetKnockBack(kRange, kDist, kSpeed);
 		magic->SetAttack(param_->normalAtk_);
 		magicBall_.push_back(magic);
 		magicFlg_ = true;
@@ -117,10 +119,10 @@ void Witch::Normal_Attack()
 //	@brief	“ÁŽêUŒ‚
 void Witch::Special_Attack()
 {
-	//float dist = param_->attackReach_;
-	float kRange = param_->attackReach_+1;
-	float kDist = param_->attackReach_;
-	magicBallCount_ = 3;
+	float kRange = param_->weaponHitReach_;
+	float kDist = param_->knockbackDist_;
+	float kSpeed = param_->knockbackSpeed_;
+	magicBallCount_ = param_->spChainWeapon_;
 	/*if (magicFlg_)
 	{
 		for (auto m : magicBall_)
@@ -141,7 +143,7 @@ void Witch::Special_Attack()
 			magic->SetDir(vec);
 			magic->SetScale(0.5);
 			magic->SetDamageList(allCharaList_, charaType_);
-			magic->SetHitRangeKnockBackDist(kRange, kDist);
+			magic->SetKnockBack(kRange, kDist,kSpeed);
 			magic->SetAttack(param_->specialAtk_);
 			magicBall_.push_back(magic);
 		}

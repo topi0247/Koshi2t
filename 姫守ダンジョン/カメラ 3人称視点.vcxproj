@@ -111,6 +111,7 @@
     <ClCompile Include="Read\ParameterRead.cpp" />
     <ClCompile Include="Read\tinyxml2.cpp" />
     <ClCompile Include="Read\XFileRead.cpp" />
+    <ClCompile Include="Stage\Spawn.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="Read\ParameterRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
+    <ClInclude Include="Stage\Spawn.h" />
     <ClInclude Include="Stage\Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -90,8 +90,8 @@ void SwordMan::Normal_Attack_Collision()
 	float degree = D3DXToDegree(m_Yaw);
 	float atkDist = param_->attackReach_;
 	float hitAngle = param_->attackRange_;
-	float backDist = param_->attackReach_;
-
+	float backDist = param_->knockbackDist_;
+	float speed = param_->knockbackSpeed_;
 	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)
@@ -107,7 +107,7 @@ void SwordMan::Normal_Attack_Collision()
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
-					chara->SetKnockBack(m_Pos, backDist);
+					chara->SetKnockBack(m_Pos, backDist,speed);
 					if (chara->GetCharaType() == Enemy)
 					{
 						chara->DamageCalc(param_->normalAtk_);
@@ -143,7 +143,8 @@ void SwordMan::Special_Attack_Collision()
 {
 	float atkRange = param_->attackRange_;
 	float atkDist = param_->attackReach_;
-	float backDist = param_->attackReach_;
+	float backDist = param_->knockbackDist_;
+	float backSpeed = param_->knockbackSpeed_;
 	if (!aroundCharaList_.empty())
 	{
 		for (auto chara : aroundCharaList_)
@@ -151,7 +152,7 @@ void SwordMan::Special_Attack_Collision()
 			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
 			{
 				hit = true;
-				chara->SetKnockBack(m_Pos, backDist);
+				chara->SetKnockBack(m_Pos, backDist,backSpeed);
 				if (chara->GetCharaType() == Enemy)
 				{
 					chara->DamageCalc(param_->specialAtk_);

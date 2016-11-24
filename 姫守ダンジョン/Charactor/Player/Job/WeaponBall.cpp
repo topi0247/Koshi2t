@@ -55,9 +55,8 @@ void WeaponBall::SetAttack(unsigned int atk)
 //
 //	@brief			飛び道具の移動更新
 //	@param (dist)	移動終了距離
-void WeaponBall::Move_Weapon(float dist)
+void WeaponBall::Move_Weapon(float dist,float speed)
 {
-	float speed = 3;
 	if (col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
 	{
 		weaponBall_->m_vPos += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
@@ -91,7 +90,7 @@ void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType c
 	{
 		if (c->GetCharaType() != cType)
 		{
-			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, range_))
+			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
 			{
 				damageList_.push_back(c);
 			}
@@ -131,7 +130,7 @@ void WeaponBall::Hit()
 		{
 			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
 			{
-				c->SetKnockBack(weaponBall_->m_vPos, dist_);
+				c->SetKnockBack(weaponBall_->m_vPos, dist_,kSpeed_);
 				delFlg_ = true;
 
 				if (c->GetCharaType() == Enemy)
@@ -144,28 +143,30 @@ void WeaponBall::Hit()
 }
 
 //
-//	@brief			攻撃範囲の設定とノックバック距離の設定
-//	@param (range)	攻撃の範囲
-//	@param (dist)	ノックバックする距離
-void WeaponBall::SetHitRangeKnockBackDist(float range, float dist)
+//	@brief			ノックバック設定
+//	@param (dist)	攻撃の範囲
+//	@param (kDist)	ノックバックする距離
+//	@param (kSpeed)	ノックバックスピード
+void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed)
 {
-	range_ = range;
 	dist_ = dist;
+	kDist_ = kDist;
+	kSpeed_ = kSpeed;
 }
 
+////
+////	@brief	攻撃の当たる範囲取得
+//float WeaponBall::GetHitDist()const
+//{
+//	return dist_;
+//}
 //
-//	@brief	攻撃の当たる範囲取得
-float WeaponBall::GetHitRange()const
-{
-	return range_;
-}
-
-//
-//	@brief	ノックバックする距離取得
-float WeaponBall::GetKnockBackDist()const
-{
-	return dist_;
-}
+////
+////	@brief	ノックバックする距離取得
+//float WeaponBall::GetKnockBackDist()const
+//{
+//	return kDist_;
+//}
 
 //
 //	@brief	描画
