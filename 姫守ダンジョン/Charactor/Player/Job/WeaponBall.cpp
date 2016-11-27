@@ -3,12 +3,12 @@
 
 //
 //	@brief	飛び道具コンストラクタ
-WeaponBall::WeaponBall(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, D3DXVECTOR3 pos)
+WeaponBall::WeaponBall(D3DXVECTOR3 pos)
 	:delCount_(0)
 {
-	weaponBall_ = new STATICMESH::CD3DXMESH;
+	weaponBall_ = new CD3DXMESH;
 	char FileName[80] = "./Model/XFiles/Player/scale1.x";
-	if (FAILED(weaponBall_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileName)))
+	if (FAILED(weaponBall_->LoadXMesh(FileName)))
 	{
 		return;
 	}
@@ -170,7 +170,7 @@ void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed)
 
 //
 //	@brief	描画
-void WeaponBall::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
+void WeaponBall::Render()
 {
-	weaponBall_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
+	weaponBall_->Render(weaponBall_->m_vPos,0,weaponBall_->m_fScale);
 }

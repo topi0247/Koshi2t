@@ -107,12 +107,15 @@
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="Main_Scene.cpp" />
     <ClCompile Include="Mesh\CD3DXMESH.cpp" />
-    <ClCompile Include="Mesh\CD3DXSKINMESH.cpp" />
-    <ClCompile Include="Mesh\MeshManager.cpp" />
+    <ClCompile Include="Mesh\CD3DXSKINMESH.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Read\MotionRead.cpp" />
     <ClCompile Include="Read\ParameterRead.cpp" />
     <ClCompile Include="Read\tinyxml2.cpp" />
     <ClCompile Include="Read\XFileRead.cpp" />
     <ClCompile Include="Stage\Spawn.cpp" />
+    <ClCompile Include="Stage\SpawnManager.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,13 +139,16 @@
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Main_Scene.h" />
     <ClInclude Include="Mesh\CD3DXMESH.h" />
-    <ClInclude Include="Mesh\CD3DXSKINMESH.h" />
-    <ClInclude Include="Mesh\MeshManager.h" />
+    <ClInclude Include="Mesh\CD3DXSKINMESH.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Origin.h" />
+    <ClInclude Include="Read\MotionRead.h" />
     <ClInclude Include="Read\ParameterRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
     <ClInclude Include="Stage\Spawn.h" />
+    <ClInclude Include="Stage\SpawnManager.h" />
     <ClInclude Include="Stage\Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

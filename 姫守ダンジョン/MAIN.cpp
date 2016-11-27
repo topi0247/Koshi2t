@@ -6,6 +6,7 @@
 //グローバル変数
 MAIN* g_pMain = NULL;
 
+
 //関数プロトタイプの宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -109,8 +110,10 @@ void MAIN::Loop()
 	//メッシュ作成　終わり
 
 	//初期化
+	//CD3DXMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
+	CD3DXMESH::InitShader(m_hWnd, m_pDevice, m_pDeviceContext);
+	CD3DXSKINMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
 	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
-
 
 
 	// メッセージループ
@@ -259,7 +262,7 @@ void MAIN::Update()
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
-	
+
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア
@@ -289,8 +292,12 @@ void MAIN::Render()
 	//camera_->Render();
 	/*D3DXMATRIX mView = camera_->GetView();
 	D3DXMATRIX mProj = camera_->GetProj();*/
+
+	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
+	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
+
 	mainScene_->Render(/*mView, mProj*/);
-	
+
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
 }

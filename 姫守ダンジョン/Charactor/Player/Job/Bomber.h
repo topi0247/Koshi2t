@@ -20,5 +20,5 @@ public:
 	virtual void Attack();
 	virtual void Move_Update();
 	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
-	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);
+	virtual void CharaRender();
 };

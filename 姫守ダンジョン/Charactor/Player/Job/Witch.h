@@ -17,5 +17,5 @@ public:
 	Witch(CharaType charaType);
 	virtual ~Witch();
 	virtual void Attack();
-	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);
+	virtual void CharaRender();
 };

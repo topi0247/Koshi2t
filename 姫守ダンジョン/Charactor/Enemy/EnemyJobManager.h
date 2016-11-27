@@ -48,6 +48,6 @@ private:
 	std::vector<WeaponBall*> atkList_;
 public:
 	virtual ~Skeleton() {};
-	virtual void CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj);		//•`‰æ
+	virtual void CharaRender();		//•`‰æ
 
 };

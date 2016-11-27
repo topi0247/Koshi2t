@@ -22,6 +22,8 @@ EnemyManager::~EnemyManager()
 {
 	delete collision_;
 	collision_ = nullptr;
+	//delete motion_;
+	//motion_ = nullptr;
 }
 
 //
@@ -30,19 +32,17 @@ EnemyManager::~EnemyManager()
 //	@param (m_pDevice)			デバイス
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 //	@param (fileName)			読み込むキャラ名
-void EnemyManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
+const char* EnemyManager::CharaInit(const char* fileName)
 {
 	char FileName[80] = { 0 };
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Enemy/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	CD3DXSKINMESH_INIT si;
-	si.hWnd = m_hWnd;
-	si.pDevice = m_pDevice;
-	si.pDeviceContext = m_pDeviceContext;
-	Init(&si);
-	CreateFromX(FileName);
-	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+
+	return FileName;
+	//CreateFromX(FileName);
+	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	//m_Pos = D3DXVECTOR3(0, 0, 0);
 }
 
 //
@@ -62,7 +62,7 @@ void EnemyManager::SetParameter(EnemyParameter* param)
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
-	hp_ = 10000;
+	//hp_ = 10000;
 }
 
 //

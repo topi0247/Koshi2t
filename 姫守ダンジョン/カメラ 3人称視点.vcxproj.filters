@@ -65,8 +65,11 @@
     <ClCompile Include="Stage\Spawn.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh\MeshManager.cpp">
-      <Filter>Mesh</Filter>
+    <ClCompile Include="Stage\SpawnManager.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Read\MotionRead.cpp">
+      <Filter>Read</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,8 +144,11 @@
     <ClInclude Include="Stage\Spawn.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh\MeshManager.h">
-      <Filter>Mesh</Filter>
+    <ClInclude Include="Stage\SpawnManager.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Read\MotionRead.h">
+      <Filter>Read</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -25,6 +25,9 @@ JobManager::~JobManager()
 {
 	delete param_;
 	param_ = nullptr;
+
+	delete motion_;
+	motion_ = nullptr;
 }
 
 //	
@@ -39,6 +42,7 @@ void JobManager::SetParameter(JobParameter* param)
 	param_->specialAtk_ = param->GetSpAtk();
 	param_->def_ = param->GetDefence();
 	param_->chainWeapon_ = param->GetChainWeapon();
+	param_->spChainWeapon_ = param->GetSpChainWeapon();
 	param_->specialAttackTime_ = param->GetSpAtkTime();
 	param_->invisibleTime_ = param->GetInvisivleTime();
 	param_->weaponDelTime_ = param->GetWeaponDelTime();
@@ -56,6 +60,7 @@ void JobManager::SetParameter(JobParameter* param)
 	param_->weaponHitReach_ = param->GetWeaponHitReach();
 	param_->weaponDelDist_ = param->GetWeaponDelDist();
 
+	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
 }
@@ -67,8 +72,8 @@ void JobManager::CharaUpdate()
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
-	//モーション変更
-	Motion_Update();
+	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+
 
 	//生存
 	if (aliveFlg_ == true)

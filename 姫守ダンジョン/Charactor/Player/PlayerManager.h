@@ -43,16 +43,6 @@ private:
 	double callTiming_;		//姫を呼んだクロック時間
 protected:
 
-	//モーション番号
-	enum MotionNo
-	{
-		waitM = 0,
-		walkM,
-		normalAtkM,
-		specialAtkM,
-		deadM,
-		revivalM,
-	};
 
 	//攻撃状態番号
 	enum AttackState
@@ -64,30 +54,30 @@ protected:
 		specialAtk,	//特殊攻撃
 	};
 
-	MotionNo motionNo_;		//モーション番号
 	AttackState atkNo_;		//攻撃状態番号
 	PlayerParameter* param_;
 
 	bool revivalFlg_;		//復活フラグ
+	D3DXVECTOR3 callPos_;	//読んだ瞬間の座標
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
 	virtual void Special_Attack() = 0;	//特殊攻撃
 	//virtual void Attack();			//攻撃
 	virtual void Move(float speed);		//移動処理
 	virtual void Dead();				//死亡
-	virtual void Motion_Update();		//モーション更新
 	void Revival();						//復活
 
 public:
 	PlayerManager();
 	virtual ~PlayerManager() {};
 
-	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);	//初期化と読み込み
-	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
-	void Princess_Call();										//姫呼び
+	virtual const char* CharaInit(const char* fileName);	//初期化と読み込み
+	virtual void DamageCalc(unsigned int atk);		//ダメージ計算
+	void Princess_Call();							//姫呼び
 	void SetRevivalFlg();
 	bool GetAliveFlg()const;						//生存フラグ取得
 	double GetCallTiming()const;
+	D3DXVECTOR3 GetCallPos()const;					//呼んだ瞬間の座標取得
 
 	//デバッグ用
 	//int GetAtkCnt() { return attackCount_; };

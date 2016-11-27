@@ -20,7 +20,7 @@ public:
 
 	int GetHitCnt() { return hitCount_; };
 	bool CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance);
-	bool RayIntersect(SKINMESH::CD3DXSKINMESH* Mesh_a, STATICMESH::CD3DXMESH* Mesh_b ,float* pfDistance, D3DXVECTOR3* pvNormal/*,float* pfDistance*/);
+	bool RayIntersect(CD3DXSKINMESH* Mesh_a, CD3DXMESH* Mesh_b ,float* pfDistance, D3DXVECTOR3* pvNormal/*,float* pfDistance*/);
 	D3DXVECTOR3 Slip(D3DXVECTOR3 L, D3DXVECTOR3 N);
 	HRESULT FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXVECTOR3* pvVertices);
 };

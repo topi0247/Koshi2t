@@ -69,7 +69,7 @@ bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 }
 
 
-bool Collision::RayIntersect(SKINMESH::CD3DXSKINMESH* pMeshA, STATICMESH::CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
+bool Collision::RayIntersect(CD3DXSKINMESH* pMeshA, CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {
 	BOOL boHit = false;
 	D3DXMATRIX Inv;

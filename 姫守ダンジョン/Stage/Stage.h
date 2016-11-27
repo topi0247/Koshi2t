@@ -7,19 +7,17 @@
 #pragma once
 #include "./../Mesh/CD3DXMESH.h"
 
-using namespace STATICMESH;
 
 class Stage
 {
-	CD3DXMESH* stageMeshFloor_;
-	CD3DXMESH* stageMeshWall_;
+	CD3DXMESH* stageMesh_;
+	D3DXVECTOR3 m_Pos;
 public:
 	Stage();
 	~Stage();
 
-	void Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext,const char* FloorName, const char* WallName);		//初期化
-	void Render(D3DXMATRIX mView,D3DXMATRIX mProj);		//描画
+	void Read(const char* StageName);		//初期化
+	void Render();		//描画
 
-	CD3DXMESH* GetMeshFloorInfo()const { return stageMeshFloor_; };		//メッシュの取得
-	CD3DXMESH* GetMeshWallInfo()const { return stageMeshWall_; };		//メッシュの取得
+	CD3DXMESH* GetMeshInfo()const { return stageMesh_; };		//メッシュの取得
 };

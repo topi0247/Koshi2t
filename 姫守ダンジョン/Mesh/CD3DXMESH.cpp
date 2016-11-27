@@ -2,7 +2,25 @@
 //本項より前のサンプルでは、このクラスは読み込みのみ行なうものだったが、
 //本サンプルでは、レンダリングも行なう。
 
-using namespace STATICMESH;
+D3DMATRIX CD3DXMESH::m_View;
+D3DMATRIX CD3DXMESH::m_Proj;
+D3DXVECTOR3 CD3DXMESH::m_Light;
+D3DXVECTOR3 CD3DXMESH::m_Eye;
+HWND CD3DXMESH::m_hWnd = nullptr;
+LPDIRECT3D9 CD3DXMESH::m_pD3d9 = nullptr;
+LPDIRECT3DDEVICE9 CD3DXMESH::m_pDevice9 = nullptr;
+ID3D11Device* CD3DXMESH::m_pDevice11 = nullptr;
+ID3D11DeviceContext* CD3DXMESH::m_pDeviceContext11 = nullptr;
+ID3D11InputLayout* CD3DXMESH::m_pVertexLayout = nullptr;
+ID3D11InputLayout* CD3DXMESH::m_pVertexLayoutNotex = nullptr;
+ID3D11VertexShader* CD3DXMESH::m_pVertexShader = nullptr;
+ID3D11VertexShader* CD3DXMESH::m_pVertexShaderNoTex = nullptr;
+ID3D11PixelShader* CD3DXMESH::m_pPixelShader = nullptr;
+ID3D11PixelShader* CD3DXMESH::m_pPixelShaderNoTex = nullptr;
+ID3D11Buffer* CD3DXMESH::m_pConstantBuffer0 = nullptr;
+ID3D11Buffer* CD3DXMESH::m_pConstantBuffer1 = nullptr;
+
+
 
 //
 //
@@ -24,76 +42,251 @@ CD3DXMESH::~CD3DXMESH()
 //
 //
 //
-HRESULT CD3DXMESH::Init(HWND hWnd,ID3D11Device* pDevice11,ID3D11DeviceContext* pContext11,LPSTR FileName)
-{
-	m_hWnd=hWnd;
-	m_pDevice11=pDevice11;
-	m_pDeviceContext11=pContext11;
-
-	if(FAILED(InitDx9()))
-	{
-		return E_FAIL;
-	}
-	if(FAILED(LoadXMesh(FileName)))
-	{
-		return E_FAIL;
-	}
-
-	if(FAILED(InitShader()))
-	{
-		return E_FAIL;
-	}
-	
-	
-
-	return S_OK;
-}
+//HRESULT CD3DXMESH::Init(HWND hWnd,ID3D11Device* pDevice11,ID3D11DeviceContext* pContext11/*,LPSTR FileName*/)
+//{
+//	m_hWnd=hWnd;
+//	m_pDevice11=pDevice11;
+//	m_pDeviceContext11=pContext11;
+//
+//	if(FAILED(InitDx9()))
+//	{
+//		return E_FAIL;
+//	}
+//	/*if(FAILED(LoadXMesh(FileName)))
+//	{
+//		return E_FAIL;
+//	}*/
+//
+//	if(FAILED(InitShader()))
+//	{
+//		return E_FAIL;
+//	}
+//	
+//	
+//
+//	return S_OK;
+//}
 //
 //
 //D3DXのパーサーを使うためには、Dx9のデバイスが必要なので作成する。
-HRESULT CD3DXMESH::InitDx9()
+
+
+//HRESULT CD3DXMESH::InitDx9()
+//{
+//	// 「Direct3D」オブジェクトの作成
+//	if( NULL == ( m_pD3d9 = Direct3DCreate9( D3D_SDK_VERSION ) ) )
+//	{
+//		MessageBoxA(0,"Direct3D9の作成に失敗しました","",MB_OK);
+//		return E_FAIL;
+//	}
+//	// 「DIRECT3Dデバイス」オブジェクトの作成
+//	D3DPRESENT_PARAMETERS d3dpp; 
+//	ZeroMemory( &d3dpp, sizeof(d3dpp) );
+//	d3dpp.BackBufferFormat =D3DFMT_UNKNOWN;
+//	d3dpp.BackBufferCount=1;	
+//	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+//	d3dpp.Windowed = true;
+//	d3dpp.EnableAutoDepthStencil = true;
+//	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;	
+//
+//	if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+//									  D3DCREATE_HARDWARE_VERTEXPROCESSING,
+//									  &d3dpp, &m_pDevice9 ) ) )
+//	{
+//		if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+//									  D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+//									  &d3dpp, &m_pDevice9 ) ) )
+//		{
+//			MessageBoxA(0,"HALモードでDIRECT3Dデバイスを作成できません\nREFモードで再試行します",NULL,MB_OK);
+//			if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
+//									  D3DCREATE_HARDWARE_VERTEXPROCESSING,
+//									  &d3dpp, &m_pDevice9 ) ) )
+//			{
+//				if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
+//									  D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+//									  &d3dpp, &m_pDevice9 ) ) )
+//				{
+//					MessageBoxA(0,"DIRECT3Dデバイスの作成に失敗しました",NULL,MB_OK);
+//					return E_FAIL;
+//				}
+//			}
+//		}
+//	}
+//	return S_OK;
+//}
+
+
+//
+//
+//	シェーダーの初期化
+HRESULT CD3DXMESH::InitShader(HWND hWnd, ID3D11Device* pDevice11, ID3D11DeviceContext* pContext11)
 {
+	m_hWnd = hWnd;
+	m_pDevice11 = pDevice11;
+	m_pDeviceContext11 = pContext11;
+
 	// 「Direct3D」オブジェクトの作成
-	if( NULL == ( m_pD3d9 = Direct3DCreate9( D3D_SDK_VERSION ) ) )
+	if (NULL == (m_pD3d9 = Direct3DCreate9(D3D_SDK_VERSION)))
 	{
-		MessageBoxA(0,"Direct3D9の作成に失敗しました","",MB_OK);
+		MessageBoxA(0, "Direct3D9の作成に失敗しました", "", MB_OK);
 		return E_FAIL;
 	}
 	// 「DIRECT3Dデバイス」オブジェクトの作成
-	D3DPRESENT_PARAMETERS d3dpp; 
-	ZeroMemory( &d3dpp, sizeof(d3dpp) );
-	d3dpp.BackBufferFormat =D3DFMT_UNKNOWN;
-	d3dpp.BackBufferCount=1;	
+	D3DPRESENT_PARAMETERS d3dpp;
+	ZeroMemory(&d3dpp, sizeof(d3dpp));
+	d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+	d3dpp.BackBufferCount = 1;
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3dpp.Windowed = true;
 	d3dpp.EnableAutoDepthStencil = true;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;	
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
-	if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
-									  D3DCREATE_HARDWARE_VERTEXPROCESSING,
-									  &d3dpp, &m_pDevice9 ) ) )
+	if (FAILED(m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+		D3DCREATE_HARDWARE_VERTEXPROCESSING,
+		&d3dpp, &m_pDevice9)))
 	{
-		if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
-									  D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-									  &d3dpp, &m_pDevice9 ) ) )
+		if (FAILED(m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+			&d3dpp, &m_pDevice9)))
 		{
-			MessageBoxA(0,"HALモードでDIRECT3Dデバイスを作成できません\nREFモードで再試行します",NULL,MB_OK);
-			if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
-									  D3DCREATE_HARDWARE_VERTEXPROCESSING,
-									  &d3dpp, &m_pDevice9 ) ) )
+			MessageBoxA(0, "HALモードでDIRECT3Dデバイスを作成できません\nREFモードで再試行します", NULL, MB_OK);
+			if (FAILED(m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
+				D3DCREATE_HARDWARE_VERTEXPROCESSING,
+				&d3dpp, &m_pDevice9)))
 			{
-				if( FAILED( m_pD3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
-									  D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-									  &d3dpp, &m_pDevice9 ) ) )
+				if (FAILED(m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, m_hWnd,
+					D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+					&d3dpp, &m_pDevice9)))
 				{
-					MessageBoxA(0,"DIRECT3Dデバイスの作成に失敗しました",NULL,MB_OK);
+					MessageBoxA(0, "DIRECT3Dデバイスの作成に失敗しました", NULL, MB_OK);
 					return E_FAIL;
 				}
 			}
 		}
 	}
+
+	//hlslファイル読み込み ブロブ作成　ブロブとはシェーダーの塊みたいなもの。XXシェーダーとして特徴を持たない。後で各種シェーダーに成り得る。
+	ID3D10Blob *pCompiledShader = NULL;
+	ID3D10Blob *pErrors = NULL;
+	//ブロブからバーテックスシェーダー作成
+	//D3DX10CreateEffectFromResource()
+	if (FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl", NULL, NULL, "VS", "vs_4_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL)))
+	{
+		MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	SAFE_RELEASE(pErrors);
+
+	if (FAILED(m_pDevice11->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pVertexShader)))
+	{
+		SAFE_RELEASE(pCompiledShader);
+		MessageBox(0, L"バーテックスシェーダー作成失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	//頂点インプットレイアウトを定義	
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	UINT numElements = sizeof(layout) / sizeof(layout[0]);
+	//頂点インプットレイアウトを作成
+	if (FAILED(m_pDevice11->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout)))
+	{
+		return FALSE;
+	}
+
+	if (FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl", NULL, NULL, "PS", "ps_4_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL)))
+	{
+		MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	SAFE_RELEASE(pErrors);
+	if (FAILED(m_pDevice11->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pPixelShader)))
+	{
+		SAFE_RELEASE(pCompiledShader);
+		MessageBox(0, L"ピクセルシェーダー作成失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+
+	//テクスチャーなしシェーダー
+	SAFE_RELEASE(pErrors);
+	SAFE_RELEASE(pCompiledShader);
+	if (FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl", NULL, NULL, "VS_NoTeX", "vs_4_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL)))
+	{
+		MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	if (FAILED(m_pDevice11->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pVertexShaderNoTex)))
+	{
+		SAFE_RELEASE(pCompiledShader);
+		MessageBox(0, L"バーテックスシェーダー作成失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	//テクスチャーなし
+	D3D11_INPUT_ELEMENT_DESC layout2[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	numElements = sizeof(layout2) / sizeof(layout2[0]);
+	//頂点インプットレイアウトを作成
+	if (FAILED(m_pDevice11->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayoutNotex)))
+	{
+		return FALSE;
+	}
+	//ブロブからピクセルシェーダー作成
+	if (FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl", NULL, NULL, "PS_NoTex", "ps_4_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL)))
+	{
+		MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	SAFE_RELEASE(pErrors);
+	if (FAILED(m_pDevice11->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pPixelShaderNoTex)))
+	{
+		SAFE_RELEASE(pCompiledShader);
+		MessageBox(0, L"ピクセルシェーダー作成失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+	SAFE_RELEASE(pCompiledShader);
+
+	//テクスチャーなし
+	if (FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl", NULL, NULL, "PS_NoTex", "ps_4_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL)))
+	{
+		MessageBox(0, L"hlsl読み込み失敗", NULL, MB_OK);
+		return E_FAIL;
+	}
+
+	SAFE_RELEASE(pCompiledShader);
+	//コンスタントバッファー作成　変換行列渡し用
+	D3D11_BUFFER_DESC cb;
+	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb.ByteWidth = sizeof(SIMPLECONSTANT_BUFFER0);
+	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.MiscFlags = 0;
+	cb.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (FAILED(m_pDevice11->CreateBuffer(&cb, NULL, &m_pConstantBuffer0)))
+	{
+		return E_FAIL;
+	}
+	//コンスタントバッファー作成  マテリアル渡し用
+	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb.ByteWidth = sizeof(SIMPLECONSTANT_BUFFER1);
+	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.MiscFlags = 0;
+	cb.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (FAILED(m_pDevice11->CreateBuffer(&cb, NULL, &m_pConstantBuffer1)))
+	{
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
+
+
 //
 //
 // Xファイルからメッシュをロードする
@@ -139,7 +332,7 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 		if( d3dxMaterials[i].pTextureFilename != NULL && 
 			lstrlenA(d3dxMaterials[i].pTextureFilename) > 0 )
 		{
-			m_Texture=true;
+			//m_Texture=true;
 			strcpy(m_pMaterial[i].szTextureName, "./Model/Textures/");
 			strcat(m_pMaterial[i].szTextureName, d3dxMaterials[i].pTextureFilename);
 
@@ -213,8 +406,8 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 		InitData.pSysMem = pvVertex;
 
 		//テクスチャー座標がマイナス対策
-		if(m_Texture)
-		{
+		//if(m_Texture)
+		//{
 			for(int i=0;i<m_pMesh->GetNumVertices();i++)
 			{
 				if(pvVertex[i].vTex.x<0)
@@ -226,7 +419,7 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 					pvVertex[i].vTex.y+=1;
 				}
 			}
-		}
+		//}
 
 		if( FAILED( m_pDevice11->CreateBuffer( &bd, &InitData, &m_pVertexBuffer) ) )
 			return FALSE;
@@ -250,203 +443,300 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 //
 //
 //
-HRESULT CD3DXMESH::InitShader()
+//HRESULT CD3DXMESH::InitShader()
+//{
+//	//hlslファイル読み込み ブロブ作成　ブロブとはシェーダーの塊みたいなもの。XXシェーダーとして特徴を持たない。後で各種シェーダーに成り得る。
+//	ID3D10Blob *pCompiledShader=NULL;
+//	ID3D10Blob *pErrors=NULL;
+//	//ブロブからバーテックスシェーダー作成
+//	//if(m_Texture)
+//	//{
+//		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"VS","vs_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+//		{
+//			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
+//			return E_FAIL;
+//		}
+//	/*}
+//	else
+//	{
+//		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"VS_NoTeX","vs_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+//		{
+//			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
+//			return E_FAIL;
+//		}
+//	}*/
+//	SAFE_RELEASE(pErrors);
+//
+//	if(FAILED(m_pDevice11->CreateVertexShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pVertexShader)))
+//	{
+//		SAFE_RELEASE(pCompiledShader);
+//		MessageBox(0,L"バーテックスシェーダー作成失敗",NULL,MB_OK);
+//		return E_FAIL;
+//	}
+//	//頂点インプットレイアウトを定義
+//	UINT numElements=0;
+//	D3D11_INPUT_ELEMENT_DESC layout[3];
+//	//if(m_Texture)
+//	//{
+//		D3D11_INPUT_ELEMENT_DESC tmp[] =
+//		{
+//			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//		};
+//		numElements=3;
+//		memcpy(layout,tmp,sizeof(D3D11_INPUT_ELEMENT_DESC)*numElements);
+//	//}
+//	/*else
+//	{
+//		D3D11_INPUT_ELEMENT_DESC tmp[] =
+//		{
+//			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },			
+//		};
+//		numElements=2;
+//		memcpy(layout,tmp,sizeof(D3D11_INPUT_ELEMENT_DESC)*numElements);
+//	}*/
+//
+//	//頂点インプットレイアウトを作成
+//	if( FAILED( m_pDevice11->CreateInputLayout( layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout ) ) )
+//	{
+//		return FALSE;
+//	}
+//	//ブロブからピクセルシェーダー作成
+//	//if(m_Texture)
+//	//{
+//		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"PS","ps_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+//		{
+//			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
+//			return E_FAIL;
+//		}
+//	//}
+//	/*else
+//	{
+//		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"PS_NoTex","ps_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
+//		{
+//			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
+//			return E_FAIL;
+//		}
+//	}*/
+//	SAFE_RELEASE(pErrors);
+//	if(FAILED(m_pDevice11->CreatePixelShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pPixelShader)))
+//	{
+//		SAFE_RELEASE(pCompiledShader);
+//		MessageBox(0,L"ピクセルシェーダー作成失敗",NULL,MB_OK);
+//		return E_FAIL;
+//	}
+//	SAFE_RELEASE(pCompiledShader);
+//	//コンスタントバッファー作成　変換行列渡し用
+//	D3D11_BUFFER_DESC cb;
+//	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
+//	cb.ByteWidth= sizeof( SIMPLECONSTANT_BUFFER0 );
+//	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
+//	cb.MiscFlags	=0;
+//	cb.Usage=D3D11_USAGE_DYNAMIC;
+//
+//	if( FAILED(m_pDevice11->CreateBuffer( &cb,NULL,&m_pConstantBuffer0)))
+//	{
+//		return E_FAIL;
+//	}
+//	//コンスタントバッファー作成  マテリアル渡し用
+//	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
+//	cb.ByteWidth= sizeof( SIMPLECONSTANT_BUFFER1 );
+//	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
+//	cb.MiscFlags	=0;
+//	cb.Usage=D3D11_USAGE_DYNAMIC;
+//
+//	if( FAILED(m_pDevice11->CreateBuffer( &cb,NULL,&m_pConstantBuffer1)))
+//	{
+//		return E_FAIL;
+//	}
+//	return S_OK;
+//}
+//
+//
+//
+
+//void CD3DXMESH::Render(D3DXMATRIX& mView,D3DXMATRIX& mProj,D3DXVECTOR3& vLight,D3DXVECTOR3& vEye)
+//{
+//	D3DXMATRIX mWorld,mTran,mYaw,mPitch,mRoll,mScale;
+//	//ワールドトランスフォーム（絶対座標変換）
+//	D3DXMatrixScaling(&mScale,m_fScale,m_fScale,m_fScale);
+//	D3DXMatrixRotationY(&mYaw,m_fYaw);
+//	D3DXMatrixRotationX(&mPitch,m_fPitch);
+//	D3DXMatrixRotationZ(&mRoll,m_fRoll);
+//	D3DXMatrixTranslation(&mTran,m_vPos.x,m_vPos.y,m_vPos.z);
+//
+//	mWorld=mScale*mYaw*mPitch*mRoll*mTran;
+//	m_World = mWorld;
+//	//使用するシェーダーの登録
+//	m_pDeviceContext11->VSSetShader(m_pVertexShader,NULL,0);
+//	m_pDeviceContext11->PSSetShader(m_pPixelShader,NULL,0);
+//	//シェーダーのコンスタントバッファーに各種データを渡す
+//	D3D11_MAPPED_SUBRESOURCE pData;
+//	if( SUCCEEDED( m_pDeviceContext11->Map( m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
+//	{
+//		SIMPLECONSTANT_BUFFER0 sg;
+//		//ワールド行列を渡す
+//		sg.mW=mWorld;
+//		D3DXMatrixTranspose( &sg.mW, &sg.mW );
+//		//ワールド、カメラ、射影行列を渡す
+//		sg.mWVP=mWorld*mView*mProj;
+//		D3DXMatrixTranspose( &sg.mWVP, &sg.mWVP );
+//		//ライトの方向を渡す
+//		sg.vLightDir=D3DXVECTOR4(vLight.x,vLight.y,vLight.z,0.0f);
+//		//視点位置を渡す
+//		sg.vEye=D3DXVECTOR4(vEye.x,vEye.y,vEye.z,0);
+//
+//		memcpy_s( pData.pData, pData.RowPitch, (void*)&sg, sizeof( SIMPLECONSTANT_BUFFER0 ) );
+//		m_pDeviceContext11->Unmap( m_pConstantBuffer0, 0 );
+//	}
+//	//このコンスタントバッファーを使うシェーダーの登録
+//	m_pDeviceContext11->VSSetConstantBuffers(0,1,&m_pConstantBuffer0 );
+//	m_pDeviceContext11->PSSetConstantBuffers(0,1,&m_pConstantBuffer0 );
+//	//頂点インプットレイアウトをセット
+//	m_pDeviceContext11->IASetInputLayout( m_pVertexLayout );
+//	//プリミティブ・トポロジーをセット
+//	m_pDeviceContext11->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+//	
+//	//属性ごとにレンダリング
+//
+//	//バーテックスバッファーをセット
+//	UINT stride = m_pMesh->GetNumBytesPerVertex();
+//	UINT offset = 0;
+//	m_pDeviceContext11->IASetVertexBuffers( 0, 1, &m_pVertexBuffer, &stride, &offset );
+//
+//	//属性の数だけ、それぞれの属性のインデックスバッファ－を描画
+//	for(DWORD i=0;i<m_NumAttr;i++)
+//	{
+//		//使用されていないマテリアル対策
+//		if(m_pMaterial[m_AttrID[i]].dwNumFace==0)
+//		{
+//			continue;
+//		}
+//		//インデックスバッファーをセット
+//		m_pDeviceContext11->IASetIndexBuffer(m_ppIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0 );
+//		//マテリアルの各要素をエフェクト（シェーダー）に渡す
+//		D3D11_MAPPED_SUBRESOURCE pData;
+//		if( SUCCEEDED( m_pDeviceContext11->Map( m_pConstantBuffer1,0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
+//		{
+//			SIMPLECONSTANT_BUFFER1 sg;
+//			sg.vAmbient=m_pMaterial[m_AttrID[i]].Ambient;//アンビエントををシェーダーに渡す
+//			sg.vDiffuse=m_pMaterial[m_AttrID[i]].Diffuse;//ディフューズカラーをシェーダーに渡す
+//			sg.vSpecular=m_pMaterial[m_AttrID[i]].Specular;//スペキュラーをシェーダーに渡す
+//			memcpy_s( pData.pData, pData.RowPitch, (void*)&sg, sizeof( SIMPLECONSTANT_BUFFER1 ) );
+//			m_pDeviceContext11->Unmap( m_pConstantBuffer1, 0 );
+//		}
+//		m_pDeviceContext11->VSSetConstantBuffers(1,1,&m_pConstantBuffer1 );
+//		m_pDeviceContext11->PSSetConstantBuffers(1,1,&m_pConstantBuffer1 );
+//		//テクスチャーをシェーダーに渡す
+//		if(m_pMaterial[m_AttrID[i]].pTexture)
+//		{
+//			m_pDeviceContext11->PSSetSamplers(0,1,&m_pSampleLinear);
+//			m_pDeviceContext11->PSSetShaderResources(0,1,&m_pMaterial[m_AttrID[i]].pTexture);
+//		}
+//		else
+//		{
+//			ID3D11ShaderResourceView* Nothing[1]={0};
+//			m_pDeviceContext11->PSSetShaderResources(0,1,Nothing);
+//		}
+//		//プリミティブをレンダリング
+//		m_pDeviceContext11->DrawIndexed(m_pMaterial[m_AttrID[i]].dwNumFace*3 , 0 ,0);
+//	}
+//}
+
+void CD3DXMESH::Render(D3DXVECTOR3 pos, float rotY, float scale)
 {
-	//hlslファイル読み込み ブロブ作成　ブロブとはシェーダーの塊みたいなもの。XXシェーダーとして特徴を持たない。後で各種シェーダーに成り得る。
-	ID3D10Blob *pCompiledShader=NULL;
-	ID3D10Blob *pErrors=NULL;
-	//ブロブからバーテックスシェーダー作成
-	if(m_Texture)
-	{
-		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"VS","vs_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-		{
-			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
-			return E_FAIL;
-		}
-	}
-	else
-	{
-		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"VS_NoTeX","vs_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-		{
-			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
-			return E_FAIL;
-		}
-	}
-	SAFE_RELEASE(pErrors);
-
-	if(FAILED(m_pDevice11->CreateVertexShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pVertexShader)))
-	{
-		SAFE_RELEASE(pCompiledShader);
-		MessageBox(0,L"バーテックスシェーダー作成失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	//頂点インプットレイアウトを定義
-	UINT numElements=0;
-	D3D11_INPUT_ELEMENT_DESC layout[3];
-	if(m_Texture)
-	{
-		D3D11_INPUT_ELEMENT_DESC tmp[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-		numElements=3;
-		memcpy(layout,tmp,sizeof(D3D11_INPUT_ELEMENT_DESC)*numElements);
-	}
-	else
-	{
-		D3D11_INPUT_ELEMENT_DESC tmp[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },			
-		};
-		numElements=2;
-		memcpy(layout,tmp,sizeof(D3D11_INPUT_ELEMENT_DESC)*numElements);
-	}
-
-	//頂点インプットレイアウトを作成
-	if( FAILED( m_pDevice11->CreateInputLayout( layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout ) ) )
-	{
-		return FALSE;
-	}
-	//ブロブからピクセルシェーダー作成
-	if(m_Texture)
-	{
-		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"PS","ps_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-		{
-			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
-			return E_FAIL;
-		}
-	}
-	else
-	{
-		if(FAILED(D3DX11CompileFromFile(L"./MESH/MESH.hlsl",NULL,NULL,"PS_NoTex","ps_4_0",0,0,NULL,&pCompiledShader,&pErrors,NULL)))
-		{
-			MessageBox(0,L"hlsl読み込み失敗",NULL,MB_OK);
-			return E_FAIL;
-		}
-	}
-	SAFE_RELEASE(pErrors);
-	if(FAILED(m_pDevice11->CreatePixelShader(pCompiledShader->GetBufferPointer(),pCompiledShader->GetBufferSize(),NULL,&m_pPixelShader)))
-	{
-		SAFE_RELEASE(pCompiledShader);
-		MessageBox(0,L"ピクセルシェーダー作成失敗",NULL,MB_OK);
-		return E_FAIL;
-	}
-	SAFE_RELEASE(pCompiledShader);
-	//コンスタントバッファー作成　変換行列渡し用
-	D3D11_BUFFER_DESC cb;
-	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth= sizeof( SIMPLECONSTANT_BUFFER0 );
-	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
-	cb.MiscFlags	=0;
-	cb.Usage=D3D11_USAGE_DYNAMIC;
-
-	if( FAILED(m_pDevice11->CreateBuffer( &cb,NULL,&m_pConstantBuffer0)))
-	{
-		return E_FAIL;
-	}
-	//コンスタントバッファー作成  マテリアル渡し用
-	cb.BindFlags= D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth= sizeof( SIMPLECONSTANT_BUFFER1 );
-	cb.CPUAccessFlags=D3D11_CPU_ACCESS_WRITE;
-	cb.MiscFlags	=0;
-	cb.Usage=D3D11_USAGE_DYNAMIC;
-
-	if( FAILED(m_pDevice11->CreateBuffer( &cb,NULL,&m_pConstantBuffer1)))
-	{
-		return E_FAIL;
-	}
-	return S_OK;
-}
-//
-//
-//
-void CD3DXMESH::Render(D3DXMATRIX& mView,D3DXMATRIX& mProj,D3DXVECTOR3& vLight,D3DXVECTOR3& vEye)
-{
-	D3DXMATRIX mWorld,mTran,mYaw,mPitch,mRoll,mScale;
+	D3DXMATRIX mWorld, mTran, mYaw, mPitch, mRoll, mScale;
 	//ワールドトランスフォーム（絶対座標変換）
-	D3DXMatrixScaling(&mScale,m_fScale,m_fScale,m_fScale);
-	D3DXMatrixRotationY(&mYaw,m_fYaw);
-	D3DXMatrixRotationX(&mPitch,m_fPitch);
-	D3DXMatrixRotationZ(&mRoll,m_fRoll);
-	D3DXMatrixTranslation(&mTran,m_vPos.x,m_vPos.y,m_vPos.z);
+	D3DXMatrixScaling(&mScale, scale, scale, scale);
+	D3DXMatrixRotationY(&mYaw, rotY);
+	//D3DXMatrixRotationX(&mPitch, m_fPitch);
+	//D3DXMatrixRotationZ(&mRoll, m_fRoll);
+	D3DXMatrixTranslation(&mTran, pos.x, pos.y, pos.z);
 
-	mWorld=mScale*mYaw*mPitch*mRoll*mTran;
+	//mWorld = mScale*mYaw*mPitch*mRoll*mTran;
+	mWorld = mScale*mYaw*mTran;
 	m_World = mWorld;
+
 	//使用するシェーダーの登録
-	m_pDeviceContext11->VSSetShader(m_pVertexShader,NULL,0);
-	m_pDeviceContext11->PSSetShader(m_pPixelShader,NULL,0);
+	m_pDeviceContext11->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pDeviceContext11->PSSetShader(m_pPixelShader, NULL, 0);
 	//シェーダーのコンスタントバッファーに各種データを渡す
 	D3D11_MAPPED_SUBRESOURCE pData;
-	if( SUCCEEDED( m_pDeviceContext11->Map( m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
+	if (SUCCEEDED(m_pDeviceContext11->Map(m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
 	{
 		SIMPLECONSTANT_BUFFER0 sg;
 		//ワールド行列を渡す
-		sg.mW=mWorld;
-		D3DXMatrixTranspose( &sg.mW, &sg.mW );
+		sg.mW = mWorld;
+		D3DXMatrixTranspose(&sg.mW, &sg.mW);
 		//ワールド、カメラ、射影行列を渡す
-		sg.mWVP=mWorld*mView*mProj;
-		D3DXMatrixTranspose( &sg.mWVP, &sg.mWVP );
+		sg.mWVP = mWorld*m_View*m_Proj;
+		D3DXMatrixTranspose(&sg.mWVP, &sg.mWVP);
 		//ライトの方向を渡す
-		sg.vLightDir=D3DXVECTOR4(vLight.x,vLight.y,vLight.z,0.0f);
+		sg.vLightDir = D3DXVECTOR4(m_Light.x, m_Light.y, m_Light.z, 0.0f);
 		//視点位置を渡す
-		sg.vEye=D3DXVECTOR4(vEye.x,vEye.y,vEye.z,0);
+		sg.vEye = D3DXVECTOR4(m_Eye.x, m_Eye.y, m_Eye.z, 0);
 
-		memcpy_s( pData.pData, pData.RowPitch, (void*)&sg, sizeof( SIMPLECONSTANT_BUFFER0 ) );
-		m_pDeviceContext11->Unmap( m_pConstantBuffer0, 0 );
+		memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLECONSTANT_BUFFER0));
+		m_pDeviceContext11->Unmap(m_pConstantBuffer0, 0);
 	}
 	//このコンスタントバッファーを使うシェーダーの登録
-	m_pDeviceContext11->VSSetConstantBuffers(0,1,&m_pConstantBuffer0 );
-	m_pDeviceContext11->PSSetConstantBuffers(0,1,&m_pConstantBuffer0 );
+	m_pDeviceContext11->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
+	m_pDeviceContext11->PSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
 	//頂点インプットレイアウトをセット
-	m_pDeviceContext11->IASetInputLayout( m_pVertexLayout );
+	m_pDeviceContext11->IASetInputLayout(m_pVertexLayout);
 	//プリミティブ・トポロジーをセット
-	m_pDeviceContext11->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	
+	m_pDeviceContext11->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	//属性ごとにレンダリング
 
 	//バーテックスバッファーをセット
 	UINT stride = m_pMesh->GetNumBytesPerVertex();
 	UINT offset = 0;
-	m_pDeviceContext11->IASetVertexBuffers( 0, 1, &m_pVertexBuffer, &stride, &offset );
+	m_pDeviceContext11->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
 	//属性の数だけ、それぞれの属性のインデックスバッファ－を描画
-	for(DWORD i=0;i<m_NumAttr;i++)
+	for (DWORD i = 0; i<m_NumAttr; i++)
 	{
 		//使用されていないマテリアル対策
-		if(m_pMaterial[m_AttrID[i]].dwNumFace==0)
+		if (m_pMaterial[m_AttrID[i]].dwNumFace == 0)
 		{
 			continue;
 		}
 		//インデックスバッファーをセット
-		m_pDeviceContext11->IASetIndexBuffer(m_ppIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0 );
+		m_pDeviceContext11->IASetIndexBuffer(m_ppIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0);
 		//マテリアルの各要素をエフェクト（シェーダー）に渡す
 		D3D11_MAPPED_SUBRESOURCE pData;
-		if( SUCCEEDED( m_pDeviceContext11->Map( m_pConstantBuffer1,0, D3D11_MAP_WRITE_DISCARD, 0, &pData ) ) )
+		if (SUCCEEDED(m_pDeviceContext11->Map(m_pConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
 		{
 			SIMPLECONSTANT_BUFFER1 sg;
-			sg.vAmbient=m_pMaterial[m_AttrID[i]].Ambient;//アンビエントををシェーダーに渡す
-			sg.vDiffuse=m_pMaterial[m_AttrID[i]].Diffuse;//ディフューズカラーをシェーダーに渡す
-			sg.vSpecular=m_pMaterial[m_AttrID[i]].Specular;//スペキュラーをシェーダーに渡す
-			memcpy_s( pData.pData, pData.RowPitch, (void*)&sg, sizeof( SIMPLECONSTANT_BUFFER1 ) );
-			m_pDeviceContext11->Unmap( m_pConstantBuffer1, 0 );
+			sg.vAmbient = m_pMaterial[m_AttrID[i]].Ambient;//アンビエントををシェーダーに渡す
+			sg.vDiffuse = m_pMaterial[m_AttrID[i]].Diffuse;//ディフューズカラーをシェーダーに渡す
+			sg.vSpecular = m_pMaterial[m_AttrID[i]].Specular;//スペキュラーをシェーダーに渡す
+			memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLECONSTANT_BUFFER1));
+			m_pDeviceContext11->Unmap(m_pConstantBuffer1, 0);
 		}
-		m_pDeviceContext11->VSSetConstantBuffers(1,1,&m_pConstantBuffer1 );
-		m_pDeviceContext11->PSSetConstantBuffers(1,1,&m_pConstantBuffer1 );
+		m_pDeviceContext11->VSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
+		m_pDeviceContext11->PSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
 		//テクスチャーをシェーダーに渡す
-		if(m_pMaterial[m_AttrID[i]].pTexture)
+		if (m_pMaterial[m_AttrID[i]].pTexture)
 		{
-			m_pDeviceContext11->PSSetSamplers(0,1,&m_pSampleLinear);
-			m_pDeviceContext11->PSSetShaderResources(0,1,&m_pMaterial[m_AttrID[i]].pTexture);
+			m_pDeviceContext11->PSSetSamplers(0, 1, &m_pSampleLinear);
+			m_pDeviceContext11->PSSetShaderResources(0, 1, &m_pMaterial[m_AttrID[i]].pTexture);
 		}
 		else
 		{
-			ID3D11ShaderResourceView* Nothing[1]={0};
-			m_pDeviceContext11->PSSetShaderResources(0,1,Nothing);
+			ID3D11ShaderResourceView* Nothing[1] = { 0 };
+			m_pDeviceContext11->PSSetShaderResources(0, 1, Nothing);
 		}
 		//プリミティブをレンダリング
-		m_pDeviceContext11->DrawIndexed(m_pMaterial[m_AttrID[i]].dwNumFace*3 , 0 ,0);
+		m_pDeviceContext11->DrawIndexed(m_pMaterial[m_AttrID[i]].dwNumFace * 3, 0, 0);
 	}
+}
+
+void CD3DXMESH::SetCamera(D3DXMATRIX view, D3DXMATRIX proj)
+{
+	m_View = view;
+	m_Proj = proj;
 }

@@ -2,23 +2,23 @@
 
 <Models Type="Player">
 
-    <model fileName="shield.X" charName="Œ•Žm"/>
+    <model fileName="sword.x" charName="Œ•Žm"/>
 
     <model fileName="witch.x" charName="–‚“±Žm"/>
 
     <model fileName="shield.X" charName="‚Žm"/>
 
-    <model fileName="shield.X" charName="”š’eŽm"/>
+    <model fileName="bomber.x" charName="”š’eŽm"/>
 
 </Models>
 
 <Models Type="Enemy">
 
-    <model fileName="t01.X" charName="ƒXƒ‰ƒCƒ€"/>
+    <model fileName="slime.x" charName="ƒXƒ‰ƒCƒ€"/>
 
-    <model fileName="t01.X" charName="ƒSƒuƒŠƒ“"/>
+    <model fileName="goblin.x" charName="ƒSƒuƒŠƒ“"/>
 
-    <model fileName="t01.X" charName="ƒXƒPƒ‹ƒgƒ“"/>
+    <model fileName="skeleton.x" charName="ƒXƒPƒ‹ƒgƒ“"/>
 </Models>
 
 <Models Type="Princess">
@@ -48,6 +48,6 @@
 </Models>
 <Models Type="Spawn">
 
-    <model fileName="spowner.x" charName="ƒXƒ|[ƒ“1"/>
+    <model fileName="spwner.x" charName="ƒXƒ|[ƒ“1"/>
 
 </Models>

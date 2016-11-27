@@ -20,19 +20,15 @@ PlayerManager::PlayerManager()
 //	@param (m_pDevice)			デバイス
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 //	@param (fileName)			読み込むキャラ名
-void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
+const char* PlayerManager::CharaInit(const char* fileName)
 {
 	char FileName[80] = { 0 };
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	CD3DXSKINMESH_INIT si;
-	si.hWnd = m_hWnd;
-	si.pDevice = m_pDevice;
-	si.pDeviceContext = m_pDeviceContext;
-	Init(&si);
-	CreateFromX(FileName);
-	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	return FileName;
+	//CreateFromX(FileName);
+	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 	//ownWright_ = 0.001f;
 }
 
@@ -41,52 +37,55 @@ void PlayerManager::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11Device
 //	@param (speed)	移動速度
 void PlayerManager::Move(float speed)
 {
-	//スティックの傾き取得
-	D3DXVECTOR3 inputStick;
-	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
-	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+		//スティックの傾き取得
+		D3DXVECTOR3 inputStick;
+		inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+		inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
 
-	//回転処理
-	const float rotEpsilon = 0.3;
-	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
-	{
-		Rotation(inputStick);
-	}
-
-
-	//移動
-	const float moveEpsilon = 0.2;	//誤作防止用
-	float sp = 0;
-	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
-	{
-		sp = speed;
-		if (motionNo_ != walkM)
+		//回転処理
+		const float rotEpsilon = 0.3;
+		if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
 		{
-			motionNo_ = walkM;
-			m_pD3dxMesh->ChangeAnimSet(walkM);
-			//ChangeMotion(waitM);
+			Rotation(inputStick);
 		}
-	}
-	else
-	{
-		if (motionNo_ != waitM)
+
+
+		//移動
+		const float moveEpsilon = 0.2;	//誤作防止用
+		float sp = 0;
+		if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
 		{
-			motionNo_ = waitM;
-			m_pD3dxMesh->ChangeAnimSet(0);
-			//ChangeMotion(walkM);
+			sp = speed;
+			if (motionNo_ != motion_->GetMotion("walk")->id_)
+			{
+				motionNo_ = motion_->GetMotion("walk")->id_;
+				m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
+				//モーション速度
+				motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			}
 		}
-	}
+		else
+		{
+			if (motionNo_ != motion_->GetMotion("wait")->id_)
+			{
+				motionNo_ = motion_->GetMotion("wait")->id_;
+				m_pD3dxMesh->ChangeAnimSet(motionNo_);
+				motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			}
+		}
 
-	//opponentWeight_ = 1;
-	MoveCharaHit();
+		//opponentWeight_ = 1;
 
-	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
-	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+		MoveCharaHit();
 
-	GamePad::update();
+		m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+		//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
-	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
-	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+		GamePad::update();
+
+		//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+		//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+	
 }
 
 //
@@ -109,15 +108,12 @@ void PlayerManager::DamageCalc(unsigned int atk)
 void PlayerManager::Dead()
 {
 	//aliveFlg_ = false;
-}
-
-//
-//	@brief	モーション更新
-void PlayerManager::Motion_Update()
-{
-	const float speed = 0.01;
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-
+	if (motionNo_ != motion_->GetMotion("dead")->id_)
+	{
+		motionNo_ = motion_->GetMotion("dead")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+	}
 }
 
 
@@ -125,10 +121,20 @@ void PlayerManager::Motion_Update()
 //	@brief	復活
 void PlayerManager::Revival()
 {
+	if (motionNo_ != motion_->GetMotion("alive")->id_)
+	{
+		motionNo_ = motion_->GetMotion("alive")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		motionSpeed_ = 1 / (float)motion_->GetMotion("alive")->frame_;
+	}
 
-	aliveFlg_ = true;
-	hp_ = param_->hp_;
-	revivalFlg_ = false;
+	if (++motionCount_ % motion_->GetMotion("alive")->frame_ == 0)
+	{
+		aliveFlg_ = true;
+		hp_ = param_->hp_;
+		revivalFlg_ = false;
+		motionCount_ = 0;
+	}
 }
 
 //
@@ -138,8 +144,25 @@ void PlayerManager::Princess_Call()
 	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
 	{
 		moveAbleFlg_ = false;
+		callPos_ = m_Pos;
 		callTiming_ = clock();
+		if (motionNo_ != motion_->GetMotion("call")->id_)
+		{
+			motionNo_ = motion_->GetMotion("call")->id_;
+			
+		}
 	}
+
+	if (motionNo_ == motion_->GetMotion("call")->id_)
+	{
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		motionSpeed_ = 1 / (float)motion_->GetMotion("call")->frame_;
+		if (++motionCount_% motion_->GetMotion("call")->frame_ == 0)
+		{
+			moveAbleFlg_ = false;
+		}
+	}
+
 }
 
 //
@@ -156,10 +179,16 @@ bool PlayerManager::GetAliveFlg()const
 	return aliveFlg_;
 }
 
-
 //
 //	@brief	姫を呼んだクロック時間取得
 double PlayerManager::GetCallTiming()const
 {
 	return callTiming_;
+}
+
+//
+//	@brief	姫を呼んだ瞬間の座標取得
+D3DXVECTOR3 PlayerManager::GetCallPos()const
+{
+	return callPos_;
 }

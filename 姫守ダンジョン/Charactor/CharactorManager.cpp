@@ -14,6 +14,9 @@ CharactorManager::CharactorManager()
 	, knockBackFlg_(0)
 	, knockBackPos_(0, 0, 0)
 	, knockBackDis_(0)
+	, motionNo_(0)
+	, motionSpeed_(0)
+	,motionCount_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
@@ -27,6 +30,13 @@ CharactorManager::~CharactorManager()
 {
 	delete collision_;
 	collision_ = nullptr;
+}
+
+//
+//	@brief	モーションデータセット
+void CharactorManager::SetMotionData(Motion* motionData)
+{
+	motion_ = motionData;
 }
 
 
@@ -51,6 +61,8 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance, float speed
 	m_Dir = D3DXVECTOR3(knockBackSpeed*dir.x, 0, knockBackSpeed*dir.z);
 
 	m_Pos += m_Dir;
+
+
 
 	if (!collision_->CharaNear(m_Pos, atkPos, distance))
 	{
@@ -89,7 +101,7 @@ void CharactorManager::StopMove()
 //	@param (pos)	攻撃者の座標
 //	@param (dist)	ノックバック距離
 //	@oaram (speed)	ノックバックスピード
-void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist,float speed)
+void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist, float speed)
 {
 	knockBackFlg_ = true;
 	knockBackPos_ = pos;
@@ -214,9 +226,7 @@ void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
-void CharactorManager::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
+void CharactorManager::CharaRender()
 {
-	m_View = mView;
-	m_Proj = mProj;
-	Render();
+	Render(m_Pos);
 }

@@ -8,7 +8,7 @@ class WeaponBall
 {
 private:
 	Collision* col_;
-	STATICMESH::CD3DXMESH* weaponBall_;
+	CD3DXMESH* weaponBall_;
 	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
 	bool delFlg_;
 	int delCount_;
@@ -20,7 +20,7 @@ private:
 	D3DXVECTOR3 dir_;
 	void Hit();
 public:
-	WeaponBall(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, D3DXVECTOR3 pos);
+	WeaponBall(D3DXVECTOR3 pos);
 	~WeaponBall();
 	void SetDir(D3DXVECTOR3 dir);
 	void SetScale(float scale);
@@ -30,7 +30,7 @@ public:
 	void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
 	void SetKnockBack(float dist, float kDist,float kSpeed);
-	void Render(D3DXMATRIX mView, D3DXMATRIX mProj);
+	void Render();
 	bool GetDelFlg()const;
 	//float GetHitDist()const;
 	//float GetKnockBackDist()const;

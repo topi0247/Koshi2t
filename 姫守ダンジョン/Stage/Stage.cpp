@@ -9,58 +9,38 @@
 //	@brief	コンストラクタ
 Stage::Stage()
 {
-	stageMeshFloor_ = new CD3DXMESH;
-	stageMeshWall_ = new CD3DXMESH;
+	stageMesh_ = new CD3DXMESH;
+	m_Pos = D3DXVECTOR3(0, 0, 0);
 }
 
 //
 //	@brief デストラクタ
 Stage::~Stage()
 {
-	SAFE_DELETE(stageMeshFloor_);
-	SAFE_DELETE(stageMeshWall_);
+	SAFE_DELETE(stageMesh_);
 }
 
 //
 //	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (FloorName)			床のXファイル名
-//	@param (WallName)			壁のXファイル名
-void Stage::Read(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* FloorName, const char* WallName)
+void Stage::Read(const char* StageName)
 {
 	char FileNameF[80];
 	memset(FileNameF, 0, sizeof(FileNameF));
 	strcpy_s(FileNameF, sizeof(FileNameF), "./Model/XFiles/Stage/");
-	strcat_s(FileNameF, sizeof(FileNameF), FloorName);
-	stageMeshFloor_->m_hWnd = m_hWnd;
-	stageMeshFloor_->m_pDevice11 = m_pDevice;
-	stageMeshFloor_->m_pDeviceContext11 = m_pDeviceContext;
-	stageMeshFloor_->InitDx9();
-	stageMeshFloor_->InitShader();
-	if (FAILED(stageMeshFloor_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileNameF)))
+	strcat_s(FileNameF, sizeof(FileNameF), StageName);
+
+	if (FAILED(stageMesh_->LoadXMesh(FileNameF)))
 	{
 		return;
 	}
 	
-	char FileNameW[80];
-	memset(FileNameW, 0, sizeof(FileNameW));
-	strcpy_s(FileNameW, sizeof(FileNameW), "./Model/XFiles/Stage/");
-	strcat_s(FileNameW, sizeof(FileNameW), WallName);
-	if (FAILED(stageMeshWall_->Init(m_hWnd, m_pDevice, m_pDeviceContext, FileNameW)))
-	{
-		return;
-	}
-
 }
 
 //
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
-void Stage::Render(D3DXMATRIX mView, D3DXMATRIX mProj)
+void Stage::Render()
 {
-	stageMeshFloor_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
-	stageMeshWall_->Render(mView, mProj, D3DXVECTOR3(1, 1, -1), D3DXVECTOR3(0, 0, -1));
+	stageMesh_->Render(m_Pos,0,1);
 }

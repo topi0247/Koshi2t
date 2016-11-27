@@ -31,6 +31,7 @@ void Witch::Attack()
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
+		atkNo_ = waitAtk;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -45,7 +46,7 @@ void Witch::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime =param_->chargeTime_;
+	unsigned int inputTime = FPS*param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -103,7 +104,7 @@ void Witch::Normal_Attack()
 	//}
 	if(!magicFlg_)
 	{
-		WeaponBall* magic= new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+		WeaponBall* magic= new WeaponBall(m_Pos);
 
 		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 		magic->SetDir(vec);
@@ -135,7 +136,7 @@ void Witch::Special_Attack()
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)
 		{
-			WeaponBall* magic = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+			WeaponBall* magic = new WeaponBall(m_Pos);
 			int degree = 90 / (magicBallCount_ / 2 + 1);
 			float temp = angle - 90 + degree + degree*i;
 			temp = D3DXToRadian(temp);
@@ -148,21 +149,20 @@ void Witch::Special_Attack()
 			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;
+		atkNo_ = noAtk;
 	}
 }
 
 //
 //	@brief	•`‰æ
-void Witch::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
+void Witch::CharaRender()
 {
-	m_View = mView;
-	m_Proj = mProj;
-	Render();
+	Render(m_Pos);
 	if (!magicBall_.empty())
 	{
 		for (auto m:magicBall_)
 		{
-			m->Render(mView, mProj);
+			m->Render();
 		}
 	}
 }

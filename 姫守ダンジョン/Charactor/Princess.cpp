@@ -14,40 +14,43 @@ Princess::~Princess()
 
 //
 //	@brief	初期化
-void Princess::CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName)
+const char* Princess::CharaInit(const char* fileName)
 {
 	char FileName[80] = { 0 };
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Princess/");
 	strcat_s(FileName, sizeof(FileName), fileName);
-	CD3DXSKINMESH_INIT si;
-	si.hWnd = m_hWnd;
-	si.pDevice = m_pDevice;
-	si.pDeviceContext = m_pDeviceContext;
-	Init(&si);
-	CreateFromX(FileName);
+	//CreateFromX(FileName);
 	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	return FileName;
 }
 
 //
 //	@brief	移動
 void Princess::Move(float speed)
 {
-	//方向ベクトル
-	D3DXVECTOR3 move = { 0,0,0 };
-	move.x = destination_.x - m_Pos.x;
-	move.z = destination_.z - m_Pos.z;
-	D3DXVec3Normalize(&move, &move);
+	float dist = 1;
+	if (!collision_->CharaNear(m_Pos, destination_, dist))
+	{
+		//方向ベクトル
+		D3DXVECTOR3 move = { 0,0,0 };
+		move.x = destination_.x - m_Pos.x;
+		move.z = destination_.z - m_Pos.z;
+		D3DXVec3Normalize(&move, &move);
 
-	//回転
-	Rotation(move);
+		//回転
+		Rotation(move);
 
-	//向いている方向から角度を取得
-	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
+		//向いている方向から角度を取得
+		D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
 
-	float sp = speed;
-	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
-
+		float sp = speed;
+		m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
+	}
+	else
+	{
+		m_Dir = D3DXVECTOR3(0, 0, 0);
+	}
 }
 
 //

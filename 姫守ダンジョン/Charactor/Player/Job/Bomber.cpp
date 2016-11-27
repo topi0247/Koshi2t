@@ -38,7 +38,7 @@ void Bomber::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = param_->chargeTime_;
+	unsigned int inputTime = FPS*param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -101,7 +101,7 @@ void Bomber::Normal_Attack()
 
 	if (bomb_.empty() || bomb_.size() < size)
 	{
-		WeaponBall* bomb = new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+		WeaponBall* bomb = new WeaponBall(m_Pos);
 		bomb->SetDamageList(allCharaList_, charaType_);
 		bomb->SetKnockBack(range, dist, kSpeed);
 		bomb_.push_back(bomb);
@@ -163,18 +163,16 @@ void Bomber::DamageCalc(unsigned int atk)
 
 //
 //	@brief	•`‰æ
-void Bomber::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
+void Bomber::CharaRender()
 {
-	m_View = mView;
-	m_Proj = mProj;
-	Render();
+	Render(m_Pos);
 	if (!bomb_.empty())
 	{
 		for (auto b : bomb_)
 		{
 			if (b != nullptr)
 			{
-				b->Render(mView, mProj);
+				b->Render();
 			}
 		}
 	}

@@ -6,6 +6,9 @@
 
 #include "Camera.h"
 
+D3DXMATRIX Camera::mView_;
+D3DXMATRIX Camera::mProj_;
+
 //
 //	@brief	コンストラクタ
 Camera::Camera()

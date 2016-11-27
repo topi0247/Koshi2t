@@ -37,7 +37,7 @@ void ShieldMan::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = param_->chargeTime_;
+	unsigned int inputTime = FPS*param_->chargeTime_;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{

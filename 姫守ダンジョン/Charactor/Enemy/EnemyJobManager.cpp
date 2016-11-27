@@ -51,7 +51,7 @@ void Skeleton::NormalAttack()
 {
 	float dist = 1;
 	float speed = 1;
-	WeaponBall* atkBall=new WeaponBall(m_hWnd, m_pDevice, m_pDeviceContext, m_Pos);
+	WeaponBall* atkBall=new WeaponBall(m_Pos);
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
 	atkBall->SetDamageList(allCharaList_, charaType_);
@@ -61,17 +61,15 @@ void Skeleton::NormalAttack()
 }
 
 
-void Skeleton::CharaRender(D3DXMATRIX mView, D3DXMATRIX mProj)
+void Skeleton::CharaRender()
 {
-	m_View = mView;
-	m_Proj = mProj;
-	Render();
+	Render(m_Pos);
 
 	if (!atkList_.empty())
 	{
 		for (auto a : atkList_)
 		{
-			a->Render(mView, mProj);
+			a->Render();
 		}
 	}
 }

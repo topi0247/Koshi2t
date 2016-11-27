@@ -50,7 +50,7 @@ public:
 	EnemyManager() ;
 	virtual ~EnemyManager();
 	
-	virtual void CharaInit(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext, const char* fileName);		//‰Šú‰»E“Ç‚İ‚İ
+	virtual const char* CharaInit(const char* fileName);		//‰Šú‰»E“Ç‚İ‚İ
 	void SetParameter(EnemyParameter* param);
 	void SetTarget(CharactorManager* chara);
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
