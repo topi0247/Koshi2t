@@ -42,6 +42,7 @@ void Witch::Attack()
 	{
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
+
 		//hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
@@ -55,6 +56,14 @@ void Witch::Attack()
 	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
+		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+		{
+			motionChange_ = false;
+			motionNo_ = motion_->GetMotion("charge")->id_;
+			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//timeEnd_ = motion_->GetMotion("charge")->frame_;
+			motionSpeed_ = 1 / (float)timeEnd_;
+		}
 	}
 
 	if (atkNo_ == specialAtk)
@@ -73,7 +82,7 @@ void Witch::Attack()
 			if (magicBall_[i]->GetDelFlg())
 			{
 				magicBall_.erase(magicBall_.begin() + count);
-				atkNo_ = noAtk;
+				/*atkNo_ = noAtk;*/
 				--count;
 			}
 			++count;
@@ -95,13 +104,22 @@ void Witch::Normal_Attack()
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	magicBallCount_ = param_->chainWeapon_;
-	//if (magicFlg_)
-	//{
-	//	for (auto m : magicBall_)
-	//	{
-	//		m->Move_Weapon(dist);
-	//	}
-	//}
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("attack")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("attack")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_%timeEnd_ == 0)
+	{
+		atkNo_ = noAtk;
+		motionChange_ = true;
+	}
+
 	if(!magicFlg_)
 	{
 		WeaponBall* magic= new WeaponBall(m_Pos);
@@ -124,13 +142,22 @@ void Witch::Special_Attack()
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	magicBallCount_ = param_->spChainWeapon_;
-	/*if (magicFlg_)
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
-		for (auto m : magicBall_)
-		{
-			m->Move_Weapon(dist);
-		}
-	}*/
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("attack")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("attack")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_%timeEnd_ == 0)
+	{
+		atkNo_ = noAtk;
+		motionChange_ = true;
+	}
+
 	if(!magicFlg_)
 	{
 		float angle = D3DXToDegree(m_Yaw);
@@ -149,7 +176,7 @@ void Witch::Special_Attack()
 			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;
-		atkNo_ = noAtk;
+		//atkNo_ = noAtk;
 	}
 }
 

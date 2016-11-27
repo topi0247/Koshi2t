@@ -3,6 +3,7 @@
 ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
+	spMoveFlg_ = false;
 }
 
 ShieldMan::~ShieldMan()
@@ -30,6 +31,7 @@ void ShieldMan::Attack()
 	}
 	else
 	{
+		spMoveFlg_ = false;
 		attackCount_ = 0;
 		atkNo_ = noAtk;
 		hit = false;
@@ -43,9 +45,13 @@ void ShieldMan::Attack()
 	{
 		atkNo_ = normalAtk;
 	}
-	else if (inputTime < attackCount_)
+	else if (inputTime < attackCount_ && attackCount_- inputTime< motion_->GetMotion("special")->frame_)
 	{
 		atkNo_ = specialAtk;
+	}
+	else
+	{
+		spMoveFlg_ = true;
 	}
 	
 	if (atkNo_ == specialAtk)
@@ -59,12 +65,22 @@ void ShieldMan::Attack()
 void ShieldMan::Normal_Attack()
 {
 	Normal_Attack_Collision();
-	timeEnd_ = 30;
-	if (++timeCount_ > timeEnd_)
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("attack1")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("attack1")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
-		timeCount_ = 0;
+		motionChange_ = true;
+		motionCount_ = 0;
 		hit = false;
 	}
 }
@@ -111,8 +127,27 @@ void ShieldMan::Normal_Attack_Collision()
 //	@brief	特殊攻撃
 void ShieldMan::Special_Attack()
 {
-	spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
+	//spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
 	Special_Attack_Collision();
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("special")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("special")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("special")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_ > timeEnd_)
+	{
+		atkNo_ = noAtk;
+		//attackCount_ = 0;
+		motionChange_ = true;
+		motionCount_ = 0;
+		hit = false;
+	}
+
 }
 
 //
@@ -187,6 +222,13 @@ void ShieldMan::Move_Update()
 		if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
 		{
 			m_Pos += m_Dir;
+			if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
+			{
+				motionNo_ = motion_->GetMotion("walk")->id_;
+				m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
+				//モーション速度
+				motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			}
 		}
 		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
 		{
@@ -196,6 +238,13 @@ void ShieldMan::Move_Update()
 		{
 			float sp = param_->specialMoveSpeed_;
 			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
+			if (motionChange_ == true && motionNo_ != motion_->GetMotion("specialWalk")->id_)
+			{
+				motionNo_ = motion_->GetMotion("specialWalk")->id_;
+				m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("specialWalk")->id_);
+				//モーション速度
+				motionSpeed_ = 1 / (float)motion_->GetMotion("specialWalk")->frame_;
+			}
 		}
 	}
 }

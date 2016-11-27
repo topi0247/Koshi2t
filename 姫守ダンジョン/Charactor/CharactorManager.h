@@ -33,6 +33,8 @@ protected:
 	unsigned int hp_;
 	unsigned int motionNo_;
 	unsigned int motionCount_;
+	unsigned int motionChangeCount_;
+	bool motionChange_;
 	float motionSpeed_;
 	float opponentWeight_;	//進行方向にいるキャラの重さ
 	float ownWright_;		//自身の重さ
@@ -75,5 +77,8 @@ public:
 	CharaType GetCharaType()const;
 
 	unsigned int GetHP()const { return hp_; };
+	unsigned int GetMotionNo()const { return motionNo_; };
+	float GetMotionSpeed()const { return motionSpeed_; };
+	unsigned int GetMotionCount()const { return motionCount_; };
 };
 

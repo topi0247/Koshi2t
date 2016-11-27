@@ -130,7 +130,7 @@ void WeaponBall::Hit()
 		{
 			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
 			{
-				c->SetKnockBack(weaponBall_->m_vPos, dist_,kSpeed_);
+				c->SetKnockBack(weaponBall_->m_vPos, kDist_,kSpeed_);
 				delFlg_ = true;
 
 				if (c->GetCharaType() == Enemy)

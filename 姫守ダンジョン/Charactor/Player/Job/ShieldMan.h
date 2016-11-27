@@ -7,6 +7,7 @@
 class ShieldMan :public JobManager
 {
 private:
+	bool spMoveFlg_;
 	D3DXVECTOR3 spMove_;
 	void Normal_Attack_Collision();
 	void Special_Attack_Collision();

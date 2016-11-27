@@ -33,6 +33,7 @@ void SwordMan::Attack()
 	else if (atkNo_ == normalAtk)
 	{
 		attackCount_ = 0;
+		//motionCount_ = 0;
 		//atkNo_ = noAtk;
 		//Normal_Attack();
 		//hit = false;
@@ -42,6 +43,8 @@ void SwordMan::Attack()
 	else if (atkNo_ == charge)
 	{
 		attackCount_ = 0;
+		motionCount_ = 0;
+		motionChange_ = true;
 		atkNo_ = specialAtk;
 		hit = false;
 	}
@@ -56,6 +59,14 @@ void SwordMan::Attack()
 	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
+		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+		{
+			motionChange_ = false;
+			motionNo_ = motion_->GetMotion("charge")->id_;
+			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			timeEnd_ = motion_->GetMotion("charge")->frame_;
+			motionSpeed_ = 1 / (float)timeEnd_;
+		}
 	}
 
 	if (atkNo_ == normalAtk)
@@ -73,13 +84,22 @@ void SwordMan::Attack()
 void SwordMan::Normal_Attack()
 {
 	Normal_Attack_Collision();
-	timeEnd_ = 40;
-	if (++timeCount_ > timeEnd_)
+	if (motionChange_==true && motionNo_ != motion_->GetMotion("attack1")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("attack1")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("attack1")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+	}
+
+	if (++motionCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
-		timeCount_ = 0;
+		motionCount_ = 0;
 		hit = false;
+		motionChange_ = true;
 	}
 }
 
@@ -127,13 +147,23 @@ void SwordMan::Normal_Attack_Collision()
 void SwordMan::Special_Attack()
 {
 	Special_Attack_Collision();
-	timeEnd_ = 30;
-	if (++timeCount_ > timeEnd_)
+
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("special")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("special")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+	}
+
+	if (++motionCount_ > timeEnd_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
-		timeCount_ = 0;
+		motionCount_ = 0;
 		hit = false;
+		motionChange_ = true;
 	}
 }
 

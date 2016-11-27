@@ -7,7 +7,8 @@ class Bomber :public JobManager
 {
 private:
 	bool bombFlg_;	//”š’e‚ª”­“®’†‚©‚Ç‚¤‚©
-	bool invincibleFlg_;	//–³“G’†‚©‚Ç‚¤‚©
+	bool invinsibleFlg_;	//–³“G’†‚©‚Ç‚¤‚©
+	int invisibleCount_;
 	int bombCount_;
 	float bombScale_;
 	//WeaponBall** bomb_;

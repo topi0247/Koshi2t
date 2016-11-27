@@ -9,8 +9,7 @@
 //	
 //	@brief	コンストラクタ
 JobManager::JobManager(CharaType charaType)
-	:timeCount_(0)
-	, hit(0)
+	: hit(0)
 	, attackCount_(0)
 {
 	atkNo_ = noAtk;
@@ -34,7 +33,7 @@ JobManager::~JobManager()
 //	@brief	パラメータセット
 void JobManager::SetParameter(JobParameter* param)
 {
-	memset(param_->name_,0, sizeof(param_->name_));
+	memset(param_->name_, 0, sizeof(param_->name_));
 	memcpy(param_->name_, param->GetName(), sizeof(param_->name_));
 
 	param_->hp_ = param->GetHP();
@@ -72,8 +71,11 @@ void JobManager::CharaUpdate()
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 
+	//仮スピード
+	//motionSpeed_ = 0.05;
+	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	//Motion_Update();
 
 	//生存
 	if (aliveFlg_ == true)
@@ -81,7 +83,6 @@ void JobManager::CharaUpdate()
 		//移動
 		float speed = param_->moveSpeed_;
 		Move(speed);
-
 		//攻撃
 		Attack();
 
@@ -99,6 +100,34 @@ void JobManager::CharaUpdate()
 	{
 		Revival();
 	}
-
 }
 
+//
+//	@brief	モーション更新
+void JobManager::Motion_Update()
+{
+	if (motionChange_ == true)
+	{
+		switch (atkNo_)
+		{
+		case normalAtk:
+			motionNo_ = motion_->GetMotion("attack1")->id_;
+			motionChangeCount_ = motion_->GetMotion("attack1")->frame_;
+			motionSpeed_ = 1 / (float)motionChangeCount_;
+			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			motionChange_ = false;
+			break;
+		default:
+			break;
+		}
+
+
+	}
+
+	if (motionChange_ == false && ++motionCount_ % motionChangeCount_ == 0)
+	{
+		motionChange_ = true;
+		motionCount_ = 0;
+		motionChangeCount_ = 0;
+	}
+}

@@ -1195,11 +1195,12 @@ void CD3DXSKINMESH::Render(D3DXVECTOR3 pos)
 	D3DXMATRIX Scale, Yaw, Pitch, Roll, Tran;
 	D3DXMatrixScaling(&Scale, m_Scale.x, m_Scale.y, m_Scale.z);
 	D3DXMatrixRotationY(&Yaw, m_Yaw);
-	D3DXMatrixRotationX(&Pitch, m_Pitch);
-	D3DXMatrixRotationZ(&Roll, m_Roll);
-	m_Rotation = Yaw*Pitch*Roll;
+	//D3DXMatrixRotationX(&Pitch, m_Pitch);
+	//D3DXMatrixRotationZ(&Roll, m_Roll);
+	//m_Rotation = Yaw*Pitch*Roll;
 	D3DXMatrixTranslation(&Tran, pos.x, pos.y, pos.z);
-	m_World = Scale*m_Rotation*Tran;
+	//m_World = Scale*m_Rotation*Tran;
+	m_World = Scale*Yaw*Tran;
 
 	//アニメーションフレームを進める　スキンを更新
 	static int iFrame = 0;

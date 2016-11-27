@@ -532,11 +532,11 @@ void Main_Scene::PlayerDebug()
 	debugText_->Render(str, 0, 10);
 	//sprintf(str, "alive : %d", virChar_[Player2]->GetAliveFlg());
 	//debugText_->Render(str, 0, 10);
-	sprintf(str, "hp_ : %d", virChar_[Player1]->GetHP());
+	sprintf(str, "motionNo : %d", virChar_[Player2]->GetMotionNo());
 	debugText_->Render(str, 0, 30);
-	sprintf(str, "normalAtk_ : %d", virChar_[Player2]->GetParam()->normalAtk_);
+	sprintf(str, "motionSPeed : %f", virChar_[Player2]->GetMotionSpeed());
 	debugText_->Render(str, 0, 50);
-	sprintf(str, "specialAtk_ : %d", virChar_[Player2]->GetParam()->specialAtk_);
+	sprintf(str, "motionCount : %d", virChar_[Player2]->GetMotionCount());
 	debugText_->Render(str, 0, 70);
 	sprintf(str, "def_ : %d", virChar_[Player2]->GetParam()->def_);
 	debugText_->Render(str, 0, 90);

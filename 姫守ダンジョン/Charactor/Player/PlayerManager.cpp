@@ -56,7 +56,8 @@ void PlayerManager::Move(float speed)
 		if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
 		{
 			sp = speed;
-			if (motionNo_ != motion_->GetMotion("walk")->id_)
+
+			if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
 			{
 				motionNo_ = motion_->GetMotion("walk")->id_;
 				m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
@@ -66,7 +67,7 @@ void PlayerManager::Move(float speed)
 		}
 		else
 		{
-			if (motionNo_ != motion_->GetMotion("wait")->id_)
+			if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 			{
 				motionNo_ = motion_->GetMotion("wait")->id_;
 				m_pD3dxMesh->ChangeAnimSet(motionNo_);
@@ -108,11 +109,22 @@ void PlayerManager::DamageCalc(unsigned int atk)
 void PlayerManager::Dead()
 {
 	//aliveFlg_ = false;
-	if (motionNo_ != motion_->GetMotion("dead")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead")->id_)
 	{
+		motionChange_ = false;
 		motionNo_ = motion_->GetMotion("dead")->id_;
 		m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+	}
+
+	if (motionNo_ == motion_->GetMotion("dead")->id_)
+	{
+		if (++motionCount_%motion_->GetMotion("dead")->frame_ == 0)
+		{
+			moveAbleFlg_ = false;
+			motionChange_ = true;
+			motionCount_ = 0;
+		}
 	}
 }
 
@@ -121,19 +133,22 @@ void PlayerManager::Dead()
 //	@brief	•œŠˆ
 void PlayerManager::Revival()
 {
-	if (motionNo_ != motion_->GetMotion("alive")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("alive")->id_)
 	{
+		motionChange_ = false;
 		motionNo_ = motion_->GetMotion("alive")->id_;
 		m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		motionSpeed_ = 1 / (float)motion_->GetMotion("alive")->frame_;
 	}
 
-	if (++motionCount_ % motion_->GetMotion("alive")->frame_ == 0)
+	if (motionNo_ == motion_->GetMotion("alive")->id_)
 	{
-		aliveFlg_ = true;
-		hp_ = param_->hp_;
-		revivalFlg_ = false;
-		motionCount_ = 0;
+		if (++motionCount_%motion_->GetMotion("alive")->frame_ == 0)
+		{
+			moveAbleFlg_ = false;
+			motionChange_ = true;
+			motionCount_ = 0;
+		}
 	}
 }
 
@@ -146,20 +161,22 @@ void PlayerManager::Princess_Call()
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
 		callTiming_ = clock();
-		if (motionNo_ != motion_->GetMotion("call")->id_)
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("call")->id_)
 		{
+			motionChange_ = false;
 			motionNo_ = motion_->GetMotion("call")->id_;
-			
+			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
 		}
 	}
 
 	if (motionNo_ == motion_->GetMotion("call")->id_)
 	{
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("call")->frame_;
-		if (++motionCount_% motion_->GetMotion("call")->frame_ == 0)
+		if (++motionCount_%motion_->GetMotion("call")->frame_ == 0)
 		{
 			moveAbleFlg_ = false;
+			motionChange_ = true;
+			motionCount_ = 0;
 		}
 	}
 

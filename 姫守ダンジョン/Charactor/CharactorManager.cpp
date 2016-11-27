@@ -16,11 +16,13 @@ CharactorManager::CharactorManager()
 	, knockBackDis_(0)
 	, motionNo_(0)
 	, motionSpeed_(0)
-	,motionCount_(0)
+	, motionCount_(0)
+	, motionChangeCount_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
 	moveAbleFlg_ = true;
+	motionChange_ = true;
 	//opponentWeight_ = 1;
 }
 
@@ -118,6 +120,7 @@ void CharactorManager::Move_Update()
 		if (knockBackFlg_ == false && moveAbleFlg_ == true)
 		{
 			m_Pos += m_Dir;
+
 		}
 		else if (knockBackFlg_ == true)
 		{

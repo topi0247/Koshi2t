@@ -7,7 +7,8 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	bomb_.clear();
 	bombScale_ = 1;
 	bombCount_ = 1;
-	invincibleFlg_ = false;
+	invisibleCount_ = 0;
+	invinsibleFlg_ = false;
 }
 
 Bomber::~Bomber()
@@ -33,7 +34,7 @@ void Bomber::Attack()
 	{
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
-		invincibleFlg_ = true;
+		invinsibleFlg_ = true;
 		//hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
@@ -47,11 +48,30 @@ void Bomber::Attack()
 	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
+		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+		{
+			motionChange_ = false;
+			motionNo_ = motion_->GetMotion("charge")->id_;
+			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//timeEnd_ = motion_->GetMotion("attack")->frame_;
+			motionSpeed_ = 1 / (float)timeEnd_;
+			motionCount_ = 0;
+		}
 	}
 
-	if (invincibleFlg_)
+	if (atkNo_ == specialAtk)
 	{
 		Special_Attack();
+	}
+
+	if (invinsibleFlg_)
+	{
+		int invincibleTime = param_->specialAttackTime_;
+		if (++invisibleCount_ % (FPS * invincibleTime) == 0)
+		{
+			invinsibleFlg_ = false;
+			invisibleCount_ = 0;
+		}
 	}
 
 	if (!bomb_.empty())
@@ -96,8 +116,24 @@ void Bomber::Normal_Attack()
 {
 	size_t size = param_->chainWeapon_;
 	float range = param_->attackRange_;
-	float dist = param_->attackReach_;
+	float dist = param_->weaponHitReach_;
 	float kSpeed = param_->knockbackSpeed_;
+
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("attack")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("attack")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_%timeEnd_ == 0)
+	{
+		atkNo_ = noAtk;
+		motionChange_ = true;
+	}
 
 	if (bomb_.empty() || bomb_.size() < size)
 	{
@@ -106,20 +142,36 @@ void Bomber::Normal_Attack()
 		bomb->SetKnockBack(range, dist, kSpeed);
 		bomb_.push_back(bomb);
 	}
-	atkNo_ = noAtk;
+	//atkNo_ = noAtk;
 }
 
 //
 //	@brief	“ÁŽêUŒ‚
 void Bomber::Special_Attack()
 {
-	int invincibleTime = param_->specialAttackTime_;
-	if (++timeCount_ % (FPS * invincibleTime) == 0)
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("special")->id_)
+	{
+		motionChange_ = false;
+		motionNo_ = motion_->GetMotion("special")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		timeEnd_ = motion_->GetMotion("special")->frame_;
+		motionSpeed_ = 1 / (float)timeEnd_;
+		motionCount_ = 0;
+	}
+
+	if (++motionCount_%timeEnd_ == 0)
+	{
+		atkNo_ = noAtk;
+		motionChange_ = true;
+	}
+
+	/*int invincibleTime = param_->specialAttackTime_;
+	if (++motionCount_ % (FPS * invincibleTime) == 0)
 	{
 		invincibleFlg_ = false;
-		timeCount_ = 0;
+		motionCount_ = 0;
 	}
-	atkNo_ = noAtk;
+	atkNo_ = noAtk;*/
 }
 
 //
@@ -133,7 +185,7 @@ void Bomber::Move_Update()
 		{
 			m_Pos += m_Dir;
 		}
-		else if (knockBackFlg_ == true && invincibleFlg_ == false)
+		else if (knockBackFlg_ == true && invinsibleFlg_ == false)
 		{
 			KnockBack(knockBackPos_, knockBackDis_, kSpeed);
 		}
@@ -147,7 +199,7 @@ void Bomber::Move_Update()
 void Bomber::DamageCalc(unsigned int atk)
 {
 	float damage = 0;
-	if (invincibleFlg_ == false)
+	if (invinsibleFlg_ == false)
 	{
 		damage = atk / (1 + ((float)param_->def_ / 100));
 	}
@@ -166,6 +218,8 @@ void Bomber::DamageCalc(unsigned int atk)
 void Bomber::CharaRender()
 {
 	Render(m_Pos);
+
+
 	if (!bomb_.empty())
 	{
 		for (auto b : bomb_)

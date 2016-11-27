@@ -17,12 +17,12 @@
 class JobManager :public PlayerManager
 {
 protected:
-	unsigned int timeCount_;	//UŒ‚ŠÔ
+	//unsigned int timeCount_;	//UŒ‚ŠÔ
 	unsigned int timeEnd_;		//UŒ‚I—¹ŠÔ
 	int attackCount_;			//UŒ‚ƒ{ƒ^ƒ“ƒJƒEƒ“ƒg
 	
 
-	//void Motion_Update();
+	virtual void Motion_Update();
 
 	Collision* col_;
 
