@@ -27,6 +27,9 @@ JobManager::~JobManager()
 
 	delete motion_;
 	motion_ = nullptr;
+
+	delete collision_;
+	collision_ = nullptr;
 }
 
 //	
@@ -82,6 +85,7 @@ void JobManager::CharaUpdate()
 	{
 		//ˆÚ“®
 		float speed = param_->moveSpeed_;
+		
 		Move(speed);
 		//UŒ‚
 		Attack();

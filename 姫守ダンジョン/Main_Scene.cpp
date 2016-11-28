@@ -13,8 +13,8 @@ Main_Scene::Main_Scene()
 	stage_ = new Stage;
 	virChar_ = new JobManager *[4];
 	virChar_[Player1] = new SwordMan(Player1);
-	virChar_[Player2] = new Witch(Player2);
-	virChar_[Player3] = new ShieldMan(Player3);
+	virChar_[Player2] = new ShieldMan(Player2);
+	virChar_[Player3] = new Witch(Player3);
 	virChar_[Player4] = new Bomber(Player4);
 	princess_ = new Princess;
 
@@ -38,6 +38,11 @@ Main_Scene::~Main_Scene()
 	delete stage_;
 	stage_ = nullptr;
 
+	if (spawn_ != nullptr)
+	{
+		delete spawn_;
+		spawn_ = nullptr;
+	}
 
 	//delete ray_;
 	//ray_ = nullptr;
@@ -52,6 +57,7 @@ Main_Scene::~Main_Scene()
 
 	delete princess_;
 	princess_ = nullptr;
+
 
 	//for (auto chara : charList_)
 	//{
@@ -109,9 +115,14 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	motionRead_->PlayerMotionRead();
 
 	//ステージのファイル読み込み
-	XFile* xfile2;
-	xfile = xfileRead->GetXFile("ステージ0");
+	xfile = xfileRead->GetXFile("ステージ5");
 	stage_->Read(xfile->GetFileName());
+
+	//スポーンの設定
+	xfile = xfileRead->GetXFile("スポーン1");
+	spawnAmount_ = 1;
+	spawn_ = new Spawn;
+	spawn_->SpawnInit(xfile->GetFileName());
 
 	//仮キャラファイル読み込み
 	char name[80];
@@ -121,26 +132,27 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	virChar_[Player1]->CreateFromX(name);
 	virChar_[Player1]->SetParameter(parameter->GetJobParamList("剣士"));
 	virChar_[Player1]->SetMotionData(motionRead_->GetMotionUser("剣士"));
-	virChar_[Player1]->m_Pos = D3DXVECTOR3(0, 0, -10);
-
-
-	memset(name, 0, sizeof(name));
-	xfile = xfileRead->GetXFile("魔導士");
-	memcpy(name, virChar_[Player2]->CharaInit(xfile->GetFileName()), sizeof(name));
-	virChar_[Player2]->CreateFromX(name);
-	//virChar_[Player2]->CharaInit(xfile->GetFileName());
-	virChar_[Player2]->SetParameter(parameter->GetJobParamList("魔導士"));
-	virChar_[Player2]->SetMotionData(motionRead_->GetMotionUser("魔導士"));
-	virChar_[Player2]->m_Pos = D3DXVECTOR3(0, 0, -10);
+	virChar_[Player1]->m_Pos = D3DXVECTOR3(-3, 0, -10);
 
 	memset(name, 0, sizeof(name));
 	xfile = xfileRead->GetXFile("盾士");
+	memcpy(name, virChar_[Player2]->CharaInit(xfile->GetFileName()), sizeof(name));
+	virChar_[Player2]->CreateFromX(name);
+	//virChar_[Player2]->CharaInit(xfile->GetFileName());
+	virChar_[Player2]->SetParameter(parameter->GetJobParamList("盾士"));
+	virChar_[Player2]->SetMotionData(motionRead_->GetMotionUser("盾士"));
+	virChar_[Player2]->m_Pos = D3DXVECTOR3(-1.5, 0, -10);
+
+	memset(name, 0, sizeof(name));
+	xfile = xfileRead->GetXFile("魔導士");
 	memcpy(name, virChar_[Player3]->CharaInit(xfile->GetFileName()), sizeof(name));
 	virChar_[Player3]->CreateFromX(name);
 	//virChar_[Player3]->CharaInit(xfile->GetFileName());
-	virChar_[Player3]->SetParameter(parameter->GetJobParamList("盾士"));
-	virChar_[Player3]->SetMotionData(motionRead_->GetMotionUser("盾士"));
-	virChar_[Player3]->m_Pos = D3DXVECTOR3(0, 0, -10);
+	virChar_[Player3]->SetParameter(parameter->GetJobParamList("魔導士"));
+	virChar_[Player3]->SetMotionData(motionRead_->GetMotionUser("魔導士"));
+	virChar_[Player3]->m_Pos = D3DXVECTOR3(1.5, 0, -10);
+
+
 
 	memset(name, 0, sizeof(name));
 	xfile = xfileRead->GetXFile("爆弾士");
@@ -149,21 +161,18 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//virChar_[Player4]->CharaInit(xfile->GetFileName());
 	virChar_[Player4]->SetParameter(parameter->GetJobParamList("爆弾士"));
 	virChar_[Player4]->SetMotionData(motionRead_->GetMotionUser("爆弾士"));
-	virChar_[Player4]->m_Pos = D3DXVECTOR3(0, 0, -10);
+	virChar_[Player4]->m_Pos = D3DXVECTOR3(3, 0, -10);
 
 	memset(name, 0, sizeof(name));
 	xfile = xfileRead->GetXFile("姫");
 	memcpy(name, princess_->CharaInit(xfile->GetFileName()), sizeof(name));
 	princess_->CreateFromX(name);
 	//princess_->CharaInit(xfile->GetFileName());
-	princess_->m_Pos = D3DXVECTOR3(0, 0, -5);
+	princess_->SetMotionData(motionRead_->GetMotionUser("姫"));
+	princess_->m_Pos = D3DXVECTOR3(0, 0, -12);
+	princess_->SetSpawn(spawn_);
 
-	////スポーンの設定
-	//xfile = xfileRead->GetXFile("スポーン1");
-	//spawnAmount_ = 1;
-	//spawn_ = new Spawn*[spawnAmount_];
-	//spawn_[0] = new Spawn;
-	//spawn_[0]->SpawnInit(xfile->GetFileName());
+
 
 	//エネミーの読み込み
 	parameter->SetEnemyParameter("./ReadData/EnemyParameterData.csv");
@@ -235,6 +244,7 @@ void Main_Scene::GameStart()
 	//{
 	//	scene_ = MainS;
 	//}
+
 	if (GetKeyState(VK_RETURN) & 0x80)
 	{
 		scene_ = MainS;
@@ -246,39 +256,17 @@ void Main_Scene::GameStart()
 void Main_Scene::GameMain()
 {
 	//エネミースポーン処理
-	//if ((GetKeyState(VK_F1) & 0x80))
+	//if (++time_ % (FPS * 3) == 0 && spawn_!=nullptr)
 	//{
-	/*static int count = 0;
-	if (count == 0)
-		if (++time_ % (FPS * 3) == 0)
-		{
-			auto virEnemy_ = new Slim;
-			xfile = xfileRead->GetXFile("スライム");
-			clock_t start = clock();
-			virEnemy_->CharaInit(wnd_, device_, deviceContext_, xfile->GetFileName());
-			clock_t end1 = clock();
-			virEnemy_->SetParameter(parameter->GetEnemyParamList("スライム"));
-			virEnemy_->SetTarget(princess_);
-			clock_t end2 = clock();
-			charList_.push_back(virEnemy_);
-			enemyList_.push_back(virEnemy_);
-			insTime_ = (double)(end1 - start) / CLOCKS_PER_SEC;
-			pushTime_ = (double)(end2 - start) / CLOCKS_PER_SEC;
-			++count;
-		}*/
-	//static bool flg = false;
-	//if (++time_ % (FPS * 3) == 0 && flg==false)
-	//{
-	//	spawn_[0]->ListSet(parameter, princess_);
-	//	std::vector<EnemyJobManager*> temp = spawn_[0]->EnemySpawn();
+	//	spawn_->ListSet(parameter, princess_);
+	//	std::vector<EnemyJobManager*> temp = spawn_->EnemySpawn();
 	//	for (auto e : temp)
 	//	{
 	//		enemyList_.push_back(e);
 	//		charList_.push_back(e);
 	//	}
-	//	spawn_[0]->ListReset();
+	//	spawn_->ListReset();
 	//	temp.clear();
-	//	flg = true;
 	//	//for (int i = 0; i < 5; i++)
 	//	//{
 	//		//virEnemy_->m_Pos.x += i;
@@ -337,6 +325,13 @@ void Main_Scene::GameMain()
 	}
 
 	princess_->SetDestination(pos);
+
+	if (princess_->SealSpawn() != nullptr)
+	{
+		delete spawn_;
+		spawn_ = nullptr;
+	}
+
 
 	//衝突判定の更新
 	CollisionControl();
@@ -499,18 +494,18 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 		}
 	}
 
-	/*if (spawn_ != nullptr)
+	if (spawn_ != nullptr)
 	{
-		for (int i = 0; i < spawnAmount_; i++)
-		{
-			if (spawn_[i] != nullptr)
+		//for (int i = 0; i < spawnAmount_; i++)
+		//{
+			if (spawn_ != nullptr)
 			{
-				spawn_[i]->SpawnRender();
+				spawn_->SpawnRender();
 			}
-		}
-	}*/
+		//}
+	}
 
-	PlayerDebug();
+	//PlayerDebug();
 	//EnemyDebug();
 
 	camera_->Render();

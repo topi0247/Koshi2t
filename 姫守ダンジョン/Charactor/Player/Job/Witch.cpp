@@ -7,10 +7,33 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	magicFlg_ = false;
 	atkNo_ = noAtk;
 	attackCount_ = 0;
+	magic_ = new WeaponBall;
 }
 
 Witch::~Witch()
 {
+	delete magic_;
+	magic_ = nullptr;
+}
+
+//
+//	@brief						Xファイル読み込み
+//	@param (m_hWnd)				ウィンドウハンドル
+//	@param (m_pDevice)			デバイス
+//	@param (m_pDeviceContext)	デバイスコンテキスト
+//	@param (fileName)			読み込むキャラ名
+const char* Witch::CharaInit(const char* fileName)
+{
+	magic_->Init("magicball.x");
+
+	char FileName[80] = { 0 };
+	memset(FileName, 0, sizeof(FileName));
+	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
+	strcat_s(FileName, sizeof(FileName), fileName);
+	return FileName;
+	//CreateFromX(FileName);
+	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	//ownWright_ = 0.001f;
 }
 
 //
@@ -122,10 +145,11 @@ void Witch::Normal_Attack()
 
 	if(!magicFlg_)
 	{
-		WeaponBall* magic= new WeaponBall(m_Pos);
+		WeaponBall* magic= new WeaponBall();
 
 		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 		magic->SetDir(vec);
+		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y+1, m_Pos.z));
 		magic->SetDamageList(allCharaList_, charaType_);
 		magic->SetKnockBack(kRange, kDist, kSpeed);
 		magic->SetAttack(param_->normalAtk_);
@@ -163,13 +187,14 @@ void Witch::Special_Attack()
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)
 		{
-			WeaponBall* magic = new WeaponBall(m_Pos);
+			WeaponBall* magic = new WeaponBall;
 			int degree = 90 / (magicBallCount_ / 2 + 1);
 			float temp = angle - 90 + degree + degree*i;
 			temp = D3DXToRadian(temp);
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
 			magic->SetDir(vec);
 			magic->SetScale(0.5);
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist,kSpeed);
 			magic->SetAttack(param_->specialAtk_);
@@ -189,7 +214,7 @@ void Witch::CharaRender()
 	{
 		for (auto m:magicBall_)
 		{
-			m->Render();
+			magic_->Render(m->GetPosition());
 		}
 	}
 }

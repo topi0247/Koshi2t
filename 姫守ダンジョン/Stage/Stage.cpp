@@ -10,7 +10,12 @@
 Stage::Stage()
 {
 	stageMesh_ = new CD3DXMESH;
-	m_Pos = D3DXVECTOR3(0, 0, 0);
+	m_Pos = D3DXVECTOR3(0, -0.2, 0);
+	skyMesh_ = new CD3DXMESH;
+	gate_ = new CD3DXMESH;
+	abyssGround_ = new CD3DXMESH;
+
+
 }
 
 //
@@ -18,6 +23,9 @@ Stage::Stage()
 Stage::~Stage()
 {
 	SAFE_DELETE(stageMesh_);
+	SAFE_DELETE(skyMesh_);
+	SAFE_DELETE(gate_);
+	SAFE_DELETE(abyssGround_);
 }
 
 //
@@ -33,7 +41,21 @@ void Stage::Read(const char* StageName)
 	{
 		return;
 	}
+
+	if (FAILED(skyMesh_->LoadXMesh("./Model/XFiles/Stage/sky.x")))
+	{
+		return;
+	}
 	
+	if (FAILED(gate_->LoadXMesh("./Model/XFiles/Stage/gate.x")))
+	{
+		return;
+	}
+
+	if (FAILED(abyssGround_->LoadXMesh("./Model/XFiles/Stage/mapbase.x")))
+	{
+		return;
+	}
 }
 
 //
@@ -42,5 +64,15 @@ void Stage::Read(const char* StageName)
 //	@param (mProj)	射影変換用マトリックス
 void Stage::Render()
 {
-	stageMesh_->Render(m_Pos,0,1);
+	//static float scale = 1;
+	//デバック用
+	//scale += -((GetKeyState(VK_F1) & 0x80)*0.0001) + ((GetKeyState(VK_F2) & 0x80)*0.0001);
+	//
+	stageMesh_->Render(m_Pos,D3DXVECTOR3(0,0,0),1);
+
+	skyMesh_->Render(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(D3DXToRadian(90), 0, 0), 3);
+
+	gate_->Render(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), 1);
+
+	abyssGround_->Render(D3DXVECTOR3(0, -2, 0), D3DXVECTOR3(0, 0, 0), 1);
 }

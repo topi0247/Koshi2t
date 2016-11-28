@@ -3,18 +3,12 @@
 
 //
 //	@brief	飛び道具コンストラクタ
-WeaponBall::WeaponBall(D3DXVECTOR3 pos)
+WeaponBall::WeaponBall()
 	:delCount_(0)
 {
 	weaponBall_ = new CD3DXMESH;
-	char FileName[80] = "./Model/XFiles/Player/scale1.x";
-	if (FAILED(weaponBall_->LoadXMesh(FileName)))
-	{
-		return;
-	}
-	weaponBall_->m_vPos = pos;
+
 	weaponBall_->m_fScale = 0.5;
-	startPos_ = pos;
 	delFlg_ = false;
 	col_ = new Collision;
 }
@@ -27,6 +21,18 @@ WeaponBall::~WeaponBall()
 	weaponBall_ = nullptr;
 	delete col_;
 	col_ = nullptr;
+}
+
+//
+//	@brief	読み込み
+void WeaponBall::Init(char* name)
+{
+	char FileName[80] = "./Model/XFiles/Player/";
+	strcat(FileName, name);
+	if (FAILED(weaponBall_->LoadXMesh(FileName)))
+	{
+		return;
+	}
 }
 
 //
@@ -45,6 +51,13 @@ void WeaponBall::SetScale(float scale)
 	weaponBall_->m_fScale += scale;
 }
 
+//
+// @brief	初期位置
+void WeaponBall::SetStartPos(D3DXVECTOR3 pos)
+{
+	startPos_ = pos;
+	weaponBall_->m_vPos = pos;
+}
 //
 //	@brief	攻撃力セット
 void WeaponBall::SetAttack(unsigned int atk)
@@ -170,7 +183,7 @@ void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed)
 
 //
 //	@brief	描画
-void WeaponBall::Render()
+void WeaponBall::Render(D3DXVECTOR3 pos)
 {
-	weaponBall_->Render(weaponBall_->m_vPos,0,weaponBall_->m_fScale);
+	weaponBall_->Render(pos,D3DXVECTOR3(0,0,0),weaponBall_->m_fScale);
 }

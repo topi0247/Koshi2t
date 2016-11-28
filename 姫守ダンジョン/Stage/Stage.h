@@ -11,6 +11,9 @@
 class Stage
 {
 	CD3DXMESH* stageMesh_;
+	CD3DXMESH* skyMesh_;
+	CD3DXMESH* gate_;
+	CD3DXMESH* abyssGround_;
 	D3DXVECTOR3 m_Pos;
 public:
 	Stage();

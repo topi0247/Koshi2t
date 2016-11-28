@@ -45,7 +45,7 @@ class Main_Scene
 	Camera* camera_;
 
 	int spawnAmount_;	//スポーンゲートの数
-	//Spawn** spawn_;
+	Spawn* spawn_;
 	EnemyJobManager* virEnemy_;	//確用仮キャラクター
 	CD3DXSKINMESH* slime_;
 	/*EnemyJobManager* virEnemy_;*/

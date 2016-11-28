@@ -30,8 +30,7 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
-	delete collision_;
-	collision_ = nullptr;
+
 }
 
 //

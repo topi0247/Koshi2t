@@ -54,7 +54,7 @@ protected:
 	virtual void Dead() = 0;							//Ž€–S
 	void Rotation(D3DXVECTOR3 dirVec);					//ƒLƒƒƒ‰‚Ì‰ñ“]
 	void AroundCharaCheck();
-	void MoveCharaHit();
+	virtual void MoveCharaHit();
 public:
 	CharactorManager();
 	virtual ~CharactorManager();

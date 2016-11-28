@@ -17,6 +17,8 @@ EnemyJobManager::~EnemyJobManager()
 
 void EnemyJobManager::CharaUpdate()
 {
+	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+
 	float speed = param_->moveSpeed_;
 	MoveCharaHit();
 	Move(speed);
@@ -51,7 +53,7 @@ void Skeleton::NormalAttack()
 {
 	float dist = 1;
 	float speed = 1;
-	WeaponBall* atkBall=new WeaponBall(m_Pos);
+	WeaponBall* atkBall=new WeaponBall();
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
 	atkBall->SetDamageList(allCharaList_, charaType_);
@@ -69,7 +71,7 @@ void Skeleton::CharaRender()
 	{
 		for (auto a : atkList_)
 		{
-			a->Render();
+			//a->Render();
 		}
 	}
 }

@@ -105,7 +105,7 @@ public:
 	HRESULT LoadXMesh(LPSTR FileName);
 	//static HRESULT InitShader();
 	//void Render(D3DXMATRIX& mView, D3DXMATRIX& mProj, D3DXVECTOR3& vLight, D3DXVECTOR3& vEye);
-	void Render(D3DXVECTOR3 pos, float rotY, float scale);
+	void Render(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float scale);
 	static void SetCamera(D3DXMATRIX view, D3DXMATRIX proj);
 };
 //}

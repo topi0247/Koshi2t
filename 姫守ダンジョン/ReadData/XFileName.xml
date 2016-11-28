@@ -23,27 +23,21 @@
 
 <Models Type="Princess">
 
-    <model fileName="shield.X" charName="姫"/>
+    <model fileName="princess.x" charName="姫"/>
 
 </Models>
 
 <Models Type="Stage">
-    <model fileName="mabase.x" charName="ステージ0"/>
-    <model fileName="stage1_floor.x" charName="ステージ1_floor1"/>
+    <model fileName="sky.x" charName="空"/>
+    <model fileName="gate.x" charName="門"/>
+    <model fileName="mapbase.x" charName="ステージ0"/>
+    <model fileName="stage1_map.x" charName="ステージ1"/>
 
-    <model fileName="stage1_wall.x" charName="ステージ1_wall1"/>
-    <model fileName="stage2_floor.x" charName="ステージ2_floor2"/>
+    <model fileName="stage2_map.x" charName="ステージ2"/>
+    <model fileName="stage3_map.x" charName="ステージ3"/>
 
-    <model fileName="stage2_wall.x" charName="ステージ2_wall2"/>
-    <model fileName="stage3_floor.x" charName="ステージ3_floor3"/>
-
-    <model fileName="stage3_wall.x" charName="ステージ3_wall3"/>
-    <model fileName="stage4_floor.x" charName="ステージ4_floor4"/>
-
-    <model fileName="stage4_wall.x" charName="ステージ4_wall4"/>
-    <model fileName="stage5_floor.x" charName="ステージ5_floor5"/>
-
-    <model fileName="stage5_wall.x" charName="ステージ5_wall5"/>
+    <model fileName="stage4_map.x" charName="ステージ4"/>
+    <model fileName="stage5_map.x" charName="ステージ5"/>
 
 </Models>
 <Models Type="Spawn">

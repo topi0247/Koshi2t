@@ -20,18 +20,21 @@ private:
 	D3DXVECTOR3 dir_;
 	void Hit();
 public:
-	WeaponBall(D3DXVECTOR3 pos);
+	WeaponBall();
 	~WeaponBall();
+	void Init(char* name);
 	void SetDir(D3DXVECTOR3 dir);
 	void SetScale(float scale);
+	void SetStartPos(D3DXVECTOR3 pos);
 	void Move_Weapon(float dist,float speed);
 	void Time_Del_Weapon(int frame);
 	void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType);
 	void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
 	void SetKnockBack(float dist, float kDist,float kSpeed);
-	void Render();
+	void Render(D3DXVECTOR3 pos);
 	bool GetDelFlg()const;
+	
 	//float GetHitDist()const;
 	//float GetKnockBackDist()const;
 	D3DXVECTOR3 GetPosition()const;

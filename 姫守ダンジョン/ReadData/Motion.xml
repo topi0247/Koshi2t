@@ -40,3 +40,9 @@
     <motion name="dead" id="6" frame="20"/>
     <motion name="alive" id="7" frame="60"/>
 </Job>
+<Job name="•P">
+    <motion name="wait" id="0" frame="10"/>
+    <motion name="walk" id="1" frame="40"/>
+    <motion name="prayer" id="2" frame="20"/>
+    <motion name="dead" id="3" frame="10"/>
+</Job>

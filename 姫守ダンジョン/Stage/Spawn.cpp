@@ -32,7 +32,7 @@ void Spawn::SpawnInit(const char* name)
 
 	m_vPos = { 0,0,0 };
 	spawnID_ = 0;
-	amount_ = 1;
+	amount_ = 20;
 
 	memset(enemyName_, 0, sizeof(enemyName_));
 	strcpy_s(enemyName_, sizeof(enemyName_), "t01.X");
@@ -44,14 +44,14 @@ void Spawn::SpawnInit(const char* name)
 void Spawn::ListSet(ParameterRead* param, CharactorManager* target)
 {
 	srand((unsigned)time(NULL));
-	//int range = 5;
+	int range = 10;
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Slim;
 		enemy->SetParameter(param->GetEnemyParamList("ƒXƒ‰ƒCƒ€"));
 		enemy->SetTarget(target);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-		enemy->m_Pos = m_vPos;//D3DXVECTOR3(rand() % range + m_vPos.x, 0, rand() % range +m_vPos.z);
+		enemy->m_Pos = D3DXVECTOR3(rand() % range + (m_vPos.x-range/2), 0, rand() % range +(m_vPos.z-range/2));
 		insEnemyList_.push_back(enemy);
 	}
 }
@@ -74,5 +74,5 @@ void Spawn::ListReset()
 //	@brief	•`‰æ
 void Spawn::SpawnRender()
 {
-	Render(m_vPos,0,0.2);
+	Render(m_vPos,D3DXVECTOR3(0,0,0),0.2);
 }

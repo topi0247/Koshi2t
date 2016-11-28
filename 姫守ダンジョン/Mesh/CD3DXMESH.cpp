@@ -645,18 +645,18 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 //	}
 //}
 
-void CD3DXMESH::Render(D3DXVECTOR3 pos, float rotY, float scale)
+void CD3DXMESH::Render(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float scale)
 {
 	D3DXMATRIX mWorld, mTran, mYaw, mPitch, mRoll, mScale;
 	//ワールドトランスフォーム（絶対座標変換）
 	D3DXMatrixScaling(&mScale, scale, scale, scale);
-	D3DXMatrixRotationY(&mYaw, rotY);
-	//D3DXMatrixRotationX(&mPitch, m_fPitch);
+	D3DXMatrixRotationY(&mYaw, rot.y);
+	D3DXMatrixRotationX(&mPitch, rot.x);
 	//D3DXMatrixRotationZ(&mRoll, m_fRoll);
 	D3DXMatrixTranslation(&mTran, pos.x, pos.y, pos.z);
 
-	//mWorld = mScale*mYaw*mPitch*mRoll*mTran;
-	mWorld = mScale*mYaw*mTran;
+	mWorld = mScale*mYaw*mPitch*mTran;
+	//mWorld = mScale*mYaw*mTran;
 	m_World = mWorld;
 
 	//使用するシェーダーの登録

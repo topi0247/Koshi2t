@@ -6,18 +6,22 @@
 class Bomber :public JobManager
 {
 private:
+	WeaponBall* bomb_;
+
 	bool bombFlg_;	//”š’e‚ª”­“®’†‚©‚Ç‚¤‚©
 	bool invinsibleFlg_;	//–³“G’†‚©‚Ç‚¤‚©
 	int invisibleCount_;
 	int bombCount_;
 	float bombScale_;
 	//WeaponBall** bomb_;
-	std::vector<WeaponBall*> bomb_;
+	std::vector<WeaponBall*> bombList_;
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
+	virtual void MoveCharaHit();
 public:
 	Bomber(CharaType charaType);
 	virtual ~Bomber();
+	virtual const char* CharaInit(const char* fileName);
 	virtual void Attack();
 	virtual void Move_Update();
 	virtual void DamageCalc(unsigned int atk);					//ƒ_ƒ[ƒWŒvZ

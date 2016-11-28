@@ -8,7 +8,7 @@ class Witch :public JobManager
 {
 	bool magicFlg_;	//‹Z‚ª”­“®’†‚©‚Ç‚¤‚©
 	int magicBallCount_;
-	//WeaponBall** magicBall_;
+	WeaponBall* magic_;
 	std::vector<WeaponBall*> magicBall_;
 private:
 	virtual void Normal_Attack();
@@ -16,6 +16,7 @@ private:
 public:
 	Witch(CharaType charaType);
 	virtual ~Witch();
+	virtual const char* CharaInit(const char* fileName);
 	virtual void Attack();
 	virtual void CharaRender();
 };
