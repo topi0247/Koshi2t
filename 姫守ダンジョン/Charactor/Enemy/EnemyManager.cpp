@@ -174,12 +174,12 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	if (motionNo_ != motion_->GetMotion("walk")->id_)
+	/*if (motionNo_ != motion_->GetMotion("walk")->id_)
 	{
 		motionNo_ = motion_->GetMotion("walk")->id_;
 		m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-	}
+	}*/
 
 }
 

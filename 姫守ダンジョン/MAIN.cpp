@@ -113,12 +113,13 @@ void MAIN::Loop()
 	//CD3DXMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
 	CD3DXMESH::InitShader(m_hWnd, m_pDevice, m_pDeviceContext);
 	CD3DXSKINMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
+	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
 	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
 
 
 	// メッセージループ
 	MSG msg = { 0 };
-	long start = timeGetTime();
+	start = timeGetTime();
 	ZeroMemory(&msg, sizeof(msg));
 	while (msg.message != WM_QUIT)
 	{
@@ -295,11 +296,28 @@ void MAIN::Render()
 
 	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
-
+	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	mainScene_->Render(/*mView, mProj*/);
 
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
+
+	/*char Str[512];
+	sprintf(Str, "fps:%f", start);
+	SetWindowTextA(m_hWnd, Str);*/
+
+	//FPS計算表示
+	static DWORD time = 0;
+	static int frame = 0;
+	frame++;
+	char str[50];
+	sprintf(str, "fps=%d", frame);
+	if (timeGetTime() - time>1000)
+	{
+		time = timeGetTime();
+		frame = 0;
+		SetWindowTextA(m_hWnd, str);
+	}
 }
 
 //

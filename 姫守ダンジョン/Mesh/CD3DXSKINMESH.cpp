@@ -994,8 +994,12 @@ HRESULT CD3DXSKINMESH::CreateFromX(CHAR* szFileName)
 
 	//一時的な入れ物は、もはや不要
 	delete piFaceBuffer;
-	if (pvVB) delete pvVB;
-
+	piFaceBuffer = nullptr;
+	if (pvVB)
+	{
+		delete pvVB;
+		pvVB = nullptr;
+	}
 	return S_OK;
 }
 

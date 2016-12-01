@@ -16,6 +16,8 @@ JobManager::JobManager(CharaType charaType)
 
 	//パラメータ初期化
 	param_ = new PlayerParameter;
+
+
 }
 
 //
@@ -71,6 +73,9 @@ void JobManager::SetParameter(JobParameter* param)
 //	@brief	キャラの更新
 void JobManager::CharaUpdate()
 {
+	//空間番号の更新
+	spaceNo_=collision_->SetSpaceNo(m_Pos);
+
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
@@ -84,9 +89,12 @@ void JobManager::CharaUpdate()
 	if (aliveFlg_ == true)
 	{
 		//移動
-		float speed = param_->moveSpeed_;
-		
-		Move(speed);
+		if (moveAbleFlg_ == true)
+		{
+			float speed = param_->moveSpeed_;
+			Move(speed);
+		}
+
 		//攻撃
 		Attack();
 
@@ -106,32 +114,3 @@ void JobManager::CharaUpdate()
 	}
 }
 
-//
-//	@brief	モーション更新
-void JobManager::Motion_Update()
-{
-	if (motionChange_ == true)
-	{
-		switch (atkNo_)
-		{
-		case normalAtk:
-			motionNo_ = motion_->GetMotion("attack1")->id_;
-			motionChangeCount_ = motion_->GetMotion("attack1")->frame_;
-			motionSpeed_ = 1 / (float)motionChangeCount_;
-			m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			motionChange_ = false;
-			break;
-		default:
-			break;
-		}
-
-
-	}
-
-	if (motionChange_ == false && ++motionCount_ % motionChangeCount_ == 0)
-	{
-		motionChange_ = true;
-		motionCount_ = 0;
-		motionChangeCount_ = 0;
-	}
-}

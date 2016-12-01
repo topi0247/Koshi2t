@@ -59,19 +59,21 @@ void PlayerManager::Move(float speed)
 
 			if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
 			{
-				motionNo_ = motion_->GetMotion("walk")->id_;
-				m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
+				//motionNo_ = motion_->GetMotion("walk")->id_;
+				//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
 				//ƒ‚[ƒVƒ‡ƒ“‘¬“x
-				motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+				//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+				ChangeMotion(motion_, "walk");
 			}
 		}
 		else
 		{
 			if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 			{
-				motionNo_ = motion_->GetMotion("wait")->id_;
-				m_pD3dxMesh->ChangeAnimSet(motionNo_);
-				motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+				//motionNo_ = motion_->GetMotion("wait")->id_;
+				//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+				//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+				ChangeMotion(motion_, "wait");
 			}
 		}
 
@@ -96,7 +98,7 @@ void PlayerManager::DamageCalc(unsigned int atk)
 	float damage = atk / (1 + ((float)param_->def_ / 100));
 	hp_ -= damage;
 
-	if (hp_ <= 0)
+	if (hp_ <= 0 || param_->hp_<hp_)
 	{
 		hp_ = 0;
 		aliveFlg_ = false;
@@ -111,18 +113,19 @@ void PlayerManager::Dead()
 	//aliveFlg_ = false;
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead")->id_)
 	{
-		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("dead")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+		moveAbleFlg_ = false;
+		//motionChange_ = false;
+		//motionNo_ = motion_->GetMotion("dead")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+		ChangeMotion(motion_, "dead");
 	}
 
 	if (motionNo_ == motion_->GetMotion("dead")->id_)
 	{
-		if (++motionCount_%motion_->GetMotion("dead")->frame_ == 0)
+		if (++motionCount_%motionFrame_ == 0)
 		{
-			moveAbleFlg_ = false;
-			motionChange_ = true;
+			//motionChange_ = true;
 			motionCount_ = 0;
 		}
 	}
@@ -136,18 +139,22 @@ void PlayerManager::Revival()
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion("alive")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("alive")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("alive")->frame_;
+		//motionNo_ = motion_->GetMotion("alive")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//motionSpeed_ = 1 / (float)motion_->GetMotion("alive")->frame_;
+		ChangeMotion(motion_, "alive");
 	}
 
 	if (motionNo_ == motion_->GetMotion("alive")->id_)
 	{
-		if (++motionCount_%motion_->GetMotion("alive")->frame_ == 0)
+		if (++motionCount_%motionFrame_ == 0)
 		{
-			moveAbleFlg_ = false;
+			moveAbleFlg_ = true;
 			motionChange_ = true;
 			motionCount_ = 0;
+			hp_ = param_->hp_;
+			revivalFlg_ = false;
+			aliveFlg_ = true;
 		}
 	}
 }
@@ -156,7 +163,7 @@ void PlayerManager::Revival()
 //	@brief	•PŒÄ‚Ñ
 void PlayerManager::Princess_Call()
 {
-	if (GamePad::checkInput(charaType_, GamePad::InputName::B))
+	if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_==noAtk)
 	{
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
@@ -164,16 +171,18 @@ void PlayerManager::Princess_Call()
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("call")->id_)
 		{
 			motionChange_ = false;
-			motionNo_ = motion_->GetMotion("call")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
+			//motionNo_ = motion_->GetMotion("call")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
+			ChangeMotion(motion_, "call");
 		}
 	}
 
 	if (motionNo_ == motion_->GetMotion("call")->id_)
 	{
-		if (++motionCount_%motion_->GetMotion("call")->frame_ == 0)
+		if (++motionCount_%motionFrame_ == 0)
 		{
+			revivalFlg_ = false;
 			moveAbleFlg_ = false;
 			motionChange_ = true;
 			motionCount_ = 0;

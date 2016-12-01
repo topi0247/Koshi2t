@@ -17,7 +17,10 @@ EnemyJobManager::~EnemyJobManager()
 
 void EnemyJobManager::CharaUpdate()
 {
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	//m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+
+	//‹óŠÔ”Ô†‚ÌXV
+	spaceNo_ = collision_->SetSpaceNo(m_Pos);
 
 	float speed = param_->moveSpeed_;
 	MoveCharaHit();

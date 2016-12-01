@@ -44,7 +44,6 @@ protected:
 	virtual void Attack();
 	virtual void NormalAttack() = 0;
 	virtual void Dead();				//死亡
-	virtual void Motion_Update() {};	//モーション更新
 	virtual void DamageCalc(unsigned int atk);
 public:
 	EnemyManager() ;

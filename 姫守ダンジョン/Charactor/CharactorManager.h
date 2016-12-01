@@ -30,17 +30,18 @@ protected:
 
 	CharaType charaType_;
 	Collision* collision_;
-	unsigned int hp_;
-	unsigned int motionNo_;
-	unsigned int motionCount_;
-	unsigned int motionChangeCount_;
-	bool motionChange_;
-	float motionSpeed_;
-	float opponentWeight_;	//進行方向にいるキャラの重さ
-	float ownWright_;		//自身の重さ
-	bool aliveFlg_;			//生存フラグ
-	bool moveAbleFlg_;		//移動可能フラグ
-	D3DXVECTOR3 ownPush_;	//自分を押している方向ベクトル
+	unsigned int spaceNo_;		//座標による空間番号
+	unsigned int hp_;			//現在のHP
+	unsigned int motionNo_;		//現在のモーション番号
+	unsigned int motionCount_;	//モーション用カウント
+	unsigned int motionFrame_;	//現在のモーションの総フレーム数
+	bool motionChange_;			//モーション変更フラグ
+	float motionSpeed_;			//モーションスピード
+	float opponentWeight_;		//進行方向にいるキャラの重さ
+	float ownWright_;			//自身の重さ
+	bool aliveFlg_;				//生存フラグ
+	bool moveAbleFlg_;			//移動可能フラグ
+	D3DXVECTOR3 ownPush_;		//自分を押している方向ベクトル
 
 	float knockBackDis_;
 	float knockBackSpeed_;
@@ -52,9 +53,10 @@ protected:
 	virtual void Move(float speed) = 0;					//移動
 	virtual void Attack() = 0;							//攻撃
 	virtual void Dead() = 0;							//死亡
+	virtual void MoveCharaHit();
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
 	void AroundCharaCheck();
-	virtual void MoveCharaHit();
+	void ChangeMotion(Motion* motion,char* name);
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
@@ -73,6 +75,7 @@ public:
 	void SetAllCharaList(std::vector<CharactorManager*> list);
 	void SetOppWeight(float weight);							//進行方向にいるキャラクターの重さセット
 	void SetKnockBack(D3DXVECTOR3 pos, float dist,float speed);
+	int GetSpaceNo();
 	bool GetAliveFlg() { return aliveFlg_; };
 	CharaType GetCharaType()const;
 

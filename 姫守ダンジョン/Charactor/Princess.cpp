@@ -7,6 +7,7 @@ Princess::Princess()
 	sealFlg_ = false;
 	resFlg_ = false;
 	sealSpawn_ = nullptr;
+	charaType_ = PrincessT;
 }
 
 //
@@ -144,7 +145,7 @@ Spawn* Princess::SealSpawn()
 //	@brief	ëhê∂
 void Princess::Resuscitation()
 {
-	float resDist = 3;
+	float resDist = 100;
 	std::list<CharactorManager*> resList;
 	if (!deadCharaList_.empty())
 	{

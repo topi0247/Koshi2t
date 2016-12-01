@@ -50,7 +50,8 @@ void SwordMan::Attack()
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	unsigned int inputTime = FPS*param_->chargeTime_;
+	/* 修正の必要あり */
+	unsigned int inputTime = (FPS*param_->chargeTime_)/2;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -62,10 +63,13 @@ void SwordMan::Attack()
 		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
 		{
 			motionChange_ = false;
-			motionNo_ = motion_->GetMotion("charge")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			timeEnd_ = motion_->GetMotion("charge")->frame_;
-			motionSpeed_ = 1 / (float)timeEnd_;
+			//motionNo_ = motion_->GetMotion("charge")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//timeEnd_ = motion_->GetMotion("charge")->frame_;
+			//motionSpeed_ = 1 / (float)timeEnd_;
+			ChangeMotion(motion_, "charge");
+			motionSpeed_ *= 5;
+			motionFrame_ /= 2;
 		}
 	}
 
@@ -87,13 +91,19 @@ void SwordMan::Normal_Attack()
 	if (motionChange_==true && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("attack1")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		timeEnd_ = motion_->GetMotion("attack1")->frame_;
-		motionSpeed_ = 1 / (float)timeEnd_;
+		//motionNo_ = motion_->GetMotion("attack1")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//timeEnd_ = motion_->GetMotion("attack1")->frame_;
+		//motionSpeed_ = 1 / (float)timeEnd_;
+		ChangeMotion(motion_, "attack1");
+
+		/*モーション自体が遅い為丁度良い感じに修正
+		　修正の必要があり。　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　*/
+		motionSpeed_ *= 10;
+		motionFrame_ /= 5;
 	}
 
-	if (++motionCount_ > timeEnd_)
+	if (++motionCount_ > motionFrame_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
@@ -151,13 +161,16 @@ void SwordMan::Special_Attack()
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("special")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		timeEnd_ = motion_->GetMotion("special")->frame_;
-		motionSpeed_ = 1 / (float)timeEnd_;
+		//motionNo_ = motion_->GetMotion("special")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//timeEnd_ = motion_->GetMotion("special")->frame_;
+		//motionSpeed_ = 1 / (float)timeEnd_;
+		ChangeMotion(motion_, "special");
+		motionSpeed_ *= 5;
+		motionFrame_ /= 2;
 	}
 
-	if (++motionCount_ > timeEnd_)
+	if (++motionCount_ > motionFrame_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;

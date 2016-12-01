@@ -104,6 +104,8 @@
     <ClCompile Include="Charactor\Princess.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugDraw\D3D11_TEXT.cpp" />
+    <ClCompile Include="Effect\D3D11_SPRITE.cpp" />
+    <ClCompile Include="Effect\Effect.cpp" />
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="Main_Scene.cpp" />
     <ClCompile Include="Mesh\CD3DXMESH.cpp" />
@@ -136,6 +138,8 @@
     <ClInclude Include="Charactor\Princess.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DebugDraw\D3D11_TEXT.h" />
+    <ClInclude Include="Effect\D3D11_SPRITE.h" />
+    <ClInclude Include="Effect\Effect.h" />
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Main_Scene.h" />
     <ClInclude Include="Mesh\CD3DXMESH.h" />

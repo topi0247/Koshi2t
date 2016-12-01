@@ -408,7 +408,7 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 		//テクスチャー座標がマイナス対策
 		//if(m_Texture)
 		//{
-			for(int i=0;i<m_pMesh->GetNumVertices();i++)
+			/*for(int i=0;i<m_pMesh->GetNumVertices();i++)
 			{
 				if(pvVertex[i].vTex.x<0)
 				{
@@ -418,7 +418,7 @@ HRESULT CD3DXMESH::LoadXMesh(LPSTR FileName)
 				{
 					pvVertex[i].vTex.y+=1;
 				}
-			}
+			}*/
 		//}
 
 		if( FAILED( m_pDevice11->CreateBuffer( &bd, &InitData, &m_pVertexBuffer) ) )

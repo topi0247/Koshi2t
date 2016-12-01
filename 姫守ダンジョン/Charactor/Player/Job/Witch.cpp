@@ -82,10 +82,11 @@ void Witch::Attack()
 		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
 		{
 			motionChange_ = false;
-			motionNo_ = motion_->GetMotion("charge")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//motionNo_ = motion_->GetMotion("charge")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//timeEnd_ = motion_->GetMotion("charge")->frame_;
-			motionSpeed_ = 1 / (float)timeEnd_;
+			//motionSpeed_ = 1 / (float)timeEnd_;
+			ChangeMotion(motion_, "charge");
 		}
 	}
 
@@ -130,32 +131,34 @@ void Witch::Normal_Attack()
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("attack")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		timeEnd_ = motion_->GetMotion("attack")->frame_;
-		motionSpeed_ = 1 / (float)timeEnd_;
-		motionCount_ = 0;
+		//motionNo_ = motion_->GetMotion("attack")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//timeEnd_ = motion_->GetMotion("attack")->frame_;
+		//motionSpeed_ = 1 / (float)timeEnd_;
+		//motionCount_ = 0;
+		ChangeMotion(motion_, "attack");
 	}
 
-	if (++motionCount_%timeEnd_ == 0)
+	if (++motionCount_%motionFrame_ == 0)
 	{
 		atkNo_ = noAtk;
 		motionChange_ = true;
+		if (!magicFlg_)
+		{
+			WeaponBall* magic = new WeaponBall();
+
+			D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
+			magic->SetDir(vec);
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
+			magic->SetDamageList(allCharaList_, charaType_);
+			magic->SetKnockBack(kRange, kDist, kSpeed);
+			magic->SetAttack(param_->normalAtk_);
+			magicBall_.push_back(magic);
+			magicFlg_ = true;
+		}
 	}
 
-	if(!magicFlg_)
-	{
-		WeaponBall* magic= new WeaponBall();
-
-		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-		magic->SetDir(vec);
-		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y+1, m_Pos.z));
-		magic->SetDamageList(allCharaList_, charaType_);
-		magic->SetKnockBack(kRange, kDist, kSpeed);
-		magic->SetAttack(param_->normalAtk_);
-		magicBall_.push_back(magic);
-		magicFlg_ = true;
-	}
+	
 }
 
 //
@@ -169,40 +172,41 @@ void Witch::Special_Attack()
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("attack")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		timeEnd_ = motion_->GetMotion("attack")->frame_;
-		motionSpeed_ = 1 / (float)timeEnd_;
-		motionCount_ = 0;
+		//motionNo_ = motion_->GetMotion("attack")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//timeEnd_ = motion_->GetMotion("attack")->frame_;
+		//motionSpeed_ = 1 / (float)timeEnd_;
+		//motionCount_ = 0;
+		ChangeMotion(motion_, "attack");
 	}
 
-	if (++motionCount_%timeEnd_ == 0)
+	if (++motionCount_%motionFrame_ == 0)
 	{
 		atkNo_ = noAtk;
 		motionChange_ = true;
+		if (!magicFlg_)
+		{
+			float angle = D3DXToDegree(m_Yaw);
+			for (int i = 0; i < magicBallCount_; i++)
+			{
+				WeaponBall* magic = new WeaponBall;
+				int degree = 90 / (magicBallCount_ / 2 + 1);
+				float temp = angle - 90 + degree + degree*i;
+				temp = D3DXToRadian(temp);
+				D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
+				magic->SetDir(vec);
+				magic->SetScale(0.5);
+				magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
+				magic->SetDamageList(allCharaList_, charaType_);
+				magic->SetKnockBack(kRange, kDist, kSpeed);
+				magic->SetAttack(param_->specialAtk_);
+				magicBall_.push_back(magic);
+			}
+			magicFlg_ = true;
+		}
 	}
 
-	if(!magicFlg_)
-	{
-		float angle = D3DXToDegree(m_Yaw);
-		for (int i = 0; i < magicBallCount_; i++)
-		{
-			WeaponBall* magic = new WeaponBall;
-			int degree = 90 / (magicBallCount_ / 2 + 1);
-			float temp = angle - 90 + degree + degree*i;
-			temp = D3DXToRadian(temp);
-			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
-			magic->SetDir(vec);
-			magic->SetScale(0.5);
-			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
-			magic->SetDamageList(allCharaList_, charaType_);
-			magic->SetKnockBack(kRange, kDist,kSpeed);
-			magic->SetAttack(param_->specialAtk_);
-			magicBall_.push_back(magic);
-		}
-		magicFlg_ = true;
-		//atkNo_ = noAtk;
-	}
+	
 }
 
 //

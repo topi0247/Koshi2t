@@ -18,11 +18,9 @@ class JobManager :public PlayerManager
 {
 protected:
 	//unsigned int timeCount_;	//攻撃時間
-	unsigned int timeEnd_;		//攻撃終了時間
+	//unsigned int timeAtkEnd_;		//攻撃終了時間
 	int attackCount_;			//攻撃ボタンカウント
 	
-
-	virtual void Motion_Update();
 
 	Collision* col_;
 

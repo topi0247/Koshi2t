@@ -87,6 +87,7 @@ void Bomber::Attack()
 	}
 	else if (atkNo_ == charge)
 	{
+		moveAbleFlg_ = true;
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
 		invinsibleFlg_ = true;
@@ -103,14 +104,16 @@ void Bomber::Attack()
 	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
+		moveAbleFlg_ = false;
 		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
 		{
 			motionChange_ = false;
-			motionNo_ = motion_->GetMotion("charge")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//motionNo_ = motion_->GetMotion("charge")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//timeEnd_ = motion_->GetMotion("attack")->frame_;
-			motionSpeed_ = 1 / (float)timeEnd_;
-			motionCount_ = 0;
+			//motionSpeed_ = 1 / (float)timeEnd_;
+			//motionCount_ = 0;
+			ChangeMotion(motion_, "charge");
 		}
 	}
 
@@ -173,18 +176,19 @@ void Bomber::Normal_Attack()
 	float range = param_->weaponHitReach_;
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
-
+	moveAbleFlg_ = false;
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("attack")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		timeEnd_ = motion_->GetMotion("attack")->frame_;
-		motionSpeed_ = 1 / (float)timeEnd_;
-		motionCount_ = 0;
+		//motionNo_ = motion_->GetMotion("attack")->id_;
+		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//timeEnd_ = motion_->GetMotion("attack")->frame_;
+		//motionSpeed_ = 1 / (float)timeEnd_;
+		//motionCount_ = 0;
+		ChangeMotion(motion_, "attack");
 	}
 
-	if (++motionCount_%timeEnd_ == 0)
+	if (++motionCount_%motionFrame_ == 0)
 	{
 		motionChange_ = true;
 		motionChange_ = true;
@@ -193,11 +197,13 @@ void Bomber::Normal_Attack()
 			WeaponBall* bomb = new WeaponBall;
 			bomb->SetStartPos(m_Pos);
 			bomb->SetScale(0.2);
+			bomb->SetAttack(param_->normalAtk_);
 			bomb->SetDamageList(allCharaList_, charaType_);
 			bomb->SetKnockBack(range, kDist, kSpeed);
 			bombList_.push_back(bomb);
 		}
 		atkNo_ = noAtk;
+		moveAbleFlg_ = true;
 	}
 
 
@@ -212,14 +218,15 @@ void Bomber::Special_Attack()
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("special")->id_)
 	{
 		motionChange_ = false;
-		motionNo_ = motion_->GetMotion("special")->id_;
+		/*motionNo_ = motion_->GetMotion("special")->id_;
 		m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		timeEnd_ = motion_->GetMotion("special")->frame_;
 		motionSpeed_ = 1 / (float)timeEnd_;
-		motionCount_ = 0;
+		motionCount_ = 0;*/
+		ChangeMotion(motion_, "special");
 	}
 
-	if (++motionCount_%timeEnd_ == 0)
+	if (++motionCount_%motionFrame_ == 0)
 	{
 		atkNo_ = noAtk;
 		motionChange_ = true;
@@ -241,7 +248,7 @@ void Bomber::Move_Update()
 	float kSpeed = param_->knockbackSpeed_;
 	if (aliveFlg_ == true)
 	{
-		if (knockBackFlg_ == false /*&& atkNo_ != (normalAtk || charge)*/)
+		if (knockBackFlg_ == false && moveAbleFlg_==true)
 		{
 			m_Pos += m_Dir;
 		}
@@ -265,7 +272,7 @@ void Bomber::DamageCalc(unsigned int atk)
 	}
 
 	hp_ -= damage;
-	if (hp_ <= 0)
+	if (hp_ <= 0 || param_->hp_ < hp_)
 	{
 		hp_ = 0;
 		aliveFlg_ = false;

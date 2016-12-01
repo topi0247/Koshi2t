@@ -53,9 +53,59 @@ Collision::~Collision()
 //
 // L:入射ベクトル（レイ） N:ポリゴンの法線
 
+//
+//	@brief		空間番号取得
+//	@param(pos)	自身の座標
+//	@note       1ステージ分だけ確認用に用意。変更しやすいよう要修正
+int Collision::SetSpaceNo(D3DXVECTOR3 pos)
+{
+	//x軸分割数
+	int sx = 34;
+
+	//ステージスケール
+	D3DXVECTOR3 stScale = { 34 * 2,0,18 * 2 };
+
+	//補正値(ステージスケールの半分)
+	D3DXVECTOR3 correction = { stScale.x / 2,0,stScale.z / 2 };
+
+	////ステージ座標
+	//D3DXVECTOR3 stagePos = { 0,0,0 };
+	////ステージ座標の補正
+	//D3DXVECTOR3 tempStagePos = { stagePos.x + correction.x,0,stagePos.z + correction.z };
+
+	//自身の座標補正
+	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
+	//自身の補正された座標から、そのステージにおける空間番号を算出
+	int no = ((int)tempOwnPos.z%sx)*sx + (int)tempOwnPos.x % sx;
+
+	return no;
+}
+
+//
+//	@brief	周辺のキャラクターとの空間番号の確認
+bool Collision::CheckSpaceNo(int ownNo, int oppNo)
+{
+	//x軸の空間分割数
+	int sx = 34;
+
+	//相手の空間番号が自分と自分の周辺の空間番号と一致するかどうか
+	if (ownNo - 1 <= oppNo || oppNo <= ownNo + 1
+		|| ownNo - sx - 1 <= oppNo || oppNo <= ownNo - sx + 1
+		|| ownNo + sx - 1 <= oppNo || oppNo <= ownNo + sx + 1)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+//
+//	@brief				距離による衝突判定
+//	@param(posA)		自身の座標
+//	@param(posB)		相手の座標
+//	@param(distance)	判定距離
 bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 {
-
 	if (pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2) <= distance*distance)
 	{
 		//hitCount_ = 0;

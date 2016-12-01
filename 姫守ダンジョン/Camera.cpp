@@ -13,7 +13,7 @@ D3DXMATRIX Camera::mProj_;
 //	@brief	コンストラクタ
 Camera::Camera()
 {
-	movePow_ = D3DXVECTOR3(0, 27, -35);
+	movePow_ = D3DXVECTOR3(0, 45, -45);
 	gazePoint_ = D3DXVECTOR3(0, 0, 0);
 	zoom = 6;
 	farPlayerPos_ = movePow_;
@@ -56,20 +56,20 @@ void Camera::Update()
 	//movePow_.y -= 0.01;
 	/*if (movePow_.y < 27)
 	{
-		movePow_.y += 0.01f;
+	movePow_.y += 0.01f;
 	}
-*/
-	if (dist_ > temp_ && movePow_.y<58)
-	{
-		movePow_.y += 0.1;
-		temp_ = dist_;
-	}
-	
-	if (dist_<temp_ && movePow_.y>35)
-	{
-		movePow_.y -= 0.1;
-		temp_ = dist_;
-	}
+	*/
+	//if (dist_ > temp_ && movePow_.y<58)
+	//{
+	//	movePow_.y += 0.1;
+	//	temp_ = dist_;
+	//}
+
+	//if (dist_<temp_ && movePow_.y>35)
+	//{
+	//	movePow_.y -= 0.1;
+	//	temp_ = dist_;
+	//}
 	//if (temp_ < dist_)
 	//{
 	//	//if (zoom <= 1)
@@ -115,7 +115,7 @@ void Camera::Render()
 //	@brief	デバッグ用カメラ移動	
 void Camera::DebugMove()
 {
-	static float Yaw = 0, Roll = -11;
+	static float Yaw = 0, Roll = -23;
 	Yaw += -(GetKeyState(VK_LEFT) & 0x80)*0.0005 + (GetKeyState(VK_RIGHT) & 0x80)*0.0005;
 	Roll += -(GetKeyState(VK_DOWN) & 0x80)*0.001 + (GetKeyState(VK_UP) & 0x80)*0.001;
 	D3DXMatrixRotationY(&yaw_, Yaw);
@@ -127,11 +127,11 @@ void Camera::DebugMove()
 	movePow_.z += -(GetKeyState('S') & 0x80)*0.001 + (GetKeyState('W') & 0x80)*0.001;
 
 	//リセット
-	if (GetKeyState(VK_SPACE) & 0x80)
+	/*if (GetKeyState(VK_SPACE) & 0x80)
 	{
-		movePow_ = D3DXVECTOR3(0, 48, -40);
-		Yaw = 0;
-		Roll = -11;
-	}
+	movePow_ = D3DXVECTOR3(0, 48, -40);
+	Yaw = 0;
+	Roll = -11;
+	}*/
 
 }

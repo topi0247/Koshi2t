@@ -9,8 +9,9 @@ class ShieldMan :public JobManager
 private:
 	bool spMoveFlg_;
 	D3DXVECTOR3 spMove_;
-	void Normal_Attack_Collision();
-	void Special_Attack_Collision();
+	void Attack_Collision(float hitAngle);
+	//void Normal_Attack_Collision();
+	//void Special_Attack_Collision();
 private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();

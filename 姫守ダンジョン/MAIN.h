@@ -15,6 +15,8 @@ class MAIN
 {
 
 	int hConsole = 0;
+
+	long start;
 public:
 	//デバッグ用コンソールウィンドウ
 	void CreateConsoleWindow();

@@ -15,9 +15,9 @@ CharactorManager::CharactorManager()
 	, knockBackPos_(0, 0, 0)
 	, knockBackDis_(0)
 	, motionNo_(0)
-	, motionSpeed_(0)
+	, motionSpeed_(0.01)
 	, motionCount_(0)
-	, motionChangeCount_(0)
+	, motionFrame_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
@@ -222,6 +222,26 @@ CharaType CharactorManager::GetCharaType()const
 void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
 {
 	allCharaList_ = list;
+}
+
+//
+//	@brief			モーション変更
+//	@param (motion)	モーション情報
+//	@param (name)	モーション名
+void CharactorManager::ChangeMotion(Motion* motion, char* name)
+{
+	motionNo_ = motion->GetMotion(name)->id_;
+	m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	motionFrame_ = motion->GetMotion(name)->frame_;
+	motionSpeed_ = 1 / (float)motionFrame_;
+	motionCount_ = 0;
+}
+
+//
+//	@brief	空間番号の取得
+int CharactorManager::GetSpaceNo()
+{
+	return spaceNo_;
 }
 
 //

@@ -5,7 +5,6 @@
 Spawn::Spawn()
 {
 	spawnID_ = 0;
-	amount_ = 10;
 	m_vPos = { 0,0,0 };
 }
 
@@ -30,12 +29,10 @@ void Spawn::SpawnInit(const char* name)
 		return;
 	}
 
-	m_vPos = { 0,0,0 };
+	m_vPos = { 0,0,5 };
 	spawnID_ = 0;
-	amount_ = 20;
+	amount_ = 5;
 
-	memset(enemyName_, 0, sizeof(enemyName_));
-	strcpy_s(enemyName_, sizeof(enemyName_), "t01.X");
 
 }
 
@@ -53,6 +50,7 @@ void Spawn::ListSet(ParameterRead* param, CharactorManager* target)
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 		enemy->m_Pos = D3DXVECTOR3(rand() % range + (m_vPos.x-range/2), 0, rand() % range +(m_vPos.z-range/2));
 		insEnemyList_.push_back(enemy);
+		//SAFE_DELETE(enemy);
 	}
 }
 
