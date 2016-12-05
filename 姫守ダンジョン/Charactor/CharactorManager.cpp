@@ -40,7 +40,6 @@ void CharactorManager::SetMotionData(Motion* motionData)
 	motion_ = motionData;
 }
 
-
 //
 //	@brief				ノックバック処理
 //	@param (atkPos)		攻撃が当たった地点の座標
@@ -77,9 +76,11 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance, float speed
 void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 {
 	//角度を算出
-	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
+	float angel = (atan2(dirVec.z, dirVec.x)*-1) -(D3DX_PI / 2.0f);
 
 	m_Yaw = angel;
+	//m_Yaw = atan2(dirVec.z, dirVec.x);
+
 }
 
 //
@@ -148,27 +149,20 @@ void CharactorManager::SetAroundChara(CharactorManager* charactor)
 //	@brief	周辺にいるキャラクターがまだ周辺にいるかどうかのチェック
 void CharactorManager::AroundCharaCheck()
 {
-	float dist = 10;
-	int count = 0;
-
-	for (size_t i = 0; i < aroundCharaList_.size(); i++)
+	std::vector<CharactorManager*> delList;
+	
+	for (auto c : aroundCharaList_)
 	{
-		//for (auto list : aroundCharaList_)
-		//{
-		if (!collision_->CharaNear(m_Pos, aroundCharaList_[count]->m_Pos, dist))
+		if (!collision_->CheckSpaceNo(spaceNo_, c->spaceNo_))
 		{
-			//いなかったら削除
-			aroundCharaList_.erase(aroundCharaList_.begin() + count);
-			--count;
-
+			delList.push_back(c);
 		}
+	}
 
-		/*if (aroundCharaList_.empty())
-		{
-			break;
-		}*/
-		++count;
-		//}
+	for (auto c : delList)
+	{
+		auto el = std::find(aroundCharaList_.begin(), aroundCharaList_.end(), c);
+		aroundCharaList_.erase(el);
 	}
 }
 
@@ -188,7 +182,7 @@ void CharactorManager::MoveCharaHit()
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
 
-			float hitAngle = 90 / 2;
+			float hitAngle = 30;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
 				/*opponentWeight_ = c->ownWright_;*/

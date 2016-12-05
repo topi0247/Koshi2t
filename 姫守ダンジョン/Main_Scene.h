@@ -14,10 +14,11 @@
 #include "./Charactor/Player/PlayerCommon.h"
 #include "./Charactor/CharactorCreator.h"
 #include "./Charactor/Enemy/EnemyJobManager.h"
-#include "./Stage/Spawn.h"
+#include "./Stage/SpawnManager.h"
 #include "./Charactor/Princess.h"
 #include "./Collision.h"
 #include "./Camera.h"
+#include "./SoundEffect/Sound.h"
 
 class Main_Scene
 {
@@ -45,7 +46,8 @@ class Main_Scene
 	Camera* camera_;
 
 	int spawnAmount_;					//スポーンゲートの数
-	Spawn* spawn_;
+	//Spawn* spawn_;
+	SpawnManager* spawnManager_;
 	EnemyJobManager* virEnemy_;			//確用仮キャラクター
 	CD3DXSKINMESH* slime_;
 	/*EnemyJobManager* virEnemy_;*/
@@ -68,10 +70,13 @@ class Main_Scene
 	D3D11_SPRITE* uiseeld_;
 	D3D11_SPRITE* uimagic_;
 	D3D11_SPRITE* uibom_;
+	D3D11_SPRITE* uititle_;
+
 
 	//デバック
 	D3D11_TEXT* debugText_;
 	double insTime_,pushTime_;
+	bool spawnFlg_;
 
 	void PlayerDebug();
 	void EnemyDebug();

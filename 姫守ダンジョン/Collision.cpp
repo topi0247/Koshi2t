@@ -76,7 +76,7 @@ int Collision::SetSpaceNo(D3DXVECTOR3 pos)
 	//自身の座標補正
 	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
 	//自身の補正された座標から、そのステージにおける空間番号を算出
-	int no = ((int)tempOwnPos.z%sx)*sx + (int)tempOwnPos.x % sx;
+	int no = ((int)tempOwnPos.z / 2)*sx + (int)tempOwnPos.x / 2;
 
 	return no;
 }
@@ -89,9 +89,9 @@ bool Collision::CheckSpaceNo(int ownNo, int oppNo)
 	int sx = 34;
 
 	//相手の空間番号が自分と自分の周辺の空間番号と一致するかどうか
-	if (ownNo - 1 <= oppNo || oppNo <= ownNo + 1
-		|| ownNo - sx - 1 <= oppNo || oppNo <= ownNo - sx + 1
-		|| ownNo + sx - 1 <= oppNo || oppNo <= ownNo + sx + 1)
+	if ((ownNo - 1 <= oppNo && oppNo <= ownNo + 1)
+		|| (ownNo - sx - 1 <= oppNo && oppNo <= ownNo - sx + 1)
+		|| (ownNo + sx - 1 <= oppNo && oppNo <= ownNo + sx + 1))
 	{
 		return true;
 	}

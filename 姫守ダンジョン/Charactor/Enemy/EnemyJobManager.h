@@ -16,6 +16,7 @@ protected:
 public:
 	EnemyJobManager();
 	virtual ~EnemyJobManager();
+	virtual void Reset();
 	virtual void CharaUpdate();
 };
 
@@ -48,6 +49,7 @@ private:
 	std::vector<WeaponBall*> atkList_;
 public:
 	virtual ~Skeleton() {};
+	virtual void Reset();
 	virtual void CharaRender();		//•`‰æ
 
 };

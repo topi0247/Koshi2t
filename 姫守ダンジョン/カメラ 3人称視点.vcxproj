@@ -114,8 +114,10 @@
     </ClCompile>
     <ClCompile Include="Read\MotionRead.cpp" />
     <ClCompile Include="Read\ParameterRead.cpp" />
+    <ClCompile Include="Read\SpawnGateRead.cpp" />
     <ClCompile Include="Read\tinyxml2.cpp" />
     <ClCompile Include="Read\XFileRead.cpp" />
+    <ClCompile Include="SoundEffect\Sound.cpp" />
     <ClCompile Include="Stage\Spawn.cpp" />
     <ClCompile Include="Stage\SpawnManager.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
@@ -149,8 +151,10 @@
     <ClInclude Include="Origin.h" />
     <ClInclude Include="Read\MotionRead.h" />
     <ClInclude Include="Read\ParameterRead.h" />
+    <ClInclude Include="Read\SpawnGateRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
+    <ClInclude Include="SoundEffect\Sound.h" />
     <ClInclude Include="Stage\Spawn.h" />
     <ClInclude Include="Stage\SpawnManager.h" />
     <ClInclude Include="Stage\Stage.h" />

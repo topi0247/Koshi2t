@@ -30,10 +30,11 @@ public:
 
 	Spawn* SealSpawn();
 	virtual const char* CharaInit(const char* fileName);		//初期化・読み込み
+	virtual void Reset();
 	virtual void CharaUpdate();						//更新
 	virtual void DamageCalc(unsigned int atk);		//ダメージ計算
 	void SetDestination(D3DXVECTOR3 pos);			//目的地セット
 	void SetDeadCharaList(PlayerManager* chara);
-	void SetSpawn(Spawn* spawn);
+	void SetSpawn(std::vector<Spawn*> spawn);
 };
 

@@ -39,6 +39,27 @@ const char* Bomber::CharaInit(const char* fileName)
 	//ownWright_ = 0.001f;
 }
 
+//
+//	@brief	リセット
+void Bomber::Reset()
+{
+	hp_ = param_->hp_;
+	motionCount_ = 0;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	atkNo_ = noAtk;
+	revivalFlg_ = false;
+	callTiming_ = 0;
+	attackCount_ = 0;
+	bombFlg_ = false;
+	invinsibleFlg_ = false;
+	bombList_.clear();
+
+	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
+}
 
 //
 //	@brief	移動方向にキャラクターがいるか
@@ -145,7 +166,7 @@ void Bomber::Attack()
 		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{
 			bombList_.erase(bombList_.begin());
-
+			Sound::getInstance().SE_play("B_NORMALATK");
 			//delete b;
 			//b = nullptr;
 			//++count;
@@ -190,6 +211,7 @@ void Bomber::Normal_Attack()
 
 	if (++motionCount_%motionFrame_ == 0)
 	{
+		Sound::getInstance().SE_play("B_SPECIAL");
 		motionChange_ = true;
 		motionChange_ = true;
 		if (bombList_.empty() || bombList_.size() < size)
@@ -200,6 +222,7 @@ void Bomber::Normal_Attack()
 			bomb->SetAttack(param_->normalAtk_);
 			bomb->SetDamageList(allCharaList_, charaType_);
 			bomb->SetKnockBack(range, kDist, kSpeed);
+			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
 		}
 		atkNo_ = noAtk;
@@ -265,6 +288,7 @@ void Bomber::Move_Update()
 //	@param (atk)	攻撃者の攻撃力
 void Bomber::DamageCalc(unsigned int atk)
 {
+	Sound::getInstance().SE_play("B_DAMAGE");
 	float damage = 0;
 	if (invinsibleFlg_ == false)
 	{
@@ -278,6 +302,14 @@ void Bomber::DamageCalc(unsigned int atk)
 		aliveFlg_ = false;
 	}
 
+}
+
+
+//
+//	@brief	死亡音再生
+void Bomber::DeadSound()
+{
+	Sound::getInstance().SE_play("B_DEAD");
 }
 
 //

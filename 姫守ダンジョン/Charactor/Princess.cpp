@@ -30,11 +30,33 @@ const char* Princess::CharaInit(const char* fileName)
 }
 
 //
+//	@brief	リセット
+void Princess::Reset()
+{
+	motionCount_ = 0;
+	motionChange_ = true;
+	opponentWeight_ = 1;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	sealFlg_ = false;
+	resFlg_ = false;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	deadCharaList_.clear();
+	m_Pos = D3DXVECTOR3(0, 0, -12);
+	destination_ = m_Pos;
+	sealSpawn_ = nullptr;
+	spawnPosList_.clear();
+}
+
+//
 //	@brief	移動
 void Princess::Move(float speed)
 {
 	float dist = 1;
-	if (!collision_->CharaNear(m_Pos, destination_, dist))
+	//int spNo = collision_->SetSpaceNo(destination_);
+	//if (!collision_->CheckSpaceNo(spaceNo_, spNo))
+	if(!collision_->CharaNear(m_Pos,destination_,dist))
 	{
 		//方向ベクトル
 		D3DXVECTOR3 move = { 0,0,0 };
@@ -51,7 +73,7 @@ void Princess::Move(float speed)
 		float sp = speed;
 		m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-		if (motionNo_ != motion_->GetMotion("walk")->id_)
+		if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
 			motionNo_ = motion_->GetMotion("walk")->id_;
 			m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
@@ -62,11 +84,11 @@ void Princess::Move(float speed)
 	{
 		m_Dir = D3DXVECTOR3(0, 0, 0);
 
-		if (motionNo_ != motion_->GetMotion("wait")->id_)
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 		{
 			motionNo_ = motion_->GetMotion("wait")->id_;
 			m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("wait")->id_);
-			motionSpeed_ = 1/(float)motion_->GetMotion("wait")->frame_;
+			motionSpeed_ = 1 / (float)motion_->GetMotion("wait")->frame_;
 		}
 	}
 }
@@ -95,9 +117,12 @@ void Princess::SetDestination(D3DXVECTOR3 pos)
 
 //
 //	@brief	封印するスポーンゲートの取得
-void Princess::SetSpawn(Spawn* spawn)
+void Princess::SetSpawn(std::vector<Spawn*> spawn)
 {
-	spawnPosList_.push_back(spawn);
+	for (auto s : spawn)
+	{
+		spawnPosList_.push_back(s);
+	}
 }
 
 //
@@ -105,11 +130,15 @@ void Princess::SetSpawn(Spawn* spawn)
 void Princess::Seal()
 {
 	float dist = 5;
+	if (GetKeyState('C')&0x80)
+	{
+		dist = 1000;
+	}
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)
 		{
-			if (collision_->CharaNear(m_Pos, spawn->m_vPos, dist))
+			if (collision_->CharaNear(m_Pos, spawn->GetPos(), dist))
 			{
 				sealFlg_ = true;
 				sealSpawn_ = spawn;
@@ -123,19 +152,25 @@ void Princess::Seal()
 Spawn* Princess::SealSpawn()
 {
 
-	if (sealFlg_ == true )
+	if (sealFlg_ == true)
 	{
 		if (motionNo_ != motion_->GetMotion("prayer")->id_)
 		{
-			m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("prayer")->id_);
-			motionSpeed_ = 1 / (float)motion_->GetMotion("prayer")->frame_;
+			motionChange_ = false;
+			//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("prayer")->id_);
+			//motionSpeed_ = 1 / (float)motion_->GetMotion("prayer")->frame_;
+			ChangeMotion(motion_, "prayer");
 		}
 
 		if (++motionCount_%motion_->GetMotion("prayer")->frame_ == 0)
 		{
 			sealFlg_ = false;
-			return sealSpawn_;
 			motionCount_ = 0;
+			motionChange_ = true;
+			//ChangeMotion(motion_, "wait");
+			auto el = std::find(spawnPosList_.begin(), spawnPosList_.end(), sealSpawn_);
+			spawnPosList_.erase(el);
+			return sealSpawn_;
 		}
 	}
 	return nullptr;
@@ -145,13 +180,14 @@ Spawn* Princess::SealSpawn()
 //	@brief	蘇生
 void Princess::Resuscitation()
 {
-	float resDist = 100;
+	//float resDist = 100;
 	std::list<CharactorManager*> resList;
 	if (!deadCharaList_.empty())
 	{
 		for (auto c : deadCharaList_)
 		{
-			if (collision_->CharaNear(m_Pos, c->m_Pos, resDist))
+			//if (collision_->CharaNear(m_Pos, c->m_Pos, resDist))
+			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo()))
 			{
 
 				//if(motionNo_!=motion_->GetMotion("prayer"))
@@ -161,8 +197,8 @@ void Princess::Resuscitation()
 		}
 	}
 
-	
-	
+
+
 	if (!resList.empty())
 	{
 		for (auto c : resList)
@@ -185,6 +221,9 @@ void Princess::SetDeadCharaList(PlayerManager* chara)
 //	@brief	更新
 void Princess::CharaUpdate()
 {
+	//空間番号の更新
+	spaceNo_ = collision_->SetSpaceNo(m_Pos);
+
 	//移動
 	float speed = 0.01;
 	MoveCharaHit();

@@ -37,6 +37,28 @@ const char* Witch::CharaInit(const char* fileName)
 }
 
 //
+//	@brief	ÉäÉZÉbÉg
+void Witch::Reset()
+{
+	hp_ = param_->hp_;
+	motionCount_ = 0;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	atkNo_ = noAtk;
+	revivalFlg_ = false;
+	callTiming_ = 0;
+	attackCount_ = 0;
+	magicFlg_ = false;
+	magicBall_.clear();
+
+	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
+}
+
+
+//
 //	@brief	çUåÇ
 void Witch::Attack()
 {
@@ -99,10 +121,10 @@ void Witch::Attack()
 	{
 		int count = 0;
 		float kDist = param_->weaponDelDist_;
-		float kSpeed = param_->knockbackSpeed_;
+		float speed = 1;
 		for (size_t i = 0; i < magicBall_.size(); i++)
 		{
-			magicBall_[i]->Move_Weapon(kDist,kSpeed);
+			magicBall_[i]->Move_Weapon(kDist,speed);
 			if (magicBall_[i]->GetDelFlg())
 			{
 				magicBall_.erase(magicBall_.begin() + count);
@@ -141,6 +163,7 @@ void Witch::Normal_Attack()
 
 	if (++motionCount_%motionFrame_ == 0)
 	{
+		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		if (!magicFlg_)
@@ -149,10 +172,12 @@ void Witch::Normal_Attack()
 
 			D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 			magic->SetDir(vec);
+			magic->SetScale(0.001);
 			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed);
 			magic->SetAttack(param_->normalAtk_);
+			magic->SetHitSound("M_DAMAGE_HIT");
 			magicBall_.push_back(magic);
 			magicFlg_ = true;
 		}
@@ -182,6 +207,7 @@ void Witch::Special_Attack()
 
 	if (++motionCount_%motionFrame_ == 0)
 	{
+		Sound::getInstance().SE_play("M_SPECIAL");
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		if (!magicFlg_)
@@ -200,6 +226,7 @@ void Witch::Special_Attack()
 				magic->SetDamageList(allCharaList_, charaType_);
 				magic->SetKnockBack(kRange, kDist, kSpeed);
 				magic->SetAttack(param_->specialAtk_);
+				magic->SetHitSound("M_DAMAGE_HIT");
 				magicBall_.push_back(magic);
 			}
 			magicFlg_ = true;
@@ -207,6 +234,18 @@ void Witch::Special_Attack()
 	}
 
 	
+}
+
+void Witch::DamageSound()
+{
+	Sound::getInstance().SE_play("M_DAMAGE");
+}
+
+//
+//	@brief	éÄñSâπçƒê∂
+void Witch::DeadSound()
+{
+	Sound::getInstance().SE_play("M_DEAD");
 }
 
 //

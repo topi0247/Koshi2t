@@ -34,6 +34,8 @@ Main_Scene::Main_Scene()
 	slime_ = new CD3DXSKINMESH;
 	//virEnemy_ = new Slim;
 
+	spawnManager_ = new SpawnManager;
+
 	camera_ = new Camera;
 }
 
@@ -44,12 +46,15 @@ Main_Scene::~Main_Scene()
 	delete stage_;
 	stage_ = nullptr;
 
-	if (spawn_ != nullptr)
-	{
-		SAFE_DELETE(spawn_);
+	//if (spawn_ != nullptr)
+	//{
+		//SAFE_DELETE(spawn_);
 		//delete spawn_;
 		//spawn_ = nullptr;
-	}
+	//}
+
+	delete spawnManager_;
+	spawnManager_ = nullptr;
 
 	//delete ray_;
 	//ray_ = nullptr;
@@ -107,6 +112,9 @@ Main_Scene::~Main_Scene()
 	uimagic_ = nullptr;
 	delete uibom_;
 	uibom_ = nullptr;
+
+	delete uititle_;
+	uititle_ = nullptr;
 }
 
 //
@@ -142,9 +150,10 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 
 	//スポーンの設定
 	xfile = xfileRead->GetXFile("スポーン1");
-	spawnAmount_ = 1;
+	spawnManager_->Init(xfile->GetFileName());
+	/*spawnAmount_ = 1;
 	spawn_ = new Spawn;
-	spawn_->SpawnInit(xfile->GetFileName());
+	spawn_->SpawnInit(xfile->GetFileName());*/
 
 	//仮キャラファイル読み込み
 	char name[80];
@@ -194,7 +203,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	//princess_->CharaInit(xfile->GetFileName());
 	princess_->SetMotionData(motionRead_->GetMotionUser("姫"));
 	princess_->m_Pos = D3DXVECTOR3(0, 0, -12);
-	princess_->SetSpawn(spawn_);
+	princess_->SetSpawn(spawnManager_->GetSpawnList());
 
 
 
@@ -236,10 +245,19 @@ HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
 
 HRESULT Main_Scene::EffectInit(ID3D11DeviceContext* m_pDeviceContext)
 {
-	uisword_ = new D3D11_SPRITE;
+	
 	deviceContext_ = m_pDeviceContext;
-	float scaleF = 7;
-	D3DXVECTOR3 scale(scaleF, scaleF, scaleF);
+	float scaleF = 10;
+	D3DXVECTOR3 scale(scaleF, 5, scaleF);
+
+	uititle_ = new D3D11_SPRITE;
+	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
+	if (FAILED(uititle_->CreateEffects(L"./Effect/Effect_Tex/title.png", true, D3DXVECTOR2(1, 1), 1,D3DXVECTOR3(20,20,20))))
+	{
+		return E_FAIL;
+	}
+
+	uisword_ = new D3D11_SPRITE;
 	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
 	if (FAILED(uisword_->CreateEffects(L"./Effect/Effect_Tex/UISword.png", true, D3DXVECTOR2(1, 1), 5, scale)))
 	{
@@ -263,6 +281,9 @@ HRESULT Main_Scene::EffectInit(ID3D11DeviceContext* m_pDeviceContext)
 	{
 		return E_FAIL;
 	}
+
+	
+
 	return S_OK;
 }
 
@@ -285,6 +306,26 @@ void Main_Scene::Update()
 		break;
 	}
 
+	//リセット処理(デバッグ用)
+	if (GetKeyState('R') & 0x80)
+	{
+		for (auto c : charList_)
+		{
+			c->Reset();
+		}
+		enemyList_.clear();
+		charList_.clear();
+
+		for (int i = 0; i < 4; i++)
+		{
+			charList_.push_back(virChar_[i]);
+		}
+		charList_.push_back(princess_);
+		spawnManager_->Reset();
+
+		princess_->SetSpawn(spawnManager_->GetSpawnList());
+	}
+
 	//カメラの更新
 	for (int i = 0; i < 4; i++)
 	{
@@ -302,7 +343,7 @@ void Main_Scene::GameStart()
 	//{
 	//	scene_ = MainS;
 	//}
-
+	spawnFlg_ = false;
 	if (GetKeyState(VK_RETURN) & 0x80)
 	{
 		scene_ = MainS;
@@ -313,37 +354,52 @@ void Main_Scene::GameStart()
 //	@brief	ゲームメイン
 void Main_Scene::GameMain()
 {
-	//エネミースポーン処理
-	if (++time_ % (FPS * 5) == 0 && spawn_ != nullptr)
+	Sound::getInstance().BGM_play("SENTOU");
+
+	//デバッグ用
+	if (GetKeyState('E') & 0x80)
 	{
-		spawn_->ListSet(parameter, princess_);
-		std::vector<EnemyJobManager*> temp = spawn_->EnemySpawn();
-		for (auto e : temp)
-		{
-			//e->SetTarget(princess_);
-			enemyList_.push_back(e);
-			charList_.push_back(e);
-		}
-		spawn_->ListReset();
-		temp.clear();
+		scene_ = EndS;
+	}
+	if (GetKeyState('S') & 0x80)
+	{
+		spawnFlg_ = true;
 	}
 
-
-
-	//エネミーターゲット更新
-	if (!enemyList_.empty())
+	////エネミースポーン処理
+	if (spawnFlg_ == true)
 	{
-		for (auto enemy : enemyList_)
+		if (enemyList_.size() < 1)
 		{
-			//プレイヤーループ
-			for (int i = 0; i < 4; i++)
+			spawnManager_->Update(parameter, princess_);
+			std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
+			if (!temp.empty())
 			{
-				//プレイヤーとエネミーが一定の距離内
-				//float dist = 5.0;
-				//if (ray_->CharaNear(enemy->m_Pos, virChar_[i]->m_Pos, dist))
-				//{
-				enemy->Target_Update(virChar_[i], princess_);
-				//}
+				for (auto e : temp)
+				{
+					enemyList_.push_back(e);
+					charList_.push_back(e);
+				}
+				temp.clear();
+			}
+		}
+
+
+		//エネミーターゲット更新
+		if (!enemyList_.empty())
+		{
+			for (auto enemy : enemyList_)
+			{
+				//プレイヤーループ
+				for (int i = 0; i < 4; i++)
+				{
+					//プレイヤーとエネミーが一定の距離内
+					//float dist = 5.0;
+					//if (ray_->CharaNear(enemy->m_Pos, virChar_[i]->m_Pos, dist))
+					//{
+					enemy->Target_Update(virChar_[i], princess_);
+					//}
+				}
 			}
 		}
 	}
@@ -374,12 +430,8 @@ void Main_Scene::GameMain()
 
 	princess_->SetDestination(pos);
 
-	if (princess_->SealSpawn() != nullptr)
-	{
-		delete spawn_;
-		spawn_ = nullptr;
-	}
-
+	//スポーンゲート消滅
+	spawnManager_->SealSpawn(princess_->SealSpawn());
 
 	//衝突判定の更新
 	CollisionControl();
@@ -420,6 +472,24 @@ void Main_Scene::GameEnd()
 	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		scene_ = StartS;
+
+		princess_->SetSpawn(spawnManager_->GetSpawnList());
+
+		for (auto c : charList_)
+		{
+			c->Reset();
+		}
+		enemyList_.clear();
+		charList_.clear();
+
+		for (int i = 0; i < 4; i++)
+		{
+			charList_.push_back(virChar_[i]);
+		}
+		charList_.push_back(princess_);
+		spawnManager_->Reset();
+
+		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
 }
 
@@ -534,6 +604,9 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 	//ステージの描画
 	stage_->Render();
 
+	//スポーンゲートの描画
+	spawnManager_->Render();
+
 	EffectRender();
 
 	//virEnemy_->CharaRender(mView, mProj);
@@ -560,16 +633,16 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 		}
 	}
 
-	if (spawn_ != nullptr)
-	{
-		//for (int i = 0; i < spawnAmount_; i++)
-		//{
-		if (spawn_ != nullptr)
-		{
-			spawn_->SpawnRender();
-		}
-		//}
-	}
+	//if (spawn_ != nullptr)
+	//{
+	//	//for (int i = 0; i < spawnAmount_; i++)
+	//	//{
+	//	if (spawn_ != nullptr)
+	//	{
+	//		//spawn_->SpawnRender();
+	//	}
+	//	//}
+	//}
 
 	PlayerDebug();
 	EnemyDebug();
@@ -598,10 +671,19 @@ void Main_Scene::EffectRender()
 	CancelRotation._41 = CancelRotation._42 = CancelRotation._43 = 0;
 	D3DXMatrixInverse(&CancelRotation, NULL, &CancelRotation);
 	World2 = CancelRotation * World2;
-	uisword_->RenderSprite(World2, D3DXVECTOR3(-20, 0, -25));
-	uiseeld_->RenderSprite(World2, D3DXVECTOR3(-10, 0, -25));
-	uimagic_->RenderSprite(World2, D3DXVECTOR3(0, 0, -25));
-	uibom_->RenderSprite(World2, D3DXVECTOR3(10, 0, -25));
+	
+	if (scene_ != MainS)
+	{
+		uititle_->RenderSprite(World2, D3DXVECTOR3(-5, 5, -13));
+	}
+	else
+	{
+		uisword_->RenderSprite(World2, D3DXVECTOR3(-20, 0, -25));
+		uiseeld_->RenderSprite(World2, D3DXVECTOR3(-10, 0, -25));
+		uimagic_->RenderSprite(World2, D3DXVECTOR3(0, 0, -25));
+		uibom_->RenderSprite(World2, D3DXVECTOR3(10, 0, -25));
+	}
+	
 	//uisword_->RenderSprite(World*mView*mProj);	
 	/*uisword_->RenderSprite(mView, mProj, virChar_[player1]->m_vPos.x, virChar_[player1]->m_vPos.y, virChar_[player1]->m_vPos.z);*/
 	//float xaaaa = hikari_->m_vSize.x / 2;// hikari_->m_dwWindowWidth / 2 * hikari_->m_vSize.x;	
@@ -627,16 +709,35 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "spaceNo %d", virChar_[Player1]->GetSpaceNo());
-	debugText_->Render(str,0 , 10);
-	sprintf(str, "%d", virChar_[Player1]->GetHP());
-	debugText_->Render(str, 370, 952);
-	sprintf(str, "%d", virChar_[Player2]->GetHP());
-	debugText_->Render(str, 775, 952);
-	sprintf(str, "%d", virChar_[Player3]->GetHP());
-	debugText_->Render(str, 1195, 952);
-	sprintf(str, "%d", virChar_[Player4]->GetHP());
-	debugText_->Render(str, 1620, 952);
+
+	//sprintf(str, "yaw %f", virChar_[Player1]->m_Yaw);
+	//debugText_->Render(str, 0, 150);
+	//sprintf(str, "spaceNo %d", virChar_[Player1]->GetSpaceNo());
+	//debugText_->Render(str, 0, 80);
+	//sprintf(str, "aroundC %d", virChar_[Player1]->GetAroundC());
+	
+	if(scene_ == MainS)
+	{
+		sprintf(str, "x %f", GamePad::getAnalogValue(0, GamePad::AnalogName::AnalogName_LeftStick_X));
+		debugText_->Render(str, 0, 50);
+		sprintf(str, "y %f", GamePad::getAnalogValue(0, GamePad::AnalogName::AnalogName_LeftStick_Y));
+		debugText_->Render(str, 0, 70);
+
+		float d = D3DXToDegree(virChar_[Player1]->m_Yaw);
+		float a = D3DXToDegree(virChar_[Player2]->m_Yaw);
+		sprintf(str, "angle %f", d/*fabsf(d - a)*/);
+		debugText_->Render(str, 0, 110);
+
+		sprintf(str, "%d", virChar_[Player1]->GetHP());
+		debugText_->Render(str, 370, 1000);
+		sprintf(str, "%d", virChar_[Player2]->GetHP());
+		debugText_->Render(str, 780, 1000);
+		sprintf(str, "%d", virChar_[Player3]->GetHP());
+		debugText_->Render(str, 1200, 1000);
+		sprintf(str, "%d", virChar_[Player4]->GetHP());
+		debugText_->Render(str, 1625, 1000);
+	}
+	
 	//sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player2]->GetAtkState());
 	//debugText_->Render(str, 0, 10);
 	////sprintf(str, "alive : %d", virChar_[Player2]->GetAliveFlg());

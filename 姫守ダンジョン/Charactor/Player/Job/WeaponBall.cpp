@@ -48,7 +48,7 @@ void WeaponBall::SetDir(D3DXVECTOR3 dir)
 //	@param (scale) 変更するサイズ
 void WeaponBall::SetScale(float scale)
 {
-	weaponBall_->m_fScale += scale;
+	weaponBall_->m_fScale = scale;
 }
 
 //
@@ -57,6 +57,7 @@ void WeaponBall::SetStartPos(D3DXVECTOR3 pos)
 {
 	startPos_ = pos;
 	weaponBall_->m_vPos = pos;
+	spaceNo_ = col_->SetSpaceNo(startPos_);
 }
 //
 //	@brief	攻撃力セット
@@ -78,6 +79,8 @@ void WeaponBall::Move_Weapon(float dist,float speed)
 	{
 		delFlg_ = true;
 	}
+
+	spaceNo_ = col_->SetSpaceNo(weaponBall_->m_vPos);
 	
 	Hit();
 }
@@ -103,7 +106,7 @@ void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType c
 	{
 		if (c->GetCharaType() != cType)
 		{
-			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
+			if (col_->CheckSpaceNo(spaceNo_,c->GetSpaceNo()))
 			{
 				damageList_.push_back(c);
 			}
@@ -149,6 +152,8 @@ void WeaponBall::Hit()
 				if (c->GetCharaType() == Enemy)
 				{
 					c->DamageCalc(atk_);
+					//敵にダメージが入った時のSE
+					Sound::getInstance().SE_play(hitSoundName_);
 				}
 			}
 		}
@@ -165,6 +170,13 @@ void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed)
 	dist_ = dist;
 	kDist_ = kDist;
 	kSpeed_ = kSpeed;
+}
+
+//
+//	@brief	ヒットサウンド設定
+void WeaponBall::SetHitSound(std::string name)
+{
+	hitSoundName_ = name;
 }
 
 ////

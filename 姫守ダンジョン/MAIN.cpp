@@ -116,6 +116,7 @@ void MAIN::Loop()
 	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
 	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
 
+	Sound::getInstance().Run();
 
 	// メッセージループ
 	MSG msg = { 0 };

@@ -9,10 +9,24 @@
 
 EnemyJobManager::EnemyJobManager()
 {
+	motionNo_ = 1;
 }
 
 EnemyJobManager::~EnemyJobManager()
 {
+}
+
+//
+//	@brief	リセット
+void EnemyJobManager::Reset()
+{
+	hp_ = param_->hp_;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+
 }
 
 void EnemyJobManager::CharaUpdate()
@@ -52,6 +66,21 @@ void Goblin::NormalAttack()
 }
 
 //=======スケルトン======//
+
+
+//
+//	@brief	リセット
+void Skeleton::Reset()
+{
+	hp_ = param_->hp_;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	atkList_.clear();
+}
+
 void Skeleton::NormalAttack()
 {
 	float dist = 1;

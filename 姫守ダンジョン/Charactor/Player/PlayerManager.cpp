@@ -95,6 +95,7 @@ void PlayerManager::Move(float speed)
 //	@brief	ダメージ計算
 void PlayerManager::DamageCalc(unsigned int atk)
 {
+	DamageSound();
 	float damage = atk / (1 + ((float)param_->def_ / 100));
 	hp_ -= damage;
 
@@ -118,6 +119,7 @@ void PlayerManager::Dead()
 		//motionNo_ = motion_->GetMotion("dead")->id_;
 		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		//motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+		DeadSound();
 		ChangeMotion(motion_, "dead");
 	}
 
@@ -175,6 +177,7 @@ void PlayerManager::Princess_Call()
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
 			ChangeMotion(motion_, "call");
+			
 		}
 	}
 
@@ -182,10 +185,11 @@ void PlayerManager::Princess_Call()
 	{
 		if (++motionCount_%motionFrame_ == 0)
 		{
-			revivalFlg_ = false;
-			moveAbleFlg_ = false;
+			//revivalFlg_ = false;
+			moveAbleFlg_ = true;
 			motionChange_ = true;
 			motionCount_ = 0;
+			//ChangeMotion(motion_, "wait");
 		}
 	}
 

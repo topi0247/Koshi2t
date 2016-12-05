@@ -27,6 +27,7 @@ protected:
 public:
 	JobManager(CharaType charaType);
 	virtual ~JobManager();
+
 	virtual void CharaUpdate();
 	//template<class> p;
 	void SetParameter(JobParameter* param);

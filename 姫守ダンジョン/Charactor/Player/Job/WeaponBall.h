@@ -7,6 +7,8 @@
 class WeaponBall
 {
 private:
+	std::string hitSoundName_;
+	unsigned int spaceNo_;
 	Collision* col_;
 	CD3DXMESH* weaponBall_;
 	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
@@ -32,6 +34,7 @@ public:
 	void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
 	void SetKnockBack(float dist, float kDist,float kSpeed);
+	void SetHitSound(std::string name);
 	void Render(D3DXVECTOR3 pos);
 	bool GetDelFlg()const;
 	

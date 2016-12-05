@@ -18,10 +18,13 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void MoveCharaHit();
+	virtual void DeadSound();
+	virtual void DamegeSound() {};
 public:
 	Bomber(CharaType charaType);
 	virtual ~Bomber();
 	virtual const char* CharaInit(const char* fileName);
+	virtual void Reset();
 	virtual void Attack();
 	virtual void Move_Update();
 	virtual void DamageCalc(unsigned int atk);					//ダメージ計算

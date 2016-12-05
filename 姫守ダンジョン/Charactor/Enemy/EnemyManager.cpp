@@ -62,6 +62,7 @@ void EnemyManager::SetParameter(EnemyParameter* param)
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
+
 	//hp_ = 10000;
 }
 
@@ -174,12 +175,12 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	/*if (motionNo_ != motion_->GetMotion("walk")->id_)
-	{
-		motionNo_ = motion_->GetMotion("walk")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-	}*/
+	//if (motionNo_ != 0)
+	//{
+	//	motionNo_ = 0;
+	//	m_pD3dxMesh->ChangeAnimSet(0);
+	//	motionSpeed_ = 0.01;
+	//}
 
 }
 
@@ -187,6 +188,7 @@ void EnemyManager::Move(float speed)
 //	@brief	ダメージ計算
 void EnemyManager::DamageCalc(unsigned int atk)
 {
+
 	float damage = atk / (1 + ((float)param_->def_ / 100));
 
 	if (hp_ <= damage)

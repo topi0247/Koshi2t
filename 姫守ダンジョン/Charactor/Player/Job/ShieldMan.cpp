@@ -12,6 +12,26 @@ ShieldMan::~ShieldMan()
 }
 
 //
+//	@brief	リセット
+void ShieldMan::Reset()
+{
+	hp_ = param_->hp_;
+	motionCount_ = 0;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	atkNo_ = noAtk;
+	revivalFlg_ = false;
+	callTiming_ = 0;
+	attackCount_ = 0;
+	spMoveFlg_ = false;
+
+	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
+}
+
+//
 //	@brief	攻撃
 void ShieldMan::Attack()
 {
@@ -72,6 +92,8 @@ void ShieldMan::Normal_Attack()
 	//Normal_Attack_Collision();
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
+		Sound::getInstance().SE_play("Sh_NORMALATK");
+
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("attack1")->id_;
 		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
@@ -185,7 +207,7 @@ void ShieldMan::Attack_Collision(float hitAngle)
 	{
 		backDist = param_->knockbackDist_;
 	}
-	
+
 
 
 	if (!aroundCharaList_.empty())
@@ -203,9 +225,12 @@ void ShieldMan::Attack_Collision(float hitAngle)
 				{
 					hit = true;
 					chara->SetKnockBack(m_Pos, backDist, backSpeed);
-					if (chara->GetCharaType() == Enemy && atkNo_==normalAtk)
+					if (chara->GetCharaType() == Enemy && atkNo_ == normalAtk)
 					{
 						chara->DamageCalc(param_->normalAtk_);
+
+						//敵にダメージが入った時のSE
+						Sound::getInstance().SE_play("Sh_DAMAGE_HIT");
 					}
 				}
 				else
@@ -260,6 +285,8 @@ void ShieldMan::Attack_Collision(float hitAngle)
 //	@brief	ダメージ計算
 void ShieldMan::DamageCalc(unsigned int atk)
 {
+	Sound::getInstance().SE_play("Sh_DAMAGE");
+
 	float damage = 0;
 	float constant = 1;
 	if (atkNo_ != specialAtk)
@@ -280,6 +307,80 @@ void ShieldMan::DamageCalc(unsigned int atk)
 
 }
 
+
+//
+//	@brief			移動処理
+//	@param (speed)	移動速度
+void ShieldMan::Move(float speed)
+{
+	//スティックの傾き取得
+	D3DXVECTOR3 inputStick;
+	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+
+	//回転処理
+	const float rotEpsilon = 0.3;
+	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	{
+		Rotation(inputStick);
+	}
+
+
+	//移動
+	const float moveEpsilon = 0.2;	//誤作防止用
+	float sp = 0;
+	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+	{
+		sp = speed;
+
+		if (motionChange_ == true)
+		{
+			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("walk")->id_)
+			{
+				ChangeMotion(motion_, "walk");
+			}
+			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
+			{
+				Sound::getInstance().SE_play("Sh_SPECIAL");
+				ChangeMotion(motion_, "specialWalk");
+			}
+		}
+	}
+	else
+	{
+
+		if (motionChange_ == true)
+		{
+			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
+			{
+				ChangeMotion(motion_, "wait");
+			}
+		}
+	}
+
+	//opponentWeight_ = 1;
+
+	MoveCharaHit();
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+
+	GamePad::update();
+
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+
+}
+
+
+//
+//	@brief	死亡音再生
+void ShieldMan::DeadSound()
+{
+	Sound::getInstance().SE_play("Sh_DEAD");
+}
+
+
 //
 //	@breif	盾士用移動処理
 void ShieldMan::Move_Update()
@@ -291,14 +392,6 @@ void ShieldMan::Move_Update()
 		if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
 		{
 			m_Pos += m_Dir;
-			if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
-			{
-				//motionNo_ = motion_->GetMotion("walk")->id_;
-				//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
-				//モーション速度
-				//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-				ChangeMotion(motion_, "walk");
-			}
 		}
 		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
 		{
@@ -308,15 +401,6 @@ void ShieldMan::Move_Update()
 		{
 			float sp = param_->specialMoveSpeed_;
 			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
-			if (motionChange_ == true && motionNo_ != motion_->GetMotion("specialWalk")->id_)
-			{
-				motionChange_ = false;
-				//motionNo_ = motion_->GetMotion("specialWalk")->id_;
-				//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("specialWalk")->id_);
-				//モーション速度
-				//motionSpeed_ = 1 / (float)motion_->GetMotion("specialWalk")->frame_;
-				ChangeMotion(motion_, "specialWalk");
-			}
 		}
 	}
 }

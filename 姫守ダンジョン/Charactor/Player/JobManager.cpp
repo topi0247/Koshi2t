@@ -69,12 +69,13 @@ void JobManager::SetParameter(JobParameter* param)
 	hp_ = param_->hp_;
 }
 
+
 //
 //	@brief	キャラの更新
 void JobManager::CharaUpdate()
 {
 	//空間番号の更新
-	spaceNo_=collision_->SetSpaceNo(m_Pos);
+	spaceNo_ = collision_->SetSpaceNo(m_Pos);
 
 	//周辺にいるキャラチェック
 	AroundCharaCheck();

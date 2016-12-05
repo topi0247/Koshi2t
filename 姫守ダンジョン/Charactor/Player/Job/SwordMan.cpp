@@ -12,6 +12,29 @@ SwordMan::~SwordMan()
 }
 
 //
+//	@brief	ƒŠƒZƒbƒg
+
+//
+//	@brief	ƒŠƒZƒbƒg
+void SwordMan::Reset()
+{
+	hp_ = param_->hp_;
+	motionCount_ = 0;
+	motionChange_ = true;
+	aliveFlg_ = true;
+	moveAbleFlg_ = true;
+	aroundCharaList_.clear();
+	allCharaList_.clear();
+	atkNo_ = noAtk;
+	revivalFlg_ = false;
+	callTiming_ = 0;
+	attackCount_ = 0;
+
+	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
+}
+
+
+//
 //	@brief	UŒ‚
 void SwordMan::Attack()
 {
@@ -90,6 +113,8 @@ void SwordMan::Normal_Attack()
 	Normal_Attack_Collision();
 	if (motionChange_==true && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
+		Sound::getInstance().SE_play("S_NORMALATK");
+
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("attack1")->id_;
 		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
@@ -112,7 +137,6 @@ void SwordMan::Normal_Attack()
 		motionChange_ = true;
 	}
 }
-
 //
 //	@brief	’ÊíUŒ‚“–‚½‚è”»’è
 void SwordMan::Normal_Attack_Collision()
@@ -140,6 +164,8 @@ void SwordMan::Normal_Attack_Collision()
 					chara->SetKnockBack(m_Pos, backDist,speed);
 					if (chara->GetCharaType() == Enemy)
 					{
+						//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½Žž‚ÌSE
+						Sound::getInstance().SE_play("S_DAMAGE_HIT");
 						chara->DamageCalc(param_->normalAtk_);
 					}
 				}
@@ -152,6 +178,11 @@ void SwordMan::Normal_Attack_Collision()
 	}
 }
 
+void SwordMan::DamageSound()
+{
+	Sound::getInstance().SE_play("S_DAMAGE");
+}
+
 //
 //	@brief	“ÁŽêUŒ‚
 void SwordMan::Special_Attack()
@@ -160,6 +191,8 @@ void SwordMan::Special_Attack()
 
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
 	{
+		Sound::getInstance().SE_play("S_SPECIAL");
+
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("special")->id_;
 		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
@@ -181,6 +214,13 @@ void SwordMan::Special_Attack()
 }
 
 //
+//	@brief	Ž€–S‰¹Ä¶
+void SwordMan::DeadSound()
+{
+	Sound::getInstance().SE_play("S_DEAD");
+}
+
+//
 //	@brief	“ÁŽêUŒ‚“–‚½‚è”»’è
 void SwordMan::Special_Attack_Collision()
 {
@@ -198,6 +238,8 @@ void SwordMan::Special_Attack_Collision()
 				chara->SetKnockBack(m_Pos, backDist,backSpeed);
 				if (chara->GetCharaType() == Enemy)
 				{
+					//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½Žž‚ÌSE
+					Sound::getInstance().SE_play("S_DAMAGE_HIT");
 					chara->DamageCalc(param_->specialAtk_);
 				}
 			}

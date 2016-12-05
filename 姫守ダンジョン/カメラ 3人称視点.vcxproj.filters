@@ -77,6 +77,12 @@
     <ClCompile Include="Effect\Effect.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Read\SpawnGateRead.cpp">
+      <Filter>Read</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffect\Sound.cpp">
+      <Filter>SoundEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -162,6 +168,12 @@
     <ClInclude Include="Effect\Effect.h">
       <Filter>Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Read\SpawnGateRead.h">
+      <Filter>Read</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffect\Sound.h">
+      <Filter>SoundEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">
@@ -190,6 +202,9 @@
     </Filter>
     <Filter Include="Effect">
       <UniqueIdentifier>{122ecbac-73b4-461b-b62b-5ae9c2e3dd5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SoundEffect">
+      <UniqueIdentifier>{e872b0bf-5851-43a9-880c-81b617b3bb08}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

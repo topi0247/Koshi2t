@@ -13,10 +13,13 @@ class Witch :public JobManager
 private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
+	virtual void DeadSound();
+	virtual void DamageSound();
 public:
 	Witch(CharaType charaType);
 	virtual ~Witch();
 	virtual const char* CharaInit(const char* fileName);
+	virtual void Reset();
 	virtual void Attack();
 	virtual void CharaRender();
 };

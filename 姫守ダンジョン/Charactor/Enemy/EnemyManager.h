@@ -45,6 +45,8 @@ protected:
 	virtual void NormalAttack() = 0;
 	virtual void Dead();				//死亡
 	virtual void DamageCalc(unsigned int atk);
+	virtual void DamageSound() {};		//ダメージサウンド
+
 public:
 	EnemyManager() ;
 	virtual ~EnemyManager();

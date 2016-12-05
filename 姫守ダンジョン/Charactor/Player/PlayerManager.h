@@ -40,8 +40,8 @@ struct PlayerParameter
 class PlayerManager : public CharactorManager
 {
 private:
-	double callTiming_;		//姫を呼んだクロック時間
 protected:
+	double callTiming_;		//姫を呼んだクロック時間
 
 
 	//攻撃状態番号
@@ -66,6 +66,7 @@ protected:
 	virtual void Move(float speed);		//移動処理
 	virtual void Dead();				//死亡
 	void Revival();						//復活
+	virtual void DeadSound() {};			//死亡時サウンド
 
 public:
 	PlayerManager();
