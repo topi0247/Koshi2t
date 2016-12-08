@@ -2,7 +2,7 @@
 //	@file	JobManager.h
 //	@brief	E‹Æ–ˆ‚Ìˆ—
 //	@date	2016/11/10
-//	@outher	m‰È•c
+//	@author	m‰È•c
 
 #pragma once
 #include "./../Player/PlayerManager.h"

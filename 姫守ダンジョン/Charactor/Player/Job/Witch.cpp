@@ -1,3 +1,10 @@
+//
+//	@file	Witch.cpp
+//	@brief	魔導士クラス
+//	@date	2016/11/21
+//	@author	仁科香苗
+//	@author	吉越大騎(サウンド)
+
 #include "./Witch.h"
 
 
@@ -166,21 +173,7 @@ void Witch::Normal_Attack()
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		if (!magicFlg_)
-		{
-			WeaponBall* magic = new WeaponBall();
-
-			D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-			magic->SetDir(vec);
-			magic->SetScale(0.001);
-			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
-			magic->SetDamageList(allCharaList_, charaType_);
-			magic->SetKnockBack(kRange, kDist, kSpeed);
-			magic->SetAttack(param_->normalAtk_);
-			magic->SetHitSound("M_DAMAGE_HIT");
-			magicBall_.push_back(magic);
-			magicFlg_ = true;
-		}
+		InstanceMagicBall(param_->chainWeapon_);
 	}
 
 	
@@ -190,10 +183,7 @@ void Witch::Normal_Attack()
 //	@brief	特殊攻撃
 void Witch::Special_Attack()
 {
-	float kRange = param_->weaponHitReach_;
-	float kDist = param_->knockbackDist_;
-	float kSpeed = param_->knockbackSpeed_;
-	magicBallCount_ = param_->spChainWeapon_;
+	
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionChange_ = false;
@@ -210,32 +200,46 @@ void Witch::Special_Attack()
 		Sound::getInstance().SE_play("M_SPECIAL");
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		if (!magicFlg_)
-		{
-			float angle = D3DXToDegree(m_Yaw);
-			for (int i = 0; i < magicBallCount_; i++)
-			{
-				WeaponBall* magic = new WeaponBall;
-				int degree = 90 / (magicBallCount_ / 2 + 1);
-				float temp = angle - 90 + degree + degree*i;
-				temp = D3DXToRadian(temp);
-				D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
-				magic->SetDir(vec);
-				magic->SetScale(0.5);
-				magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
-				magic->SetDamageList(allCharaList_, charaType_);
-				magic->SetKnockBack(kRange, kDist, kSpeed);
-				magic->SetAttack(param_->specialAtk_);
-				magic->SetHitSound("M_DAMAGE_HIT");
-				magicBall_.push_back(magic);
-			}
-			magicFlg_ = true;
-		}
+		InstanceMagicBall(param_->spChainWeapon_);
 	}
 
 	
 }
 
+//
+//	@brief	マジックボール生成
+void Witch::InstanceMagicBall(int count)
+{
+	float kRange = param_->weaponHitReach_;
+	float kDist = param_->knockbackDist_;
+	float kSpeed = param_->knockbackSpeed_;
+	magicBallCount_ = count;
+
+	if (!magicFlg_)
+	{
+		float angle = D3DXToDegree(m_Yaw);
+		for (int i = 0; i < magicBallCount_; i++)
+		{
+			WeaponBall* magic = new WeaponBall;
+			int degree = 90 / (magicBallCount_ / 2 + 1);
+			float temp = angle - 90 + degree + degree*i;
+			temp = D3DXToRadian(temp);
+			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
+			magic->SetDir(vec);
+			magic->SetScale(0.5);
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
+			magic->SetDamageList(allCharaList_, charaType_);
+			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
+			magic->SetAttack(param_->specialAtk_);
+			magic->SetHitSound("M_DAMAGE_HIT");
+			magicBall_.push_back(magic);
+		}
+		magicFlg_ = true;
+	}
+}
+
+//
+//	@brief	被ダメ時のSE再生
 void Witch::DamageSound()
 {
 	Sound::getInstance().SE_play("M_DAMAGE");

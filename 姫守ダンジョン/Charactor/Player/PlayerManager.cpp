@@ -2,7 +2,7 @@
 //	@file	PlayerManager.cpp
 //	@brief	ƒvƒŒƒCƒ„[ŠÇ—ƒNƒ‰ƒX
 //	@date	2016/11/09
-//	@outher	m‰È•c
+//	@author	m‰È•c
 
 #include "PlayerManager.h"
 
@@ -37,58 +37,64 @@ const char* PlayerManager::CharaInit(const char* fileName)
 //	@param (speed)	ˆÚ“®‘¬“x
 void PlayerManager::Move(float speed)
 {
-		//ƒXƒeƒBƒbƒN‚ÌŒX‚«Žæ“¾
-		D3DXVECTOR3 inputStick;
-		inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
-		inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		return;
+	}
 
-		//‰ñ“]ˆ—
-		const float rotEpsilon = 0.3;
-		if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	//ƒXƒeƒBƒbƒN‚ÌŒX‚«Žæ“¾
+	D3DXVECTOR3 inputStick;
+	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+
+	//‰ñ“]ˆ—
+	const float rotEpsilon = 0.3;
+	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	{
+		Rotation(inputStick);
+	}
+
+
+	//ˆÚ“®
+	const float moveEpsilon = 0.2;	//Œëì–hŽ~—p
+	float sp = 0;
+	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+	{
+		sp = speed;
+
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
-			Rotation(inputStick);
+			//motionNo_ = motion_->GetMotion("walk")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
+			//ƒ‚[ƒVƒ‡ƒ“‘¬“x
+			//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			ChangeMotion(motion_, "walk");
 		}
-
-
-		//ˆÚ“®
-		const float moveEpsilon = 0.2;	//Œëì–hŽ~—p
-		float sp = 0;
-		if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+	}
+	else
+	{
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 		{
-			sp = speed;
-
-			if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
-			{
-				//motionNo_ = motion_->GetMotion("walk")->id_;
-				//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
-				//ƒ‚[ƒVƒ‡ƒ“‘¬“x
-				//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-				ChangeMotion(motion_, "walk");
-			}
+			//motionNo_ = motion_->GetMotion("wait")->id_;
+			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+			//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			ChangeMotion(motion_, "wait");
 		}
-		else
-		{
-			if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
-			{
-				//motionNo_ = motion_->GetMotion("wait")->id_;
-				//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-				//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-				ChangeMotion(motion_, "wait");
-			}
-		}
+	}
 
-		//opponentWeight_ = 1;
+	//opponentWeight_ = 1;
 
-		MoveCharaHit();
+	MoveCharaHit();
 
-		m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
-		//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
-		GamePad::update();
+	GamePad::update();
 
-		//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
-		//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
-	
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+
 }
 
 //
@@ -99,7 +105,7 @@ void PlayerManager::DamageCalc(unsigned int atk)
 	float damage = atk / (1 + ((float)param_->def_ / 100));
 	hp_ -= damage;
 
-	if (hp_ <= 0 || param_->hp_<hp_)
+	if (hp_ <= 0 || param_->hp_ < hp_)
 	{
 		hp_ = 0;
 		aliveFlg_ = false;
@@ -165,7 +171,7 @@ void PlayerManager::Revival()
 //	@brief	•PŒÄ‚Ñ
 void PlayerManager::Princess_Call()
 {
-	if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_==noAtk)
+	if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_ == noAtk)
 	{
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
@@ -177,7 +183,7 @@ void PlayerManager::Princess_Call()
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
 			ChangeMotion(motion_, "call");
-			
+
 		}
 	}
 

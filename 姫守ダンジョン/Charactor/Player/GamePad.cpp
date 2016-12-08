@@ -2,7 +2,7 @@
 //	@file	GamePad.cpp
 //	@brief	ゲームパッド管理クラス
 //	@date	2016/11/09
-//	@outher	不明
+//	@author	不明
 
 #include "GamePad.h"
 

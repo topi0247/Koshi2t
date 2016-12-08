@@ -1,8 +1,8 @@
 //
-//	@file	JobManager.h
+//	@file	JobManager.cpp
 //	@brief	E‹Æ‚²‚Æ‚Ìˆ—
 //	@date	2016/11/10
-//	@outher	m‰È•c
+//	@author	m‰È•c
 
 #include "JobManager.h"
 

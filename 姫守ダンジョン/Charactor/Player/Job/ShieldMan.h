@@ -1,3 +1,10 @@
+//
+//	@file	Shield.h
+//	@brief	‚mƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
@@ -15,7 +22,7 @@ private:
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void Move(float speed);
-	virtual void Move_Update();
+	//virtual void Move_Update();
 	virtual void DeadSound();
 	virtual void DamegeSound() {};
 

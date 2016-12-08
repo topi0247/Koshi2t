@@ -2,7 +2,7 @@
 //	@file	Collision.cpp
 //	@brief	‚ ‚½‚è”»’èŠÇ—ƒNƒ‰ƒX
 //	@date	2016/11/14
-//	@outher@‹g‰z‘å‹R
+//	@author@‹g‰z‘å‹R
 
 #include "Collision.h"
 
@@ -146,7 +146,6 @@ bool Collision::RayIntersect(CD3DXSKINMESH* pMeshA, CD3DXMESH* pMeshB, float* pf
 		pvNormal->x = p.a;
 		pvNormal->y = p.b;
 		pvNormal->z = p.c;
-
 		return true;
 	}
 	return false;

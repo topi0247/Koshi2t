@@ -15,6 +15,7 @@
     <RootNamespace>CameraThirdPerson</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>姫守ダンジョン</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -42,8 +43,8 @@
     <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>\OutputDirectory\</OutDir>
+    <IntDir>\MiddleDirectory</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
@@ -107,7 +108,6 @@
     <ClCompile Include="Effect\D3D11_SPRITE.cpp" />
     <ClCompile Include="Effect\Effect.cpp" />
     <ClCompile Include="MAIN.cpp" />
-    <ClCompile Include="Main_Scene.cpp" />
     <ClCompile Include="Mesh\CD3DXMESH.cpp" />
     <ClCompile Include="Mesh\CD3DXSKINMESH.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -117,6 +117,7 @@
     <ClCompile Include="Read\SpawnGateRead.cpp" />
     <ClCompile Include="Read\tinyxml2.cpp" />
     <ClCompile Include="Read\XFileRead.cpp" />
+    <ClCompile Include="Scene\Main_Scene.cpp" />
     <ClCompile Include="SoundEffect\Sound.cpp" />
     <ClCompile Include="Stage\Spawn.cpp" />
     <ClCompile Include="Stage\SpawnManager.cpp" />
@@ -143,7 +144,6 @@
     <ClInclude Include="Effect\D3D11_SPRITE.h" />
     <ClInclude Include="Effect\Effect.h" />
     <ClInclude Include="MAIN.h" />
-    <ClInclude Include="Main_Scene.h" />
     <ClInclude Include="Mesh\CD3DXMESH.h" />
     <ClInclude Include="Mesh\CD3DXSKINMESH.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -154,6 +154,7 @@
     <ClInclude Include="Read\SpawnGateRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
+    <ClInclude Include="Scene\Main_Scene.h" />
     <ClInclude Include="SoundEffect\Sound.h" />
     <ClInclude Include="Stage\Spawn.h" />
     <ClInclude Include="Stage\SpawnManager.h" />

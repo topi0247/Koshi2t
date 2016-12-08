@@ -2,7 +2,8 @@
 //	@file	EnemyManager.cpp
 //	@brief	エネミー管理クラス
 //	@date	2016/11/13
-//	@outher　吉越大騎
+//	@author　吉越大騎
+//	@author	仁科香苗
 
 #include "EnemyManager.h"
 
@@ -62,7 +63,6 @@ void EnemyManager::SetParameter(EnemyParameter* param)
 
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
-
 	//hp_ = 10000;
 }
 
@@ -76,30 +76,30 @@ void EnemyManager::SetTarget(CharactorManager* chara)
 }
 
 //
-//	@brief　				ターゲットの更新
+//	@brief　					ターゲットの更新
 //	@param (chara)			プレイヤー
 //	@param (princess)		姫
 void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * princess)
 {
-	CharactorManager* temp = chara;
-	float dist = 5;
+	CharactorManager* temp = targetChar_;
+	//float dist = 5;
 
-	if (targetChar_->GetCharaType() != temp->GetCharaType())
+	if (perpetrator_== chara->GetCharaType())
 	{
-		temp = targetChar_;
+		temp = chara;
 	}
 
-	//現在のターゲットが姫
-	if (targetChar_->GetCharaType() == princess->GetCharaType())
-	{
-		if (collision_->CharaNear(m_Pos, chara->m_Pos, dist))
-		{
-			temp = chara;
-		}
-	}
+	////現在のターゲットが姫
+	//if (targetChar_->GetCharaType() == princess->GetCharaType())
+	//{
+	//	if (collision_->CharaNear(m_Pos, chara->m_Pos, dist))
+	//	{
+	//		temp = chara;
+	//	}
+	//}
 
 	//ターゲットが死んでいる
-	if (!temp->GetAliveFlg())
+	if (!targetChar_->GetAliveFlg())
 	{
 		temp = princess;
 	}
@@ -175,12 +175,12 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	//if (motionNo_ != 0)
-	//{
-	//	motionNo_ = 0;
-	//	m_pD3dxMesh->ChangeAnimSet(0);
-	//	motionSpeed_ = 0.01;
-	//}
+	/*if (motionNo_ != motion_->GetMotion("walk")->id_)
+	{
+		motionNo_ = motion_->GetMotion("walk")->id_;
+		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+	}*/
 
 }
 

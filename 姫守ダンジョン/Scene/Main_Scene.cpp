@@ -1,8 +1,9 @@
 //
 //	@file	Main_Scene.cpp
-//	@brief	ゲームメインシーン管理
+//	@brief	ゲームメインシーン
 //	@date	2016/11/08
-//	@outher	仁科香苗
+//	@author	仁科香苗
+//	@author 吉越大騎(エフェクト・UI)
 
 #include "./Main_Scene.h"
 
@@ -164,6 +165,7 @@ void Main_Scene::Init(HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext*
 	virChar_[Player1]->SetParameter(parameter->GetJobParamList("剣士"));
 	virChar_[Player1]->SetMotionData(motionRead_->GetMotionUser("剣士"));
 	virChar_[Player1]->m_Pos = D3DXVECTOR3(-3, 0, -10);
+	//virChar_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
 
 	char name2[80];
 	memset(name2, 0, sizeof(name2));
@@ -247,7 +249,7 @@ HRESULT Main_Scene::EffectInit(ID3D11DeviceContext* m_pDeviceContext)
 {
 	
 	deviceContext_ = m_pDeviceContext;
-	float scaleF = 10;
+	float scaleF = 8;
 	D3DXVECTOR3 scale(scaleF, 5, scaleF);
 
 	uititle_ = new D3D11_SPRITE;
@@ -347,6 +349,8 @@ void Main_Scene::GameStart()
 	if (GetKeyState(VK_RETURN) & 0x80)
 	{
 		scene_ = MainS;
+		Sound::getInstance().BGM_play("SENTOU");
+
 	}
 }
 
@@ -354,7 +358,6 @@ void Main_Scene::GameStart()
 //	@brief	ゲームメイン
 void Main_Scene::GameMain()
 {
-	Sound::getInstance().BGM_play("SENTOU");
 
 	//デバッグ用
 	if (GetKeyState('E') & 0x80)
@@ -369,7 +372,7 @@ void Main_Scene::GameMain()
 	////エネミースポーン処理
 	if (spawnFlg_ == true)
 	{
-		if (enemyList_.size() < 1)
+		if (enemyList_.size() < 50)
 		{
 			spawnManager_->Update(parameter, princess_);
 			std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
@@ -544,20 +547,27 @@ void Main_Scene::CollisionControl()
 	//bool wallFlg = false;
 	for (auto chara : charList_)
 	{
-		if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
+		if (chara->m_Dir != D3DXVECTOR3(0,0,0))
 		{
-			//当たり状態なので、滑らせる
-			//virChar_[player1]->m_Pos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
-			chara->SlipMove(ray_->Slip(chara->m_Dir, vNormal));
-			//滑りベクトル先の壁とのレイ判定 ２重に判定	
-			if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+			if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 			{
-				//virChar_[player1]->m_Pos = D3DXVECTOR3(0, 0, 0);//止める
-				chara->StopMove();
-				//wallFlg = true;
+				if (chara->GetKnockBackFlg() == true)
+				{
+					chara->SetKnockBackFlg(false);
+				}
+
+				//当たり状態なので、滑らせる
+				//virChar_[player1]->m_Pos = ray_->Slip(virChar_[player1]->m_Dir, vNormal);//滑りベクトルを計算
+				chara->SlipMove(ray_->Slip(chara->m_Dir, vNormal));
+				//滑りベクトル先の壁とのレイ判定 ２重に判定	
+				if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+				{
+					//virChar_[player1]->m_Pos = D3DXVECTOR3(0, 0, 0);//止める
+					chara->StopMove();
+					//wallFlg = true;
+				}
 			}
 		}
-
 
 		////周辺にキャラクターがいるかどうかの確認
 		//for (auto opp : charList_)
@@ -645,7 +655,10 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 	//}
 
 	PlayerDebug();
+#ifdef _DEBUG
 	EnemyDebug();
+#endif // _DEBUG
+
 
 	camera_->Render();
 
@@ -664,7 +677,7 @@ void Main_Scene::EffectRender()
 	D3DXMATRIX Tran, World, World2;
 	//ビルボードのワールドトランスフォーム	
 	x = 0;
-	D3DXMatrixTranslation(&Tran, x, 0, 0);
+	D3DXMatrixTranslation(&Tran, x, 10, 0);
 	World = Tran;
 	World2 = Tran;
 	D3DXMATRIX CancelRotation = Camera::mView_;
@@ -674,14 +687,15 @@ void Main_Scene::EffectRender()
 	
 	if (scene_ != MainS)
 	{
-		uititle_->RenderSprite(World2, D3DXVECTOR3(-5, 5, -13));
+		uititle_->RenderSprite(World2, D3DXVECTOR3(-4, 5, -20));
 	}
 	else
 	{
-		uisword_->RenderSprite(World2, D3DXVECTOR3(-20, 0, -25));
-		uiseeld_->RenderSprite(World2, D3DXVECTOR3(-10, 0, -25));
-		uimagic_->RenderSprite(World2, D3DXVECTOR3(0, 0, -25));
-		uibom_->RenderSprite(World2, D3DXVECTOR3(10, 0, -25));
+		float high = -28;
+		uisword_->RenderSprite(World2, D3DXVECTOR3(-18, 0, high));
+		uiseeld_->RenderSprite(World2, D3DXVECTOR3(-8.5, 0, high));
+		uimagic_->RenderSprite(World2, D3DXVECTOR3(0.5, 0, high));
+		uibom_->RenderSprite(World2, D3DXVECTOR3(10, 0, high));
 	}
 	
 	//uisword_->RenderSprite(World*mView*mProj);	
@@ -709,65 +723,32 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-
-	//sprintf(str, "yaw %f", virChar_[Player1]->m_Yaw);
-	//debugText_->Render(str, 0, 150);
+	//sprintf(str, "pos %d", (int)virChar_[Player1]->m_Pos.x);
+	//debugText_->Render(str, 0, 110);
 	//sprintf(str, "spaceNo %d", virChar_[Player1]->GetSpaceNo());
 	//debugText_->Render(str, 0, 80);
 	//sprintf(str, "aroundC %d", virChar_[Player1]->GetAroundC());
 	
+#ifdef _DEBUG
+	sprintf(str, "x:%f z:%f", virChar_[Player2]->m_Dir.x, virChar_[Player2]->m_Dir.z);
+	debugText_->Render(str, 0, 50);
+#endif // _DEBUG
+
+
 	if(scene_ == MainS)
 	{
-		sprintf(str, "x %f", GamePad::getAnalogValue(0, GamePad::AnalogName::AnalogName_LeftStick_X));
-		debugText_->Render(str, 0, 50);
-		sprintf(str, "y %f", GamePad::getAnalogValue(0, GamePad::AnalogName::AnalogName_LeftStick_Y));
-		debugText_->Render(str, 0, 70);
-
-		float d = D3DXToDegree(virChar_[Player1]->m_Yaw);
-		float a = D3DXToDegree(virChar_[Player2]->m_Yaw);
-		sprintf(str, "angle %f", d/*fabsf(d - a)*/);
-		debugText_->Render(str, 0, 110);
-
+		float high = 960;
 		sprintf(str, "%d", virChar_[Player1]->GetHP());
-		debugText_->Render(str, 370, 1000);
+		debugText_->Render(str, 248, high);
 		sprintf(str, "%d", virChar_[Player2]->GetHP());
-		debugText_->Render(str, 780, 1000);
+		debugText_->Render(str, 760, high);
 		sprintf(str, "%d", virChar_[Player3]->GetHP());
-		debugText_->Render(str, 1200, 1000);
+		debugText_->Render(str, 1240, high);
 		sprintf(str, "%d", virChar_[Player4]->GetHP());
-		debugText_->Render(str, 1625, 1000);
+		debugText_->Render(str, 1740, high);
 	}
 	
-	//sprintf(str, "Atk(no0,w1,na2,c3,sa4) : %d", virChar_[Player2]->GetAtkState());
-	//debugText_->Render(str, 0, 10);
-	////sprintf(str, "alive : %d", virChar_[Player2]->GetAliveFlg());
-	////debugText_->Render(str, 0, 10);
-	//sprintf(str, "motionNo : %d", virChar_[Player2]->GetMotionNo());
-	//debugText_->Render(str, 0, 30);
-	//sprintf(str, "motionSPeed : %f", virChar_[Player2]->GetMotionSpeed());
-	//debugText_->Render(str, 0, 50);
-	//sprintf(str, "motionCount : %d", virChar_[Player2]->GetMotionCount());
-	//debugText_->Render(str, 0, 70);
-	//sprintf(str, "def_ : %d", virChar_[Player2]->GetParam()->def_);
-	//debugText_->Render(str, 0, 90);
-	//sprintf(str, "specialAttackTime_ : %f", virChar_[Player2]->GetParam()->specialAttackTime_);
-	//debugText_->Render(str, 0, 110);
-	//sprintf(str, "chargeTime_ : %d", virChar_[Player2]->GetParam()->chargeTime_);
-	//debugText_->Render(str, 0, 130);
-	//sprintf(str, "moveSpeed_ : %f", virChar_[Player2]->GetParam()->moveSpeed_);
-	//debugText_->Render(str, 0, 150);
-	//sprintf(str, "specialMoveSpeed_ : %f", virChar_[Player2]->GetParam()->specialMoveSpeed_);
-	//debugText_->Render(str, 0, 170);
-	//sprintf(str, "weight_ : %f", virChar_[Player2]->GetParam()->weight_);
-	//debugText_->Render(str, 0, 190);
-	//sprintf(str, "attackReach_ : %f", virChar_[Player2]->GetParam()->attackReach_);
-	//debugText_->Render(str, 0, 210);
-	//sprintf(str, "attackRange_ : %f", virChar_[Player2]->GetParam()->attackRange_);
-	//debugText_->Render(str, 0, 230);
-	//sprintf(str, "scale_ : %f", virChar_[Player2]->GetParam()->scale_);
-	//debugText_->Render(str, 0, 250);
-	//sprintf(str, "x : %f y :%f", virChar_[Player2]->m_Pos.x, virChar_[Player2]->m_Pos.z);
-	//debugText_->Render(str, 0, 270);
+	
 }
 
 void Main_Scene::EnemyDebug()
@@ -775,30 +756,8 @@ void Main_Scene::EnemyDebug()
 	char str[256];
 	if (!enemyList_.empty())
 	{
-		//EnemyJobManager* obj = enemyList_[0];
-		sprintf(str, "count : %d", enemyList_.size());
+		sprintf(str, "count:%d", enemyList_.size());
 		debugText_->Render(str, 0, 30);
-		/*sprintf(str, "alive : %d", obj->GetAliveFlg());
-		debugText_->Render(str, 0, 10);
-		sprintf(str, "hp_ : %d", obj->GetHP());
-		debugText_->Render(str, 0, 30);
-		sprintf(str, "atk_ : %d", obj->GetParam()->atk_);
-		debugText_->Render(str, 0, 50);
-		sprintf(str, "reach : %d", obj->GetParam()->attackReach_);
-		debugText_->Render(str, 0, 70);
-		sprintf(str, "def_ : %d", obj->GetParam()->def_);
-		debugText_->Render(str, 0, 90);
-		sprintf(str, "moveSpeed: %f", obj->GetParam()->moveSpeed_);
-		debugText_->Render(str, 0, 110);
-		sprintf(str, "targetAlive: %d", obj->GetTarget()->GetAliveFlg());
-		debugText_->Render(str, 0, 130);
-		sprintf(str, "targetType: %d", obj->GetTarget()->GetCharaType());
-		debugText_->Render(str, 0, 150);
-		sprintf(str, "count : %d", enemyList_.size());
-		debugText_->Render(str, 0, 350);
-		sprintf(str, "ins : %f", insTime_);
-		debugText_->Render(str, 0, 370);
-		sprintf(str, "push : %f", pushTime_);
-		debugText_->Render(str, 0, 390);*/
+		
 	}
 }

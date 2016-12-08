@@ -2,8 +2,9 @@
 //	@file	Origin.h
 //	@brief	各ファイルで必要なインクルードファイルとマクロ定義
 //	@date	2016/11/08
-//	@outher	仁科香苗
+//	@author	仁科香苗
 //	@note	サンプルコードを基にMAINクラスから移行しました。
+
 #pragma once
 #include <stdio.h>
 #include <windows.h>

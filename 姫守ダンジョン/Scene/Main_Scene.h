@@ -1,24 +1,26 @@
 //
 //	@file	Main_Scene.h
-//	@brief	メインゲームシーン管理クラス
+//	@brief	メインゲームシーンクラス
 //	@date	2016/11/08
-//	@outher	仁科香苗
+//	@author	仁科香苗
+//	@author	吉越大騎(エフェクト・UI)
+
 #pragma once
 #include <vector>
 #include <time.h>
-#include "./Origin.h"
-#include "./Read/XFileRead.h"
-#include "./Read/ParameterRead.h"
-#include "./Read/MotionRead.h"
-#include "./Stage/Stage.h"
-#include "./Charactor/Player/PlayerCommon.h"
-#include "./Charactor/CharactorCreator.h"
-#include "./Charactor/Enemy/EnemyJobManager.h"
-#include "./Stage/SpawnManager.h"
-#include "./Charactor/Princess.h"
-#include "./Collision.h"
-#include "./Camera.h"
-#include "./SoundEffect/Sound.h"
+#include "./../Origin.h"
+#include "./../Read/XFileRead.h"
+#include "./../Read/ParameterRead.h"
+#include "./../Read/MotionRead.h"
+#include "./../Stage/Stage.h"
+#include "./../Charactor/Player/PlayerCommon.h"
+#include "./../Charactor/CharactorCreator.h"
+#include "./../Charactor/Enemy/EnemyJobManager.h"
+#include "./../Stage/SpawnManager.h"
+#include "./../Charactor/Princess.h"
+#include "./../Collision.h"
+#include "./../Camera.h"
+#include "./../SoundEffect/Sound.h"
 
 class Main_Scene
 {

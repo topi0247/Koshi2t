@@ -1,3 +1,10 @@
+//
+//	@file	Bomber.cpp
+//	@brief	”š’eŽmƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #include "./Bomber.h"
 
 Bomber::Bomber(CharaType charaType) :JobManager(charaType)
@@ -221,7 +228,7 @@ void Bomber::Normal_Attack()
 			bomb->SetScale(0.2);
 			bomb->SetAttack(param_->normalAtk_);
 			bomb->SetDamageList(allCharaList_, charaType_);
-			bomb->SetKnockBack(range, kDist, kSpeed);
+			bomb->SetKnockBack(range, kDist, kSpeed,charaType_);
 			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
 		}

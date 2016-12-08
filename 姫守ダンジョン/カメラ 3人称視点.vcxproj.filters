@@ -12,7 +12,6 @@
       <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Main_Scene.cpp" />
     <ClCompile Include="DebugDraw\D3D11_TEXT.cpp">
       <Filter>DebugDraw</Filter>
     </ClCompile>
@@ -83,6 +82,9 @@
     <ClCompile Include="SoundEffect\Sound.cpp">
       <Filter>SoundEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Main_Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -97,7 +99,6 @@
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Main_Scene.h" />
     <ClInclude Include="DebugDraw\D3D11_TEXT.h">
       <Filter>DebugDraw</Filter>
     </ClInclude>
@@ -174,6 +175,9 @@
     <ClInclude Include="SoundEffect\Sound.h">
       <Filter>SoundEffect</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Main_Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">
@@ -205,6 +209,9 @@
     </Filter>
     <Filter Include="SoundEffect">
       <UniqueIdentifier>{e872b0bf-5851-43a9-880c-81b617b3bb08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{4a4a7d89-c1ba-418c-b11d-81d06abcc27f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

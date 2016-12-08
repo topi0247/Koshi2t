@@ -2,7 +2,7 @@
 //	@file	CharactorCreator.h
 //	@brief	キャラクター生成クラス
 //	@date	2016/11/14
-//	@outher	仁科香苗
+//	@author	仁科香苗
 
 #pragma once
 #include <map>

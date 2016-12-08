@@ -2,7 +2,8 @@
 //	@file	XFileRead.h
 //	@brief	Xファイル読み込み
 //	@date	2016/11/07
-//	@outher	仁科香苗
+//	@author	仁科香苗
+//	@author 吉越大騎(エフェクト・UI)
 
 #pragma once
 #include "./../Origin.h"

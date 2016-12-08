@@ -1,8 +1,9 @@
 //
-//	@file	JobManager.h
+//	@file	EnemyJobManager.h
 //	@brief	“G‚²‚Æ‚Ìˆ—
 //	@date	2016/11/13
-//	@outher	‹g‰z‘å‹R
+//	@author	‹g‰z‘å‹R
+//	@author	m‰È•c
 
 #pragma once
 #include "./../Enemy/EnemyManager.h"

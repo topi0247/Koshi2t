@@ -1,3 +1,10 @@
+//
+//	@file	Witch.h
+//	@brief	–‚“±mƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
@@ -10,7 +17,8 @@ class Witch :public JobManager
 	int magicBallCount_;
 	WeaponBall* magic_;
 	std::vector<WeaponBall*> magicBall_;
-private:
+
+	void InstanceMagicBall(int count);
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void DeadSound();

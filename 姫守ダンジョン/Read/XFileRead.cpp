@@ -2,7 +2,7 @@
 //	@file	XFileRead.h
 //	@brief	Xƒtƒ@ƒCƒ‹“Ç‚İ‚İ
 //	@date	2016/11/07
-//	@outher	m‰È•c
+//	@author	m‰È•c
 
 #include "XFileRead.h"
 

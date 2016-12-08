@@ -1,8 +1,8 @@
 //
 //	@file	Spawn.h
 //	@brief	スポーンゲートクラス
-//	@date	2016/11/24
-//	@outher	仁科香苗
+//	@date	2016/11/25
+//	@author	仁科香苗
 #pragma once
 #include <time.h>
 #include "./../Origin.h"

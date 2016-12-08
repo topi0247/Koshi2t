@@ -2,7 +2,7 @@
 //	@file	Effect.cpp
 //	@brief	ƒGƒtƒFƒNƒg‚Ìˆ—
 //	@date	2016/11/22
-//	@outher	‹g‰z‘å‹R
+//	@author	‹g‰z‘å‹R
 //#include "Effect.h"
 
 

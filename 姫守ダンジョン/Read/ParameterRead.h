@@ -2,7 +2,7 @@
 //	@file	ParameterRead.h
 //	@brief	ƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
 //	@date	2016/11/14
-//	@outher	m‰È•c
+//	@author	m‰È•c
 
 #pragma once
 #include <iostream>

@@ -2,7 +2,7 @@
 //	@file	Camera.h
 //	@brief	ƒJƒƒ‰ŠÖ˜A
 //	@date	2016/11/08
-//	@outher	m‰È•c
+//	@author	m‰È•c
 #pragma once
 #include "./Origin.h"
 

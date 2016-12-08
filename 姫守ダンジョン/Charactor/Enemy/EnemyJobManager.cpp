@@ -1,15 +1,15 @@
 //
-//	@file	JobManager.h
+//	@file	EnemyJobManager.cpp
 //	@brief	“G‚²‚Æ‚Ìˆ—
 //	@date	2016/11/13
-//	@outher	‹g‰z‘å‹R
+//	@author	‹g‰z‘å‹R
+//	@author	m‰È•c
 
 
 #include "EnemyJobManager.h"
 
 EnemyJobManager::EnemyJobManager()
 {
-	motionNo_ = 1;
 }
 
 EnemyJobManager::~EnemyJobManager()
@@ -51,18 +51,19 @@ void EnemyJobManager::CharaUpdate()
 void Slim::NormalAttack()
 {
 	float dist = 3;
-	float speed = 1;
+	float speed = 0.01;
 	targetChar_->DamageCalc(param_->atk_);
-	targetChar_->KnockBack(m_Pos,dist,speed);
+	//targetChar_->KnockBack(m_Pos,dist,speed);
+	targetChar_->SetKnockBack(m_Pos, dist, speed,charaType_);
 }
 
 //=======ƒSƒuƒŠƒ“========//
 void Goblin::NormalAttack()
 {
 	float dist = 3;
-	float speed = 1;
+	float speed = 0.01;
 	targetChar_->DamageCalc(param_->atk_);
-	targetChar_->KnockBack(m_Pos, dist, speed);
+	targetChar_->SetKnockBack(m_Pos, dist, speed,charaType_);
 }
 
 //=======ƒXƒPƒ‹ƒgƒ“======//
@@ -84,12 +85,12 @@ void Skeleton::Reset()
 void Skeleton::NormalAttack()
 {
 	float dist = 1;
-	float speed = 1;
+	float speed = 0.01;
 	WeaponBall* atkBall=new WeaponBall();
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
 	atkBall->SetDamageList(allCharaList_, charaType_);
-	atkBall->SetKnockBack(dist, param_->attackReach_,speed);
+	atkBall->SetKnockBack(dist, param_->attackReach_,speed,charaType_);
 	atkBall->SetAttack(param_->atk_);
 	atkList_.push_back(atkBall);
 }

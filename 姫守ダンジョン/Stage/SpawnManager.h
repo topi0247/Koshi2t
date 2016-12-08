@@ -1,3 +1,9 @@
+//
+//	@file	SpawnManager.h
+//	@brief	スポーンゲート管理クラス
+//	@date	2016/11/28
+//	@author	仁科香苗
+
 #pragma once
 #include "./../Origin.h"
 #include "./../Mesh/CD3DXMESH.h"

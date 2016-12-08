@@ -2,7 +2,8 @@
 //	@file	CharactorManager.h
 //	@brief	キャラクター管理クラス
 //	@date	2016/11/09
-//	@outher	仁科香苗
+//	@author	仁科香苗
+//	@author	吉越大騎(サウンド)
 
 #include "./CharactorManager.h"
 
@@ -23,6 +24,7 @@ CharactorManager::CharactorManager()
 	aliveFlg_ = true;
 	moveAbleFlg_ = true;
 	motionChange_ = true;
+	perpetrator_ = Non;
 	//opponentWeight_ = 1;
 }
 
@@ -60,9 +62,7 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance, float speed
 
 	m_Dir = D3DXVECTOR3(knockBackSpeed*dir.x, 0, knockBackSpeed*dir.z);
 
-	m_Pos += m_Dir;
-
-
+	//m_Pos += m_Dir;
 
 	if (!collision_->CharaNear(m_Pos, atkPos, distance))
 	{
@@ -76,11 +76,9 @@ void CharactorManager::KnockBack(D3DXVECTOR3 atkPos, float distance, float speed
 void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 {
 	//角度を算出
-	float angel = (atan2(dirVec.z, dirVec.x)*-1) -(D3DX_PI / 2.0f);
+	float angel = (atan2(dirVec.z, dirVec.x)*-1) - (D3DX_PI / 2.0f);
 
 	m_Yaw = angel;
-	//m_Yaw = atan2(dirVec.z, dirVec.x);
-
 }
 
 //
@@ -99,16 +97,18 @@ void CharactorManager::StopMove()
 }
 
 //
-//	@brief			ノックバック
-//	@param (pos)	攻撃者の座標
-//	@param (dist)	ノックバック距離
-//	@oaram (speed)	ノックバックスピード
-void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist, float speed)
+//	@brief				ノックバック
+//	@param (pos)		攻撃者の座標
+//	@param (dist)		ノックバック距離
+//	@param (speed)		ノックバックスピード
+//	@param (charatype)	攻撃者
+void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist, float speed, CharaType charatype)
 {
 	knockBackFlg_ = true;
 	knockBackPos_ = pos;
 	knockBackDis_ = dist;
 	knockBackSpeed_ = speed;
+	perpetrator_ = charatype;
 }
 
 //
@@ -117,7 +117,8 @@ void CharactorManager::Move_Update()
 {
 	if (aliveFlg_ == true)
 	{
-		if (knockBackFlg_ == false && moveAbleFlg_ == true)
+		m_Pos += m_Dir;
+		/*if (knockBackFlg_ == false && moveAbleFlg_ == true)
 		{
 			m_Pos += m_Dir;
 
@@ -125,7 +126,7 @@ void CharactorManager::Move_Update()
 		else if (knockBackFlg_ == true)
 		{
 			KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-		}
+		}*/
 	}
 }
 
@@ -182,7 +183,7 @@ void CharactorManager::MoveCharaHit()
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
 
-			float hitAngle = 30;
+			float hitAngle = 90 / 2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
 				/*opponentWeight_ = c->ownWright_;*/

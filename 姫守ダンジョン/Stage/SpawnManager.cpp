@@ -1,3 +1,9 @@
+//
+//	@file	SpawnManager.cpp
+//	@brief	スポーンゲート管理クラス
+//	@date	2016/11/28
+//	@author	仁科香苗
+
 #include "./SpawnManager.h"
 
 //

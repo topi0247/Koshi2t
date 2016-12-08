@@ -1,9 +1,16 @@
+//
+//	@file	WeaponBall.h
+//	@brief	”ò‚Ñ“¹‹ïƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #pragma once
 #include "./../../../Origin.h"
 #include "./../../CharactorManager.h"
 
 //
-//	@brief	”ò‚Ñ“¹‹ï(–‚“±m‚Æ”š’em)
+//	@brief	”ò‚Ñ“¹‹ï
 class WeaponBall
 {
 private:
@@ -11,6 +18,7 @@ private:
 	unsigned int spaceNo_;
 	Collision* col_;
 	CD3DXMESH* weaponBall_;
+	CharaType user_;
 	std::vector<CharactorManager*> damageList_;	//”í’e‚·‚é‰Â”\«‚Ì‚ ‚éƒLƒƒƒ‰ƒNƒ^[ƒŠƒXƒg
 	bool delFlg_;
 	int delCount_;
@@ -33,7 +41,7 @@ public:
 	void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType);
 	void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
-	void SetKnockBack(float dist, float kDist,float kSpeed);
+	void SetKnockBack(float dist, float kDist,float kSpeed,CharaType charatype);
 	void SetHitSound(std::string name);
 	void Render(D3DXVECTOR3 pos);
 	bool GetDelFlg()const;

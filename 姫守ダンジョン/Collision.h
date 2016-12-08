@@ -2,7 +2,7 @@
 //	@file	Collision.h
 //	@brief	‚ ‚½‚è”»’èŠÇ—ƒNƒ‰ƒX
 //	@date	2016/11/14
-//	@outher@‹g‰z‘å‹R
+//	@author@‹g‰z‘å‹R
 
 #pragma once
 #include "Origin.h"

@@ -2,7 +2,8 @@
 //	@file	PlayerManager.h
 //	@brief	ƒvƒŒƒCƒ„[ŠÇ—ƒNƒ‰ƒX
 //	@date	2016/11/09
-//	@outher	m‰È•c
+//	@author	m‰È•c
+
 #pragma once
 #include <time.h>
 #include "./../CharactorManager.h"

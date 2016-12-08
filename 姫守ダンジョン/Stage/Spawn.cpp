@@ -1,3 +1,9 @@
+//
+//	@file	Spawn.cpp
+//	@brief	スポーンゲートクラス
+//	@date	2016/11/25
+//	@author	仁科香苗
+
 #include "./Spawn.h"
 
 //

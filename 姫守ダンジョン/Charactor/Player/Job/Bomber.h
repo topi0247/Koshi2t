@@ -1,3 +1,10 @@
+//
+//	@file	Bomber.h
+//	@brief	”š’emƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"

@@ -2,7 +2,7 @@
 //	@file	Stage.cpp
 //	@brief	ƒXƒe[ƒWŠÖ˜A
 //	@date	2016/11/07
-//	@outher	m‰È•c
+//	@author	m‰È•c
 #include "./Stage.h"
 
 //

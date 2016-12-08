@@ -1,3 +1,10 @@
+//
+//	@file	Princess.h
+//	@brief	•PƒNƒ‰ƒX
+//	@date	2016/12/01
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #pragma once
 #include <list>
 #include "./CharactorManager.h"

@@ -85,7 +85,7 @@ void Sound::Run()
 
 	//ダメージヒット
 	Damage_HIT["S_DAMAGE_HIT"] = LoadSound("SoundEffect/SE/sword_sound/sword_hit.wav");
-	m_pSourceVoice[Damage_HIT["S_DAMAGE_HIT"]]->SetVolume(0.6f, 0);
+	m_pSourceVoice[Damage_HIT["S_DAMAGE_HIT"]]->SetVolume(3.0f, 0);
 
 	//死亡
 	Dead["S_DEAD"] = LoadSound("SoundEffect/SE/sword_sound/sword_dethvoice.wav");

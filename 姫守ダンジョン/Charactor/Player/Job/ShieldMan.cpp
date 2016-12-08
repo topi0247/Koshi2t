@@ -1,3 +1,10 @@
+//
+//	@file	ShieldMan.cpp
+//	@brief	‚ŽmƒNƒ‰ƒX
+//	@date	2016/11/21
+//	@author	m‰È•c
+//	@author	‹g‰z‘å‹R(ƒTƒEƒ“ƒh)
+
 #include "ShieldMan.h"
 
 ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
@@ -87,7 +94,6 @@ void ShieldMan::Attack()
 void ShieldMan::Normal_Attack()
 {
 	float hitAngle = param_->attackRange_;
-	Attack_Collision(hitAngle);
 
 	//Normal_Attack_Collision();
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
@@ -101,6 +107,9 @@ void ShieldMan::Normal_Attack()
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack1");
+
+		Attack_Collision(hitAngle);
+
 	}
 
 	if (++motionCount_ > motionFrame_)
@@ -224,7 +233,7 @@ void ShieldMan::Attack_Collision(float hitAngle)
 				if (fabsf(degree - angle) <= hitAngle)
 				{
 					hit = true;
-					chara->SetKnockBack(m_Pos, backDist, backSpeed);
+					chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
 					if (chara->GetCharaType() == Enemy && atkNo_ == normalAtk)
 					{
 						chara->DamageCalc(param_->normalAtk_);
@@ -313,6 +322,12 @@ void ShieldMan::DamageCalc(unsigned int atk)
 //	@param (speed)	ˆÚ“®‘¬“x
 void ShieldMan::Move(float speed)
 {
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		return;
+	}
+
 	//ƒXƒeƒBƒbƒN‚ÌŒX‚«Žæ“¾
 	D3DXVECTOR3 inputStick;
 	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
@@ -331,7 +346,14 @@ void ShieldMan::Move(float speed)
 	float sp = 0;
 	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
 	{
-		sp = speed;
+		if (atkNo_ != specialAtk)
+		{
+			sp = speed;
+		}
+		else
+		{
+			sp = param_->specialMoveSpeed_;
+		}
 
 		if (motionChange_ == true)
 		{
@@ -341,8 +363,11 @@ void ShieldMan::Move(float speed)
 			}
 			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
 			{
-				Sound::getInstance().SE_play("Sh_SPECIAL");
 				ChangeMotion(motion_, "specialWalk");
+			}
+			if (atkNo_ == specialAtk)
+			{
+				Sound::getInstance().SE_play("Sh_SPECIAL");
 			}
 		}
 	}
@@ -362,7 +387,9 @@ void ShieldMan::Move(float speed)
 
 	MoveCharaHit();
 
+	
 	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+
 	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
 	GamePad::update();
@@ -379,28 +406,29 @@ void ShieldMan::DeadSound()
 {
 	Sound::getInstance().SE_play("Sh_DEAD");
 }
-
-
 //
-//	@breif	‚Žm—pˆÚ“®ˆ—
-void ShieldMan::Move_Update()
-{
-	float backSpeed = param_->knockbackSpeed_;
-
-	if (aliveFlg_ == true)
-	{
-		if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
-		{
-			m_Pos += m_Dir;
-		}
-		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
-		{
-			KnockBack(knockBackPos_, knockBackDis_, backSpeed);
-		}
-		else if (spMoveFlg_ == true && atkNo_ == specialAtk)
-		{
-			float sp = param_->specialMoveSpeed_;
-			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
-		}
-	}
-}
+//
+////
+////	@breif	‚Žm—pˆÚ“®ˆ—
+//void ShieldMan::Move_Update()
+//{
+//	float backSpeed = param_->knockbackSpeed_;
+//
+//	if (aliveFlg_ == true)
+//	{
+//		m_Pos += m_Dir;
+//		/*if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
+//		{
+//			m_Pos += m_Dir;
+//		}
+//		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
+//		{
+//			KnockBack(knockBackPos_, knockBackDis_, backSpeed);
+//		}
+//		else if (spMoveFlg_ == true && atkNo_ == specialAtk)
+//		{
+//			float sp = param_->specialMoveSpeed_;
+//			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
+//		}*/
+//	}
+//}

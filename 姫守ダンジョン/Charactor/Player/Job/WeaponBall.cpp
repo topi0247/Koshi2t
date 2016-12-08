@@ -1,3 +1,10 @@
+//
+//	@file	WeaponBall.cpp
+//	@brief	飛び道具クラス
+//	@date	2016/11/21
+//	@author	仁科香苗
+//	@author	吉越大騎(サウンド)
+
 #include "./WeaponBall.h"
 
 
@@ -146,7 +153,7 @@ void WeaponBall::Hit()
 		{
 			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
 			{
-				c->SetKnockBack(weaponBall_->m_vPos, kDist_,kSpeed_);
+				c->SetKnockBack(weaponBall_->m_vPos, kDist_,kSpeed_,user_);
 				delFlg_ = true;
 
 				if (c->GetCharaType() == Enemy)
@@ -161,15 +168,17 @@ void WeaponBall::Hit()
 }
 
 //
-//	@brief			ノックバック設定
-//	@param (dist)	攻撃の範囲
-//	@param (kDist)	ノックバックする距離
-//	@param (kSpeed)	ノックバックスピード
-void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed)
+//	@brief				ノックバック設定
+//	@param (dist)		攻撃の範囲
+//	@param (kDist)		ノックバックする距離
+//	@param (kSpeed)		ノックバックスピード
+//	@param (charatype)	使用したキャラクタータイプ
+void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed, CharaType charatype)
 {
 	dist_ = dist;
 	kDist_ = kDist;
 	kSpeed_ = kSpeed;
+	user_ = charatype;
 }
 
 //

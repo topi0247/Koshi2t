@@ -2,7 +2,8 @@
 //	@file	EnemyManager.h
 //	@brief	“GŠÇ—ƒNƒ‰ƒX
 //	@date	2016/11/13
-//	@outher	‹g‰z‘å‹R
+//	@author	‹g‰z‘å‹R
+//	@author	m‰È•c
 
 #pragma once
 #include "./../CharactorManager.h"

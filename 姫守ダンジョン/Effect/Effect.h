@@ -2,7 +2,7 @@
 //	@file	Effect.h
 //	@brief	ƒGƒtƒFƒNƒg‚Ìˆ—
 //	@date	2016/11/22
-//	@outher	‹g‰z‘å‹R
+//	@author	‹g‰z‘å‹R
 //
 //#pragma once
 //#include "D3D11_SPRITE.h"
