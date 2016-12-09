@@ -9,8 +9,7 @@
 //	
 //	@brief	コンストラクタ
 JobManager::JobManager(CharaType charaType)
-	: hit(0)
-	, attackCount_(0)
+	: attackCount_(0)
 {
 	atkNo_ = noAtk;
 
@@ -69,7 +68,6 @@ void JobManager::SetParameter(JobParameter* param)
 	hp_ = param_->hp_;
 }
 
-
 //
 //	@brief	キャラの更新
 void JobManager::CharaUpdate()
@@ -109,6 +107,10 @@ void JobManager::CharaUpdate()
 
 	}
 
+	//飛び道具の更新
+	WeaponUpdate();
+
+	//蘇生
 	if (revivalFlg_ == true)
 	{
 		Revival();

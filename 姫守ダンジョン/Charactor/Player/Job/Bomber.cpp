@@ -100,6 +100,104 @@ void Bomber::MoveCharaHit()
 }
 
 //
+//	@brief			ˆÚ“®ˆ—
+//	@param (speed)	ˆÚ“®‘¬“x
+void Bomber::Move(float speed)
+{
+	if (damageFlg_)
+	{
+		damageDrawTime_ = FPS * 0.5;
+		if (damageCount_ >= damageDrawTime_)
+		{
+			damageFlg_ = false;
+			damageCount_ = 0;
+		}
+		return;
+	}
+
+	if (atkNo_ == specialAtk)
+	{
+		knockBackFlg_ = false;
+	}
+
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		return;
+	}
+
+	//ƒXƒeƒBƒbƒN‚ÌŒX‚«Žæ“¾
+	D3DXVECTOR3 inputStick;
+	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+
+	//‰ñ“]ˆ—
+	const float rotEpsilon = 0.3;
+	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	{
+		Rotation(inputStick);
+	}
+
+
+	//ˆÚ“®
+	const float moveEpsilon = 0.2;	//Œëì–hŽ~—p
+	float sp = 0;
+	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+	{
+		if (atkNo_ != specialAtk)
+		{
+			sp = speed;
+		}
+		else
+		{
+			sp = param_->specialMoveSpeed_;
+		}
+
+		if (motionChange_ == true)
+		{
+			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("walk")->id_)
+			{
+				ChangeMotion(motion_, "walk");
+			}
+			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
+			{
+				ChangeMotion(motion_, "specialWalk");
+			}
+			if (atkNo_ == specialAtk)
+			{
+				Sound::getInstance().SE_play("Sh_SPECIAL");
+			}
+		}
+	}
+	else
+	{
+
+		if (motionChange_ == true)
+		{
+			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
+			{
+				ChangeMotion(motion_, "wait");
+			}
+		}
+	}
+
+	//opponentWeight_ = 1;
+
+	MoveCharaHit();
+
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+
+	GamePad::update();
+
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+
+}
+
+//
 //	@brief	UŒ‚
 void Bomber::Attack()
 {
@@ -107,6 +205,7 @@ void Bomber::Attack()
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
+		moveAbleFlg_ = false;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -119,7 +218,6 @@ void Bomber::Attack()
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
 		invinsibleFlg_ = true;
-		//hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
@@ -159,41 +257,6 @@ void Bomber::Attack()
 			invisibleCount_ = 0;
 		}
 	}
-
-	if (!bombList_.empty())
-	{
-		bombFlg_ = true;
-		//static int count = 0;
-		//int count = 0;
-		float delTime = FPS*param_->weaponDelTime_;
-		for (auto b : bombList_)
-		{
-			b->Time_Del_Weapon(delTime);
-		}
-		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
-		{
-			bombList_.erase(bombList_.begin());
-			Sound::getInstance().SE_play("B_NORMALATK");
-			//delete b;
-			//b = nullptr;
-			//++count;
-			//--count;
-		}
-		//++count;
-		if (bombList_.empty())
-		{
-			bombList_.clear();
-			bombFlg_ = false;
-			//count = 0;
-		}
-
-		/*if (count == bombCount_)
-		{
-		bomb_.clear();
-		bombFlg_ = false;
-		count = 0;
-		}*/
-	}
 }
 
 //
@@ -220,12 +283,11 @@ void Bomber::Normal_Attack()
 	{
 		Sound::getInstance().SE_play("B_SPECIAL");
 		motionChange_ = true;
-		motionChange_ = true;
 		if (bombList_.empty() || bombList_.size() < size)
 		{
 			WeaponBall* bomb = new WeaponBall;
 			bomb->SetStartPos(m_Pos);
-			bomb->SetScale(0.2);
+			bomb->SetScale(param_->weaponScale_);
 			bomb->SetAttack(param_->normalAtk_);
 			bomb->SetDamageList(allCharaList_, charaType_);
 			bomb->SetKnockBack(range, kDist, kSpeed,charaType_);
@@ -260,6 +322,7 @@ void Bomber::Special_Attack()
 	{
 		atkNo_ = noAtk;
 		motionChange_ = true;
+		moveAbleFlg_ = true;
 	}
 
 	/*int invincibleTime = param_->specialAttackTime_;
@@ -272,22 +335,48 @@ void Bomber::Special_Attack()
 }
 
 //
-//	@brief	”š’eŽm—pˆÚ“®ˆ—
-void Bomber::Move_Update()
+//	@brief	”š’e‚ÌXV
+void Bomber::WeaponUpdate()
 {
-	float kSpeed = param_->knockbackSpeed_;
-	if (aliveFlg_ == true)
+	if (!bombList_.empty())
 	{
-		if (knockBackFlg_ == false && moveAbleFlg_==true)
+		bombFlg_ = true;
+		float delTime = FPS*param_->weaponDelTime_;
+		for (auto b : bombList_)
 		{
-			m_Pos += m_Dir;
+			b->Time_Del_Weapon(delTime);
+			b->SetDamageList(allCharaList_, charaType_);
 		}
-		else if (knockBackFlg_ == true && invinsibleFlg_ == false)
+		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{
-			KnockBack(knockBackPos_, knockBackDis_, kSpeed);
+			bombList_.erase(bombList_.begin());
+			Sound::getInstance().SE_play("B_NORMALATK");
+		}
+		if (bombList_.empty())
+		{
+			bombList_.clear();
+			bombFlg_ = false;
 		}
 	}
 }
+
+////
+////	@brief	”š’eŽm—pˆÚ“®ˆ—
+//void Bomber::Move_Update()
+//{
+//	float kSpeed = param_->knockbackSpeed_;
+//	if (aliveFlg_ == true)
+//	{
+//		if (knockBackFlg_ == false && moveAbleFlg_==true)
+//		{
+//			m_Pos += m_Dir;
+//		}
+//		else if (knockBackFlg_ == true && invinsibleFlg_ == false)
+//		{
+//			KnockBack(knockBackPos_, knockBackDis_, kSpeed);
+//		}
+//	}
+//}
 
 
 //
@@ -295,20 +384,24 @@ void Bomber::Move_Update()
 //	@param (atk)	UŒ‚ŽÒ‚ÌUŒ‚—Í
 void Bomber::DamageCalc(unsigned int atk)
 {
-	Sound::getInstance().SE_play("B_DAMAGE");
-	float damage = 0;
-	if (invinsibleFlg_ == false)
+	if (!(damageFlg_ && invinsibleFlg_))
 	{
-		damage = atk / (1 + ((float)param_->def_ / 100));
-	}
+		damageFlg_ = true;
+		Sound::getInstance().SE_play("B_DAMAGE");
+		float damage = 0;
+		//if (invinsibleFlg_ == false)
+		//{
+			damage = atk / (1 + ((float)param_->def_ / 100));
+		//}
 
-	hp_ -= damage;
-	if (hp_ <= 0 || param_->hp_ < hp_)
-	{
-		hp_ = 0;
-		aliveFlg_ = false;
+		hp_ -= damage;
+		if (hp_ <= 0 || param_->hp_ < hp_)
+		{
+			hp_ = 0;
+			aliveFlg_ = false;
+			damageFlg_ = false;
+		}
 	}
-
 }
 
 
@@ -323,8 +416,21 @@ void Bomber::DeadSound()
 //	@brief	•`‰æ
 void Bomber::CharaRender()
 {
-	Render(m_Pos);
 
+	bool drawFlg = true;
+
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	if (drawFlg)
+	{
+		Render(m_Pos);
+	}
 
 	if (!bombList_.empty())
 	{

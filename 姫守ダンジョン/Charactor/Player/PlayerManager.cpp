@@ -37,11 +37,26 @@ const char* PlayerManager::CharaInit(const char* fileName)
 //	@param (speed)	移動速度
 void PlayerManager::Move(float speed)
 {
-	if (knockBackFlg_ == true)
+	if (damageFlg_)
 	{
-		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-		return;
+		damageDrawTime_ = FPS * 0.5;
+		if (damageCount_ >= damageDrawTime_)
+		{
+			damageFlg_ = false;
+			damageCount_ = 0;
+		}
+		else
+		{
+			if (knockBackFlg_)
+			{
+				KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+				//return;
+			}
+			return;
+		}
 	}
+
+	
 
 	//スティックの傾き取得
 	D3DXVECTOR3 inputStick;
@@ -101,16 +116,20 @@ void PlayerManager::Move(float speed)
 //	@brief	ダメージ計算
 void PlayerManager::DamageCalc(unsigned int atk)
 {
-	DamageSound();
-	float damage = atk / (1 + ((float)param_->def_ / 100));
-	hp_ -= damage;
-
-	if (hp_ <= 0 || param_->hp_ < hp_)
+	if (!damageFlg_)
 	{
-		hp_ = 0;
-		aliveFlg_ = false;
-	}
+		damageFlg_ = true;
+		DamageSound();
+		float damage = atk / (1 + ((float)param_->def_ / 100));
+		hp_ -= damage;
 
+		if (hp_ <= 0 || param_->hp_ < hp_)
+		{
+			hp_ = 0;
+			aliveFlg_ = false;
+			damageFlg_ = false;
+		}
+	}
 }
 
 //

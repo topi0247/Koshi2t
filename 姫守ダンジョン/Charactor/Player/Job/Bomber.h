@@ -22,10 +22,13 @@ private:
 	float bombScale_;
 	//WeaponBall** bomb_;
 	std::vector<WeaponBall*> bombList_;
+
+	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void MoveCharaHit();
 	virtual void DeadSound();
+	virtual void Move(float speed);
 	virtual void DamegeSound() {};
 public:
 	Bomber(CharaType charaType);
@@ -33,7 +36,7 @@ public:
 	virtual const char* CharaInit(const char* fileName);
 	virtual void Reset();
 	virtual void Attack();
-	virtual void Move_Update();
+	//virtual void Move_Update();
 	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
 	virtual void CharaRender();
 };

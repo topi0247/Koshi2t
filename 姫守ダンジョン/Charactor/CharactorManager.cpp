@@ -19,12 +19,14 @@ CharactorManager::CharactorManager()
 	, motionSpeed_(0.01)
 	, motionCount_(0)
 	, motionFrame_(0)
+	,damageCount_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
 	moveAbleFlg_ = true;
 	motionChange_ = true;
 	perpetrator_ = Non;
+	damageFlg_ = false;
 	//opponentWeight_ = 1;
 }
 
@@ -115,7 +117,7 @@ void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist, float speed, Ch
 //	@brief	移動の更新
 void CharactorManager::Move_Update()
 {
-	if (aliveFlg_ == true)
+	if (aliveFlg_ == true && moveAbleFlg_==true)
 	{
 		m_Pos += m_Dir;
 		/*if (knockBackFlg_ == false && moveAbleFlg_ == true)
@@ -245,5 +247,18 @@ int CharactorManager::GetSpaceNo()
 //	@param (mProj)	射影変換用マトリックス
 void CharactorManager::CharaRender()
 {
-	Render(m_Pos);
+	bool drawFlg = true;
+
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	if (drawFlg)
+	{
+		Render(m_Pos);
+	}
 }

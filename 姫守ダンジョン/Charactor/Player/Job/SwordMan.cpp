@@ -45,20 +45,14 @@ void SwordMan::Reset()
 //	@brief	攻撃
 void SwordMan::Attack()
 {
-	if (atkNo_ == noAtk)
-	{
-		moveAbleFlg_ = true;
-	}
-	else
-	{
-		moveAbleFlg_ = false;
-	}
 
-	if (GamePad::checkInput(charaType_,GamePad::InputName::A)
+
+	if (GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
 		atkNo_ = waitAtk;
+		moveAbleFlg_ = false;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -76,12 +70,11 @@ void SwordMan::Attack()
 		motionCount_ = 0;
 		motionChange_ = true;
 		atkNo_ = specialAtk;
-		hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	/* 修正の必要あり */
-	unsigned int inputTime = (FPS*param_->chargeTime_)/2;
+	unsigned int inputTime = (FPS*param_->chargeTime_) / 2;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -117,7 +110,7 @@ void SwordMan::Attack()
 //	@breif	通常攻撃
 void SwordMan::Normal_Attack()
 {
-	if (motionChange_==true && motionNo_ != motion_->GetMotion("attack1")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		Sound::getInstance().SE_play("S_NORMALATK");
 
@@ -142,8 +135,8 @@ void SwordMan::Normal_Attack()
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
 		motionCount_ = 0;
-		hit = false;
 		motionChange_ = true;
+		moveAbleFlg_ = true;
 	}
 }
 
@@ -170,18 +163,13 @@ void SwordMan::Normal_Attack_Collision()
 
 				if (fabsf(degree - angle) <= hitAngle)
 				{
-					hit = true;
-					chara->SetKnockBack(m_Pos, backDist,speed,charaType_);
+					chara->SetKnockBack(m_Pos, backDist, speed, charaType_);
 					if (chara->GetCharaType() == Enemy)
 					{
 						//敵にダメージが入った時のSE
 						Sound::getInstance().SE_play("S_DAMAGE_HIT");
 						chara->DamageCalc(param_->normalAtk_);
 					}
-				}
-				else
-				{
-					hit = false;
 				}
 			}
 		}
@@ -218,8 +206,8 @@ void SwordMan::Special_Attack()
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
 		motionCount_ = 0;
-		hit = false;
 		motionChange_ = true;
+		moveAbleFlg_ = true;
 	}
 }
 
@@ -244,8 +232,7 @@ void SwordMan::Special_Attack_Collision()
 		{
 			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
 			{
-				hit = true;
-				chara->SetKnockBack(m_Pos, backDist,backSpeed, charaType_);
+				chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
 				if (chara->GetCharaType() == Enemy)
 				{
 					//敵にダメージが入った時のSE

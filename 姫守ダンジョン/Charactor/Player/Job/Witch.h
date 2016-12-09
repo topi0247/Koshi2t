@@ -19,6 +19,7 @@ class Witch :public JobManager
 	std::vector<WeaponBall*> magicBall_;
 
 	void InstanceMagicBall(int count);
+	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void DeadSound();

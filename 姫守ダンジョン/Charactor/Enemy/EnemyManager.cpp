@@ -159,6 +159,12 @@ void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* 
 //	@param (speed)	ˆÚ“®‘¬“x
 void EnemyManager::Move(float speed)
 {
+	if (knockBackFlg_)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		return;
+	}
+
 	D3DXVECTOR3 E_Lock;
 	E_Lock.x = targetPos_.x - m_Pos.x;
 	E_Lock.z = targetPos_.z - m_Pos.z;

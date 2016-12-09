@@ -60,6 +60,12 @@ void Princess::Reset()
 //	@brief	ˆÚ“®
 void Princess::Move(float speed)
 {
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		return;
+	}
+
 	float dist = 1;
 	//int spNo = collision_->SetSpaceNo(destination_);
 	//if (!collision_->CheckSpaceNo(spaceNo_, spNo))

@@ -69,21 +69,13 @@ void Witch::Reset()
 //	@brief	攻撃
 void Witch::Attack()
 {
-	if (atkNo_ == noAtk)
-	{
-		moveAbleFlg_ = true;
-	}
-	else
-	{
-		moveAbleFlg_ = false;
-	}
-
 	//atkNo_ = noAtk;
 	if (magicFlg_ == false && GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
 		atkNo_ = waitAtk;
+		moveAbleFlg_ = false;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -94,8 +86,6 @@ void Witch::Attack()
 	{
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
-
-		//hit = false;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
@@ -124,28 +114,7 @@ void Witch::Attack()
 		Special_Attack();
 	}
 
-	if (magicFlg_ == true && !magicBall_.empty())
-	{
-		int count = 0;
-		float kDist = param_->weaponDelDist_;
-		float speed = 1;
-		for (size_t i = 0; i < magicBall_.size(); i++)
-		{
-			magicBall_[i]->Move_Weapon(kDist,speed);
-			if (magicBall_[i]->GetDelFlg())
-			{
-				magicBall_.erase(magicBall_.begin() + count);
-				/*atkNo_ = noAtk;*/
-				--count;
-			}
-			++count;
-		}
-		if (magicBall_.empty())
-		{
-			magicBall_.clear();
-			magicFlg_ = false;
-		}
-	}
+	
 }
 
 //
@@ -173,6 +142,7 @@ void Witch::Normal_Attack()
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
+		moveAbleFlg_ = true;
 		InstanceMagicBall(param_->chainWeapon_);
 	}
 
@@ -200,6 +170,7 @@ void Witch::Special_Attack()
 		Sound::getInstance().SE_play("M_SPECIAL");
 		atkNo_ = noAtk;
 		motionChange_ = true;
+		moveAbleFlg_ = true;
 		InstanceMagicBall(param_->spChainWeapon_);
 	}
 
@@ -226,8 +197,8 @@ void Witch::InstanceMagicBall(int count)
 			temp = D3DXToRadian(temp);
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
 			magic->SetDir(vec);
-			magic->SetScale(0.5);
-			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
+			magic->SetScale(param_->weaponScale_);
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y+0.03, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 			magic->SetAttack(param_->specialAtk_);
@@ -235,6 +206,35 @@ void Witch::InstanceMagicBall(int count)
 			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;
+	}
+}
+
+//
+//	@brief	マジックボールの更新
+void Witch::WeaponUpdate()
+{
+	if (magicFlg_ == true && !magicBall_.empty())
+	{
+		int count = 0;
+		float kDist = param_->weaponDelDist_;
+		float speed = 1;
+		for (size_t i = 0; i < magicBall_.size(); i++)
+		{
+			magicBall_[i]->Move_Weapon(kDist, speed);
+			magicBall_[i]->SetDamageList(allCharaList_, charaType_);
+			if (magicBall_[i]->GetDelFlg())
+			{
+				magicBall_.erase(magicBall_.begin() + count);
+				/*atkNo_ = noAtk;*/
+				--count;
+			}
+			++count;
+		}
+		if (magicBall_.empty())
+		{
+			magicBall_.clear();
+			magicFlg_ = false;
+		}
 	}
 }
 
@@ -256,7 +256,21 @@ void Witch::DeadSound()
 //	@brief	描画
 void Witch::CharaRender()
 {
-	Render(m_Pos);
+	bool drawFlg = true;
+
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	if (drawFlg)
+	{
+		Render(m_Pos);
+	}
+	
 	if (!magicBall_.empty())
 	{
 		for (auto m:magicBall_)

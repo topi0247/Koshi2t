@@ -20,9 +20,9 @@ protected:
 	//unsigned int timeCount_;	//攻撃時間
 	//unsigned int timeAtkEnd_;		//攻撃終了時間
 	int attackCount_;			//攻撃ボタンカウント
-	
-
 	Collision* col_;
+
+	virtual void WeaponUpdate() {};
 
 public:
 	JobManager(CharaType charaType);
@@ -32,7 +32,6 @@ public:
 	//template<class> p;
 	void SetParameter(JobParameter* param);
 	//PlayerParameter GetParam()const;
-	bool hit;//デバッグ用
 
 	int GetAtkCnt() { return attackCount_; };
 

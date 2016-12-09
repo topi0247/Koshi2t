@@ -46,6 +46,7 @@ void ShieldMan::Attack()
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
+		moveAbleFlg_ = false;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -62,7 +63,6 @@ void ShieldMan::Attack()
 		attackCount_ = 0;
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		hit = false;
 		spMove_ = D3DXVECTOR3(1, 0, 1);
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
@@ -85,6 +85,7 @@ void ShieldMan::Attack()
 
 	if (atkNo_ == specialAtk)
 	{
+		moveAbleFlg_ = true;
 		Special_Attack();
 	}
 }
@@ -118,47 +119,9 @@ void ShieldMan::Normal_Attack()
 		//attackCount_ = 0;
 		motionChange_ = true;
 		motionCount_ = 0;
-		hit = false;
+		moveAbleFlg_ = true;
 	}
 }
-
-////
-////	@brief	’ÊíUŒ‚“–‚½‚è”»’è
-//void ShieldMan::Normal_Attack_Collision()
-//{
-//	float degree = D3DXToDegree(m_Yaw);
-//	float hitAngle = param_->attackRange_;
-//	float atkDist = param_->attackReach_;
-//	float backDist = param_->knockbackDist_;
-//	float backSpeed = param_->knockbackSpeed_;
-//
-//	if (!aroundCharaList_.empty())
-//	{
-//		for (auto chara : aroundCharaList_)
-//		{
-//			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
-//			{
-//				D3DXVECTOR3 vec = chara->m_Pos - m_Pos;
-//				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-//				angle = D3DXToDegree(angle);
-//
-//				if (fabsf(degree - angle) <= hitAngle)
-//				{
-//					hit = true;
-//					chara->SetKnockBack(m_Pos, backDist, backSpeed);
-//					if (chara->GetCharaType() == Enemy)
-//					{
-//						chara->DamageCalc(param_->normalAtk_);
-//					}
-//				}
-//				else
-//				{
-//					hit = false;
-//				}
-//			}
-//		}
-//	}
-//}
 
 //
 //	@brief	“ÁŽêUŒ‚
@@ -167,7 +130,6 @@ void ShieldMan::Special_Attack()
 	//spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
 	//Special_Attack_Collision();
 	float hitAngle = param_->specialAtkRange_;
-	Attack_Collision(hitAngle);
 
 	if (spMoveFlg_ == false)
 	{
@@ -178,6 +140,8 @@ void ShieldMan::Special_Attack()
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//motionSpeed_ = 1 / (float)motion_->GetMotion("special")->frame_;
 			ChangeMotion(motion_, "special");
+
+			Attack_Collision(hitAngle);
 		}
 	}
 	//if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("special")->id_)
@@ -210,7 +174,6 @@ void ShieldMan::Attack_Collision(float hitAngle)
 	float atkDist = param_->attackReach_;
 	float backSpeed = param_->knockbackSpeed_;
 
-
 	float backDist = 0;
 	if (atkNo_ == normalAtk)
 	{
@@ -232,7 +195,6 @@ void ShieldMan::Attack_Collision(float hitAngle)
 				//float tempAngle = 360;
 				if (fabsf(degree - angle) <= hitAngle)
 				{
-					hit = true;
 					chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
 					if (chara->GetCharaType() == Enemy && atkNo_ == normalAtk)
 					{
@@ -242,78 +204,40 @@ void ShieldMan::Attack_Collision(float hitAngle)
 						Sound::getInstance().SE_play("Sh_DAMAGE_HIT");
 					}
 				}
-				else
-				{
-					hit = false;
-				}
 			}
 		}
 	}
 }
 
-//
-////
-////	@brief	“ÁŽêUŒ‚“–‚½‚è”»’è
-//void ShieldMan::Special_Attack_Collision()
-//{
-//	float degree = D3DXToDegree(m_Yaw);
-//	float hitAngle = param_->attackRange_;
-//	float atkDist = param_->attackReach_;
-//	float backDist = param_->knockbackDist_;
-//
-//	if (!aroundCharaList_.empty())
-//	{
-//		for (auto chara : aroundCharaList_)
-//		{
-//			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
-//			{
-//				D3DXVECTOR3 vec = chara->m_Pos - m_Pos;
-//				D3DXVec3Normalize(&vec, &vec);
-//				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-//				angle = D3DXToDegree(angle);
-//
-//				if (fabsf(degree - angle) <= hitAngle)
-//				{
-//					hit = true;
-//					chara->SetKnockBack(m_Pos, backDist, backSpeed);
-//					if (chara->GetCharaType() == Enemy)
-//					{
-//						chara->DamageCalc(param_->specialAtk_);
-//					}
-//				}
-//				else
-//				{
-//					hit = false;
-//				}
-//			}
-//		}
-//	}
-//}
 
 //
 //	@brief	ƒ_ƒ[ƒWŒvŽZ
 void ShieldMan::DamageCalc(unsigned int atk)
 {
-	Sound::getInstance().SE_play("Sh_DAMAGE");
-
-	float damage = 0;
-	float constant = 1;
-	if (atkNo_ != specialAtk)
+	if (!damageFlg_)
 	{
-		damage = atk / (1 + ((float)param_->def_ / 100));
-	}
-	else
-	{
-		damage = constant;
-	}
+		Sound::getInstance().SE_play("Sh_DAMAGE");
+		damageFlg_ = true;
 
-	hp_ -= damage;
-	if (hp_ <= 0 || param_->hp_ < hp_)
-	{
-		hp_ = 0;
-		aliveFlg_ = false;
-	}
+		float damage = 0;
+		float constant = 1;
+		if (atkNo_ != specialAtk)
+		{
+			damage = atk / (1 + ((float)param_->def_ / 100));
+		}
+		else
+		{
+			damage = constant;
+		}
 
+		hp_ -= damage;
+		if (hp_ <= 0 || param_->hp_ < hp_)
+		{
+			hp_ = 0;
+			aliveFlg_ = false;
+			damageFlg_ = false;
+		}
+	}
 }
 
 
@@ -322,6 +246,22 @@ void ShieldMan::DamageCalc(unsigned int atk)
 //	@param (speed)	ˆÚ“®‘¬“x
 void ShieldMan::Move(float speed)
 {
+	if (damageFlg_)
+	{
+		damageDrawTime_ = FPS * 0.5;
+		if (damageCount_ >= damageDrawTime_)
+		{
+			damageFlg_ = false;
+			damageCount_ = 0;
+		}
+		return;
+	}
+
+	if (atkNo_ == specialAtk)
+	{
+		knockBackFlg_ = false;
+	}
+
 	if (knockBackFlg_ == true)
 	{
 		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);

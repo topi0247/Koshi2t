@@ -29,31 +29,39 @@ enum CharaType
 class CharactorManager:public CD3DXSKINMESH
 {
 protected:
-	Motion* motion_;
-
-	CharaType charaType_;		//自分のキャラクタータイプ
-	CharaType perpetrator_;		//最後に攻撃してきたキャラクター
-	Collision* collision_;
-	unsigned int spaceNo_;		//座標による空間番号
-	unsigned int hp_;			//現在のHP
+	Motion* motion_;			//モーション管理クラス
 	unsigned int motionNo_;		//現在のモーション番号
 	unsigned int motionCount_;	//モーション用カウント
 	unsigned int motionFrame_;	//現在のモーションの総フレーム数
 	bool motionChange_;			//モーション変更フラグ
 	float motionSpeed_;			//モーションスピード
-	float opponentWeight_;		//進行方向にいるキャラの重さ
-	float ownWright_;			//自身の重さ
-	bool aliveFlg_;				//生存フラグ
-	bool moveAbleFlg_;			//移動可能フラグ
-	D3DXVECTOR3 ownPush_;		//自分を押している方向ベクトル
+
 
 	float knockBackDis_;		//ノックバック距離
 	float knockBackSpeed_;		//ノックバックスピード
 	bool knockBackFlg_;			//ノックバックフラグ
 	D3DXVECTOR3 knockBackPos_;	//ノックバック開始座標
 
+	CharaType perpetrator_;		//最後に攻撃してきたキャラクター
+	Collision* collision_;		//衝突判定クラス
+	unsigned int hp_;			//現在のHP
+	bool aliveFlg_;				//生存フラグ
+
+	unsigned int damageCount_;		//ダメージ時点滅描画カウントアップ
+	unsigned int damageDrawTime_;	//ダメージ時点滅描画時間
+	bool damageFlg_;				//ダメージフラグ
+
+	unsigned int spaceNo_;		//座標による空間番号
+	float opponentWeight_;		//進行方向にいるキャラの重さ
+	float ownWright_;			//自身の重さ
+	bool moveAbleFlg_;			//移動可能フラグ
+	D3DXVECTOR3 ownPush_;		//自分を押している方向ベクトル
+
+
+	CharaType charaType_;								//自分のキャラクタータイプ
 	std::vector<CharactorManager*> aroundCharaList_;	//周辺にいるキャラ
 	std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
+
 	virtual void Move(float speed) = 0;					//移動
 	virtual void Attack() = 0;							//攻撃
 	virtual void Dead() = 0;							//死亡
@@ -61,7 +69,7 @@ protected:
 	void Rotation(D3DXVECTOR3 dirVec);					//キャラの回転
 	void AroundCharaCheck();							//周辺にキャラクターがいるかどうか
 	void ChangeMotion(Motion* motion,char* name);		//モーションの変更
-	virtual void DamageSound() {};		//ダメージサウンド
+	virtual void DamageSound() {};						//ダメージサウンド
 
 public:
 	CharactorManager();
