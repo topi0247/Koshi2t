@@ -1,5 +1,25 @@
 #include "D3D11_TEXT.h"
 
+ID3D11Device* D3D11_TEXT::m_pDevice=nullptr;
+ID3D11DeviceContext* D3D11_TEXT::m_pDeviceContext=nullptr;
+ID3D11SamplerState* D3D11_TEXT::m_pSampleLinear=nullptr;
+ID3D11VertexShader* D3D11_TEXT::m_pVertexShader=nullptr;
+ID3D11PixelShader* D3D11_TEXT::m_pPixelShader=nullptr;
+ID3D11InputLayout* D3D11_TEXT::m_pVertexLayout=nullptr;
+ID3D11Buffer* D3D11_TEXT::m_pConstantBuffer=nullptr;
+ID3D11BlendState* D3D11_TEXT::m_pBlendState=nullptr;
+
+DWORD D3D11_TEXT::m_dwWindowHeight;
+DWORD D3D11_TEXT::m_dwWindowWidth;
+ID3D11ShaderResourceView* D3D11_TEXT::m_pAsciiTexture;
+ID3D11Buffer* D3D11_TEXT::m_pVertexBuffer[100];
+D3DXMATRIX D3D11_TEXT::m_mView;
+D3DXMATRIX D3D11_TEXT::m_mProj;
+float D3D11_TEXT::m_fKerning[100];
+float D3D11_TEXT::m_fScale;
+float D3D11_TEXT::m_fAlpha;
+D3DXVECTOR4 D3D11_TEXT::m_vColor;
+
 //
 //
 //
@@ -239,4 +259,10 @@ void D3D11_TEXT::RenderFont(int FontIndex,int x,int y)
 	m_pDeviceContext->OMSetBlendState(m_pBlendState, NULL, ColorKey);
 	m_pDeviceContext->Draw( 4, 0 );
 	m_pDeviceContext->OMSetBlendState(0, NULL, ColorKey);
+}
+
+void D3D11_TEXT::SetCamera(D3DXMATRIX view, D3DXMATRIX proj)
+{
+	m_mView = view;
+	m_mProj = proj;
 }

@@ -38,28 +38,29 @@ public:
 	D3D11_TEXT();
 	~D3D11_TEXT();
 	
-	HRESULT Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,float size,D3DXVECTOR4 vColor);
+	static HRESULT Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,float size,D3DXVECTOR4 vColor);
+	static void SetCamera(D3DXMATRIX view, D3DXMATRIX proj);
 	void Render(char* text,int x,int y);
 	void RenderFont(int FontIndex,int x,int y);
 
-	ID3D11Device* m_pDevice;
-	ID3D11DeviceContext* m_pDeviceContext;
-	ID3D11SamplerState* m_pSampleLinear;	
-	ID3D11VertexShader* m_pVertexShader;
-	ID3D11PixelShader* m_pPixelShader;
-	ID3D11InputLayout* m_pVertexLayout;
-	ID3D11Buffer* m_pConstantBuffer;
-	ID3D11BlendState* m_pBlendState;
+	static ID3D11Device* m_pDevice;
+	static ID3D11DeviceContext* m_pDeviceContext;
+	static ID3D11SamplerState* m_pSampleLinear;
+	static ID3D11VertexShader* m_pVertexShader;
+	static ID3D11PixelShader* m_pPixelShader;
+	static ID3D11InputLayout* m_pVertexLayout;
+	static ID3D11Buffer* m_pConstantBuffer;
+	static ID3D11BlendState* m_pBlendState;
 
 
-	DWORD m_dwWindowWidth;
-	DWORD m_dwWindowHeight;
-	ID3D11ShaderResourceView* m_pAsciiTexture;
-	ID3D11Buffer* m_pVertexBuffer[100];
-	D3DXMATRIX m_mView;
-	D3DXMATRIX m_mProj;
-	float m_fKerning[100];
-	float m_fScale;//25pixelÇäÓèÄ 25pixel=1.0f
-	float m_fAlpha;
-	D3DXVECTOR4 m_vColor;
+	static DWORD m_dwWindowWidth;
+	static DWORD m_dwWindowHeight;
+	static ID3D11ShaderResourceView* m_pAsciiTexture;
+	static ID3D11Buffer* m_pVertexBuffer[100];
+	static D3DXMATRIX m_mView;
+	static D3DXMATRIX m_mProj;
+	static float m_fKerning[100];
+	static float m_fScale;//25pixelÇäÓèÄ 25pixel=1.0f
+	static float m_fAlpha;
+	static D3DXVECTOR4 m_vColor;
 };

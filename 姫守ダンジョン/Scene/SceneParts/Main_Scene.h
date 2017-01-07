@@ -77,11 +77,11 @@ private:
 
 
 	//デバック
-	//D3D11_TEXT* debugText_;
+	D3D11_TEXT* debugText_;
 	double insTime_,pushTime_;
 	bool spawnFlg_;
 
-	//void PlayerDebug();
+	void PlayerDebug();
 	//void EnemyDebug();
 
 	//map<string, TD_Graphics*> Title_UI;

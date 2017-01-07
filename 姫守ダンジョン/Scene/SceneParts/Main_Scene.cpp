@@ -40,6 +40,7 @@ Main_Scene::Main_Scene()
 	camera_ = new Camera;
 
 	//Title_UI["TITLE_UI"] = new TD_Graphics;
+	debugText_ = new D3D11_TEXT;
 }
 
 //
@@ -619,7 +620,7 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 	//	//}
 	//}
 
-	//PlayerDebug();
+	PlayerDebug();
 #ifdef _DEBUG
 	//EnemyDebug();
 #endif // _DEBUG
@@ -686,35 +687,35 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 //
 //	return next;
 //}
-//
-//void Main_Scene::PlayerDebug()
-//{
-//	//デバッグ描画
-//	char str[256];
-//	
-//	
-//#ifdef _DEBUG
-//	sprintf(str, "chara:%d", virChar_[Player1]->GetAroundC());
-//	debugText_->Render(str, 0, 50);
-//#endif // _DEBUG
-//
-//
-//	if(scene_ == MainS)
-//	{
-//		float high = 960;
-//		sprintf(str, "%d", virChar_[Player1]->GetHP());
-//		debugText_->Render(str, 248, high);
-//		sprintf(str, "%d", virChar_[Player2]->GetHP());
-//		debugText_->Render(str, 760, high);
-//		sprintf(str, "%d", virChar_[Player3]->GetHP());
-//		debugText_->Render(str, 1240, high);
-//		sprintf(str, "%d", virChar_[Player4]->GetHP());
-//		debugText_->Render(str, 1740, high);
-//	}
-//	
-//	
-//}
-//
+
+void Main_Scene::PlayerDebug()
+{
+	//デバッグ描画
+	char str[256];
+	
+	
+#ifdef _DEBUG
+	sprintf(str, "chara:%d", virChar_[Player1]->GetAroundC());
+	debugText_->Render(str, 0, 50);
+#endif // _DEBUG
+
+
+	if(scene_ == MainS)
+	{
+		float high = 960;
+		sprintf(str, "%f  %f  %f", virChar_[Player1]->m_Pos.x, virChar_[Player1]->m_Pos.y, virChar_[Player1]->m_Pos.z);
+		debugText_->Render(str, 248, high);
+		/*sprintf(str, "%d", virChar_[Player2]->m_Pos);
+		debugText_->Render(str, 760, high);
+		sprintf(str, "%d", virChar_[Player3]->m_Pos);
+		debugText_->Render(str, 1240, high);
+		sprintf(str, "%d", virChar_[Player4]->m_Pos);
+		debugText_->Render(str, 1740, high);*/
+	}
+	
+	
+}
+
 //void Main_Scene::EnemyDebug()
 //{
 //	char str[256];
