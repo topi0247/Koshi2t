@@ -115,7 +115,7 @@ void MAIN::Loop()
 	Sound::getInstance().Run();
 	//エフェクト
 	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
-	//モデルの読み込み
+	//キャラクターデータ・モデルの読み込み
 	CharactorCreator::LoadModel();
 
 	//シーンマネージャ

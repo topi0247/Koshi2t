@@ -11,6 +11,7 @@
 #include "./../Mesh/CD3DXMESH.h"
 #include "./../Mesh/CD3DXSKINMESH.h"
 #include "./../Read/XFileRead.h"
+#include "./../Read/MotionRead.h"
 
 struct CharaModel
 {

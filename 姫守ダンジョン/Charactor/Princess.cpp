@@ -82,7 +82,7 @@ void Princess::Move(float speed)
 		if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
 			motionNo_ = motion_->GetMotion("walk")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
+			mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
 			motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
 		}
 	}
@@ -93,7 +93,7 @@ void Princess::Move(float speed)
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 		{
 			motionNo_ = motion_->GetMotion("wait")->id_;
-			m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("wait")->id_);
+			mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("wait")->id_);
 			motionSpeed_ = 1 / (float)motion_->GetMotion("wait")->frame_;
 		}
 	}
@@ -108,7 +108,7 @@ void Princess::DamageCalc(unsigned int atk)
 	aliveFlg_ = false;
 	if (motionNo_ != motion_->GetMotion("dead")->id_)
 	{
-		m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("dead")->id_);
+		mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("dead")->id_);
 		motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
 	}
 }
@@ -238,6 +238,6 @@ void Princess::CharaUpdate()
 	Seal();
 
 	//モーションスピード
-	m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 
 }

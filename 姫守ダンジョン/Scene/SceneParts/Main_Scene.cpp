@@ -143,7 +143,7 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	//virChar_[Player2]->CharaInit(xfile->GetFileName());
 	//virChar_[Player2]->SetParameter(parameter->GetJobParamList("‚Žm"));
 	//virChar_[Player2]->SetMotionData(motionRead_->GetMotionUser("‚Žm"));
-	virChar_[Player2]->CharaInit("Œ•Žm");
+	virChar_[Player2]->CharaInit("‚Žm");
 	virChar_[Player2]->m_Pos = D3DXVECTOR3(-1.5, 0, -10);
 
 	//char name3[80];
@@ -154,7 +154,7 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	//virChar_[Player3]->CharaInit(xfile->GetFileName());
 	//virChar_[Player3]->SetParameter(parameter->GetJobParamList("–‚“±Žm"));
 	//virChar_[Player3]->SetMotionData(motionRead_->GetMotionUser("–‚“±Žm"));
-	virChar_[Player3]->CharaInit("Œ•Žm");
+	virChar_[Player3]->CharaInit("”š’eŽm");
 	virChar_[Player3]->m_Pos = D3DXVECTOR3(1.5, 0, -10);
 
 	//char name4[80];
@@ -165,7 +165,7 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	//virChar_[Player4]->CharaInit(xfile->GetFileName());
 	//virChar_[Player4]->SetParameter(parameter->GetJobParamList("”š’eŽm"));
 	//virChar_[Player4]->SetMotionData(motionRead_->GetMotionUser("”š’eŽm"));
-	virChar_[Player4]->CharaInit("Œ•Žm");
+	virChar_[Player4]->CharaInit("–‚“±Žm");
 	virChar_[Player4]->m_Pos = D3DXVECTOR3(3, 0, -10);
 
 	//char name5[80];

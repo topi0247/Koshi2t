@@ -42,6 +42,9 @@ void CharactorCreator::LoadModel()
 	spawnM->mesh_->LoadXMesh(file->GetFilePath());
 	stageModelList_.push_back(spawnM);
 
+	//モーションデータのロード
+	MotionRead::PlayerMotionRead();
+	MotionRead::EnemyMotionRead();
 }
 
 //

@@ -1,5 +1,10 @@
 #include "MotionRead.h"
 
+Motion** MotionRead::playermMotionList_;
+Motion** MotionRead::enemyMotionList_;
+unsigned int MotionRead::countP_;
+unsigned int MotionRead::countE_;
+
 //
 //	@brief	モーションクラスコンストラクタ
 Motion::Motion(XMLElement* element)
@@ -52,10 +57,6 @@ const MotionAttr* Motion::GetMotion(char* name)const
 //
 //	@brief	モーション読み込みクラスのコンストラクタ
 MotionRead::MotionRead()
-	:playermMotionList_(0)
-	, enemyMotionList_(0)
-	, countP_(0)
-	, countE_(0)
 {
 }
 

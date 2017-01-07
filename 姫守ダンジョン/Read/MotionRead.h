@@ -32,16 +32,16 @@ public:
 class MotionRead
 {
 private:
-	Motion** playermMotionList_;	//プレイヤーモーションリスト
-	Motion** enemyMotionList_;		//エネミーモーションリスト
+	static Motion** playermMotionList_;	//プレイヤーモーションリスト
+	static Motion** enemyMotionList_;		//エネミーモーションリスト
 
-	unsigned int countP_;
-	unsigned int countE_;
+	static unsigned int countP_;
+	static unsigned int countE_;
 public:
 	MotionRead();
 	~MotionRead();
 
-	void PlayerMotionRead();
-	void EnemyMotionRead();
+	static void PlayerMotionRead();
+	static void EnemyMotionRead();
 	Motion* GetMotionUser(const char* name);
 };
