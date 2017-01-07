@@ -10,8 +10,7 @@ class Camera
 {
 	D3D11_TEXT* debugText_;
 
-	D3DXVECTOR3 movePow_;				//移動量
-	D3DXVECTOR3 gazePoint_;				//注視点
+
 	D3DXMATRIX oriMat_, tran_, yaw_,pitch_;
 	float dist_,temp_;
 	D3DXVECTOR3 farPlayerPos_;
@@ -24,7 +23,9 @@ public:
 	~Camera();
 	
 	static D3DXMATRIX mView_;
-	static D3DXMATRIX mProj_;
+	static D3DXMATRIX mProj_;	
+	static D3DXVECTOR3 movePow_;				//移動量
+	static D3DXVECTOR3 gazePoint_;				//注視点
 	//D3DXMATRIX GetView()const { return mView_; };
 	//D3DXMATRIX GetProj()const { return mProj_; };
 	void Update();	//更新

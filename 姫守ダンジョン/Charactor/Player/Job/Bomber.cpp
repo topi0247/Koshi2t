@@ -17,34 +17,40 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	invisibleCount_ = 0;
 	invinsibleFlg_ = false;
 	bomb_ = new WeaponBall;
+
+	bom_UI["BOM_UI"] = new TD_Graphics;
+
 }
 
 Bomber::~Bomber()
 {
 	delete bomb_;
+	delete bom_UI["BOM_UI"];
 	bomb_ = nullptr;
 }
 
 
+////
+////	@brief						Xファイル読み込み
+////	@param (m_hWnd)				ウィンドウハンドル
+////	@param (m_pDevice)			デバイス
+////	@param (m_pDeviceContext)	デバイスコンテキスト
+////	@param (fileName)			読み込むキャラ名
+//const char* Bomber::CharaInit(const char* fileName)
+//{
+//	bomb_->Init("bomb.x");
 //
-//	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			読み込むキャラ名
-const char* Bomber::CharaInit(const char* fileName)
-{
-	bomb_->Init("bomb.x");
-
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-	return FileName;
-	//CreateFromX(FileName);
-	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	//ownWright_ = 0.001f;
-}
+//	bom_UI["BOM_UI"]->Init(L"./UI/UI_Tex/UIbom.png", 0, D3DXVECTOR2(1480, 785), D3DXVECTOR2(256, 128), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+//
+//	char FileName[80] = { 0 };
+//	memset(FileName, 0, sizeof(FileName));
+//	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
+//	strcat_s(FileName, sizeof(FileName), fileName);
+//	return FileName;
+//	//CreateFromX(FileName);
+//	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+//	//ownWright_ = 0.001f;
+//}
 
 //
 //	@brief	リセット
@@ -417,6 +423,8 @@ void Bomber::DeadSound()
 void Bomber::CharaRender()
 {
 
+	//bom_UI["BOM_UI"]->Render("0", 0, 0, 0);
+
 	bool drawFlg = true;
 
 	if (damageFlg_)
@@ -429,7 +437,8 @@ void Bomber::CharaRender()
 
 	if (drawFlg)
 	{
-		Render(m_Pos);
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 
 	if (!bombList_.empty())

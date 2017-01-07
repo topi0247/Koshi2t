@@ -7,76 +7,31 @@
 #pragma once
 #include <map>
 #include <string>
+#include <vector>
+#include "./../Mesh/CD3DXMESH.h"
+#include "./../Mesh/CD3DXSKINMESH.h"
+#include "./../Read/XFileRead.h"
 
-typedef std::string ObjectType;
-
-//
-//	@brief	生成器ベース
-template<class Base>
-class CreatorBase
+struct CharaModel
 {
-public:
-	virtual ~CreatorBase() {};
-	virtual Base* Create() const = 0;
+	char name_[30];
+	CD3DXSKINMESH* mesh_;
 };
 
-//
-//	@brief	生成する型と基底クラス指定
-template<class Product,class Base>
-class Creator :public CreatorBase<Base>
+struct StageModel
 {
-public:
-	virtual Base* Create() const { return new Product; };
+	char name_[30];
+	CD3DXMESH* mesh_;
 };
 
-//
-//	@brief	生成と登録
-template<class Base>
 class CharactorCreator
 {
-private:
-	typedef std::map<ObjectType, CreatorBase<Base> *> CreatorMap;
-	CreatorMap creatorMap_;
+	static std::vector<CharaModel*> charaModelList_;
+	static std::vector<StageModel*> stageModelList_;
 public:
-	//キャラクターの生成命令
-	Base* Create(ObjectType type);
+	static void LoadModel();
+	CD3DXMESH* GetStageModel(char* name);
+	CD3DXSKINMESH* GetCharaModel(char* name);
+	static void Destroy();
 
-	//生成器を登録
-	bool Register(ObjectType, CreatorBase<Base>*creator);
 };
-
-//
-//	@brief 生成器登録処理
-template<class Base>
-bool CharactorCreator<Base>::Register(ObjectType, CreatorBase<Base>*creator)
-{
-	// データがない場合は、コンテナの終端が返ってくる
-	CreatorMap::iterator it = creatorMap_.find(type);
-
-	// 既にデータがある場合は生成器を削除する
-	if (it != creatorMap_.end())
-	{
-		delete creator;
-		return false;
-	}
-
-	creatorMap_[type] = creator;
-	return true;
-}
-
-//
-//	@brief	生成
-template<class Base>
-Base* Create(ObjectType type)
-{
-	CreatorMap::iterator it = creatorMap_.find(type);
-
-	// 生成器がなければ失敗
-	if (it == creatorMap_.end())
-	{
-		return nullptr;
-	}
-
-	CreatorBase<Base>* creator = (*it).second;
-	return creator->Create();
-}

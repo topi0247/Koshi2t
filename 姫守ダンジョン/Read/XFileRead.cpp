@@ -9,7 +9,7 @@
 //
 //	@brief				XFileクラスコンストラクタ
 //	@param (element)	読み込む要素
-XFile::XFile(XMLElement* element,const char* type)
+XFile::XFile(XMLElement* element, const char* type)
 {
 	//タイプ取得
 	memset(type_, 0, sizeof(type_));
@@ -22,6 +22,23 @@ XFile::XFile(XMLElement* element,const char* type)
 	//キャラネーム取得
 	memset(charName_, 0, sizeof(charName_));
 	strcpy_s(charName_, sizeof(charName_) - 1, element->Attribute("charName"));
+
+	if (strcmp(type, "Player") == 0)
+	{
+		filePath_ = "./Model/XFiles/Player/"+(std::string)fileName_;
+	}
+	else if (strcmp(type, "Enemy") == 0)
+	{
+		filePath_ = "./Model/XFiles/Enemy/" + (std::string)fileName_;
+	}
+	else if (strcmp(type, "Princess") == 0)
+	{
+		filePath_ = "./Model/XFiles/Princess/" + (std::string)fileName_;
+	}
+	else
+	{
+		filePath_ = "./Model/XFiles/Stage/" + (std::string)fileName_;
+	}
 }
 
 //
@@ -60,7 +77,7 @@ void XFileRead::ReadXFilePath()
 		const char* type = models->Attribute("Type");
 		for (XMLElement* model = models->FirstChildElement("model"); model != NULL; model = model->NextSiblingElement("model"))
 		{
-			XFile* temp = new XFile(model,type);
+			XFile* temp = new XFile(model, type);
 			XFile** newList = new XFile*[count_ + 1];
 
 			if (count_ > 0)
@@ -89,6 +106,35 @@ XFile* XFileRead::GetXFile(const char* name)
 	}
 
 	return nullptr;
+}
+
+//
+//	@brief			ステージモデルの情報取得
+std::vector<XFile*> XFileRead::GetStageFile()
+{
+	std::vector<XFile*> temp;
+	for (int i = 0; i < count_; i++)
+	{
+		if (strcmp(xfileList_[i]->GetType(), "Stage") == 0)
+		{
+			temp.push_back(xfileList_[i]);
+		}
+	}
+	return temp;
+}
+
+std::vector<XFile*> XFileRead::GetModelFile()
+{
+	std::vector<XFile*> temp;
+	for (int i = 0; i < count_; i++)
+	{
+		if (strcmp(xfileList_[i]->GetType(), "Stage") != 0
+			&& strcmp(xfileList_[i]->GetType(), "Spawn") != 0)
+		{
+			temp.push_back(xfileList_[i]);
+		}
+	}
+	return temp;
 }
 
 ////

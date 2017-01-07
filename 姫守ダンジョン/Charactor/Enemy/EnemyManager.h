@@ -47,13 +47,11 @@ protected:
 	virtual void Dead();				//死亡
 	virtual void DamageCalc(unsigned int atk);
 	virtual void DamageSound() {};		//ダメージサウンド
-
+	virtual void SetParameter(char* name);
 public:
 	EnemyManager() ;
 	virtual ~EnemyManager();
 	
-	virtual const char* CharaInit(const char* fileName);		//初期化・読み込み
-	void SetParameter(EnemyParameter* param);
 	void SetTarget(CharactorManager* chara);
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 

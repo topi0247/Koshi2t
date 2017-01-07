@@ -39,7 +39,7 @@ class JobParameter
 	float weaponDelDist_;				//飛び道具消滅距離
 public:
 	JobParameter(std::string str);
-	const char* GetName()const { return name_; };					//名前取得
+	char* GetName()const { return name_; };					//名前取得
 	unsigned int GetHP()const { return hp_; };						//HP取得
 	unsigned int GetNormalAtk()const { return normalAtk_; };		//通常攻撃力取得
 	unsigned int GetSpAtk()const { return specialAtk_; };			//特殊攻撃力取得
@@ -114,9 +114,9 @@ class ParameterRead
 public:
 	ParameterRead();
 	~ParameterRead();
-	void SetJobParameter(const char* filePath);		//職業パラメータ読み込み
-	void SetPriceccParameter(const char* filePath);	//姫パラメータ読み込み
-	void SetEnemyParameter(const char* filePath);	//敵パラメータ読み込み
+	void SetJobParameter(/*const char* filePath*/);		//職業パラメータ読み込み
+	void SetPricessParameter(/*const char* filePath*/);	//姫パラメータ読み込み
+	void SetEnemyParameter(/*const char* filePath*/);	//敵パラメータ読み込み
 
 	int GetJobCount()const;
 	int GetEnemyCount()const;

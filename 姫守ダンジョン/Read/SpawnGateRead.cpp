@@ -15,15 +15,28 @@ SpawnGate::SpawnGate(XMLElement* element)
 		SpawnGateAttr* temp = new SpawnGateAttr;
 
 		temp->id_ = atoi(spawn->Attribute("id"));
-		float x = atof(spawn->Attribute("x"));
-		float y = atof(spawn->Attribute("y"));
-		float z = atof(spawn->Attribute("z"));
-		temp->pos_ = D3DXVECTOR3(x, y, z);
 		memset(temp->enemyName_, 0, sizeof(temp->enemyName_));
 		strcpy_s(temp->enemyName_, sizeof(temp->enemyName_), spawn->Attribute("enemyName"));
 		temp->amount_ = atoi(spawn->Attribute("amount"));
 		temp->interval_ = atoi(spawn->Attribute("interval"));
-		temp->spawnRange_ = atoi (spawn->Attribute("range"));
+
+		XMLElement* pos = spawn->FirstChildElement("pos");
+		PosRead(pos, temp->pos_);
+		/*temp->pos_.x = atof(pos->Attribute("x"));
+		temp->pos_.y = atof(pos->Attribute("y"));
+		temp->pos_.z = atof(pos->Attribute("z"));*/
+
+		pos = pos->NextSiblingElement("leftBack");
+		PosRead(pos, temp->leftBack_);
+		/*temp->leftBack_.x = atof(pos->Attribute("x"));
+		temp->leftBack_.y = atof(pos->Attribute("y"));
+		temp->leftBack_.z = atof(pos->Attribute("z"));*/
+
+		pos = pos->NextSiblingElement("rightFront");
+		PosRead(pos, temp->rightFront_);
+		/*temp->leftBack_.x = atof(pos->Attribute("x"));
+		temp->leftBack_.y = atof(pos->Attribute("y"));
+		temp->leftBack_.z = atof(pos->Attribute("z"));*/
 
 		SpawnGateAttr** newList = new SpawnGateAttr*[count_ + 1];
 
@@ -50,6 +63,13 @@ SpawnGate::~SpawnGate()
 	}
 	delete[] spawnGateList_;
 	spawnGateList_ = nullptr;*/
+}
+
+void SpawnGate::PosRead(XMLElement* element,D3DXVECTOR3 &pos)
+{
+	pos.x = atof(element->Attribute("x"));
+	pos.y = atof(element->Attribute("y"));
+	pos.z = atof(element->Attribute("z"));
 }
 
 //

@@ -23,17 +23,10 @@ Princess::~Princess()
 {
 }
 
-//
-//	@brief	‰Šú‰»
-const char* Princess::CharaInit(const char* fileName)
+void Princess::SetParameter(char* name)
 {
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Princess/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-	//CreateFromX(FileName);
-	m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	return FileName;
+	ParameterRead* parameter = new ParameterRead;
+	parameter->SetPricessParameter();
 }
 
 //
@@ -143,10 +136,6 @@ void Princess::SetSpawn(std::vector<Spawn*> spawn)
 void Princess::Seal()
 {
 	float dist = 5;
-	if (GetKeyState('C')&0x80)
-	{
-		dist = 1000;
-	}
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)

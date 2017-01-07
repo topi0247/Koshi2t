@@ -11,11 +11,13 @@ ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
 	spMoveFlg_ = false;
+
+	//ShieldMan_UI["SHIELDMAN_UI"] = new TD_Graphics;
 }
 
 ShieldMan::~ShieldMan()
 {
-
+	//delete ShieldMan_UI["SHIELDMAN_UI"];
 }
 
 //
@@ -36,6 +38,7 @@ void ShieldMan::Reset()
 	spMoveFlg_ = false;
 
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
+	//ShieldMan_UI["SHIELDMAN_UI"]->Init(L"./UI/UI_Tex/UISeeld.png", 0, D3DXVECTOR2(15, 785), D3DXVECTOR2(256, 128), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //

@@ -15,33 +15,38 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	atkNo_ = noAtk;
 	attackCount_ = 0;
 	magic_ = new WeaponBall;
+
+	Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
 Witch::~Witch()
 {
 	delete magic_;
+	delete Witch_UI["WITCH_UI"];
 	magic_ = nullptr;
 }
 
+////
+////	@brief						Xファイル読み込み
+////	@param (m_hWnd)				ウィンドウハンドル
+////	@param (m_pDevice)			デバイス
+////	@param (m_pDeviceContext)	デバイスコンテキスト
+////	@param (fileName)			読み込むキャラ名
+//const char* Witch::CharaInit(const char* fileName)
+//{
+//	magic_->Init("magicball.x");
 //
-//	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			読み込むキャラ名
-const char* Witch::CharaInit(const char* fileName)
-{
-	magic_->Init("magicball.x");
-
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-	return FileName;
-	//CreateFromX(FileName);
-	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	//ownWright_ = 0.001f;
-}
+//	Witch_UI["WITCH_UI"]->Init(L"./UI/UI_Tex/UIMagic.png", 0, D3DXVECTOR2(986, 785), D3DXVECTOR2(256, 128), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+//
+//	char FileName[80] = { 0 };
+//	memset(FileName, 0, sizeof(FileName));
+//	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
+//	strcat_s(FileName, sizeof(FileName), fileName);
+//	return FileName;
+//	//CreateFromX(FileName);
+//	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+//	//ownWright_ = 0.001f;
+//}
 
 //
 //	@brief	リセット
@@ -256,6 +261,9 @@ void Witch::DeadSound()
 //	@brief	描画
 void Witch::CharaRender()
 {
+
+	//Witch_UI["WITCH_UI"]->Render(0, 0, 0, 0);
+
 	bool drawFlg = true;
 
 	if (damageFlg_)
@@ -268,7 +276,8 @@ void Witch::CharaRender()
 
 	if (drawFlg)
 	{
-		Render(m_Pos);
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 	
 	if (!magicBall_.empty())

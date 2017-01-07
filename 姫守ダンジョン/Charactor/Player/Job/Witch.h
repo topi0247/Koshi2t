@@ -9,10 +9,13 @@
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
 #include "./../Job/WeaponBall.h"
+#include "../../../UI/TD_Graphics.h"
 
 //	–‚“±ŽmƒNƒ‰ƒX
 class Witch :public JobManager
 {
+private:
+
 	bool magicFlg_;	//‹Z‚ª”­“®’†‚©‚Ç‚¤‚©
 	int magicBallCount_;
 	WeaponBall* magic_;
@@ -24,10 +27,13 @@ class Witch :public JobManager
 	virtual void Special_Attack();
 	virtual void DeadSound();
 	virtual void DamageSound();
+
+	map<string, TD_Graphics*> Witch_UI;
+
 public:
 	Witch(CharaType charaType);
 	virtual ~Witch();
-	virtual const char* CharaInit(const char* fileName);
+	//virtual const char* CharaInit(const char* fileName);
 	virtual void Reset();
 	virtual void Attack();
 	virtual void CharaRender();

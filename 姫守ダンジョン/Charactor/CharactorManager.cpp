@@ -19,7 +19,7 @@ CharactorManager::CharactorManager()
 	, motionSpeed_(0.01)
 	, motionCount_(0)
 	, motionFrame_(0)
-	,damageCount_(0)
+	, damageCount_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
@@ -34,7 +34,22 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
+	//SAFE_DELETE(mesh_);
+}
 
+//
+//	@brief モデル読み込み・初期化
+void CharactorManager::CharaInit(char* name)
+{
+	CharactorCreator* creator = new CharactorCreator;
+	mesh_ = creator->GetCharaModel(name);
+
+	XFileRead* xfileRead = new XFileRead;
+	MotionRead* motionRead = new MotionRead;
+	XFile* xfile = xfileRead->GetXFile(name);
+	//CreateFromX(xfile->GetFilePath());
+	SetMotionData(motionRead->GetMotionUser(name));
+	SetParameter(name);
 }
 
 //
@@ -117,7 +132,7 @@ void CharactorManager::SetKnockBack(D3DXVECTOR3 pos, float dist, float speed, Ch
 //	@brief	移動の更新
 void CharactorManager::Move_Update()
 {
-	if (aliveFlg_ == true && moveAbleFlg_==true)
+	if (aliveFlg_ == true && moveAbleFlg_ == true)
 	{
 		m_Pos += m_Dir;
 		/*if (knockBackFlg_ == false && moveAbleFlg_ == true)
@@ -153,10 +168,10 @@ void CharactorManager::SetAroundChara(CharactorManager* charactor)
 void CharactorManager::AroundCharaCheck()
 {
 	std::vector<CharactorManager*> delList;
-	
+
 	for (auto c : aroundCharaList_)
 	{
-		if (!collision_->CheckSpaceNo(spaceNo_, c->spaceNo_))
+		if (!(collision_->CheckSpaceNo(spaceNo_, c->spaceNo_) && c->GetAliveFlg()))
 		{
 			delList.push_back(c);
 		}
@@ -259,6 +274,7 @@ void CharactorManager::CharaRender()
 
 	if (drawFlg)
 	{
-		Render(m_Pos);
+		float scale = 0.2f;
+		mesh_->Render(m_Pos,m_Yaw,D3DXVECTOR3(scale,scale,scale));
 	}
 }

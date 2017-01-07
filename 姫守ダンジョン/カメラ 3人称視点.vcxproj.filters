@@ -70,20 +70,41 @@
     <ClCompile Include="Read\MotionRead.cpp">
       <Filter>Read</Filter>
     </ClCompile>
-    <ClCompile Include="Effect\D3D11_SPRITE.cpp">
-      <Filter>Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect\Effect.cpp">
-      <Filter>Effect</Filter>
-    </ClCompile>
     <ClCompile Include="Read\SpawnGateRead.cpp">
       <Filter>Read</Filter>
     </ClCompile>
-    <ClCompile Include="SoundEffect\Sound.cpp">
-      <Filter>SoundEffect</Filter>
+    <ClCompile Include="Sound\Sound.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Main_Scene.cpp">
-      <Filter>Scene</Filter>
+    <ClCompile Include="Effekseer\Effect.cpp">
+      <Filter>Effekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager\SceneRoot.cpp">
+      <Filter>Scene\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneParts\CharactorSelection_Scene.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneParts\Main_Scene.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneParts\Result_Scene.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneParts\Scene.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneParts\Title_Scene.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TD_Graphics.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Charactor\CharactorCreator.cpp">
+      <Filter>Charactor</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\D3D11_SPRITE.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,20 +184,41 @@
     <ClInclude Include="Read\MotionRead.h">
       <Filter>Read</Filter>
     </ClInclude>
-    <ClInclude Include="Effect\D3D11_SPRITE.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect\Effect.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
     <ClInclude Include="Read\SpawnGateRead.h">
       <Filter>Read</Filter>
     </ClInclude>
-    <ClInclude Include="SoundEffect\Sound.h">
-      <Filter>SoundEffect</Filter>
+    <ClInclude Include="Sound\Sound.h">
+      <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Main_Scene.h">
-      <Filter>Scene</Filter>
+    <ClInclude Include="Effekseer\Effect.h">
+      <Filter>Effekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Bass\SceneBase.h">
+      <Filter>Scene\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager\SceneRoot.h">
+      <Filter>Scene\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneParts\CharactorSelection_Scene.h">
+      <Filter>Scene\SceneParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneParts\Main_Scene.h">
+      <Filter>Scene\SceneParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneParts\Result_Scene.h">
+      <Filter>Scene\SceneParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneParts\Scene.h">
+      <Filter>Scene\SceneParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneParts\Title_Scene.h">
+      <Filter>Scene\SceneParts</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TD_Graphics.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\D3D11_SPRITE.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,14 +246,26 @@
     <Filter Include="Charactor\Player\Job">
       <UniqueIdentifier>{901bdccf-b2de-46f9-8457-e1c2a8bcdb21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Effect">
-      <UniqueIdentifier>{122ecbac-73b4-461b-b62b-5ae9c2e3dd5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SoundEffect">
-      <UniqueIdentifier>{e872b0bf-5851-43a9-880c-81b617b3bb08}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{4a4a7d89-c1ba-418c-b11d-81d06abcc27f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effekseer">
+      <UniqueIdentifier>{84f684b1-34d5-41d5-90ac-38f3aeeb6654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{122ecbac-73b4-461b-b62b-5ae9c2e3dd5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{e872b0bf-5851-43a9-880c-81b617b3bb08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Base">
+      <UniqueIdentifier>{701db02f-bbd1-4c36-8068-f0c691980fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\SceneParts">
+      <UniqueIdentifier>{ce2252f3-4839-44c1-8972-78df3073623f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\SceneManager">
+      <UniqueIdentifier>{a15ad059-dd9f-44e1-bc89-042d990f5d48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

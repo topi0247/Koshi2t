@@ -11,7 +11,11 @@
 #include "./../Mesh/CD3DXSKINMESH.h"
 #include "./../Collision.h"
 #include "./../Read/MotionRead.h"
-#include "./../SoundEffect/Sound.h"
+#include "./../Sound/Sound.h"
+#include "./../Read/MotionRead.h"
+#include "./../Read/ParameterRead.h"
+#include "./../Read/XFileRead.h"
+#include "./CharactorCreator.h"
 
 //#include "./../DebugDraw/D3D11_TEXT.h"
 enum CharaType
@@ -29,6 +33,8 @@ enum CharaType
 class CharactorManager:public CD3DXSKINMESH
 {
 protected:
+	CD3DXSKINMESH* mesh_;
+
 	Motion* motion_;			//モーション管理クラス
 	unsigned int motionNo_;		//現在のモーション番号
 	unsigned int motionCount_;	//モーション用カウント
@@ -70,17 +76,17 @@ protected:
 	void AroundCharaCheck();							//周辺にキャラクターがいるかどうか
 	void ChangeMotion(Motion* motion,char* name);		//モーションの変更
 	virtual void DamageSound() {};						//ダメージサウンド
-
+	virtual void SetParameter(char* name)=0;
 public:
 	CharactorManager();
 	virtual ~CharactorManager();
 
-	virtual const char* CharaInit(const char* fileName)=0;		//初期化・読み込み
+	virtual void CharaInit(char* name);		//初期化・読み込み
 	virtual void CharaUpdate()=0;								//更新
 	virtual void Reset()=0;										//リセット
 	virtual void CharaRender();									//描画
 	virtual void Move_Update();									//移動の更新
-	virtual void DamageCalc(unsigned int atk) {};				//ダメージ計算
+	virtual void DamageCalc(unsigned int atk)=0;				//ダメージ計算
 	void SetMotionData(Motion* motionData);
 	void KnockBack(D3DXVECTOR3 atkPos, float distance,float speed);	//ノックバック
 

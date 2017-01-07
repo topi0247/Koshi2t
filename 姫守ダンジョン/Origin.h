@@ -14,7 +14,9 @@
 #include <d3dx11.h>
 #include <d3dCompiler.h>
 #include "./DebugDraw/D3D11_TEXT.h"
-#include "./Effect/D3D11_SPRITE.h"
+#include "./UI/D3D11_SPRITE.h"
+#include "./Compiled/include/Effekseer.h"
+#include "./Compiled/include/EffekseerRendererDX11.h"
 
 //必要なライブラリファイルのロード
 #pragma comment(lib,"winmm.lib")
@@ -24,6 +26,16 @@
 #pragma comment(lib,"d3dx10.lib")
 #pragma comment(lib,"d3dx11.lib")
 #pragma comment(lib,"d3dCompiler.lib")
+
+#if _DEBUG
+#pragma comment(lib, "./Compiled/lib/VS2015/Debug/Effekseer.lib" )
+#pragma comment(lib, "./Compiled/lib/VS2015/Debug/EffekseerRendererDX11.lib" )
+//#pragma comment(lib, "VS2015/Debug/EffekseerSoundXAudio2.lib" )
+#else
+#pragma comment(lib, "./Compiled/lib/VS2015/Release/Effekseer.lib" )
+#pragma comment(lib, "./Compiled/lib/VS2015/Release/EffekseerRendererDX11.lib" )
+//#pragma comment(lib, "VS2015/Release/EffekseerSoundXAudio2.lib" )
+#endif
 
 //定数定義
 #define WINDOW_WIDTH 1920	//ウィンドウ幅
@@ -36,3 +48,5 @@ const int FPS = 60;				//FPS
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
 #define SAFE_DELETE(x) if(x){delete x; x=0;}
 #define SAFE_DELETE_ARRAY(p){ if(p){ delete[] (p);   (p)=NULL;}}
+//画像数
+#define PIC2D_NUM 25

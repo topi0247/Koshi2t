@@ -68,12 +68,11 @@ protected:
 	virtual void Dead();				//死亡
 	void Revival();						//復活
 	virtual void DeadSound() {};			//死亡時サウンド
-
+	virtual void SetParameter(char* name);
 public:
 	PlayerManager();
 	virtual ~PlayerManager() {};
 
-	virtual const char* CharaInit(const char* fileName);	//初期化と読み込み
 	virtual void DamageCalc(unsigned int atk);		//ダメージ計算
 	void Princess_Call();							//姫呼び
 	void SetRevivalFlg();

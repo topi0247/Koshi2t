@@ -27,43 +27,30 @@ EnemyManager::~EnemyManager()
 	//motion_ = nullptr;
 }
 
-//
-//	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			読み込むキャラ名
-const char* EnemyManager::CharaInit(const char* fileName)
-{
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Enemy/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-
-	return FileName;
-	//CreateFromX(FileName);
-	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	//m_Pos = D3DXVECTOR3(0, 0, 0);
-}
 
 //
 //	@brief	パラメータセット
-void EnemyManager::SetParameter(EnemyParameter* param)
+
+void EnemyManager::SetParameter(char* name)
 {
+	ParameterRead* parameter = new ParameterRead;
+	parameter->SetJobParameter();
+	EnemyParameter* enemy = parameter->GetEnemyParamList(name);
+
+
 	memset(param_->name_, 0, sizeof(param_->name_));
-	memcpy(param_->name_, param->GetName(), sizeof(param_->name_));
+	memcpy(param_->name_, enemy->GetName(), sizeof(param_->name_));
 
-	param_->hp_ = param->GetHP();
-	param_->atk_ = param->GetAtk();
-	param_->def_ = param->GetDefence();
-	param_->moveSpeed_ = param->GetMoveSpeed();
-	param_->weight_ = param->GetWeight();
-	param_->attackReach_ = param->GetAttackReach();
-	param_->scale_ = param->GetScale();
+	param_->hp_ = enemy->GetHP();
+	param_->def_ = enemy->GetDefence();
+	param_->moveSpeed_ = enemy->GetMoveSpeed();
+	param_->weight_ = enemy->GetWeight();
+	param_->attackReach_ = enemy->GetAttackReach();
+	param_->scale_ = enemy->GetScale();
 
+	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
 	ownWright_ = param_->weight_;
 	hp_ = param_->hp_;
-	//hp_ = 10000;
 }
 
 //
@@ -196,15 +183,12 @@ void EnemyManager::DamageCalc(unsigned int atk)
 {
 
 	float damage = atk / (1 + ((float)param_->def_ / 100));
+	hp_ -= damage;
 
-	if (hp_ <= damage)
+	if (hp_ <= 0 || param_->hp_ < hp_)
 	{
 		hp_ = 0;
 		aliveFlg_ = false;
-	}
-	else
-	{
-		hp_ -= damage;
 	}
 }
 

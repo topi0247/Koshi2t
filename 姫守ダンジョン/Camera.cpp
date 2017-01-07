@@ -8,6 +8,8 @@
 
 D3DXMATRIX Camera::mView_;
 D3DXMATRIX Camera::mProj_;
+D3DXVECTOR3 Camera::movePow_;
+D3DXVECTOR3 Camera::gazePoint_;
 
 //
 //	@brief	コンストラクタ
@@ -83,7 +85,9 @@ void Camera::Update()
 	//	temp_ = dist_;
 	//}
 
-	//DebugMove();
+#if _DEBUG
+	DebugMove();
+#endif
 }
 
 
@@ -127,11 +131,15 @@ void Camera::DebugMove()
 	movePow_.z += -(GetKeyState('S') & 0x80)*0.001 + (GetKeyState('W') & 0x80)*0.001;
 
 	//リセット
-	/*if (GetKeyState(VK_SPACE) & 0x80)
+#if _DEBUG
+
+	if (GetKeyState(VK_SPACE) & 0x80)
 	{
-	movePow_ = D3DXVECTOR3(0, 48, -40);
-	Yaw = 0;
-	Roll = -11;
-	}*/
+		movePow_ = D3DXVECTOR3(0, 0, 0); /*D3DXVECTOR3(0, 48, -40);*/
+		Yaw = 0;
+		Roll = -11;
+	}
+
+#endif
 
 }

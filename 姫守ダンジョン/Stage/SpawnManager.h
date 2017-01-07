@@ -9,6 +9,7 @@
 #include "./../Mesh/CD3DXMESH.h"
 #include "./../Read/SpawnGateRead.h"
 #include "./Spawn.h"
+#include "./../Charactor/CharactorCreator.h"
 
 class SpawnManager
 {
@@ -31,7 +32,7 @@ public:
 	SpawnManager();
 	~SpawnManager();
 
-	void Init(const char* name);
+	void Init(char* name);
 	void Reset();
 	void Update(ParameterRead* param, CharactorManager* target);
 	void SealSpawn(Spawn* spawn);

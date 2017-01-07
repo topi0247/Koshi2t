@@ -14,22 +14,43 @@ PlayerManager::PlayerManager()
 	callTiming_ = 0;
 }
 
-//
-//	@brief						Xファイル読み込み
-//	@param (m_hWnd)				ウィンドウハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-//	@param (fileName)			読み込むキャラ名
-const char* PlayerManager::CharaInit(const char* fileName)
+
+void PlayerManager::SetParameter(char* name)
 {
-	char FileName[80] = { 0 };
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Player/");
-	strcat_s(FileName, sizeof(FileName), fileName);
-	return FileName;
-	//CreateFromX(FileName);
-	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	//ownWright_ = 0.001f;
+	ParameterRead* parameter = new ParameterRead;
+	parameter->SetJobParameter(/*"./../ReadData/JobParameterData.csv"*/);
+	JobParameter* job = parameter->GetJobParamList(name);
+	
+
+	memset(param_->name_, 0, sizeof(param_->name_));
+	memcpy(param_->name_, job->GetName(), sizeof(param_->name_));
+
+	param_->hp_ = job->GetHP();
+	param_->normalAtk_ = job->GetNormalAtk();
+	param_->specialAtk_ = job->GetSpAtk();
+	param_->def_ = job->GetDefence();
+	param_->chainWeapon_ = job->GetChainWeapon();
+	param_->spChainWeapon_ = job->GetSpChainWeapon();
+	param_->specialAttackTime_ = job->GetSpAtkTime();
+	param_->invisibleTime_ = job->GetInvisivleTime();
+	param_->weaponDelTime_ = job->GetWeaponDelTime();
+	param_->chargeTime_ = job->GetChargeTime();
+	param_->moveSpeed_ = job->GetMoveSpeed();
+	param_->specialMoveSpeed_ = job->GetSpMoveSpeed();
+	param_->weight_ = job->GetWeight();
+	param_->attackReach_ = job->GetAttackReach();
+	param_->attackRange_ = job->GetAttackRange();
+	param_->specialAtkRange_ = job->GetSpAtkRange();
+	param_->scale_ = job->GetScale();
+	param_->knockbackSpeed_ = job->GetKnockBackSpeed();
+	param_->knockbackDist_ = job->GetKnockBackDist();
+	param_->weaponScale_ = job->GetWeaponScale();
+	param_->weaponHitReach_ = job->GetWeaponHitReach();
+	param_->weaponDelDist_ = job->GetWeaponDelDist();
+
+	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
+	ownWright_ = param_->weight_;
+	hp_ = param_->hp_;
 }
 
 //
@@ -195,18 +216,18 @@ void PlayerManager::Princess_Call()
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
 		callTiming_ = clock();
-		if (motionChange_ == true && motionNo_ != motion_->GetMotion("call")->id_)
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("call1")->id_)
 		{
 			motionChange_ = false;
 			//motionNo_ = motion_->GetMotion("call")->id_;
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
-			ChangeMotion(motion_, "call");
+			ChangeMotion(motion_, "call1");
 
 		}
 	}
 
-	if (motionNo_ == motion_->GetMotion("call")->id_)
+	if (motionNo_ == motion_->GetMotion("call1")->id_)
 	{
 		if (++motionCount_%motionFrame_ == 0)
 		{

@@ -31,12 +31,12 @@ private:
 	virtual void Attack() {};
 	void Seal();					//封印
 	void Resuscitation();			//蘇生
+	virtual void SetParameter(char* name);
 public:
 	Princess();
 	virtual ~Princess();
 
 	Spawn* SealSpawn();
-	virtual const char* CharaInit(const char* fileName);		//初期化・読み込み
 	virtual void Reset();
 	virtual void CharaUpdate();						//更新
 	virtual void DamageCalc(unsigned int atk);		//ダメージ計算

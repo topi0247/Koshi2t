@@ -43,19 +43,19 @@
     <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\OutputDirectory</OutDir>
-    <IntDir>.\MiddleDirectory</IntDir>
+    <OutDir>.\Debug</OutDir>
+    <IntDir>.\Debug</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\owner\Desktop\ソースツリー\姫守ダンジョン\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\owner\Desktop\ソースツリー\姫守ダンジョン\Compiled\lib\VS2015\Debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>プリンセスコール</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\OutputDirectory</OutDir>
     <IntDir>.\MiddleDirectory</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\owner\Desktop\ソースツリー\姫守ダンジョン\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\owner\Desktop\ソースツリー\姫守ダンジョン\Compiled\lib\VS2015\Release;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>プリンセスコール</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -78,10 +78,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -89,10 +90,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Charactor\CharactorCreator.cpp" />
     <ClCompile Include="Charactor\CharactorManager.cpp" />
     <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp" />
     <ClCompile Include="Charactor\Enemy\EnemyManager.cpp" />
@@ -107,8 +110,7 @@
     <ClCompile Include="Charactor\Princess.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DebugDraw\D3D11_TEXT.cpp" />
-    <ClCompile Include="Effect\D3D11_SPRITE.cpp" />
-    <ClCompile Include="Effect\Effect.cpp" />
+    <ClCompile Include="Effekseer\Effect.cpp" />
     <ClCompile Include="MAIN.cpp" />
     <ClCompile Include="Mesh\CD3DXMESH.cpp" />
     <ClCompile Include="Mesh\CD3DXSKINMESH.cpp">
@@ -119,11 +121,18 @@
     <ClCompile Include="Read\SpawnGateRead.cpp" />
     <ClCompile Include="Read\tinyxml2.cpp" />
     <ClCompile Include="Read\XFileRead.cpp" />
-    <ClCompile Include="Scene\Main_Scene.cpp" />
-    <ClCompile Include="SoundEffect\Sound.cpp" />
+    <ClCompile Include="Scene\SceneManager\SceneRoot.cpp" />
+    <ClCompile Include="Scene\SceneParts\CharactorSelection_Scene.cpp" />
+    <ClCompile Include="Scene\SceneParts\Main_Scene.cpp" />
+    <ClCompile Include="Scene\SceneParts\Result_Scene.cpp" />
+    <ClCompile Include="Scene\SceneParts\Scene.cpp" />
+    <ClCompile Include="Scene\SceneParts\Title_Scene.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Stage\Spawn.cpp" />
     <ClCompile Include="Stage\SpawnManager.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
+    <ClCompile Include="UI\D3D11_SPRITE.cpp" />
+    <ClCompile Include="UI\TD_Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -143,8 +152,7 @@
     <ClInclude Include="Charactor\Princess.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DebugDraw\D3D11_TEXT.h" />
-    <ClInclude Include="Effect\D3D11_SPRITE.h" />
-    <ClInclude Include="Effect\Effect.h" />
+    <ClInclude Include="Effekseer\Effect.h" />
     <ClInclude Include="MAIN.h" />
     <ClInclude Include="Mesh\CD3DXMESH.h" />
     <ClInclude Include="Mesh\CD3DXSKINMESH.h">
@@ -156,11 +164,19 @@
     <ClInclude Include="Read\SpawnGateRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
-    <ClInclude Include="Scene\Main_Scene.h" />
-    <ClInclude Include="SoundEffect\Sound.h" />
+    <ClInclude Include="Scene\Bass\SceneBase.h" />
+    <ClInclude Include="Scene\SceneManager\SceneRoot.h" />
+    <ClInclude Include="Scene\SceneParts\CharactorSelection_Scene.h" />
+    <ClInclude Include="Scene\SceneParts\Main_Scene.h" />
+    <ClInclude Include="Scene\SceneParts\Result_Scene.h" />
+    <ClInclude Include="Scene\SceneParts\Scene.h" />
+    <ClInclude Include="Scene\SceneParts\Title_Scene.h" />
+    <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Stage\Spawn.h" />
     <ClInclude Include="Stage\SpawnManager.h" />
     <ClInclude Include="Stage\Stage.h" />
+    <ClInclude Include="UI\D3D11_SPRITE.h" />
+    <ClInclude Include="UI\TD_Graphics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

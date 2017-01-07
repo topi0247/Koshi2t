@@ -65,7 +65,12 @@ void Spawn::ListSet(ParameterRead* param, CharactorManager* target)
 	tempCharactor_ = target;
 	int spawnTime = FPS*spawn_->interval_;
 	
-	if (++timeCount_%spawnTime == 0)
+	int width = spawn_->leftBack_.x + spawn_->rightFront_.x;	//幅
+	int height = spawn_->leftBack_.z + spawn_->rightFront_.z;	//高さ(z軸)
+	D3DXVECTOR3 tempPos = D3DXVECTOR3(spawn_->pos_.x - spawn_->leftBack_.x, 0, spawn_->pos_.z + spawn_->leftBack_.z);	//出現座標の一番左奥
+	int amount_ = spawn_->amount_;
+
+	if (timeCount_++%spawnTime == 0)
 	{
 		if (strcmp(spawn_->enemyName_, "スライム") == 0)
 		{
@@ -86,16 +91,17 @@ void Spawn::ListSet(ParameterRead* param, CharactorManager* target)
 //	@brief	スライムセット
 void Spawn::SlimeSet()
 {
-	int range = spawn_->spawnRange_;
+	int width = spawn_->leftBack_.x + spawn_->rightFront_.x;	//幅
+	int height= spawn_->leftBack_.z + spawn_->rightFront_.z;	//高さ(z軸)
+	D3DXVECTOR3 tempPos = D3DXVECTOR3(spawn_->pos_.x - spawn_->leftBack_.x, 0, spawn_->pos_.z + spawn_->leftBack_.z);	//出現座標の一番左奥
 	int amount_ = spawn_->amount_;
-	D3DXVECTOR3 pos = spawn_->pos_;
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Slim;
-		enemy->SetParameter(tempParameter_->GetEnemyParamList(spawn_->enemyName_));
+		enemy->CharaInit(spawn_->enemyName_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-		enemy->m_Pos = D3DXVECTOR3(rand() % range + (pos.x - range / 2), 0, rand() % range + (pos.z - range / 2));
+		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z-rand() % height);
 		insEnemyList_.push_back(enemy);
 		//SAFE_DELETE(enemy);
 	}
@@ -105,16 +111,17 @@ void Spawn::SlimeSet()
 //	@brief	ゴブリンセット
 void Spawn::GoblinSet()
 {
-	int range = spawn_->spawnRange_;
+	int width = spawn_->leftBack_.x + spawn_->rightFront_.x;	//幅
+	int height = spawn_->leftBack_.z + spawn_->rightFront_.z;	//高さ(z軸)
+	D3DXVECTOR3 tempPos = D3DXVECTOR3(spawn_->pos_.x - spawn_->leftBack_.x, 0, spawn_->pos_.z + spawn_->leftBack_.z);	//出現座標の一番左奥
 	int amount_ = spawn_->amount_;
-	D3DXVECTOR3 pos = spawn_->pos_;
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Goblin;
-		enemy->SetParameter(tempParameter_->GetEnemyParamList(spawn_->enemyName_));
+		enemy->CharaInit(spawn_->enemyName_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-		enemy->m_Pos = D3DXVECTOR3(rand() % range + (pos.x - range / 2), 0, rand() % range + (pos.z - range / 2));
+		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z - rand() % height);
 		insEnemyList_.push_back(enemy);
 		//SAFE_DELETE(enemy);
 	}
@@ -124,16 +131,17 @@ void Spawn::GoblinSet()
 //	@brief	スケルトンセット
 void Spawn::SkeletonSet()
 {
-	int range = spawn_->spawnRange_;
+	int width = spawn_->leftBack_.x + spawn_->rightFront_.x;	//幅
+	int height = spawn_->leftBack_.z + spawn_->rightFront_.z;	//高さ(z軸)
+	D3DXVECTOR3 tempPos = D3DXVECTOR3(spawn_->pos_.x - spawn_->leftBack_.x, 0, spawn_->pos_.z - spawn_->leftBack_.z);	//出現座標の一番左奥
 	int amount_ = spawn_->amount_;
-	D3DXVECTOR3 pos = spawn_->pos_;
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Skeleton;
-		enemy->SetParameter(tempParameter_->GetEnemyParamList(spawn_->enemyName_));
+		enemy->CharaInit(spawn_->enemyName_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-		enemy->m_Pos = D3DXVECTOR3(rand() % range + (pos.x - range / 2), 0, rand() % range + (pos.z - range / 2));
+		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z - rand() % height);
 		insEnemyList_.push_back(enemy);
 		//SAFE_DELETE(enemy);
 	}

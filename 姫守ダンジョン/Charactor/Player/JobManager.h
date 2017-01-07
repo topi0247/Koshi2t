@@ -30,7 +30,7 @@ public:
 
 	virtual void CharaUpdate();
 	//template<class> p;
-	void SetParameter(JobParameter* param);
+	//void SetParameter(JobParameter* param);
 	//PlayerParameter GetParam()const;
 
 	int GetAtkCnt() { return attackCount_; };

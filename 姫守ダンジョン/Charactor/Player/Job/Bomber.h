@@ -8,6 +8,7 @@
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
+#include "../../../UI/TD_Graphics.h"
 
 //	”š’eŽmƒNƒ‰ƒX
 class Bomber :public JobManager
@@ -30,10 +31,13 @@ private:
 	virtual void DeadSound();
 	virtual void Move(float speed);
 	virtual void DamegeSound() {};
+
+	map<string, TD_Graphics*> bom_UI;
+
 public:
 	Bomber(CharaType charaType);
 	virtual ~Bomber();
-	virtual const char* CharaInit(const char* fileName);
+	//virtual const char* CharaInit(const char* fileName);
 	virtual void Reset();
 	virtual void Attack();
 	//virtual void Move_Update();

@@ -8,6 +8,7 @@
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
+//#include "../../../UI/TD_Graphics.h"
 
 //	‚mƒNƒ‰ƒX
 class ShieldMan :public JobManager
@@ -25,6 +26,8 @@ private:
 	//virtual void Move_Update();
 	virtual void DeadSound();
 	virtual void DamegeSound() {};
+
+	/*map<string, TD_Graphics*> ShieldMan_UI;*/
 
 public:
 	ShieldMan(CharaType charaType);

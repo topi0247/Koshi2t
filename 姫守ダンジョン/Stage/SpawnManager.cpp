@@ -23,24 +23,30 @@ SpawnManager::~SpawnManager()
 	//spawnGate_ = nullptr;
 
 	SAFE_DELETE(spawnMesh_);
+	spawnList_.clear();
 }
 
 //
 //	@brief	‰Šú‰»
-void SpawnManager::Init(const char* name)
+void SpawnManager::Init(char* name)
 {
-	spawnMesh_ = new CD3DXMESH;
+	CharactorCreator* creator = new CharactorCreator;
+	spawnMesh_ = creator->GetStageModel(name);
+	//delete creator;
+	//creator = nullptr;
+	SpawnSet();
+	/*spawnMesh_ = new CD3DXMESH;
 
 	char FileName[80];
 	memset(FileName, 0, sizeof(FileName));
 	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Stage/");
 	strcat_s(FileName, sizeof(FileName), name);
-	if (spawnMesh_->LoadXMesh(FileName))
+	if (FAILED(spawnMesh_->LoadXMesh(FileName)))
 	{
 		return;
 	}
 
-	SpawnSet();
+	SpawnSet();*/
 }
 
 //

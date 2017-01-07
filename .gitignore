@@ -21,3 +21,9 @@ JobParameterData.xlsx
 *.bmp
 *.iobj
 *.ipdb
+*.efkproj
+*.lnk
+*.efk
+*.efkmodel
+*.txt
+*.sdf

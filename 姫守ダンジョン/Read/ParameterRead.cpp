@@ -299,10 +299,10 @@ ParameterRead::~ParameterRead()
 //
 //	@brief				職業パラメータ読み込み
 //	@param (filePath)	csvファイルパス
-void ParameterRead::SetJobParameter(const char* filePath)
+void ParameterRead::SetJobParameter(/*const char* filePath*/)
 {
 	//ファイルの読み込み
-	ifstream ifs(filePath);
+	ifstream ifs("./ReadData/JobParameterData.csv");
 	if (!ifs)
 	{
 		return;
@@ -336,34 +336,34 @@ void ParameterRead::SetJobParameter(const char* filePath)
 //
 //	@brief				姫パラメータ読み込み
 //	@param (filePath)	csvファイルパス
-void ParameterRead::SetPriceccParameter(const char* filePath)
+void ParameterRead::SetPricessParameter(/*const char* filePath*/)
 {
-	//ファイルの読み込み
-	ifstream ifs(filePath);
-	if (!ifs)
-	{
-		return;
-	}
+	////ファイルの読み込み
+	//ifstream ifs("");
+	//if (!ifs)
+	//{
+	//	return;
+	//}
 
-	//一行目はパラメータ名なので飛ばす
-	string str;
-	getline(ifs, str);
+	////一行目はパラメータ名なので飛ばす
+	//string str;
+	//getline(ifs, str);
 
-	//データの読み込み
-	getline(ifs, str);
-	princessParam_ = new PrincessParameter(str);
+	////データの読み込み
+	//getline(ifs, str);
+	//princessParam_ = new PrincessParameter(str);
 
-	//ファイルを閉じる
-	ifs.close();
+	////ファイルを閉じる
+	//ifs.close();
 }
 
 //
 //	@brief				敵パラメータ読み込み
 //	@param (filePath)	csvファイルパス
-void ParameterRead::SetEnemyParameter(const char* filePath)
+void ParameterRead::SetEnemyParameter(/*const char* filePath*/)
 {
 	//ファイルの読み込み
-	ifstream ifs(filePath);
+	ifstream ifs("./ReadData/EnemyParameterData.csv");
 	if (!ifs)
 	{
 		return;

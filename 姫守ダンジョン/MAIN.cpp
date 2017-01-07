@@ -21,14 +21,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 		if (SUCCEEDED(g_pMain->InitWindow(hInstance, 0, 0, WINDOW_WIDTH,
 			WINDOW_HEIGHT, APP_NAME)))
 		{
-			g_pMain->CreateConsoleWindow();
+			//g_pMain->CreateConsoleWindow();
 			if (SUCCEEDED(g_pMain->InitD3D()))
 			{
 				g_pMain->Loop();
 			}
 		}
 		//アプリ終了
-		g_pMain->CloseConsoleWindow();
+		//g_pMain->CloseConsoleWindow();
 		g_pMain->DestroyD3D();
 		delete g_pMain;
 	}
@@ -100,23 +100,27 @@ LRESULT MAIN::MsgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 //メッセージループとアプリケーション処理の入り口
 void MAIN::Loop()
 {
-	//メッシュ作成
-	//XFileRead* xfileRead = new XFileRead;
-	//xfileRead->ReadXFilePath();
-	//XFile* xfile = xfileRead->GetXFile("ステージ");
-	/*camera_ = new Camera;*/
-	//stageMesh_ = new Stage;
-	//stageMesh_->Read(m_hWnd, m_pDevice, m_pDeviceContext,xfile->GetFileName());
-	//メッシュ作成　終わり
+
 
 	//初期化
-	//CD3DXMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
+	//スタティックメッシュ
 	CD3DXMESH::InitShader(m_hWnd, m_pDevice, m_pDeviceContext);
+	//スキンメッシュ
 	CD3DXSKINMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
+	//スプライト
 	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
-	mainScene_->Init(m_hWnd, m_pDevice, m_pDeviceContext);
-
+	//UI
+	TD_Graphics::InitDevice(m_pDeviceContext);
+	//サウンド
 	Sound::getInstance().Run();
+	//エフェクト
+	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
+	//モデルの読み込み
+	CharactorCreator::LoadModel();
+
+	//シーンマネージャ
+	root_ = new SceneRoot;
+	root_->Init();
 
 	// メッセージループ
 	MSG msg = { 0 };
@@ -230,8 +234,8 @@ HRESULT MAIN::InitD3D()
 	SAFE_RELEASE(pIr);
 
 	//初期化
-	mainScene_ = new Main_Scene;
-	mainScene_->DebugInit(m_pDeviceContext);
+	//mainScene_ = new Main_Scene;
+	//mainScene_->DebugInit(m_pDeviceContext);
 	return S_OK;
 }
 //
@@ -241,8 +245,8 @@ void MAIN::DestroyD3D()
 {
 	//delete camera_;
 	//camera_ = nullptr;
-	delete mainScene_;
-	mainScene_ = nullptr;
+	CharactorCreator::Destroy();
+	root_->Destroy();
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);
 	SAFE_RELEASE(m_pBackBuffer_DSTexDSV);
@@ -256,7 +260,9 @@ void MAIN::DestroyD3D()
 void MAIN::Update()
 {
 	//camera_->Update();
-	mainScene_->Update();
+	//mainScene_->Update();
+	scene_ = nullptr;
+	scene_ = root_->Update(root_);
 }
 
 //
@@ -264,6 +270,8 @@ void MAIN::Update()
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
+	//scene_ = nullptr;
+	//scene_ = root_->Update(root_);
 
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
@@ -271,34 +279,11 @@ void MAIN::Render()
 	m_pDeviceContext->ClearDepthStencilView(m_pBackBuffer_DSTexDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 
 
-	//// ３人称視点処理　ビュートランスフォーム カメラをキャラの後ろに配置するだけ
-	//D3DXVECTOR3 vEyePt(0.0f, 2.0f, -4.0f); //カメラ（視点）位置
-	//D3DXVECTOR3 vLookatPt(0.0f, 1.7f, 0.0f);//注視位置
-	//D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置
-
-	////視点と注視点の両方をキャラの姿勢（回転と位置）行列で曲げて移動すればいい
-	//D3DXMATRIX OriMat, Tran, Yaw;
-	//D3DXMatrixTranslation(&Tran, 0, 0, 0);
-	//D3DXMatrixRotationY(&Yaw, 0);
-	//OriMat = Yaw*Tran;
-
-	//D3DXVec3TransformCoord(&vEyePt, &vEyePt, &OriMat);
-	//D3DXVec3TransformCoord(&vLookatPt, &vLookatPt, &OriMat);
-
-	//D3DXMatrixLookAtLH(&mView, &vEyePt, &vLookatPt, &vUpVec);
-	//camera_->Render(mView, mProj);
-
-	//// プロジェクショントランスフォーム（射影変換）
-	//D3DXMatrixPerspectiveFovLH(&mProj, D3DX_PI / 4, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
-	//レンダリング
-	//camera_->Render();
-	/*D3DXMATRIX mView = camera_->GetView();
-	D3DXMATRIX mProj = camera_->GetProj();*/
-
 	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
-	mainScene_->Render(/*mView, mProj*/);
+
+	scene_->Render();
 
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
@@ -319,21 +304,4 @@ void MAIN::Render()
 		frame = 0;
 		SetWindowTextA(m_hWnd, str);
 	}
-}
-
-//
-//	@brief	デバック用コンソールウィンドウ表示
-void MAIN::CreateConsoleWindow()
-{
-	//AllocConsole();
-	//hConsole = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
-	//*stdout = *_fdopen(hConsole, "w");
-	//setvbuf(stdout, NULL, _IONBF, 0);
-}
-
-//
-//	@brief	デバッグ用コンソールウィンドウ終了
-void MAIN::CloseConsoleWindow()
-{
-	//_close(hConsole);
 }

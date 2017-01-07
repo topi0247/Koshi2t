@@ -30,18 +30,17 @@
 <Models Type="Stage">
     <model fileName="sky.x" charName="空"/>
     <model fileName="gate.x" charName="門"/>
-    <model fileName="mapbase.x" charName="ステージ0"/>
+    <model fileName="mapbase.x" charName="地面"/>
+    <model fileName="stage5_map.x" charName="ステージ5"/>
     <model fileName="stage1_map.x" charName="ステージ1"/>
 
     <model fileName="stage2_map.x" charName="ステージ2"/>
     <model fileName="stage3_map.x" charName="ステージ3"/>
 
     <model fileName="stage4_map.x" charName="ステージ4"/>
-    <model fileName="stage5_map.x" charName="ステージ5"/>
-
 </Models>
 <Models Type="Spawn">
 
-    <model fileName="spwner.x" charName="スポーン1"/>
+    <model fileName="spwner.x" charName="スポーン"/>
 
 </Models>
