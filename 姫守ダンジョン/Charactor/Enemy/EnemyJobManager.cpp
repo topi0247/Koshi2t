@@ -98,7 +98,21 @@ void Skeleton::NormalAttack()
 
 void Skeleton::CharaRender()
 {
-	Render(m_Pos);
+	bool drawFlg = true;
+
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	if (drawFlg)
+	{
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
+	}
 
 	if (!atkList_.empty())
 	{

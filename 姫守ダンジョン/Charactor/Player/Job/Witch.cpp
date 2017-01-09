@@ -45,7 +45,7 @@ Witch::~Witch()
 //	return FileName;
 //	//CreateFromX(FileName);
 //	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-//	//ownWright_ = 0.001f;
+//	//ownWeight_ = 0.001f;
 //}
 
 //
@@ -262,7 +262,7 @@ void Witch::DeadSound()
 void Witch::CharaRender()
 {
 
-	//Witch_UI["WITCH_UI"]->Render(0, 0, 0, 0);
+	Witch_UI["WITCH_UI"]->Render(0, 0, 0, 0);
 
 	bool drawFlg = true;
 

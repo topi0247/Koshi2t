@@ -2,6 +2,10 @@
 
 std::vector<CharaModel*> CharactorCreator::charaModelList_;
 std::vector<StageModel*> CharactorCreator::stageModelList_;
+char CharactorCreator::player1_[10];
+char CharactorCreator::player2_[10];
+char CharactorCreator::player3_[10];
+char CharactorCreator::player4_[10];
 
 //
 //	@brief	モデルのロード
@@ -45,6 +49,11 @@ void CharactorCreator::LoadModel()
 	//モーションデータのロード
 	MotionRead::PlayerMotionRead();
 	MotionRead::EnemyMotionRead();
+
+	//パラメーターデータのロード
+	ParameterRead::SetJobParameter();
+	ParameterRead::SetPricessParameter();
+	ParameterRead::SetEnemyParameter();
 }
 
 //

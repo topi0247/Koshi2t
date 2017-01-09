@@ -124,6 +124,7 @@
     <ClCompile Include="Scene\SceneManager\SceneRoot.cpp" />
     <ClCompile Include="Scene\SceneParts\CharactorSelection_Scene.cpp" />
     <ClCompile Include="Scene\SceneParts\Main_Scene.cpp" />
+    <ClCompile Include="Scene\SceneParts\Result.cpp" />
     <ClCompile Include="Scene\SceneParts\Result_Scene.cpp" />
     <ClCompile Include="Scene\SceneParts\Scene.cpp" />
     <ClCompile Include="Scene\SceneParts\Title_Scene.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Scene\SceneManager\SceneRoot.h" />
     <ClInclude Include="Scene\SceneParts\CharactorSelection_Scene.h" />
     <ClInclude Include="Scene\SceneParts\Main_Scene.h" />
+    <ClInclude Include="Scene\SceneParts\Result.h" />
     <ClInclude Include="Scene\SceneParts\Result_Scene.h" />
     <ClInclude Include="Scene\SceneParts\Scene.h" />
     <ClInclude Include="Scene\SceneParts\Title_Scene.h" />

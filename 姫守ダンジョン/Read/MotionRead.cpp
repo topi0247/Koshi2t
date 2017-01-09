@@ -9,7 +9,7 @@ unsigned int MotionRead::countE_;
 //	@brief	モーションクラスコンストラクタ
 Motion::Motion(XMLElement* element)
 	:count_(0)
-	,motionList_(0)
+	, motionList_(0)
 {
 	//モーション使用者名
 	memset(name_, 0, sizeof(name_));
@@ -145,26 +145,22 @@ void MotionRead::EnemyMotionRead()
 //	@brief	モーション使用者取得
 Motion* MotionRead::GetMotionUser(const char* name)
 {
-	if (playermMotionList_ != nullptr)
+
+	for (int i = 0; i < countP_; i++)
 	{
-		for (int i = 0; i < countP_; i++)
+		if (strcmp(name, playermMotionList_[i]->GetName()) == 0)
 		{
-			if (strcmp(name, playermMotionList_[i]->GetName()) == 0)
-			{
-				return playermMotionList_[i];
-			}
-		}
-	}
-	else if (enemyMotionList_ != nullptr)
-	{
-		for (int i = 0; i < countE_; i++)
-		{
-			if (strcmp(name, enemyMotionList_[i]->GetName()) == 0)
-			{
-				return enemyMotionList_[i];
-			}
+			return playermMotionList_[i];
 		}
 	}
 
+	for (int i = 0; i < countE_; i++)
+	{
+		if (strcmp(name, enemyMotionList_[i]->GetName()) == 0)
+		{
+			return enemyMotionList_[i];
+		}
+	}
 	return nullptr;
+
 }

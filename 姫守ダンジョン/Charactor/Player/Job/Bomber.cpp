@@ -49,7 +49,7 @@ Bomber::~Bomber()
 //	return FileName;
 //	//CreateFromX(FileName);
 //	//m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-//	//ownWright_ = 0.001f;
+//	//ownWeight_ = 0.001f;
 //}
 
 //
@@ -93,7 +93,7 @@ void Bomber::MoveCharaHit()
 			float hitAngle = 90 / 2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
-				/*opponentWeight_ = c->ownWright_;*/
+				/*opponentWeight_ = c->ownWeight_;*/
 				opponentWeight_ = 0;
 				opp = c;
 			}
@@ -423,7 +423,7 @@ void Bomber::DeadSound()
 void Bomber::CharaRender()
 {
 
-	//bom_UI["BOM_UI"]->Render("0", 0, 0, 0);
+	bom_UI["BOM_UI"]->Render("0", 0, 0, 0);
 
 	bool drawFlg = true;
 

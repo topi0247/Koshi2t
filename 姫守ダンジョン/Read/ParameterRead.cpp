@@ -256,14 +256,15 @@ EnemyParameter::EnemyParameter(string str)
 
 //=======================================================================//
 
+JobParameter** ParameterRead::jobParamList_;
+PrincessParameter* ParameterRead::princessParam_;
+EnemyParameter** ParameterRead::enemyParamList_;
+int ParameterRead::jobCount_;
+int ParameterRead::enemyCount_;
+
 //
 //	@brief	ParameterReadコンストラクタ	
 ParameterRead::ParameterRead()
-	:jobParamList_(0)
-	, enemyParamList_(0)
-	, princessParam_(0)
-	, jobCount_(0)
-	, enemyCount_(0)
 {
 }
 
@@ -285,6 +286,8 @@ ParameterRead::~ParameterRead()
 			jobParamList_[i] = nullptr;
 		}
 	}
+	delete[] jobParamList_;
+	jobParamList_ = nullptr;
 
 	if (enemyParamList_ != nullptr)
 	{
@@ -294,6 +297,8 @@ ParameterRead::~ParameterRead()
 			enemyParamList_[j] = nullptr;
 		}
 	}
+	delete[] enemyParamList_;
+	enemyParamList_ = nullptr;
 }
 
 //

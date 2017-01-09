@@ -28,13 +28,18 @@ class EnemyManager : public CharactorManager
 {
 private:
 	D3DXVECTOR3 targetPos_;
+	static std::vector<D3DXVECTOR3> busStop_;
+	static std::vector<int> busStopSpaceNo_;
+
 	enum TargetObject
 	{
 		princess = 0,
 		player,
 	};
 	TargetObject targetObj_;
-	
+
+
+	void SetTargetPos(D3DXVECTOR3 pos);
 protected:
 	unsigned int atkWaitTime_;	//攻撃する間隔
 
@@ -49,14 +54,15 @@ protected:
 	virtual void DamageSound() {};		//ダメージサウンド
 	virtual void SetParameter(char* name);
 public:
-	EnemyManager() ;
+	EnemyManager();
 	virtual ~EnemyManager();
-	
+
+	static void SetBusStop(std::vector<D3DXVECTOR3> pos);
 	void SetTarget(CharactorManager* chara);
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 
 	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
-	
+
 	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
 	EnemyParam* GetParam() { return param_; };
 	CharactorManager* GetTarget() { return targetChar_; };

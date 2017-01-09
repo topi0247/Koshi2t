@@ -30,7 +30,6 @@
     <ClCompile Include="Read\ParameterRead.cpp">
       <Filter>Read</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Charactor\Enemy\EnemyJobManager.cpp">
       <Filter>Charactor\Enemy</Filter>
     </ClCompile>
@@ -106,6 +105,10 @@
     <ClCompile Include="UI\D3D11_SPRITE.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Scene\SceneParts\Result.cpp">
+      <Filter>Scene\SceneParts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MAIN.h" />
@@ -138,7 +141,6 @@
     <ClInclude Include="Charactor\CharactorCreator.h">
       <Filter>Charactor</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h" />
     <ClInclude Include="Charactor\Enemy\EnemyManager.h">
       <Filter>Charactor\Enemy</Filter>
     </ClInclude>
@@ -219,6 +221,10 @@
     </ClInclude>
     <ClInclude Include="UI\D3D11_SPRITE.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Scene\SceneParts\Result.h">
+      <Filter>Scene\SceneParts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -90,13 +90,20 @@ void Camera::Update()
 #endif
 }
 
+void Camera::TitleUpdate(float radius)
+{
+	//static float move = 0;
+	//movePow_.x += cosf(move);
+	//movePow_.z += sinf(move);
+	//move += 0.01;
+}
 
 //	@brief			描画
 //	@param (mView)	描画用マトリックス
 //	@param (mProj)	射影変換用マトリックス
 void Camera::Render()
 {
-	// ３人称視点処理　ビュートランスフォーム カメラをキャラの後ろに配置するだけ
+	//ビュートランスフォーム カメラをキャラの後ろに配置するだけ
 	D3DXVECTOR3 camPos = movePow_;
 	D3DXVECTOR3 lookPos = gazePoint_;
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置

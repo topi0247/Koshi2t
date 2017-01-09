@@ -4,6 +4,8 @@
 #include "./../../Effekseer/Effect.h"
 #include "./../../Sound/Sound.h"
 #include "./../../DebugDraw/D3D11_TEXT.h"
+#include "./../../Charactor/Player/GamePad.h"
+#include "./../../UI/TD_Graphics.h"
 
 class SceneBase
 {

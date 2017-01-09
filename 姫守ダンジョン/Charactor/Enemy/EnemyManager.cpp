@@ -7,13 +7,16 @@
 
 #include "EnemyManager.h"
 
+std::vector<D3DXVECTOR3> EnemyManager::busStop_;
+std::vector<int> EnemyManager::busStopSpaceNo_;
+
 EnemyManager::EnemyManager()
 {
 	charaType_ = Enemy;
 	m_Pos = { 0,0,0 };
 	aliveFlg_ = true;
 	moveAbleFlg_ = true;
-	opponentWeight_ = 1;
+	//opponentWeight_ = 1;
 	//targetPos_ = D3DXVECTOR3(0, 0, 0);
 	collision_ = new Collision;
 	param_ = new EnemyParam;
@@ -30,11 +33,10 @@ EnemyManager::~EnemyManager()
 
 //
 //	@brief	パラメータセット
-
 void EnemyManager::SetParameter(char* name)
 {
 	ParameterRead* parameter = new ParameterRead;
-	parameter->SetJobParameter();
+	//parameter->SetJobParameter();
 	EnemyParameter* enemy = parameter->GetEnemyParamList(name);
 
 
@@ -49,8 +51,23 @@ void EnemyManager::SetParameter(char* name)
 	param_->scale_ = enemy->GetScale();
 
 	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
-	ownWright_ = param_->weight_;
+	ownWeight_ = param_->weight_;
 	hp_ = param_->hp_;
+}
+
+//
+//	@brief	バス停セット
+void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
+{
+	busStop_ = pos;
+	Collision* col = new Collision;
+	for (auto p : pos)
+	{
+		int no = col->SetSpaceNo(p);
+		busStopSpaceNo_.push_back(no);
+	}
+	//delete col;
+	//col = nullptr;
 }
 
 //
@@ -59,7 +76,43 @@ void EnemyManager::SetParameter(char* name)
 void EnemyManager::SetTarget(CharactorManager* chara)
 {
 	targetChar_ = chara;
-	targetPos_ = targetChar_->m_Pos;
+	
+}
+
+//
+//	@brief	ターゲット座標セット
+void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
+{
+	targetPos_ = pos;
+
+	for (auto no : busStopSpaceNo_)
+	{
+		if (collision_->CheckSpaceNo(spaceNo_, no))
+		{
+			return;
+		}
+	}
+
+	float dist = pow(m_Pos.x - targetPos_.x, 2) + pow(m_Pos.z - targetPos_.z, 2);
+	float degree = D3DXToDegree(m_Yaw);
+	D3DXVECTOR3 vec = targetPos_ - m_Pos;
+	float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+	angle = D3DXToDegree(angle);
+
+	for (auto p : busStop_)
+	{
+		float temp = pow(m_Pos.x - p.x, 2) + pow(m_Pos.z - p.z, 2);
+		D3DXVECTOR3 tempVec = p - m_Pos;
+		float tempAngle = (atan2(tempVec.z, tempVec.x)*-1) - (D3DX_PI / 2.0f);
+		tempAngle = D3DXToDegree(tempAngle);
+		if (temp < dist && fabsf(degree - angle) <= 90)
+		{
+			targetPos_ = p;
+			dist = temp;
+		}
+	}
+
+	
 }
 
 //
@@ -71,7 +124,7 @@ void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * pr
 	CharactorManager* temp = targetChar_;
 	//float dist = 5;
 
-	if (perpetrator_== chara->GetCharaType())
+	if (perpetrator_ == chara->GetCharaType())
 	{
 		temp = chara;
 	}
@@ -93,6 +146,7 @@ void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * pr
 
 	//ターゲットの更新
 	SetTarget(temp);
+	SetTargetPos(temp->m_Pos);
 }
 
 //
@@ -168,12 +222,12 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	/*if (motionNo_ != motion_->GetMotion("walk")->id_)
+	if (motionNo_ != motion_->GetMotion("walk")->id_)
 	{
 		motionNo_ = motion_->GetMotion("walk")->id_;
-		m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-	}*/
+	}
 
 }
 

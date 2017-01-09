@@ -20,7 +20,7 @@ private:
 	D3DXVECTOR3 rot_;
 
 	SpawnGateAttr* spawn_;
-	ParameterRead* tempParameter_;
+	//ParameterRead* tempParameter_;
 	CharactorManager* tempCharactor_;
 
 	//int spawnID_;		//ÉXÉ|Å[Éìî‘çÜ
@@ -37,7 +37,8 @@ public:
 	std::vector<EnemyJobManager*> EnemySpawn();
 	//void SpawnInit(const char* name);
 	void SpawnInit(SpawnGateAttr* spawnInfo);
-	void ListSet(ParameterRead* param,CharactorManager* target);
+	//void ListSet(ParameterRead* param,CharactorManager* target);
+	void ListSet(CharactorManager* target);
 	void ListReset();
 	D3DXVECTOR3 GetPos()const { return spawn_->pos_; };
 	D3DXVECTOR3 GetRot()const { return rot_; };

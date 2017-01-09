@@ -58,10 +58,10 @@ void Spawn::SpawnInit(SpawnGateAttr* spawnInfo)
 
 //
 //	@brief	エネミーリストのセット
-void Spawn::ListSet(ParameterRead* param, CharactorManager* target)
+void Spawn::ListSet(/*ParameterRead* param, */CharactorManager* target)
 {
 	srand((unsigned)time(NULL));
-	tempParameter_ = param;
+	//tempParameter_ = param;
 	tempCharactor_ = target;
 	int spawnTime = FPS*spawn_->interval_;
 	

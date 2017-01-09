@@ -11,7 +11,7 @@ struct SpawnGateAttr
 {
 	unsigned int id_;			//スポーンゲート番号
 	D3DXVECTOR3 pos_;			//座標
-	D3DXVECTOR3 leftBack_;	//出現範囲座標左奥
+	D3DXVECTOR3 leftBack_;		//出現範囲座標左奥
 	D3DXVECTOR3 rightFront_;	//出現範囲座標右手前
 	char enemyName_[30];		//出現する敵の名前
 	unsigned int amount_;		//一度に出現する数
@@ -26,6 +26,7 @@ private:
 	char stageName_[30];
 	unsigned int count_;
 	SpawnGateAttr** spawnGateList_;
+	std::vector<D3DXVECTOR3> busStop_;
 
 	void PosRead(XMLElement* element,D3DXVECTOR3 &pos);
 public:

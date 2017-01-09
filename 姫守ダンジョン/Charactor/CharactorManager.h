@@ -59,7 +59,7 @@ protected:
 
 	unsigned int spaceNo_;		//座標による空間番号
 	float opponentWeight_;		//進行方向にいるキャラの重さ
-	float ownWright_;			//自身の重さ
+	float ownWeight_;			//自身の重さ
 	bool moveAbleFlg_;			//移動可能フラグ
 	D3DXVECTOR3 ownPush_;		//自分を押している方向ベクトル
 

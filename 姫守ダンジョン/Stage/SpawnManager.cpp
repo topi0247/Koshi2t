@@ -92,13 +92,13 @@ void SpawnManager::Reset()
 
 //
 //	@brief	XVˆ—
-void SpawnManager::Update(ParameterRead* param, CharactorManager* target)
+void SpawnManager::Update(/*ParameterRead* param, */CharactorManager* target)
 {
 	if (!spawnList_.empty())
 	{
 		for (auto s : spawnList_)
 		{
-			s->ListSet(param, target);
+			s->ListSet(target);
 		}
 	}
 }

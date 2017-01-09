@@ -44,6 +44,7 @@
 const int FPS = 60;				//FPS
 
 
+
 //ƒ}ƒNƒ
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
 #define SAFE_DELETE(x) if(x){delete x; x=0;}

@@ -5,7 +5,7 @@
 //	@brief	スポーンゲートクラスのコンストラクタ
 SpawnGate::SpawnGate(XMLElement* element)
 	:spawnGateList_(0)
-	,count_(0)
+	, count_(0)
 {
 	memset(stageName_, 0, sizeof(stageName_));
 	strcpy_s(stageName_, sizeof(stageName_), element->Attribute("Type"));
@@ -38,6 +38,11 @@ SpawnGate::SpawnGate(XMLElement* element)
 		temp->leftBack_.y = atof(pos->Attribute("y"));
 		temp->leftBack_.z = atof(pos->Attribute("z"));*/
 
+		D3DXVECTOR3 first;
+		pos = pos->NextSiblingElement("firstTarget");
+		PosRead(pos, first);
+		busStop_.push_back(first);
+
 		SpawnGateAttr** newList = new SpawnGateAttr*[count_ + 1];
 
 		if (count_ > 0)
@@ -65,7 +70,7 @@ SpawnGate::~SpawnGate()
 	spawnGateList_ = nullptr;*/
 }
 
-void SpawnGate::PosRead(XMLElement* element,D3DXVECTOR3 &pos)
+void SpawnGate::PosRead(XMLElement* element, D3DXVECTOR3 &pos)
 {
 	pos.x = atof(element->Attribute("x"));
 	pos.y = atof(element->Attribute("y"));
@@ -77,7 +82,7 @@ void SpawnGate::PosRead(XMLElement* element,D3DXVECTOR3 &pos)
 std::vector<SpawnGateAttr*> SpawnGate::GetStageAllSpawnGate()
 {
 	std::vector<SpawnGateAttr*> temp;
-	for (int i = 0;i < count_; i++)
+	for (int i = 0; i < count_; i++)
 	{
 		temp.push_back(spawnGateList_[i]);
 	}
@@ -90,7 +95,7 @@ std::vector<SpawnGateAttr*> SpawnGate::GetStageAllSpawnGate()
 //	@brief	スポーンゲート読み込みクラスコンストラクタ
 SpawnGateRead::SpawnGateRead()
 	:spawnGateList_(0)
-	,count_(0)
+	, count_(0)
 {
 }
 

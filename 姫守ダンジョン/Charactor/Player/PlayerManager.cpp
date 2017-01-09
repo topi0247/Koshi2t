@@ -18,7 +18,7 @@ PlayerManager::PlayerManager()
 void PlayerManager::SetParameter(char* name)
 {
 	ParameterRead* parameter = new ParameterRead;
-	parameter->SetJobParameter(/*"./../ReadData/JobParameterData.csv"*/);
+	//parameter->SetJobParameter(/*"./../ReadData/JobParameterData.csv"*/);
 	JobParameter* job = parameter->GetJobParamList(name);
 	
 
@@ -49,7 +49,7 @@ void PlayerManager::SetParameter(char* name)
 	param_->weaponDelDist_ = job->GetWeaponDelDist();
 
 	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
-	ownWright_ = param_->weight_;
+	ownWeight_ = param_->weight_;
 	hp_ = param_->hp_;
 }
 

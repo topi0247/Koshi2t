@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <assert.h>
 #include "../Origin.h"
 #define MAX 100
 
@@ -19,7 +20,7 @@ private:
 
 	static ID3D11Device*				g_device;
 	static ID3D11DeviceContext*			g_context;
-
+	void EffectSet();
 public:
 
 	Effect(const Effect&) = delete;
@@ -39,7 +40,7 @@ public:
 	void Set();
 	void Effect_Play(string name, D3DXVECTOR3 pos);
 	void Effect_Stop(string name);
-	void SetScale(string name,float scale);
+	void SetScale(string name, float scale);
 	void Update(string name, D3DXVECTOR3 pos);
 	void Draw();
 };

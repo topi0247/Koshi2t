@@ -285,6 +285,7 @@ void MAIN::Render()
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
+	Effect::getInstance().SetCamera(Camera::movePow_, Camera::gazePoint_);
 
 	scene_->Render();
 

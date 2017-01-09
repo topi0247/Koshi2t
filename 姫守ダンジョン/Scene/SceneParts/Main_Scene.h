@@ -44,7 +44,7 @@ private:
 
 	Stage* stage_;						//ステージ情報
 	Collision* ray_;
-	std::vector<JobManager*> virChar_;	//確認用仮キャラクター
+	std::vector<JobManager*> player_;	//確認用仮キャラクター
 	Princess* princess_;				//姫
 	Camera* camera_;
 
@@ -52,7 +52,7 @@ private:
 	//Spawn* spawn_;
 	SpawnManager* spawnManager_;
 	EnemyJobManager* virEnemy_;			//確用仮キャラクター
-	CD3DXSKINMESH* slime_;
+	//CD3DXSKINMESH* slime_;
 	/*EnemyJobManager* virEnemy_;*/
 
 	void CollisionControl();			//衝突判定管理
@@ -67,6 +67,7 @@ private:
 	void GameEnd();		//ゲーム終了
 
 	void EnemyDestroy();	//エネミー死亡処理
+	JobManager* SetCharaJob(char* name, CharaType type);
 
 							//エフェクト	
 	//D3D11_SPRITE* uisword_;

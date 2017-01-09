@@ -34,7 +34,7 @@ public:
 
 	void Init(char* name);
 	void Reset();
-	void Update(ParameterRead* param, CharactorManager* target);
+	void Update(/*ParameterRead* param, */CharactorManager* target);
 	void SealSpawn(Spawn* spawn);
 	void Render();
 	std::vector<EnemyJobManager*> OutEnemy();

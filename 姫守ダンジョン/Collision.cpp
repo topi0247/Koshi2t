@@ -118,6 +118,15 @@ bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 	}
 }
 
+////
+////	@breif			‹——£‘ª’è
+////	@param (posA)	©g‚ÌÀ•W
+////	@param (posB)	‘Šè‚ÌÀ•W
+////	@return			‹——£‚Ì“ñæ
+//float Collision::Distance2(D3DXVECTOR3 posA, D3DXVECTOR3 posB)
+//{
+//	return pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2);
+//}
 
 bool Collision::RayIntersect(CD3DXSKINMESH* pMeshA, CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {

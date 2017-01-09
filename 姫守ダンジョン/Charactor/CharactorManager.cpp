@@ -44,9 +44,9 @@ void CharactorManager::CharaInit(char* name)
 	CharactorCreator* creator = new CharactorCreator;
 	mesh_ = creator->GetCharaModel(name);
 
-	XFileRead* xfileRead = new XFileRead;
+	//XFileRead* xfileRead = new XFileRead;
 	MotionRead* motionRead = new MotionRead;
-	XFile* xfile = xfileRead->GetXFile(name);
+	//XFile* xfile = xfileRead->GetXFile(name);
 	//CreateFromX(xfile->GetFilePath());
 	SetMotionData(motionRead->GetMotionUser(name));
 	SetParameter(name);
@@ -203,7 +203,7 @@ void CharactorManager::MoveCharaHit()
 			float hitAngle = 90 / 2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
-				/*opponentWeight_ = c->ownWright_;*/
+				/*opponentWeight_ = c->ownWeight_;*/
 				opponentWeight_ = 0;
 				opp = c;
 			}

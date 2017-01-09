@@ -27,7 +27,7 @@ Effect::~Effect()
 {
 	/*for (int i = 0; i < g_effect.size(); i++)
 	{
-		ES_SAFE_RELEASE(g_effect[0]);
+	ES_SAFE_RELEASE(g_effect[0]);
 	}*/
 
 	// 先にエフェクト管理用インスタンスを破棄
@@ -160,18 +160,47 @@ void Effect::Set()
 	g_manager->SetModelLoader(g_renderer->CreateModelLoader());
 
 	// エフェクトの読込
-	effect_["reborn"] = LoadEffect((const EFK_CHAR*)L"Effekseer/EffectsMaterial/distortion.efk");
+	EffectSet();
+	//effect_["smork"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/盾/smork.efk");
+	//effect_["smork"] = LoadEffect((const EFK_CHAR*)L"Effekseer/EffectsMaterial/bi-m2.efk");
 
 	//g_handle = g_manager->Play(g_effect, 0, 0, 0);
+}
+
+//
+//	@brief	エフェクト読み込み
+void Effect::EffectSet()
+{
+	//全体
+	effect_["charge1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge1.efk");
+	effect_["charge2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge2.efk");
+
+	//剣士
+
+	//盾士
+	effect_["smork"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/盾士/smork.efk");
+
+	//爆弾士
+	effect_["explosion"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/爆弾士/explosion.efk");
+
+	//魔導士
+	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/魔導士/beam1.efk");
+
+	effect_["beam2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/魔導士/bi-m2.efk");
+
+	//姫
+
+	//
 }
 
 //
 //	@brief	エフェクトのロード
 int Effect::LoadEffect(const EFK_CHAR* path)
 {
+	assert(Effekseer::Effect::Create(g_manager, path) != NULL);
 	static int no = -1;
 	++no;
-	g_effect[no]= Effekseer::Effect::Create(g_manager, path);
+	g_effect[no] = Effekseer::Effect::Create(g_manager, path);
 	return no;
 }
 

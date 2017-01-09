@@ -90,7 +90,7 @@ class EnemyParameter
 	float scale_;				//ƒXƒP[ƒ‹
 public:
 	EnemyParameter(std::string str);
-	const char* GetName()const { return name_; };				//–¼‘Oæ“¾
+	char* GetName()const { return name_; };				//–¼‘Oæ“¾
 	unsigned int GetHP()const { return hp_; };					//HPæ“¾
 	unsigned int GetAtk()const { return atk_; };				//’ÊíUŒ‚—Íæ“¾
 	unsigned int GetDefence()const { return def_; };			//ç”õ—Íæ“¾
@@ -105,18 +105,18 @@ public:
 //	@note	ŒÄ‚Ño‚µ‚às‚¤
 class ParameterRead
 {
-	JobParameter** jobParamList_;		//E‹Æƒpƒ‰ƒ[ƒ^Ši”[
-	PrincessParameter* princessParam_;	//•Pƒpƒ‰ƒ[ƒ^Ši”[
-	EnemyParameter** enemyParamList_;	//“Gƒpƒ‰ƒ[ƒ^Ši”[
+	static JobParameter** jobParamList_;		//E‹Æƒpƒ‰ƒ[ƒ^Ši”[
+	static PrincessParameter* princessParam_;	//•Pƒpƒ‰ƒ[ƒ^Ši”[
+	static EnemyParameter** enemyParamList_;	//“Gƒpƒ‰ƒ[ƒ^Ši”[
 
-	int jobCount_;		//E‹Æ”
-	int enemyCount_;	//“G‚Ìí—Ş”
+	static int jobCount_;		//E‹Æ”
+	static int enemyCount_;	//“G‚Ìí—Ş”
 public:
 	ParameterRead();
 	~ParameterRead();
-	void SetJobParameter(/*const char* filePath*/);		//E‹Æƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
-	void SetPricessParameter(/*const char* filePath*/);	//•Pƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
-	void SetEnemyParameter(/*const char* filePath*/);	//“Gƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+	static void SetJobParameter(/*const char* filePath*/);		//E‹Æƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+	static void SetPricessParameter(/*const char* filePath*/);	//•Pƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
+	static void SetEnemyParameter(/*const char* filePath*/);	//“Gƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
 
 	int GetJobCount()const;
 	int GetEnemyCount()const;
