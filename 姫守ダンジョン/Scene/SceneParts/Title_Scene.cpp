@@ -3,18 +3,21 @@
 Title_Scene::Title_Scene()
 {
 	title_UI["TITLE_UI"] = new TD_Graphics;
+	camera_ = new Camera;
 }
 
 Title_Scene::~Title_Scene()
 {
 	delete title_UI["TITLE_UI"];
+	title_UI["TITLE_UI"] = nullptr;
+	delete camera_;
+	camera_ = nullptr;
 }
-std::string name = "beam2";
+
 void Title_Scene::Init()
 {
-	camera_ = new Camera;
 	camera_->gazePoint_ = D3DXVECTOR3(0, 3, 0);
-	camera_->movePow_ = D3DXVECTOR3(0, 7, -25);
+	camera_->movePow_ = D3DXVECTOR3(0, 8, -20);
 	CharactorCreator* creator = new CharactorCreator;
 	mesh_sword_ = creator->GetCharaModel("Œ•Žm");
 	mesh_shiled_ = creator->GetCharaModel("‚Žm");
@@ -24,6 +27,7 @@ void Title_Scene::Init()
 	mesh_enemy_ = creator->GetCharaModel("ƒXƒ‰ƒCƒ€");
 
 
+
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
 	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
@@ -31,13 +35,11 @@ void Title_Scene::Init()
 
 void Title_Scene::Destroy()
 {
-	delete camera_;
 }
-
 
 SceneBase* Title_Scene::Update(SceneRoot* root)
 {
-	camera_->TitleUpdate(25);
+	camera_->TitleUpdate(20);
 
 	SceneBase* next = this;
 
@@ -62,9 +64,9 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 
 void Title_Scene::Render()
 {
-	D3DXVECTOR2 pos(0, 0);
-	D3DXVECTOR2 size(1, 1);
-	title_UI["TITLE_UI"]->Render(pos, size,true);
+	D3DXVECTOR2 pos(350, 0);
+	D3DXVECTOR2 size(0.6, 0.4);
+	title_UI["TITLE_UI"]->Render(pos, size, true);
 
 	float scale = 0.5;
 	float dist = 5;
@@ -79,6 +81,12 @@ void Title_Scene::Render()
 	mesh_witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale));
 	mesh_princess_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+
+	/*for (int i = 0; i < enemyMax; i++)
+	{
+		float angel = (atan2(0, pos.x)*-1) - (D3DX_PI / 2.0f);
+		mesh_enemy_->Render(enemyPos_[i], angel, D3DXVECTOR3(scale, scale, scale));
+	}*/
 
 	//Effect::getInstance().Update(name, D3DXVECTOR3(0, 0, 0));
 	//Effect::getInstance().Draw();

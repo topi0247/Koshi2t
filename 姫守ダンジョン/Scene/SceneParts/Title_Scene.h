@@ -9,6 +9,7 @@
 #include "./../../Charactor/CharactorCreator.h"
 #include "./../../Camera.h"
 
+#define enemyMax 10
 class Title_Scene :public Scene
 {
 private:
@@ -22,6 +23,7 @@ private:
 	CD3DXSKINMESH* mesh_enemy_;
 
 	Camera* camera_;
+	D3DXVECTOR3 enemyPos_[enemyMax];
 public:
 	Title_Scene();
 	~Title_Scene();

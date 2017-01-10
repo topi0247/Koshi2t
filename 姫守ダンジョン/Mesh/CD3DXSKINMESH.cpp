@@ -1359,7 +1359,7 @@ void CD3DXSKINMESH::Render(D3DXVECTOR3 pos, float yaw, D3DXVECTOR3 scale)
 	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
 	{
 		SHADER_SKIN_GLOBAL0 sg;
-		sg.vLightDir = D3DXVECTOR4(1, 1, -1, 0.0f);
+		sg.vLightDir = D3DXVECTOR4(0, 1, -1, 0.0f);
 		sg.vEye = D3DXVECTOR4(m_Eye.x, m_Eye.y, m_Eye.z, 0);
 		memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SHADER_SKIN_GLOBAL0));
 		m_pDeviceContext->Unmap(m_pConstantBuffer0, 0);

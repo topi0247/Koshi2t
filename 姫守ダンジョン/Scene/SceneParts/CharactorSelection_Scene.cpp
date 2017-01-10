@@ -60,7 +60,7 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 	SceneBase* next = this;
 	Update();
 
-	
+
 	if (nextFlg_)
 	{
 		for (int i = 0; i < 4; i++)
@@ -69,6 +69,16 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 			{
 				DecideJob();
 				next = new Main_Scene;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::B))
+			{
+				next = new Title_Scene;
 			}
 		}
 	}
@@ -89,7 +99,7 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 				backFlg = true;
 			}
 		}
-		
+
 	}
 	if (backFlg)
 	{
@@ -114,7 +124,7 @@ void CharactorSelection_Scene::Update()
 				SetCharaJob(i);
 				keyWait_[i] = 0;
 			}
-			if (GamePad::checkInput(i, GamePad::InputName::B))
+			if (choiceJob_[i] != not&&GamePad::checkInput(i, GamePad::InputName::B))
 			{
 				CancelJob(i);
 				keyWait_[i] = 0;
@@ -289,7 +299,7 @@ void CharactorSelection_Scene::MeshRender(jobName name, int type)
 
 	D3DXVECTOR3 pos(meshPos_[type].x, meshPos_[type].y, meshPos_[type].z);
 	float scale = 0.2;
-	float speed = 1.0f/ 40.0f;
+	float speed = 1.0f / 40.0f;
 	switch (name)
 	{
 	case sword:
@@ -311,14 +321,14 @@ void CharactorSelection_Scene::MeshRender(jobName name, int type)
 
 void CharactorSelection_Scene::Render()
 {
-	
+
 
 	/*static */D3DXVECTOR2 size(1, 1);
 	//size = HandAnimation(size);
 	//pos_[0].x += 0.1f;
 	for (int i = 0; i < 4; i++)
 	{
-		charaSelect_UI["FINGER_UI"]->Render(pos_[i], size,true);
+		charaSelect_UI["FINGER_UI"]->Render(pos_[i], size, true);
 	}
 
 	//static D3DXVECTOR2 mag(1, 1);
@@ -326,8 +336,8 @@ void CharactorSelection_Scene::Render()
 	//mag.y += -(GetKeyState(VK_UP) & 0x80)*0.001f + (GetKeyState(VK_DOWN) & 0x80)*0.001f;
 
 
-	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1,1),false);
-	
+	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
+
 	float scale = 0.15;
 	float y = 1.5;
 	float speed = 1.0f / 40.0f;
@@ -351,7 +361,7 @@ void CharactorSelection_Scene::Render()
 	shield_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	
+
 	camera_->Render();
 
 

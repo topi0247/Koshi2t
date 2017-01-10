@@ -4,6 +4,7 @@
 //	@date	2016/11/08
 //	@author	m‰È•c
 #pragma once
+#include <math.h>
 #include "./Origin.h"
 
 class Camera
