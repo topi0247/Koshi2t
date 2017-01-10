@@ -26,7 +26,7 @@ void Title_Scene::Init()
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
-	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", 0, D3DXVECTOR2(0, 0), D3DXVECTOR2(1920 / 4, 1080 / 4), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 void Title_Scene::Destroy()
@@ -34,16 +34,25 @@ void Title_Scene::Destroy()
 	delete camera_;
 }
 
+
 SceneBase* Title_Scene::Update(SceneRoot* root)
 {
 	camera_->TitleUpdate(25);
 
 	SceneBase* next = this;
 
-	//if (GetKeyState(VK_F1) & 0x80)
-	if (GamePad::checkInput(0, GamePad::InputName::A))
+	static bool nextFlg = false;
+	for (int i = 0; i < 4; i++)
+	{
+		if (GamePad::checkInput(i, GamePad::InputName::A))
+		{
+			nextFlg = true;
+		}
+	}
+	if (nextFlg)
 	{
 		next = new CharactorSelection_Scene;
+		nextFlg = false;
 	}
 
 	GamePad::update();
@@ -53,7 +62,9 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 
 void Title_Scene::Render()
 {
-	title_UI["TITLE_UI"]->Render(0, 0, 0, 0);
+	D3DXVECTOR2 pos(0, 0);
+	D3DXVECTOR2 size(1, 1);
+	title_UI["TITLE_UI"]->Render(pos, size,true);
 
 	float scale = 0.5;
 	float dist = 5;

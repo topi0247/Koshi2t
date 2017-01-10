@@ -261,8 +261,9 @@ void Witch::DeadSound()
 //	@brief	•`‰æ
 void Witch::CharaRender()
 {
-
-	Witch_UI["WITCH_UI"]->Render(0, 0, 0, 0);
+	//D3DXVECTOR2 pos(0, 0);
+	//D3DXVECTOR2 size(1, 1);
+	//Witch_UI["WITCH_UI"]->Render(pos,size);
 
 	bool drawFlg = true;
 

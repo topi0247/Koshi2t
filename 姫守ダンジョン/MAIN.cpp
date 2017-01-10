@@ -110,7 +110,7 @@ void MAIN::Loop()
 	//スプライト
 	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
 	//UI
-	TD_Graphics::InitDevice(m_pDeviceContext);
+	TD_Graphics::InitShader(m_pDeviceContext);
 	//サウンド
 	Sound::getInstance().Run();
 	//エフェクト
@@ -276,13 +276,14 @@ void MAIN::Render()
 	//scene_ = root_->Update(root_);
 
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
-	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
+	float ClearColor[4] = { 0,0,0,0 };// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア
 	m_pDeviceContext->ClearDepthStencilView(m_pBackBuffer_DSTexDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 
 
 	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
+	TD_Graphics::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
 	Effect::getInstance().SetCamera(Camera::movePow_, Camera::gazePoint_);

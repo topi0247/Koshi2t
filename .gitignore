@@ -27,3 +27,5 @@ JobParameterData.xlsx
 *.efkmodel
 *.txt
 *.sdf
+*.zip
+*.lib

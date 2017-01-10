@@ -12,11 +12,8 @@
 //	@brief	コンストラクタ
 Main_Scene::Main_Scene()
 {
-	stage_ = new Stage;
-	
 	camera_ = new Camera;
 
-	//Title_UI["TITLE_UI"] = new TD_Graphics;
 	debugText_ = new D3D11_TEXT;
 }
 
@@ -24,42 +21,8 @@ Main_Scene::Main_Scene()
 //	@brief	デストラクタ
 Main_Scene::~Main_Scene()
 {
-	//delete stage_;
-	//stage_ = nullptr;
-
-	//delete spawnManager_;
-	//spawnManager_ = nullptr;
-
-
-	for (int i = 0; i < 4; i++)
-	{
-		SAFE_DELETE(player_[i]);
-	}
-	SAFE_DELETE(princess_);
-	//SAFE_DELETE(virEnemy_);
-	//SAFE_DELETE(slime_);
-	//delete debugText_;
-	//debugText_ = nullptr;
-
-	//delete xfile;
-	//xfile = nullptr;
-	//delete parameter;
-	//parameter = nullptr;
-
 	delete camera_;
 	camera_ = nullptr;
-
-	/*delete uisword_;
-	uisword_ = nullptr;
-	delete uiseeld_;
-	uiseeld_ = nullptr;
-	delete uimagic_;
-	uimagic_ = nullptr;
-	delete uibom_;
-	uibom_ = nullptr;*/
-
-	/*delete uititle_;
-	uititle_ = nullptr;*/
 }
 
 //
@@ -69,42 +32,42 @@ Main_Scene::~Main_Scene()
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext*/)
 {
-	
 
+	stage_ = new Stage;
 	spawnManager_ = new SpawnManager;
 	stage_->Init("ステージ5");
 	spawnManager_->Init("スポーン");
+
 
 	JobManager* ply;
 	for (int i = 0; i < 4; i++)
 	{
 		player_.push_back(ply);
 	}
-
 	player_[Player1] = SetCharaJob(CharactorCreator::player1_, Player1);
+	player_[Player1]->CharaInit(CharactorCreator::player1_);
+	player_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
 	player_[Player2] = SetCharaJob(CharactorCreator::player2_, Player2);
+	player_[Player2]->CharaInit(CharactorCreator::player2_);
+	player_[Player2]->m_Pos = D3DXVECTOR3(-1.5, 0, -10);
 	player_[Player3] = SetCharaJob(CharactorCreator::player3_, Player3);
+	player_[Player3]->CharaInit(CharactorCreator::player3_);
+	player_[Player3]->m_Pos = D3DXVECTOR3(1.5, 0, -10);
 	player_[Player4] = SetCharaJob(CharactorCreator::player4_, Player4);
+	player_[Player4]->CharaInit(CharactorCreator::player4_);
+	player_[Player4]->m_Pos = D3DXVECTOR3(3, 0, -10);
+
 	princess_ = new Princess;
+	princess_->CharaInit("姫");
+	princess_->m_Pos = D3DXVECTOR3(0, 0, -12);
+	princess_->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
+	princess_->SetSpawn(spawnManager_->GetSpawnList());
 
 	for (int i = 0; i < 4; i++)
 	{
 		charList_.push_back(player_[i]);
 	}
 	charList_.push_back(princess_);
-	player_[Player1]->CharaInit(CharactorCreator::player1_);
-	player_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
-	player_[Player2]->CharaInit(CharactorCreator::player2_);
-	player_[Player2]->m_Pos = D3DXVECTOR3(-1.5, 0, -10);
-	player_[Player3]->CharaInit(CharactorCreator::player3_);
-	player_[Player3]->m_Pos = D3DXVECTOR3(1.5, 0, -10);
-	player_[Player4]->CharaInit(CharactorCreator::player4_);
-	player_[Player4]->m_Pos = D3DXVECTOR3(3, 0, -10);
-
-	princess_->CharaInit("姫");
-	princess_->m_Pos = D3DXVECTOR3(0, 0, -12);
-	princess_->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
-	princess_->SetSpawn(spawnManager_->GetSpawnList());
 
 	time_ = 0;
 	scene_ = StartS;
@@ -512,7 +475,7 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 	}
 
 #ifdef _DEBUG
-	PlayerDebug();
+	//PlayerDebug();
 	//EnemyDebug();
 #endif // _DEBUG
 
