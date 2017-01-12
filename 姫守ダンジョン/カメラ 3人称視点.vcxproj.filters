@@ -106,7 +106,7 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="Scene\SceneParts\Result.cpp">
+    <ClCompile Include="Scene\SceneParts\Load_Scene.cpp">
       <Filter>Scene\SceneParts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -223,7 +223,7 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h" />
-    <ClInclude Include="Scene\SceneParts\Result.h">
+    <ClInclude Include="Scene\SceneParts\Load_Scene.h">
       <Filter>Scene\SceneParts</Filter>
     </ClInclude>
   </ItemGroup>

@@ -46,7 +46,7 @@ private:
 	D3DXVECTOR2 HandAnimation(D3DXVECTOR2 size);
 public:
 	CharactorSelection_Scene();
-	~CharactorSelection_Scene();
+	virtual ~CharactorSelection_Scene();
 
 	void Init();
 	SceneBase* Update(SceneRoot* root);

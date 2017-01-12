@@ -25,7 +25,7 @@ void Title_Scene::Init()
 	mesh_witch_ = creator->GetCharaModel("–‚“±m");
 	mesh_princess_ = creator->GetCharaModel("•P");
 	mesh_enemy_ = creator->GetCharaModel("ƒXƒ‰ƒCƒ€");
-
+	mesh_stage_ = creator->GetStageModel("ƒ^ƒCƒgƒ‹");
 
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
@@ -35,6 +35,7 @@ void Title_Scene::Init()
 
 void Title_Scene::Destroy()
 {
+
 }
 
 SceneBase* Title_Scene::Update(SceneRoot* root)
@@ -59,6 +60,15 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 
 	GamePad::update();
 
+#ifdef _DEBUG
+	if (GetKeyState(VK_RETURN))
+	{
+		//DebugSetJob();
+		//next = new Main_Scene;
+		next = new Load_Scene;
+	}
+#endif //_DEBUG
+
 	return next;
 }
 
@@ -71,17 +81,19 @@ void Title_Scene::Render()
 	float scale = 0.5;
 	float dist = 5;
 	float speed = 1.0f / 40.0f;
-	mesh_sword_->Render(D3DXVECTOR3(0, 0, -dist), 0, D3DXVECTOR3(scale, scale, scale));
+	mesh_sword_->Render(D3DXVECTOR3(0, 0, -dist), 0, D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
 	mesh_sword_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale));
+	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
 	mesh_shiled_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale));
+	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
 	mesh_bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale));
+	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
 	mesh_witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale));
+	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
 	mesh_princess_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
+	//ƒXƒe[ƒW‚Ì•`‰æ
+	mesh_stage_->Render(D3DXVECTOR3(0, 0.8, 0), D3DXVECTOR3(0, 0, 0), 2);
 	/*for (int i = 0; i < enemyMax; i++)
 	{
 		float angel = (atan2(0, pos.x)*-1) - (D3DX_PI / 2.0f);
@@ -92,4 +104,13 @@ void Title_Scene::Render()
 	//Effect::getInstance().Draw();
 
 	camera_->Render();
+}
+
+
+void Title_Scene::DebugSetJob()
+{
+	strcpy(CharactorCreator::player1_, "Œ•m");
+	strcpy(CharactorCreator::player2_, "‚m");
+	strcpy(CharactorCreator::player3_, "”š’em");
+	strcpy(CharactorCreator::player4_, "–‚“±m");
 }

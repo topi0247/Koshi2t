@@ -10,15 +10,19 @@
 #include "./../Read/SpawnGateRead.h"
 #include "./Spawn.h"
 #include "./../Charactor/CharactorCreator.h"
+#include "./../UI/TD_Graphics.h"
+#include "./../Camera.h"
 
 class SpawnManager
 {
 private:
+	TD_Graphics* seal_UI;
 	CD3DXMESH* spawnMesh_;
 	SpawnGateRead* spawnGateRead_;
 	SpawnGate* spawnGate_;
 
 	int timeCount_;
+	bool uiDrawFlg_;
 
 	//char stageTye[30];					//現在のステージタイプ
 	std::vector<Spawn*> spawnList_;			//現在存在しているスポーンゲートリスト

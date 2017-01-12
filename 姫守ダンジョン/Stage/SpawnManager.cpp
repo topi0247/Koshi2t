@@ -10,6 +10,7 @@
 //	@brief	コンストラクタ
 SpawnManager::SpawnManager()
 {
+	seal_UI = new TD_Graphics;
 	spawnGateRead_ = new SpawnGateRead;
 }
 
@@ -17,13 +18,16 @@ SpawnManager::SpawnManager()
 //	@brief	デストラクタ
 SpawnManager::~SpawnManager()
 {
+	delete seal_UI;
+	seal_UI = nullptr;
+
 	delete spawnGateRead_;
 	spawnGateRead_ = nullptr;
 	//delete spawnGate_;
 	//spawnGate_ = nullptr;
 
-	SAFE_DELETE(spawnMesh_);
-	spawnList_.clear();
+	//SAFE_DELETE(spawnMesh_);
+	//spawnList_.clear();
 }
 
 //
@@ -47,6 +51,9 @@ void SpawnManager::Init(char* name)
 	}
 
 	SpawnSet();*/
+
+	uiDrawFlg_ = false;
+	seal_UI->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //
@@ -132,9 +139,9 @@ std::vector<EnemyJobManager*> SpawnManager::OutEnemy()
 void SpawnManager::SealSpawn(Spawn* spawn)
 {
 	sealSpawn_ = spawn;
-
 	if (sealSpawn_ != nullptr)
 	{
+		uiDrawFlg_ = true;
 		auto elS = std::find(spawnList_.begin(), spawnList_.end(), sealSpawn_);
 		//auto elF = std::find(functionList_.begin(), functionList_.end(), sealSpawn_);
 		//auto elR = std::find(renderList_.begin(), renderList_.end(), sealSpawn_);
@@ -150,11 +157,36 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 //	@brief	描画
 void SpawnManager::Render()
 {
+
+
 	if (!spawnList_.empty())
 	{
 		for (auto s : spawnList_)
 		{
 			spawnMesh_->Render(s->GetPos(), s->GetRot(), s->GetScale());
+		}
+	}
+
+	//uiDrawFlg_ = true;
+	if (uiDrawFlg_)
+	{
+		static int count = 1;
+		static D3DXVECTOR2 pos(WINDOW_WIDTH, 10);
+		D3DXVECTOR2 size(0.3, 0.2);
+		seal_UI->Render(pos, size, true);
+		if (pos.x >= WINDOW_WIDTH / 2 || count == 0)
+		{
+			pos.x -= 100;
+			if (pos.x <= -1000)
+			{
+				uiDrawFlg_ = false;
+				count = 1;
+				pos = D3DXVECTOR2(WINDOW_WIDTH, 10);
+			}
+		}
+		else if (++count % (FPS * 2) == 0)
+		{
+			count = 0;
 		}
 	}
 }

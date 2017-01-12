@@ -9,7 +9,7 @@ class Result_Scene :public Scene
 {
 public:
 	Result_Scene();
-	~Result_Scene();
+	virtual ~Result_Scene();
 
 	void Init();
 	SceneBase* Update(SceneRoot* root);

@@ -5,9 +5,14 @@
 #include "./../SceneParts/Scene.h"
 #include "./../SceneManager/SceneRoot.h"
 #include "./../SceneParts/CharactorSelection_Scene.h"
+#include "./../SceneParts/Load_Scene.h"
 #include "./../../Mesh/CD3DXSKINMESH.h"
 #include "./../../Charactor/CharactorCreator.h"
 #include "./../../Camera.h"
+
+#ifdef _DEBUG
+#include "./Main_Scene.h"
+#endif //_DEBUG
 
 #define enemyMax 10
 class Title_Scene :public Scene
@@ -21,12 +26,15 @@ private:
 	CD3DXSKINMESH* mesh_witch_;
 	CD3DXSKINMESH* mesh_princess_;
 	CD3DXSKINMESH* mesh_enemy_;
+	CD3DXMESH* mesh_stage_;
 
 	Camera* camera_;
 	D3DXVECTOR3 enemyPos_[enemyMax];
+
+	void DebugSetJob();
 public:
 	Title_Scene();
-	~Title_Scene();
+	virtual ~Title_Scene();
 
 	void Init();
 	SceneBase* Update(SceneRoot* root);

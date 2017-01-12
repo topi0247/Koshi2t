@@ -462,12 +462,11 @@ void Main_Scene::CollisionControl()
 //	@param (mProj)	射影変換用マトリックス
 void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 {
+	//スポーンゲートの描画
+	spawnManager_->Render();
 
 	//ステージの描画
 	stage_->Render();
-
-	//スポーンゲートの描画
-	spawnManager_->Render();
 
 	for (auto chara : charList_)
 	{

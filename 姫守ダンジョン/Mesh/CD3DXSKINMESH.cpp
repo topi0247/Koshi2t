@@ -1187,6 +1187,7 @@ CHAR* CD3DXSKINMESH::GetBoneNames(int iBoneIndex)
 
 //
 //	レンダー
+//	座標指定
 void CD3DXSKINMESH::Render(D3DXVECTOR3 pos)
 {
 	D3D11_MAPPED_SUBRESOURCE pData;
@@ -1305,6 +1306,7 @@ void CD3DXSKINMESH::Render(D3DXVECTOR3 pos)
 
 //
 //	レンダー
+//	座標・Y軸回転・スケール指定
 void CD3DXSKINMESH::Render(D3DXVECTOR3 pos, float yaw, D3DXVECTOR3 scale)
 {
 	D3D11_MAPPED_SUBRESOURCE pData;
@@ -1360,6 +1362,126 @@ void CD3DXSKINMESH::Render(D3DXVECTOR3 pos, float yaw, D3DXVECTOR3 scale)
 	{
 		SHADER_SKIN_GLOBAL0 sg;
 		sg.vLightDir = D3DXVECTOR4(0, 1, -1, 0.0f);
+		sg.vEye = D3DXVECTOR4(m_Eye.x, m_Eye.y, m_Eye.z, 0);
+		memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SHADER_SKIN_GLOBAL0));
+		m_pDeviceContext->Unmap(m_pConstantBuffer0, 0);
+	}
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
+
+	//マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
+	for (int i = 0; i < m_dwNumMaterial; i++)
+	{
+		//使用されていないマテリアル対策
+		if (m_pMaterial[i].dwNumFace == 0)
+		{
+			continue;
+		}
+		//インデックスバッファーをセット
+		stride = sizeof(int);
+		offset = 0;
+		m_pDeviceContext->IASetIndexBuffer(m_ppIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0);
+
+		//マテリアルの各要素と変換行列をシェーダーに渡す			
+		D3D11_MAPPED_SUBRESOURCE pData;
+		if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+		{
+			SHADER_SKIN_GLOBAL1 sg;
+			sg.mW = m_World;
+			D3DXMatrixTranspose(&sg.mW, &sg.mW);
+			sg.mWVP = m_World*m_View*m_Proj;
+			D3DXMatrixTranspose(&sg.mWVP, &sg.mWVP);
+			sg.vAmbient = m_pMaterial[i].Ka;
+			sg.vDiffuse = m_pMaterial[i].Kd;
+			sg.vSpecular = m_pMaterial[i].Ks;
+			memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SHADER_SKIN_GLOBAL1));
+			m_pDeviceContext->Unmap(m_pConstantBuffer1, 0);
+		}
+		m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
+		m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
+		//テクスチャーをシェーダーに渡す
+		if (m_pMaterial[i].szTextureName[0] != NULL)
+		{
+			m_pDeviceContext->PSSetSamplers(0, 1, &m_pSampleLinear);
+			m_pDeviceContext->PSSetShaderResources(0, 1, &m_pMaterial[i].pTexture);
+		}
+		else
+		{
+			ID3D11ShaderResourceView* Nothing[1] = { 0 };
+			m_pDeviceContext->PSSetShaderResources(0, 1, Nothing);
+		}
+		//Draw
+		m_pDeviceContext->DrawIndexed(m_pMaterial[i].dwNumFace * 3, 0, 0);
+	}
+	////アニメ進行
+	//if(m_pD3dxMesh->m_pAnimController)
+	//{
+	//	m_pD3dxMesh->m_pAnimController->AdvanceTime(0.0001666,NULL);
+	//}
+	D3DXMATRIX m;
+	D3DXMatrixIdentity(&m);
+	m_pD3dxMesh->UpdateFrameMatrices(m_pD3dxMesh->m_pFrameRoot, &m);
+}
+
+//
+//	レンダー
+//	座標・Y軸回転・スケール・ライト方向指定
+
+void CD3DXSKINMESH::Render(D3DXVECTOR3 pos, float yaw, D3DXVECTOR3 scale,D3DXVECTOR3 light)
+{
+	D3D11_MAPPED_SUBRESOURCE pData;
+
+	//使用するシェーダーのセット
+	m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
+
+	//ワールド行列
+	D3DXMATRIX Scale, Yaw, Pitch, Roll, Tran;
+	D3DXMatrixScaling(&Scale, scale.x, scale.y, scale.z);
+	D3DXMatrixRotationY(&Yaw, yaw);
+	/*D3DXMatrixRotationX(&Pitch, m_Pitch);
+	D3DXMatrixRotationZ(&Roll, m_Roll);*/
+	//m_Rotation = Yaw*Pitch*Roll;
+	D3DXMatrixTranslation(&Tran, pos.x, pos.y, pos.z);
+	//m_World = Scale*m_Rotation*Tran;
+	m_World = Scale*Yaw*Tran;
+
+	//アニメーションフレームを進める　スキンを更新
+	static int iFrame = 0;
+	iFrame++;
+	if (iFrame >= 3600) iFrame = 0;
+	SetNewPoseMatrices(iFrame);
+	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBufferBone, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+	{
+		SHADER_GLOBAL_BONES sg;
+		for (int i = 0; i < m_iNumBone; i++)
+		{
+			D3DXMATRIX mat = GetCurrentPoseMatrix(i);
+			D3DXMatrixTranspose(&mat, &mat);
+			sg.mBone[i] = mat;
+		}
+		memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SHADER_GLOBAL_BONES));
+		m_pDeviceContext->Unmap(m_pConstantBufferBone, 0);
+	}
+	m_pDeviceContext->VSSetConstantBuffers(2, 1, &m_pConstantBufferBone);
+	m_pDeviceContext->PSSetConstantBuffers(2, 1, &m_pConstantBufferBone);
+
+	//バーテックスバッファーをセット（バーテックスバッファーは一つでいい）
+	UINT stride = sizeof(MY_SKINVERTEX);
+	UINT offset = 0;
+	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+
+	//頂点インプットレイアウトをセット
+	m_pDeviceContext->IASetInputLayout(m_pVertexLayout);
+
+	//プリミティブ・トポロジーをセット
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//カメラ位置をシェーダーに渡す
+	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
+	{
+		SHADER_SKIN_GLOBAL0 sg;
+		sg.vLightDir = D3DXVECTOR4(light.x, light.y, light.z, 0.0f);
 		sg.vEye = D3DXVECTOR4(m_Eye.x, m_Eye.y, m_Eye.z, 0);
 		memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SHADER_SKIN_GLOBAL0));
 		m_pDeviceContext->Unmap(m_pConstantBuffer0, 0);
