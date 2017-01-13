@@ -40,8 +40,13 @@ void CharactorSelection_Scene::Init()
 		choiceJob_[i] = not;
 		keyWait_[i] = 0;
 		pos_[i] = D3DXVECTOR2(100 + i * 500, 50);
-		meshPos_[i] = D3DXVECTOR3(-3 + i * 2, 0, 0);
+		meshPos_[i] = D3DXVECTOR3(-3.5 + i * 2.3, 0, 0);
 	}
+
+	meshPos_[0] = D3DXVECTOR3(-2.5, 0, 0);
+	meshPos_[1] = D3DXVECTOR3(-1.3, 0, 0);
+	meshPos_[2] = D3DXVECTOR3(1.5, 0, 0);
+	meshPos_[3] = D3DXVECTOR3(2, 0, 0);
 
 	charaSelect_UI["FINGER_UI"]->Init(L"./UI/UI_Tex/finger.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["CHARASELECT_UI"]->Init(L"./UI/UI_Tex/character_select.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
@@ -298,7 +303,7 @@ void CharactorSelection_Scene::MeshRender(jobName name, int type)
 {
 
 	D3DXVECTOR3 pos(meshPos_[type].x, meshPos_[type].y, meshPos_[type].z);
-	float scale = 0.2;
+	float scale = 0.1;
 	float speed = 1.0f / 40.0f;
 	switch (name)
 	{
@@ -338,17 +343,17 @@ void CharactorSelection_Scene::Render()
 
 	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
 
-	float scale = 0.15;
-	float y = 1.5;
+	//float scale = 0.15;
+	//float y = 1.5;
 	float speed = 1.0f / 40.0f;
-	sword_->Render(D3DXVECTOR3(-4, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
-	//sword_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	shield_->Render(D3DXVECTOR3(-1, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
-	//shield_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	bomber_->Render(D3DXVECTOR3(1, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
-	//bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	witch_->Render(D3DXVECTOR3(3.5, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
-	//witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	//sword_->Render(D3DXVECTOR3(-4, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
+	////sword_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	//shield_->Render(D3DXVECTOR3(-1, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
+	////shield_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	//bomber_->Render(D3DXVECTOR3(1, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
+	////bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	//witch_->Render(D3DXVECTOR3(3.5, y, 1), 0, D3DXVECTOR3(scale, scale, scale));
+	////witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 
 	for (int i = 0; i < 4; i++)
@@ -362,13 +367,22 @@ void CharactorSelection_Scene::Render()
 	bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
+	/*static D3DXVECTOR3 pos(0, 0, 0);
+	static float scale = 0.1;
+	float speedD = 0.001;
+	pos.x += (GetKeyState(VK_RIGHT) & 0x80)*speedD + -(GetKeyState(VK_LEFT) & 0x80)*speedD;
+	pos.y += (GetKeyState(VK_UP) & 0x80)*speedD + -(GetKeyState(VK_DOWN) & 0x80)*speedD;
+	scale += (GetKeyState('L') & 0x80)*speedD + -(GetKeyState('S') & 0x80)*speedD;
+	sword_->Render(pos, 0, D3DXVECTOR3(scale, scale, scale));
+*/
+
 	camera_->Render();
 
 
-	////デバッグ描画
-	//char str[256];
-	//sprintf(str, "mag.x:%f mag.y:%f",mag.x,mag.y);
-	//text_->Render(str, 0, 50);
+	//デバッグ描画
+	char str[256];
+	sprintf(str, "pos.x:%f pos.y:%f scale:%f",meshPos_[0].x, meshPos_[0].y);
+	text_->Render(str, 0, 50);
 
 
 }

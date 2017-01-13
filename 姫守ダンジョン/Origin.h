@@ -40,7 +40,7 @@
 //定数定義
 #define WINDOW_WIDTH 1920	//ウィンドウ幅
 #define WINDOW_HEIGHT 1080 //ウィンドウ高さ
-#define APP_NAME L"姫守ダンジョン"	//ゲームタイトル
+#define APP_NAME L"プリンセスコール"	//ゲームタイトル
 const int FPS = 60;				//FPS
 
 

@@ -27,6 +27,16 @@ void Title_Scene::Init()
 	mesh_enemy_ = creator->GetCharaModel("スライム");
 	mesh_stage_ = creator->GetStageModel("タイトル");
 
+	int i = 0;
+	//while (i < enemyMax)
+	for(int i=0;i<enemyMax;i++)
+	{
+		enemyPos_[i] = D3DXVECTOR3(rand() % 20 - 10, 0, rand() % 20 - 10);
+		/*if ((enemyPos_[i].x < -5 || enemyPos_[i].x>5 )&& (enemyPos_[i].z<-5 && enemyPos_[i].z > 5))
+		{
+			++i;
+		}*/
+	}
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
@@ -61,12 +71,12 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 	GamePad::update();
 
 #ifdef _DEBUG
-	if (GetKeyState(VK_SPACE))
-	{
-		//DebugSetJob();
-		//next = new Main_Scene;
-		next = new Load_Scene;
-	}
+	//if (GetKeyState(VK_SPACE))
+	//{
+	//	//DebugSetJob();
+	//	//next = new Main_Scene;
+	//	next = new Load_Scene;
+	//}
 #endif //_DEBUG
 
 	return next;
@@ -94,11 +104,14 @@ void Title_Scene::Render()
 
 	//ステージの描画
 	mesh_stage_->Render(D3DXVECTOR3(0, 0.8, 0), D3DXVECTOR3(0, 0, 0), 2);
-	/*for (int i = 0; i < enemyMax; i++)
+	//mesh_enemy_->Render(D3DXVECTOR3(0, 0, 8), 0, D3DXVECTOR3(0.5, 0.5, 0.5));
+	for (int i = 0; i < enemyMax; i++)
 	{
-		float angel = (atan2(0, pos.x)*-1) - (D3DX_PI / 2.0f);
+		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[i].x, 0, 0 - enemyPos_[i].z);
+		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
 		mesh_enemy_->Render(enemyPos_[i], angel, D3DXVECTOR3(scale, scale, scale));
-	}*/
+	}
+	mesh_enemy_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 	//Effect::getInstance().Update(name, D3DXVECTOR3(0, 0, 0));
 	//Effect::getInstance().Draw();

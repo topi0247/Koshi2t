@@ -33,6 +33,9 @@ Main_Scene::~Main_Scene()
 void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext*/)
 {
 
+	camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
+	camera_->gazePoint_ = D3DXVECTOR3(0, -7, 0);
+
 	stage_ = new Stage;
 	spawnManager_ = new SpawnManager;
 	stage_->Init("ステージ5");

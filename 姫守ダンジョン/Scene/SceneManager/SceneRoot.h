@@ -24,5 +24,7 @@ public:
 
 private:
 	Scene* scene_;
+	Scene* loadScene_;
+	Scene* nextScene_;
 	//Mode mode_;
 };

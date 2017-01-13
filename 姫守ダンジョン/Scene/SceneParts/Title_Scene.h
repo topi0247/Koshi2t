@@ -14,7 +14,7 @@
 #include "./Main_Scene.h"
 #endif //_DEBUG
 
-#define enemyMax 10
+#define enemyMax 5
 class Title_Scene :public Scene
 {
 private:

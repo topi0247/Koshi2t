@@ -15,8 +15,7 @@ D3DXVECTOR3 Camera::gazePoint_;
 //	@brief	コンストラクタ
 Camera::Camera()
 {
-	movePow_ = D3DXVECTOR3(0, 45, -45);
-	gazePoint_ = D3DXVECTOR3(0, -7, 0);
+	
 	zoom = 6;
 	farPlayerPos_ = movePow_;
 	//dist_ = zoom;

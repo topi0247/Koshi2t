@@ -18,6 +18,7 @@ void SceneRoot::Init()
 
 	//scene_ = new SceneTitle();
 
+	loadScene_ = new Load_Scene;
 	scene_ = new Title_Scene;
 	scene_->Init();
 }
@@ -25,6 +26,7 @@ void SceneRoot::Init()
 void SceneRoot::Destroy()
 {
 	//std::cout << "SceneRoot::Shutdown()" << std::endl;
+	delete loadScene_;
 	delete scene_;
 	//scene_ = nullptr;
 }
@@ -33,10 +35,10 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 {
 	//std::cout << "SceneRoot::Update(SceneBase)" << std::endl;
 
-	if (getchar() == 'q')
-	{
-		return nullptr;
-	}
+	//if (getchar() == 'q')
+	//{
+	//	return nullptr;
+	//}
 
 	//ƒV[ƒ“‚ÌŽÀs
 	SceneBase* next = scene_->Update(this);
@@ -49,10 +51,28 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 
 		scene_->Destroy();
 		delete scene_;
-
-		scene_ = casted;
+		
+		//next = loadScene_;
+		scene_ = loadScene_;
+		//scene_ = new Load_Scene;
 		scene_->Init();
+		nextScene_ = casted;
+		//next->Init();
 	}
+	if (next == loadScene_)
+	{
+		static int count = 0;
+		if (++count%(FPS * 1) == 0)
+		{
+			//scene_->Destroy();
+			//delete scene_;
+			scene_ = nextScene_;
+			scene_->Init();
+			//delete nextScene_;
+			count = 0;
+		}
+	}
+
 	return this;
 }
 
