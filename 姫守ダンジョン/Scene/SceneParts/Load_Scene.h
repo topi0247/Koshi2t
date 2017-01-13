@@ -7,11 +7,13 @@
 #include "./CharactorSelection_Scene.h"
 #include "./Main_Scene.h"
 #include "./../../Camera.h"
+#include "./../../UI/D3D11_SPRITE.h"
 
 class Load_Scene :public Scene
 {
 private:
-	TD_Graphics* loading_UI;
+	D3D11_SPRITE* loading_UI;
+	D3D11_TEXT* debugText_;
 public:
 	Load_Scene();
 	virtual ~Load_Scene();

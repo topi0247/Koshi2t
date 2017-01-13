@@ -61,7 +61,7 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 	GamePad::update();
 
 #ifdef _DEBUG
-	if (GetKeyState(VK_RETURN))
+	if (GetKeyState(VK_SPACE))
 	{
 		//DebugSetJob();
 		//next = new Main_Scene;

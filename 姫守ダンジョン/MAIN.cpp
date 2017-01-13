@@ -108,7 +108,7 @@ void MAIN::Loop()
 	//スキンメッシュ
 	CD3DXSKINMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
 	//スプライト
-	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
+	D3D11_SPRITE::InitShader(m_pDeviceContext,WINDOW_WIDTH,WINDOW_HEIGHT);
 	//UI
 	TD_Graphics::InitShader(m_pDeviceContext);
 	//サウンド
@@ -234,7 +234,7 @@ HRESULT MAIN::InitD3D()
 	SAFE_RELEASE(pIr);
 
 	//初期化
-	D3DXVECTOR4 vColor(0, 0, 0, 1);
+	D3DXVECTOR4 vColor(1, 1, 1, 1);
 	D3D11_TEXT::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor);
 	//mainScene_ = new Main_Scene;
 	//mainScene_->DebugInit(m_pDeviceContext);

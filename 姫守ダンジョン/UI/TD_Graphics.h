@@ -1,7 +1,9 @@
 #pragma once
 #include "../Origin.h"
+#include "D3D11_SPRITE.h"
 //#include "../MAIN.h"
 
+#define TexMax 100
 
 struct SIMPLESHADER_CONSTANT_BUFFER
 {
@@ -52,6 +54,8 @@ public:
 	// @param (_Rect)		レクト
 	HRESULT Init(LPCWSTR texname,/* int texnum, */D3DXVECTOR2 drawpos, D3DXVECTOR2 texsize, D3DXVECTOR4 vColor, GrapRect _Rect);
 
+	HRESULT AnimInit(D3DXVECTOR4 vColor, bool flg_alpha, WCHAR *filepass, D3DXVECTOR2 size, int animSpeed);
+
 	// @param (pos)		表示座標
 	// @param (scale)	拡大倍率
 	// @param (flg)		モデルとの前後関係(真ならモデルより前)
@@ -78,10 +82,12 @@ private:
 	static D3DXMATRIX					m_mProj;
 
 	ID3D11Buffer*				m_pVertexBuffer;
-	ID3D11ShaderResourceView*	m_pAsciiTexture;
+	ID3D11ShaderResourceView*	m_pAsciiTexture[TexMax];
 	ID3D11Buffer*				m_RectBuffer;
 	float						m_fScale;				//25pixelを基準 25pixel=1.0f
 	float						m_fAlpha;
+	int							m_iAnimSpeed;
+	int							m_iAnimCount;
 	D3DXVECTOR4					m_vColor;
 	D3DXVECTOR2					m_Size;
 
