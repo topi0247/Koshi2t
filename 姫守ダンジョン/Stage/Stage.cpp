@@ -18,16 +18,19 @@ Stage::Stage()
 	//skyMesh_ = new CD3DXMESH;
 	//gate_ = new CD3DXMESH;
 	//abyssGround_ = new CD3DXMESH;
+	creator_ = new CharactorCreator;
 }
 
 //
 //	@brief	デストラクタ
 Stage::~Stage()
 {
-	SAFE_DELETE(stage_);
-	//SAFE_DELETE(skyMesh_);
-	SAFE_DELETE(gate_);
-	SAFE_DELETE(abyssGround_);
+	//SAFE_DELETE(stage_);
+	////SAFE_DELETE(skyMesh_);
+	//SAFE_DELETE(gate_);
+	//SAFE_DELETE(abyssGround_);
+	delete creator_;
+	creator_ = nullptr;
 }
 
 
@@ -72,10 +75,10 @@ Stage::~Stage()
 
 void Stage::Init(char* stageName)
 {
-	CharactorCreator* creator=new CharactorCreator;
-	gate_ = creator->GetStageModel("門");
-	abyssGround_ = creator->GetStageModel("地面");
-	stage_ = creator->GetStageModel(stageName);
+	//CharactorCreator* creator=new CharactorCreator;
+	gate_ = creator_->LoadStage("門");
+	abyssGround_ = creator_->LoadStage("地面");
+	stage_ = creator_->LoadStage(stageName);
 
 	//delete creator;
 	//creator = nullptr;

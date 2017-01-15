@@ -28,6 +28,7 @@
 </Models>
 
 <Models Type="Stage">
+    <model fileName="titleback.x" charName="タイトル"/>
     <model fileName="sky.x" charName="空"/>
     <model fileName="gate.x" charName="門"/>
     <model fileName="mapbase.x" charName="地面"/>

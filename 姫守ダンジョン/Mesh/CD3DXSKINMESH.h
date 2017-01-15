@@ -237,5 +237,6 @@ public:
 	//void Render();
 	void Render(D3DXVECTOR3 pos);
 	void Render(D3DXVECTOR3 pos, float yaw,D3DXVECTOR3 scale);
+	void Render(D3DXVECTOR3 pos, float yaw, D3DXVECTOR3 scale,D3DXVECTOR3 light);
 	static void CD3DXSKINMESH::SetCamera(D3DXMATRIX view, D3DXMATRIX proj);
 };

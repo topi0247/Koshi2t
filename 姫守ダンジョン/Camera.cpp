@@ -8,15 +8,14 @@
 
 D3DXMATRIX Camera::mView_;
 D3DXMATRIX Camera::mProj_;
-D3DXVECTOR3 Camera::movePow_;
-D3DXVECTOR3 Camera::gazePoint_;
+//D3DXVECTOR3 Camera::movePow_;
+//D3DXVECTOR3 Camera::gazePoint_;
 
 //
 //	@brief	コンストラクタ
 Camera::Camera()
 {
-	movePow_ = D3DXVECTOR3(0, 45, -45);
-	gazePoint_ = D3DXVECTOR3(0, -7, 0);
+	
 	zoom = 6;
 	farPlayerPos_ = movePow_;
 	//dist_ = zoom;
@@ -47,7 +46,7 @@ void Camera::SetPlayerPos(D3DXVECTOR3 pos)
 
 //
 //	@brief	更新
-void Camera::Update()
+void Camera::Main_Update()
 {
 	//float dist = pow(movePow_.y- gazePoint_.y, 2);
 	//if (dist_ >= dist)
@@ -96,6 +95,11 @@ void Camera::TitleUpdate(float radius)
 	//movePow_.x += cosf(move);
 	//movePow_.z += sinf(move);
 	//move += 0.01;
+	static float degree = -100;
+	float radian = D3DX_PI / 180 * degree;
+	movePow_.x = gazePoint_.x + radius*cosf(radian);
+	movePow_.z = gazePoint_.z + radius*sinf(radian);
+	degree += 0.1f;
 }
 
 //	@brief			描画

@@ -108,15 +108,15 @@ void MAIN::Loop()
 	//スキンメッシュ
 	CD3DXSKINMESH::Init(m_hWnd, m_pDevice, m_pDeviceContext);
 	//スプライト
-	D3D11_SPRITE::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT/*, D3DXVECTOR4(1, 1, 1, 1)*/);
+	D3D11_SPRITE::InitShader(m_pDeviceContext,WINDOW_WIDTH,WINDOW_HEIGHT);
 	//UI
-	TD_Graphics::InitDevice(m_pDeviceContext);
+	TD_Graphics::InitShader(m_pDeviceContext);
 	//サウンド
 	Sound::getInstance().Run();
 	//エフェクト
 	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
-	//キャラクターデータ・モデルの読み込み
-	CharactorCreator::LoadModel();
+	////キャラクターデータ・モデルの読み込み
+	//CharactorCreator::LoadModel();
 
 	//シーンマネージャ
 	root_ = new SceneRoot;
@@ -234,7 +234,7 @@ HRESULT MAIN::InitD3D()
 	SAFE_RELEASE(pIr);
 
 	//初期化
-	D3DXVECTOR4 vColor(0, 0, 0, 1);
+	D3DXVECTOR4 vColor(1, 1, 1, 1);
 	D3D11_TEXT::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor);
 	//mainScene_ = new Main_Scene;
 	//mainScene_->DebugInit(m_pDeviceContext);
@@ -247,7 +247,7 @@ void MAIN::DestroyD3D()
 {
 	//delete camera_;
 	//camera_ = nullptr;
-	CharactorCreator::Destroy();
+	//CharactorCreator::Destroy();
 	root_->Destroy();
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);
@@ -276,16 +276,18 @@ void MAIN::Render()
 	//scene_ = root_->Update(root_);
 
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
-	float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
+	float ClearColor[4] = { 0,0,0,0 };// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア
 	m_pDeviceContext->ClearDepthStencilView(m_pBackBuffer_DSTexDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 
 
 	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
+	TD_Graphics::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
-	Effect::getInstance().SetCamera(Camera::movePow_, Camera::gazePoint_);
+	Camera* camera_ = new Camera;
+	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);
 
 	scene_->Render();
 
@@ -296,16 +298,16 @@ void MAIN::Render()
 	sprintf(Str, "fps:%f", start);
 	SetWindowTextA(m_hWnd, Str);*/
 
-	//FPS計算表示
-	static DWORD time = 0;
-	static int frame = 0;
-	frame++;
-	char str[50];
-	sprintf(str, "fps=%d", frame);
-	if (timeGetTime() - time>1000)
-	{
-		time = timeGetTime();
-		frame = 0;
-		SetWindowTextA(m_hWnd, str);
-	}
+	////FPS計算表示
+	//static DWORD time = 0;
+	//static int frame = 0;
+	//frame++;
+	//char str[50];
+	//sprintf(str, "fps=%d", frame);
+	//if (timeGetTime() - time>1000)
+	//{
+	//	time = timeGetTime();
+	//	frame = 0;
+	//	SetWindowTextA(m_hWnd, str);
+	//}
 }
