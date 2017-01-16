@@ -12,6 +12,7 @@ SpawnManager::SpawnManager()
 {
 	seal_UI = new TD_Graphics;
 	spawnGateRead_ = new SpawnGateRead;
+	creator_ = new CharactorCreator;
 }
 
 //
@@ -23,6 +24,9 @@ SpawnManager::~SpawnManager()
 
 	delete spawnGateRead_;
 	spawnGateRead_ = nullptr;
+
+	delete creator_;
+	creator_ = nullptr;
 	//delete spawnGate_;
 	//spawnGate_ = nullptr;
 
@@ -34,8 +38,7 @@ SpawnManager::~SpawnManager()
 //	@brief	‰Šú‰»
 void SpawnManager::Init(char* name)
 {
-	CharactorCreator* creator = new CharactorCreator;
-	spawnMesh_ = creator->GetStageModel(name);
+	spawnMesh_ = creator_->LoadStage(name);
 	//delete creator;
 	//creator = nullptr;
 	SpawnSet();

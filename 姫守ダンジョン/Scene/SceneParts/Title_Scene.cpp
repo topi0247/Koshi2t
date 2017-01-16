@@ -4,6 +4,7 @@ Title_Scene::Title_Scene()
 {
 	title_UI["TITLE_UI"] = new TD_Graphics;
 	camera_ = new Camera;
+	creator_ = new CharactorCreator;
 }
 
 Title_Scene::~Title_Scene()
@@ -12,20 +13,22 @@ Title_Scene::~Title_Scene()
 	title_UI["TITLE_UI"] = nullptr;
 	delete camera_;
 	camera_ = nullptr;
+	delete creator_;
+	creator_ = nullptr;
+	
 }
 
 void Title_Scene::Init()
 {
 	camera_->gazePoint_ = D3DXVECTOR3(0, 3, 0);
 	camera_->movePow_ = D3DXVECTOR3(0, 8, -20);
-	CharactorCreator* creator = new CharactorCreator;
-	mesh_sword_ = creator->GetCharaModel("Œ•m");
-	mesh_shiled_ = creator->GetCharaModel("‚m");
-	mesh_bomber_ = creator->GetCharaModel("”š’em");
-	mesh_witch_ = creator->GetCharaModel("–‚“±m");
-	mesh_princess_ = creator->GetCharaModel("•P");
-	mesh_enemy_ = creator->GetCharaModel("ƒXƒ‰ƒCƒ€");
-	mesh_stage_ = creator->GetStageModel("ƒ^ƒCƒgƒ‹");
+	mesh_sword_ = creator_->LoadChara("Œ•m");
+	mesh_shiled_ = creator_->LoadChara("‚m");
+	mesh_bomber_ = creator_->LoadChara("”š’em");
+	mesh_witch_ = creator_->LoadChara("–‚“±m");
+	mesh_princess_ = creator_->LoadChara("•P");
+	mesh_enemy_ = creator_->LoadChara("ƒXƒ‰ƒCƒ€");
+	mesh_stage_ = creator_->LoadStage("ƒ^ƒCƒgƒ‹");
 
 	int i = 0;
 	//while (i < enemyMax)
@@ -45,7 +48,13 @@ void Title_Scene::Init()
 
 void Title_Scene::Destroy()
 {
-
+	SAFE_DELETE(mesh_sword_);
+	SAFE_DELETE(mesh_shiled_);
+	SAFE_DELETE(mesh_bomber_);
+	SAFE_DELETE(mesh_witch_);
+	SAFE_DELETE(mesh_princess_);
+	SAFE_DELETE(mesh_enemy_);
+	//SAFE_DELETE(mesh_stage_);
 }
 
 SceneBase* Title_Scene::Update(SceneRoot* root)
@@ -91,15 +100,15 @@ void Title_Scene::Render()
 	float scale = 0.5;
 	float dist = 5;
 	float speed = 1.0f / 40.0f;
-	mesh_sword_->Render(D3DXVECTOR3(0, 0, -dist), 0, D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
+	mesh_sword_->Render(D3DXVECTOR3(0, 0, -dist), 0, D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_sword_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
+	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_shiled_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
+	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
+	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale), Camera::movePow_);
+	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_princess_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 	//ƒXƒe[ƒW‚Ì•`‰æ

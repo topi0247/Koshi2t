@@ -22,6 +22,7 @@
 
 class Stage
 {
+	CharactorCreator* creator_;
 	//std::vector<StageMesh*> stage_;
 	CD3DXMESH* stage_;
 	//CD3DXMESH* skyMesh_;

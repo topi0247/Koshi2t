@@ -8,8 +8,8 @@
 
 D3DXMATRIX Camera::mView_;
 D3DXMATRIX Camera::mProj_;
-D3DXVECTOR3 Camera::movePow_;
-D3DXVECTOR3 Camera::gazePoint_;
+//D3DXVECTOR3 Camera::movePow_;
+//D3DXVECTOR3 Camera::gazePoint_;
 
 //
 //	@brief	コンストラクタ
@@ -46,7 +46,7 @@ void Camera::SetPlayerPos(D3DXVECTOR3 pos)
 
 //
 //	@brief	更新
-void Camera::Update()
+void Camera::Main_Update()
 {
 	//float dist = pow(movePow_.y- gazePoint_.y, 2);
 	//if (dist_ >= dist)

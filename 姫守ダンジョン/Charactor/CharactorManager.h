@@ -34,6 +34,7 @@ class CharactorManager:public CD3DXSKINMESH
 {
 protected:
 	CD3DXSKINMESH* mesh_;
+	CharactorCreator* creator_;
 
 	Motion* motion_;			//モーション管理クラス
 	unsigned int motionNo_;		//現在のモーション番号

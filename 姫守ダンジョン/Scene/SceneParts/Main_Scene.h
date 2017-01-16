@@ -44,7 +44,8 @@ private:
 
 	Stage* stage_;						//ステージ情報
 	Collision* ray_;
-	std::vector<JobManager*> player_;	//確認用仮キャラクター
+	std::vector<JobManager*> player_;	//プレイヤー
+	CharactorCreator* creator_;
 	Princess* princess_;				//姫
 	Camera* camera_;
 

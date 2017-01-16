@@ -115,8 +115,8 @@ void MAIN::Loop()
 	Sound::getInstance().Run();
 	//エフェクト
 	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
-	//キャラクターデータ・モデルの読み込み
-	CharactorCreator::LoadModel();
+	////キャラクターデータ・モデルの読み込み
+	//CharactorCreator::LoadModel();
 
 	//シーンマネージャ
 	root_ = new SceneRoot;
@@ -247,7 +247,7 @@ void MAIN::DestroyD3D()
 {
 	//delete camera_;
 	//camera_ = nullptr;
-	CharactorCreator::Destroy();
+	//CharactorCreator::Destroy();
 	root_->Destroy();
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);
@@ -286,7 +286,8 @@ void MAIN::Render()
 	TD_Graphics::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
-	Effect::getInstance().SetCamera(Camera::movePow_, Camera::gazePoint_);
+	Camera* camera_ = new Camera;
+	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);
 
 	scene_->Render();
 

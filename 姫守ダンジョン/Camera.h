@@ -25,13 +25,13 @@ public:
 
 	static D3DXMATRIX mView_;
 	static D3DXMATRIX mProj_;
-	static D3DXVECTOR3 movePow_;				//移動量
-	static D3DXVECTOR3 gazePoint_;				//注視点
+	D3DXVECTOR3 movePow_;				//移動量
+	D3DXVECTOR3 gazePoint_;				//注視点
 												//D3DXMATRIX GetView()const { return mView_; };
 												//D3DXMATRIX GetProj()const { return mProj_; };
 	void TitleUpdate(float radius);
 
-	void Update();	//更新
+	void Main_Update();	//更新
 	void Render();	//描画処理
 	void SetPlayerPos(D3DXVECTOR3 pos);
 	D3DXVECTOR3 GetPos() { return movePow_; };

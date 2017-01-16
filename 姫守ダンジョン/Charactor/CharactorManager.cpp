@@ -27,6 +27,7 @@ CharactorManager::CharactorManager()
 	motionChange_ = true;
 	perpetrator_ = Non;
 	damageFlg_ = false;
+	creator_ = new CharactorCreator;
 	//opponentWeight_ = 1;
 }
 
@@ -34,15 +35,19 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
-	//SAFE_DELETE(mesh_);
+	SAFE_DELETE(mesh_);
+	delete creator_;
+	creator_ = nullptr;
+	delete collision_;
+	collision_ = nullptr;
 }
 
 //
 //	@brief モデル読み込み・初期化
 void CharactorManager::CharaInit(char* name)
 {
-	CharactorCreator* creator = new CharactorCreator;
-	mesh_ = creator->GetCharaModel(name);
+	mesh_ = new CD3DXSKINMESH;
+	mesh_ = creator_->LoadChara(name);
 
 	//XFileRead* xfileRead = new XFileRead;
 	MotionRead* motionRead = new MotionRead;

@@ -15,6 +15,7 @@ Main_Scene::Main_Scene()
 	camera_ = new Camera;
 
 	debugText_ = new D3D11_TEXT;
+	creator_ = new CharactorCreator;
 }
 
 //
@@ -23,6 +24,8 @@ Main_Scene::~Main_Scene()
 {
 	delete camera_;
 	camera_ = nullptr;
+	delete creator_;
+	creator_ = nullptr;
 }
 
 //
@@ -47,6 +50,7 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	{
 		player_.push_back(ply);
 	}
+	creator_->LoadData();
 	player_[Player1] = SetCharaJob(CharactorCreator::player1_, Player1);
 	player_[Player1]->CharaInit(CharactorCreator::player1_);
 	player_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
@@ -105,6 +109,15 @@ JobManager* Main_Scene::SetCharaJob(char* name, CharaType type)
 //	@brief	‰ð•ú
 void Main_Scene::Destroy()
 {
+	/*for (int i = 0; i < charList_.size(); i++)
+	{
+		delete charList_[0];
+	}
+	charList_.clear();
+	enemyList_.clear();
+	player_.clear();*/
+	delete creator_;
+	creator_ = nullptr;
 }
 
 ////

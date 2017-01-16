@@ -29,6 +29,7 @@ private:
 	CD3DXMESH* mesh_stage_;
 
 	Camera* camera_;
+	CharactorCreator* creator_;
 	D3DXVECTOR3 enemyPos_[enemyMax];
 
 	void DebugSetJob();

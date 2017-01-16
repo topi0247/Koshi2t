@@ -17,6 +17,7 @@ class SpawnManager
 {
 private:
 	TD_Graphics* seal_UI;
+	CharactorCreator* creator_;
 	CD3DXMESH* spawnMesh_;
 	SpawnGateRead* spawnGateRead_;
 	SpawnGate* spawnGate_;

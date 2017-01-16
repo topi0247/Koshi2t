@@ -54,3 +54,6 @@ public:
 	//Camera* camera_;
 
 };
+
+//	マルチスレッド用関数　この中でロードに必要な処理を実行
+unsigned int WINAPI ThreadFunc(LPVOID arg);

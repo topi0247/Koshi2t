@@ -23,6 +23,7 @@ private:
 		not= 100,
 	};
 	std::map<std::string, TD_Graphics*> charaSelect_UI;
+	CharactorCreator* creator_;
 	CD3DXSKINMESH* sword_;
 	CD3DXSKINMESH* shield_;
 	CD3DXSKINMESH* bomber_;
@@ -43,7 +44,8 @@ private:
 	void CancelJob(int type);
 	void Update();
 	void MeshRender(jobName name, int type);
-	D3DXVECTOR2 HandAnimation(D3DXVECTOR2 size);
+	float HandAnimation(float size);
+	D3DXVECTOR2 StartAnimation(D3DXVECTOR2 pos);
 public:
 	CharactorSelection_Scene();
 	virtual ~CharactorSelection_Scene();

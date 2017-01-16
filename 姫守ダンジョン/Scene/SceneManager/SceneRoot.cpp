@@ -1,5 +1,8 @@
 #include "./SceneRoot.h"
-#include "./../SceneParts/Main_Scene.h"
+
+Scene* SceneRoot::beforeScene_ = nullptr;
+Scene* SceneRoot::nextScene_ = nullptr;
+bool SceneRoot::loadFlg_=false;
 
 SceneRoot::SceneRoot()
 	:scene_(nullptr)
@@ -31,6 +34,9 @@ void SceneRoot::Destroy()
 	//scene_ = nullptr;
 }
 
+
+
+
 SceneBase* SceneRoot::Update(SceneBase* scene)
 {
 	//std::cout << "SceneRoot::Update(SceneBase)" << std::endl;
@@ -46,6 +52,8 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 	//戻り値が現在のシーンと異なっていればシーン切り替え処理
 	if (next != scene_)
 	{
+		// beforeScene_ = scene_;
+
 		Scene* casted = dynamic_cast<Scene*>(next);
 		assert(casted);
 
@@ -58,19 +66,23 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 		scene_->Init();
 		nextScene_ = casted;
 		//next->Init();
+		
+		//	別スレッド起動
+		_beginthreadex(
+			NULL, //セキュリティ属性
+			0, //スタックサイズ
+			ThreadFunc, //スレッド関数
+			NULL, //スレッド関数に渡す引数
+			0, //作成オプション(0またはCREATE_SUSPENDED)
+			NULL);//スレッドID
 	}
-	if (next == loadScene_)
+	if (loadFlg_)
 	{
-		static int count = 0;
-		if (++count%(FPS * 1) == 0)
-		{
-			//scene_->Destroy();
-			//delete scene_;
-			scene_ = nextScene_;
-			scene_->Init();
-			//delete nextScene_;
-			count = 0;
-		}
+		scene_->Destroy();
+		//delete scene_;
+
+		scene_ = nextScene_;
+		loadFlg_ = false;
 	}
 
 	return this;
@@ -79,4 +91,18 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 void SceneRoot::Render()
 {
 	scene_->Render();
+}
+
+void SceneRoot::Load()
+{
+	//beforeScene_->Destroy();
+	//delete beforeScene_;
+	nextScene_->Init();
+	loadFlg_ = true;
+}
+
+unsigned int WINAPI SceneRoot::ThreadFunc(LPVOID arg)
+{
+	Load();
+	return 0;
 }
