@@ -158,22 +158,21 @@ void PlayerManager::DamageCalc(unsigned int atk)
 void PlayerManager::Dead()
 {
 	//aliveFlg_ = false;
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_)
+
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_ && motionNo_ != motion_->GetMotion("dead2")->id_)
 	{
 		moveAbleFlg_ = false;
-		//motionChange_ = false;
-		//motionNo_ = motion_->GetMotion("dead")->id_;
-		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		//motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
 		DeadSound();
 		ChangeMotion(motion_, "dead1");
+		motionCount_ = 0;
 	}
 	if (++motionCount_%motionFrame_ == 0 && motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
-		//motionChange_ = true;
 		ChangeMotion(motion_, "dead2");
 		motionCount_ = 0;
+		motionChange_ = true;
 	}
+
 }
 
 
@@ -208,34 +207,65 @@ void PlayerManager::Revival()
 //	@brief	•PŒÄ‚Ñ
 void PlayerManager::Princess_Call()
 {
+	//static int pushButtonTime = 0;
+	static bool callFlg = false;
 	if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_ == noAtk)
 	{
+		//++pushButtonTime;
+		callFlg = true;
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
 		callTiming_ = clock();
-		if (motionChange_ == true && motionNo_ != motion_->GetMotion("call1")->id_)
+		if (motionNo_ != motion_->GetMotion("call1")->id_ && motionNo_ != motion_->GetMotion("call2")->id_)
 		{
+			moveAbleFlg_ = false;
 			motionChange_ = false;
-			//motionNo_ = motion_->GetMotion("call")->id_;
-			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
 			ChangeMotion(motion_, "call1");
-
 		}
 	}
-
-	if (motionNo_ == motion_->GetMotion("call1")->id_)
+	else if (callFlg && !moveAbleFlg_)
 	{
-		if (++motionCount_%motionFrame_ == 0)
+		callFlg = false;
+		ChangeMotion(motion_, "call3");
+	}
+
+	if (callFlg&&motionNo_ == motion_->GetMotion("call1")->id_)
+	{
+		if (++motionCount_ > motionFrame_)
+		{
+			ChangeMotion(motion_, "call2");
+		}
+	}
+	else if (motionNo_ == motion_->GetMotion("call3")->id_)
+	{
+		if (++motionCount_ > motionFrame_)
 		{
 			//revivalFlg_ = false;
 			moveAbleFlg_ = true;
 			motionChange_ = true;
-			motionCount_ = 0;
-			//ChangeMotion(motion_, "wait");
+			ChangeMotion(motion_, "wait");
 		}
 	}
+	//if (0 < pushButtonTime)
+	//{
+	//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("call1")->id_)
+	//	{
+	//		motionChange_ = false;
+	//		//motionNo_ = motion_->GetMotion("call")->id_;
+	//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//		//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
+	//		ChangeMotion(motion_, "call1");
+	//	}
+	//}
+	//else if (motion_->GetMotion("call1")->frame_ < pushButtonTime)
+	//{
+	//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("call2")->id_)
+	//	{
+	//		ChangeMotion(motion_, "call2");
+	//	}
+	//}
 
+	
 }
 
 //

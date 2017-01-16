@@ -61,11 +61,6 @@ public:
 	// @param (flg)		モデルとの前後関係(真ならモデルより前)
 	void	Render(D3DXVECTOR2 pos,D3DXVECTOR2 scale,bool flg);
 
-	// @param (pos)			表示座標
-	// @param (scale)		拡大倍率
-	// @param (flg)			モデルとの前後関係(真ならモデルより前)
-	// @param (animSpeed)	アニメーション再生スピード
-	void	AnimRender(D3DXVECTOR2 pos, D3DXVECTOR2 scale, bool flg,int animSpeed);
 
 
 private:

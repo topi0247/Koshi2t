@@ -16,7 +16,29 @@ JobManager::JobManager(CharaType charaType)
 	//パラメータ初期化
 	param_ = new PlayerParameter;
 
-
+	//UI
+	backUI_ = new TD_Graphics;
+	backUIPos_ = D3DXVECTOR2(0 + charaType * UI_INTERVAL +UI_SPACE, 830);
+	D3DXVECTOR2 backScale(440, 220);
+	switch (charaType)
+	{
+	case Player1:
+		backUI_->Init(L"./UI/UI_Tex/hp_frame.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		break;
+	case Player2:
+		backUI_->Init(L"./UI/UI_Tex/hp_frame2.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		break;
+	case Player3:
+		backUI_->Init(L"./UI/UI_Tex/hp_frame3.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		break;
+	case Player4:
+		backUI_->Init(L"./UI/UI_Tex/hp_frame4.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		break;
+	}
+	hpGageUI_ = new TD_Graphics;
+	hpGazePos_=D3DXVECTOR2(20+charaType*UI_INTERVAL+UI_SPACE, 975);
+	D3DXVECTOR2 hpScale(420, 60);
+	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png", hpGazePos_, hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //
@@ -31,6 +53,12 @@ JobManager::~JobManager()
 
 	delete collision_;
 	collision_ = nullptr;
+
+	delete backUI_;
+	backUI_ = nullptr;
+
+	delete hpGageUI_;
+	hpGageUI_ = nullptr;
 }
 
 //
@@ -46,7 +74,6 @@ void JobManager::CharaUpdate()
 
 	//仮スピード
 	//motionSpeed_ = 0.05;
-	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	//Motion_Update();
 
 	//生存
@@ -82,3 +109,14 @@ void JobManager::CharaUpdate()
 	}
 }
 
+//
+//	@brief	UI描画
+void JobManager::UIRender()
+{
+	D3DXVECTOR2 scale(1, 1);
+	jobMarkUI_->Render(D3DXVECTOR2(0, 0), scale, true);
+	backUI_->Render(D3DXVECTOR2(0, 0), scale, true);
+	float hpX = (float)hp_ / (float)param_->hp_;
+	scale = D3DXVECTOR2(hpX, 1);
+	hpGageUI_->Render(D3DXVECTOR2(0, 0), scale, true);
+}

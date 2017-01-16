@@ -29,4 +29,5 @@ public:
 	virtual ~SwordMan();
 	virtual void Reset();
 	virtual void Attack();
+	virtual void CharaRender();	
 };

@@ -47,12 +47,14 @@ void EnemyManager::SetParameter(char* name)
 	param_->def_ = enemy->GetDefence();
 	param_->moveSpeed_ = enemy->GetMoveSpeed();
 	param_->weight_ = enemy->GetWeight();
+	param_->atk_ = enemy->GetAtk();
 	param_->attackReach_ = enemy->GetAttackReach();
 	param_->scale_ = enemy->GetScale();
 
 	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
 	ownWeight_ = param_->weight_;
 	hp_ = param_->hp_;
+
 }
 
 //
@@ -231,9 +233,10 @@ void EnemyManager::Move(float speed)
 
 	if (motionNo_ != motion_->GetMotion("walk")->id_)
 	{
-		motionNo_ = motion_->GetMotion("walk")->id_;
-		mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+		ChangeMotion(motion_, "walk");
+		//motionNo_ = motion_->GetMotion("walk")->id_;
+		//mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
 	}
 
 }

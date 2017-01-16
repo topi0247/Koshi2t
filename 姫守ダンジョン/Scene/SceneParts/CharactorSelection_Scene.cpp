@@ -450,8 +450,11 @@ void CharactorSelection_Scene::Render()
 
 	////デバッグ描画
 	//char str[256];
-	//sprintf(str, "pos.x:%f pos.y:%f",pos.x, pos.y);
+	//sprintf(str, "%d", (int)sword_->m_pD3dxMesh->m_pAnimController->GetTime() % 2);
 	//text_->Render(str, 0, 50);
+	//static int fps = 0;
+	//sprintf(str, "%d", fps++%FPS/10);
+	//text_->Render(str, 0, 80);
 
 
 }

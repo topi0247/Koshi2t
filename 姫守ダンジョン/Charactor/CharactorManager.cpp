@@ -35,7 +35,6 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
-	SAFE_DELETE(mesh_);
 	delete creator_;
 	creator_ = nullptr;
 	delete collision_;
@@ -46,9 +45,9 @@ CharactorManager::~CharactorManager()
 //	@brief モデル読み込み・初期化
 void CharactorManager::CharaInit(char* name)
 {
+	mesh_ = new CD3DXSKINMESH;
 	if (charaType_ != Enemy)
 	{
-		mesh_ = new CD3DXSKINMESH;
 		mesh_ = creator_->LoadChara(name);
 	}
 	//XFileRead* xfileRead = new XFileRead;
@@ -57,6 +56,13 @@ void CharactorManager::CharaInit(char* name)
 	//CreateFromX(xfile->GetFilePath());
 	SetMotionData(motionRead->GetMotionUser(name));
 	SetParameter(name);
+}
+
+//
+//	@brief	解放
+void CharactorManager::Destroy()
+{
+	SAFE_DELETE(mesh_);
 }
 
 //
@@ -268,7 +274,10 @@ int CharactorManager::GetSpaceNo()
 void CharactorManager::CharaRender()
 {
 	bool drawFlg = true;
-
+	if (charaType_ != Enemy)
+	{
+		mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	}
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)

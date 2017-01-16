@@ -18,7 +18,13 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	invinsibleFlg_ = false;
 	bomb_ = new CD3DXMESH;
 	bomb_ = creator_->LoadStage("”š’e");
-	bom_UI["BOM_UI"] = new TD_Graphics;
+
+	//UI
+	jobMarkUI_ = new TD_Graphics;
+	jobUIPos_ = D3DXVECTOR2(30 + charaType*UI_INTERVAL + UI_SPACE, 860);
+	D3DXVECTOR2 scale(105, 100);
+	jobMarkUI_->Init(L"./UI/UI_Tex/bomber.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
 
 }
 
@@ -26,8 +32,10 @@ Bomber::~Bomber()
 {
 	delete bomb_;
 	bomb_ = nullptr;
-	delete bom_UI["BOM_UI"];
-	bomb_ = nullptr;
+	delete jobMarkUI_;
+	jobMarkUI_ = nullptr;
+	//delete bom_UI["BOM_UI"];
+	//bomb_ = nullptr;
 }
 
 
@@ -249,7 +257,7 @@ void Bomber::Attack()
 			//motionCount_ = 0;
 			ChangeMotion(motion_, "charge1");
 		}
-		else if (++motionCount_% motionFrame_==0 && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		else if (++motionCount_>motionFrame_ && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
 			ChangeMotion(motion_, "charge2");
 		}
@@ -440,9 +448,9 @@ void Bomber::CharaRender()
 	/*D3DXVECTOR2 pos(0, 0);
 	D3DXVECTOR2 size(1, 1);
 	bom_UI["BOM_UI"]->Render(pos,size);*/
-
+	//ƒ‚ƒfƒ‹‚Ì•`‰æ
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
-
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)
@@ -450,13 +458,12 @@ void Bomber::CharaRender()
 			drawFlg = false;
 		}
 	}
-
 	if (drawFlg)
 	{
 		float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
-
+	//”š’e‚Ì•`‰æ
 	if (!bombList_.empty())
 	{
 		for (auto b : bombList_)
@@ -468,4 +475,8 @@ void Bomber::CharaRender()
 			}
 		}
 	}
+
+
+	//UI•`‰æ
+	UIRender();
 }

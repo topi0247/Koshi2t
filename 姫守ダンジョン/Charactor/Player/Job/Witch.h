@@ -30,7 +30,7 @@ private:
 	virtual void DeadSound();
 	virtual void DamageSound();
 
-	map<string, TD_Graphics*> Witch_UI;
+	//map<string, TD_Graphics*> Witch_UI;
 
 public:
 	Witch(CharaType charaType);

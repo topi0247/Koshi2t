@@ -2,7 +2,7 @@
 
 <Job name="Œ•Žm">
     <motion name="wait" id="0" frame="40"/>
-    <motion name="walk" id="1" frame="43"/>
+    <motion name="walk" id="1" frame="35"/>
     <motion name="attack1" id="2" frame="25"/>
     <motion name="attack2" id="3" frame="30"/>
     <motion name="attack3" id="4" frame="30"/>

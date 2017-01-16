@@ -16,15 +16,23 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	attackCount_ = 0;
 	magic_ = new CD3DXMESH;
 	magic_ = creator_->LoadStage("–‚–@‹…");
-	Witch_UI["WITCH_UI"] = new TD_Graphics;
+
+	//UI
+	jobMarkUI_ = new TD_Graphics;
+	jobUIPos_ = D3DXVECTOR2(30+charaType*UI_INTERVAL+UI_SPACE, 860);
+	D3DXVECTOR2 scale(105, 100);
+	jobMarkUI_->Init(L"./UI/UI_Tex/mage.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
 Witch::~Witch()
 {
 	delete magic_;
 	magic_ = nullptr;
-	delete Witch_UI["WITCH_UI"];
-	magic_ = nullptr;
+	delete jobMarkUI_;
+	jobMarkUI_ = nullptr;
+	//delete Witch_UI["WITCH_UI"];
+	//magic_ = nullptr;
 }
 
 ////
@@ -300,8 +308,9 @@ void Witch::CharaRender()
 	//D3DXVECTOR2 size(1, 1);
 	//Witch_UI["WITCH_UI"]->Render(pos,size);
 
+	//ƒ‚ƒfƒ‹•`‰æ
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
-
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)
@@ -309,13 +318,12 @@ void Witch::CharaRender()
 			drawFlg = false;
 		}
 	}
-
 	if (drawFlg)
 	{
 		float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
-
+	//–‚–@•`‰æ
 	if (!magicBall_.empty())
 	{
 		for (auto m : magicBall_)
@@ -323,4 +331,8 @@ void Witch::CharaRender()
 			magic_->Render(m->GetPosition(), D3DXVECTOR3(0, 0, 0), m->GetScale());
 		}
 	}
+
+
+	//UI•`‰æ
+	UIRender();
 }

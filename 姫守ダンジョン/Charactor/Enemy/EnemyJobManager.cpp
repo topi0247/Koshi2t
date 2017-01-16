@@ -98,8 +98,8 @@ void Skeleton::NormalAttack()
 
 void Skeleton::CharaRender()
 {
+	//mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
-
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)

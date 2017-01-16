@@ -21,40 +21,36 @@
 #include "./../SceneParts/Scene.h"
 #include "./../SceneManager/SceneRoot.h"
 #include "./../SceneParts/Title_Scene.h"
+#include "./../SceneParts/Result_Scene.h"
 
 class Main_Scene :public Scene
 {
 private:
+	bool failedFlg_;
+
+	TD_Graphics* uiStart_;
+	TD_Graphics* uiClear_;
+	TD_Graphics* uiFailed_;
+	
 	enum scene
 	{
 		StartS=0,
 		MainS,
 		EndS,
+		NextS,
 	};
 	scene scene_;
 
-	//XFileRead* xfileRead;
-	//XFile* xfile;
-	//ParameterRead* parameter;
-	//MotionRead* motionRead_;
-
-	/*HWND wnd_;
-	ID3D11Device* device_;
-	ID3D11DeviceContext* deviceContext_;*/
-
 	Stage* stage_;						//ステージ情報
-	Collision* ray_;
 	std::vector<JobManager*> player_;	//プレイヤー
-	CharactorCreator* creator_;
 	Princess* princess_;				//姫
-	Camera* camera_;
+	CharactorCreator* creator_;			//モデル・キャラデータ読み込みクラス
+	Collision* ray_;					//当たり判定クラス
+	Camera* camera_;					//カメラクラス
+
 
 	int spawnAmount_;					//スポーンゲートの数
-	//Spawn* spawn_;
 	SpawnManager* spawnManager_;
-	EnemyJobManager* virEnemy_;			//確用仮キャラクター
-	//CD3DXSKINMESH* slime_;
-	/*EnemyJobManager* virEnemy_;*/
 
 	void CollisionControl();			//衝突判定管理
 

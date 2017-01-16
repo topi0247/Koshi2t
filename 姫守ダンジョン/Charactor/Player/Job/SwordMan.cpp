@@ -18,11 +18,19 @@ SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 	atkMotion_[3] = "attack4";
 	atkMotion_[4] = "attack5";
 	atkMotion_[5] = "attack6";
+
+	//UI
+	jobMarkUI_ = new TD_Graphics;
+	jobUIPos_ = D3DXVECTOR2(30 + charaType*UI_INTERVAL + UI_SPACE, 860);
+	D3DXVECTOR2 scale(105, 100);
+	jobMarkUI_->Init(L"./UI/UI_Tex/fighter.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
 }
 
 SwordMan::~SwordMan()
 {
-
+	delete jobMarkUI_;
+	jobMarkUI_ = nullptr;
 }
 
 
@@ -51,31 +59,46 @@ void SwordMan::Reset()
 void SwordMan::Attack()
 {
 	static int keyWait= 0;
-	if (GamePad::checkInput(charaType_, GamePad::InputName::A))
+	int maxKeyWait = 10;
+	static bool atkAble = true;
+	if (atkAble && GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
 		keyWait = 0;
-		++attackCount_;
+		//++attackCount_;
 		atkNo_ = normalAtk;
+		atkAble = false;
 		moveAbleFlg_ = false;
 		//keyWait = 0;
 	}
-	else if (atkNo_ == normalAtk)
+	else if(!atkAble && !GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
-		attackCount_ = 0;
-		//motionCount_ = 0;
-		//atkNo_ = noAtk;
-		//Normal_Attack();
-		//hit = false;
-		//atkNo_ = noAtk;
-		//Special_Attack();
+		atkAble = true;
 	}
+	//else if (atkNo_ == normalAtk)
+	//{
+	//	attackCount_ = 0;
+	//	motionCount_ = 0;
+	//	atkNo_ = noAtk;
+	//	Normal_Attack();
+	//	hit = false;
+	//	atkNo_ = noAtk;
+	//	Special_Attack();
+	//}
 	else if (atkNo_ == noAtk)
 	{
-		if (++keyWait > 10)
+		if (++keyWait > maxKeyWait)
 		{
 			chainCount_ = 0;
 		}
 	}
+
+	//if (!atkAble)
+	//{
+	//	if (++keyWait > maxKeyWait)
+	//	{
+	//		atkAble = true;
+	//	}
+	//}
 
 	//else if (atkNo_ == charge)
 	//{
@@ -198,6 +221,31 @@ void SwordMan::DamageSound()
 void SwordMan::DeadSound()
 {
 	Sound::getInstance().SE_play("S_DEAD");
+}
+
+
+//
+//	@brief			•`‰æ
+void SwordMan::CharaRender()
+{
+	//ƒ‚ƒfƒ‹•`‰æ
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	bool drawFlg = true;
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+	if (drawFlg)
+	{
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
+	}
+
+	//UI•`‰æ
+	UIRender();
 }
 
 ////

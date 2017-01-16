@@ -14,11 +14,20 @@ ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 	shield_ = new CD3DXMESH;
 	shield_ = creator_->LoadStage("‚");
 	//ShieldMan_UI["SHIELDMAN_UI"] = new TD_Graphics;
+
+	//UI
+	jobMarkUI_ = new TD_Graphics;
+	jobUIPos_ = D3DXVECTOR2(30 + charaType*UI_INTERVAL + UI_SPACE, 860);
+	D3DXVECTOR2 scale(105, 100);
+	jobMarkUI_->Init(L"./UI/UI_Tex/guardian.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
 }
 
 ShieldMan::~ShieldMan()
 {
 	SAFE_DELETE(shield_);
+	delete jobMarkUI_;
+	jobMarkUI_ = nullptr;
 	//delete ShieldMan_UI["SHIELDMAN_UI"];
 }
 
@@ -356,8 +365,9 @@ void ShieldMan::DeadSound()
 //	@brief	•`‰æ
 void ShieldMan::CharaRender()
 {
+	//ƒ‚ƒfƒ‹‚Ì•`‰æ
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
-
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)
@@ -372,7 +382,7 @@ void ShieldMan::CharaRender()
 		float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
-
+	//‚‚Ì•`‰æ
 	if (atkNo_ == specialAtk)
 	{
 		float yaw = D3DXToDegree(m_Yaw)+50.0f;
@@ -387,6 +397,9 @@ void ShieldMan::CharaRender()
 		pos += m_Pos;
 		shield_->Render(pos, D3DXVECTOR3(0, yaw, 0), scale);
 	}
+
+	//UI•`‰æ
+	UIRender();
 }
 
 //

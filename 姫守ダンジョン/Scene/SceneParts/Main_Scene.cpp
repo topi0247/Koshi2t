@@ -13,9 +13,11 @@
 Main_Scene::Main_Scene()
 {
 	camera_ = new Camera;
-
 	debugText_ = new D3D11_TEXT;
 	creator_ = new CharactorCreator;
+	uiStart_ = new TD_Graphics;
+	uiClear_ = new TD_Graphics;
+	uiFailed_ = new TD_Graphics;
 }
 
 //
@@ -26,14 +28,17 @@ Main_Scene::~Main_Scene()
 	camera_ = nullptr;
 	delete creator_;
 	creator_ = nullptr;
+	delete uiStart_;
+	uiStart_ = nullptr;
+	delete uiClear_;
+	uiClear_ = nullptr;
+	delete uiFailed_;
+	uiFailed_ = nullptr;
 }
 
 //
-//	@brief						初期化
-//	@param (m_hWnd)				ウィンドウのハンドル
-//	@param (m_pDevice)			デバイス
-//	@param (m_pDeviceContext)	デバイスコンテキスト
-void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext*/)
+//	@brief	初期化
+void Main_Scene::Init()
 {
 	creator_->LoadData();
 	camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
@@ -52,7 +57,7 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	}
 	player_[Player1] = SetCharaJob(CharactorCreator::player1_, Player1);
 	player_[Player1]->CharaInit(CharactorCreator::player1_);
-	player_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
+	player_[Player1]->m_Pos = D3DXVECTOR3(-3, 0, -10);
 	player_[Player2] = SetCharaJob(CharactorCreator::player2_, Player2);
 	player_[Player2]->CharaInit(CharactorCreator::player2_);
 	player_[Player2]->m_Pos = D3DXVECTOR3(-1.5, 0, -10);
@@ -75,6 +80,13 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	}
 	charList_.push_back(princess_);
 
+	//UI
+	D3DXVECTOR2 scale(1623, 336);
+	uiStart_->Init(L"./UI/UI_Tex/start_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiClear_->Init(L"./UI/UI_Tex/clear_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
+	failedFlg_ = false;
 	time_ = 0;
 	scene_ = StartS;
 }
@@ -108,15 +120,10 @@ JobManager* Main_Scene::SetCharaJob(char* name, CharaType type)
 //	@brief	解放
 void Main_Scene::Destroy()
 {
-	/*for (int i = 0; i < charList_.size(); i++)
+	for (int i = 0; i < charList_.size(); i++)
 	{
-		delete charList_[0];
+		charList_[i]->Destroy();
 	}
-	charList_.clear();
-	enemyList_.clear();
-	player_.clear();*/
-	delete creator_;
-	creator_ = nullptr;
 }
 
 ////
@@ -185,12 +192,15 @@ void Main_Scene::Update()
 	{
 	case MainS:
 		GameMain();
+		camera_->gazePoint_ = princess_->m_Pos;
+		camera_->Main_Game_Update();
 		break;
 	case EndS:
 		GameEnd();
 		break;
 	case StartS:
 		GameStart();
+		camera_->Main_Start_Update();
 		break;
 	default:
 		break;
@@ -227,9 +237,16 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 
 	Update();
 
-	if (GetKeyState(VK_F3) & 0x80)
+	if (scene_ == NextS)
 	{
-		next = new Title_Scene;
+		if (!failedFlg_)
+		{
+			next = new Result_Scene;
+		}
+		else
+		{
+			next = new Title_Scene;
+		}
 	}
 
 	return next;
@@ -244,13 +261,16 @@ void Main_Scene::GameStart()
 	//{
 	//	scene_ = MainS;
 	//}
-	spawnFlg_ = false;
+	//spawnFlg_ = false;
 	//if (GetKeyState(VK_RETURN) & 0x80)
 	//{
-		scene_ = MainS;
-		Sound::getInstance().BGM_play("SENTOU");
-
+	Sound::getInstance().BGM_play("SENTOU");
 	//}
+	static int startCount = 0;
+	if (++startCount % (FPS * 5) == 0)
+	{
+		scene_ = MainS;
+	}
 }
 
 //
@@ -258,48 +278,48 @@ void Main_Scene::GameStart()
 void Main_Scene::GameMain()
 {
 
-	//デバッグ用
-	if (GetKeyState('E') & 0x80)
-	{
-		scene_ = EndS;
-	}
-	if (GetKeyState('S') & 0x80)
-	{
-		spawnFlg_ = true;
-	}
+	////デバッグ用
+	//if (GetKeyState('E') & 0x80)
+	//{
+	//	scene_ = EndS;
+	//}
+	//if (GetKeyState('S') & 0x80)
+	//{
+	//	spawnFlg_ = true;
+	//}
 
-	////エネミースポーン処理
-	if (spawnFlg_ == true)
+	//////エネミースポーン処理
+	//if (spawnFlg_ == true)
+	//{
+	if (enemyList_.size() < 50)
 	{
-		if (enemyList_.size() < 50)
+		spawnManager_->Update(princess_);
+		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
+		if (!temp.empty())
 		{
-			spawnManager_->Update(princess_);
-			std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
-			if (!temp.empty())
+			for (auto e : temp)
 			{
-				for (auto e : temp)
-				{
-					enemyList_.push_back(e);
-					charList_.push_back(e);
-				}
-				temp.clear();
+				enemyList_.push_back(e);
+				charList_.push_back(e);
 			}
-		}
-
-
-		//エネミーターゲット更新
-		if (!enemyList_.empty())
-		{
-			for (auto enemy : enemyList_)
-			{
-				//プレイヤーループ
-				for (int i = 0; i < 4; i++)
-				{
-					enemy->Target_Update(player_[i], princess_);
-				}
-			}
+			temp.clear();
 		}
 	}
+
+
+	//エネミーターゲット更新
+	if (!enemyList_.empty())
+	{
+		for (auto enemy : enemyList_)
+		{
+			//プレイヤーループ
+			for (int i = 0; i < 4; i++)
+			{
+				enemy->Target_Update(player_[i], princess_);
+			}
+		}
+	}
+	//}
 
 	//キャラ更新
 	for (auto chara : charList_)
@@ -356,6 +376,7 @@ void Main_Scene::GameMain()
 	//ゲーム終了(姫死亡 又は プレイヤー全滅 又はクリア)
 	if (!(princess_->GetAliveFlg() || deadCount == 4))
 	{
+		failedFlg_ = true;
 		scene_ = EndS;
 	}
 }
@@ -364,6 +385,13 @@ void Main_Scene::GameMain()
 //	@brief	ゲーム終了
 void Main_Scene::GameEnd()
 {
+	static int endCount = 0;
+	if (++endCount % (FPS * 5) == 0)
+	{
+		scene_ = NextS;
+	}
+
+#ifdef _DEBUG
 	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		scene_ = StartS;
@@ -386,6 +414,7 @@ void Main_Scene::GameEnd()
 
 		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
+#endif //_DEBUG
 }
 
 //
@@ -473,9 +502,7 @@ void Main_Scene::CollisionControl()
 
 //
 //	@brief			描画
-//	@param (mView)	描画用マトリックス
-//	@param (mProj)	射影変換用マトリックス
-void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
+void Main_Scene::Render()
 {
 	//スポーンゲートの描画
 	spawnManager_->Render();
@@ -483,9 +510,21 @@ void Main_Scene::Render(/*D3DXMATRIX mView, D3DXMATRIX mProj*/)
 	//ステージの描画
 	stage_->Render();
 
+	//キャラ描画
 	for (auto chara : charList_)
 	{
 		chara->CharaRender();
+	}
+
+
+	//UI描画
+	if (scene_ == StartS)
+	{
+		uiStart_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), true);
+	}
+	else if (scene_ == EndS && failedFlg_)
+	{
+		uiFailed_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), true);
 	}
 
 #ifdef _DEBUG

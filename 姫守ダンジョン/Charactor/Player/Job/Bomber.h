@@ -33,7 +33,7 @@ private:
 	//virtual void Move(float speed);
 	virtual void DamegeSound() {};
 
-	map<string, TD_Graphics*> bom_UI;
+	//map<string, TD_Graphics*> bom_UI;
 
 public:
 	Bomber(CharaType charaType);

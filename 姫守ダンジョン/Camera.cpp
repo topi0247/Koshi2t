@@ -15,7 +15,7 @@ D3DXMATRIX Camera::mProj_;
 //	@brief	コンストラクタ
 Camera::Camera()
 {
-	
+
 	zoom = 6;
 	farPlayerPos_ = movePow_;
 	//dist_ = zoom;
@@ -45,9 +45,22 @@ void Camera::SetPlayerPos(D3DXVECTOR3 pos)
 }
 
 //
-//	@brief	更新
-void Camera::Main_Update()
+//	@brief	メインシーンゲーム開始時更新
+void Camera::Main_Start_Update()
 {
+
+}
+
+//
+//	@brief	メインシーンゲーム中更新
+void Camera::Main_Game_Update()
+{
+	static float x = movePow_.x;
+	movePow_.x = gazePoint_.x;
+	float y = x - movePow_.x;
+	movePow_.y += y;
+	x = movePow_.x;
+	//movePow_.z = gazePoint_.z+z;
 	//float dist = pow(movePow_.y- gazePoint_.y, 2);
 	//if (dist_ >= dist)
 	//{
@@ -85,7 +98,7 @@ void Camera::Main_Update()
 	//}
 
 #if _DEBUG
-	DebugMove();
+	//DebugMove();
 #endif
 }
 

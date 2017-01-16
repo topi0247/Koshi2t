@@ -106,10 +106,17 @@ void Princess::Move(float speed)
 void Princess::DamageCalc(unsigned int atk)
 {
 	aliveFlg_ = false;
-	if (motionNo_ != motion_->GetMotion("dead")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_ && motionNo_ != motion_->GetMotion("dead2")->id_)
 	{
-		mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("dead")->id_);
-		motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
+		moveAbleFlg_ = false;
+		ChangeMotion(motion_, "dead1");
+		motionCount_ = 0;
+	}
+	if (++motionCount_%motionFrame_ == 0 && motionNo_ == motion_->GetMotion("dead1")->id_)
+	{
+		ChangeMotion(motion_, "dead2");
+		motionCount_ = 0;
+		motionChange_ = true;
 	}
 }
 

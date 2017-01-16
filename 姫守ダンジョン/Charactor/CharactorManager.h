@@ -88,6 +88,7 @@ public:
 	virtual void CharaRender();									//描画
 	virtual void Move_Update();									//移動の更新
 	virtual void DamageCalc(unsigned int atk)=0;				//ダメージ計算
+	void Destroy();												//解放
 	void SetMotionData(Motion* motionData);
 	void KnockBack(D3DXVECTOR3 atkPos, float distance,float speed);	//ノックバック
 

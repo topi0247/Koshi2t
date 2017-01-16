@@ -168,7 +168,7 @@ void WeaponBall::Hit()
 				{
 					c->DamageCalc(atk_);
 					//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½‚ÌSE
-					Sound::getInstance().SE_play(hitSoundName_);
+					//Sound::getInstance().SE_play(hitSoundName_);
 				}
 			}
 		}

@@ -56,7 +56,7 @@ void SpawnManager::Init(char* name)
 	SpawnSet();*/
 
 	uiDrawFlg_ = false;
-	seal_UI->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	seal_UI->Init(L"./UI/UI_Tex/success_font.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //

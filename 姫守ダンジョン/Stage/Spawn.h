@@ -22,6 +22,8 @@ private:
 	SpawnGateAttr* spawn_;
 	//ParameterRead* tempParameter_;
 	CharactorManager* tempCharactor_;
+	CharactorCreator* creator_;
+	CD3DXSKINMESH* enemyMesh_;
 
 	//int spawnID_;		//スポーン番号
 	//int amount_;		//一度に生成するエネミーの数

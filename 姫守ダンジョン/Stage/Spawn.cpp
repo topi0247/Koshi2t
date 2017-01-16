@@ -11,13 +11,17 @@
 Spawn::Spawn()
 	:timeCount_(0)
 {
+	enemyMesh_ = new CD3DXSKINMESH;
+	creator_ = new CharactorCreator;
 }
 
 //
 //	@brief	デストラクタ
 Spawn::~Spawn()
 {
-
+	SAFE_DELETE(enemyMesh_);
+	delete creator_;
+	creator_ = nullptr;
 }
 
 ////
@@ -48,6 +52,7 @@ void Spawn::SpawnInit(SpawnGateAttr* spawnInfo)
 	scale_ = 0.5;
 	rot_ = D3DXVECTOR3(0,0,0);
 	spawn_ = spawnInfo;
+	enemyMesh_ = creator_->LoadChara(spawn_->enemyName_);
 	//memset(spawn_, 0, sizeof(spawn_));
 	//memcpy(spawn_, spawnInfo, sizeof(spawn_));
 	//spawnID_ = spawnInfo->id_;
@@ -98,8 +103,8 @@ void Spawn::SlimeSet()
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Slim;
-		//enemy->SetModel()
-		//enemy->CharaInit(spawn_->enemyName_);
+		enemy->CharaInit(spawn_->enemyName_);
+		enemy->SetModel(enemyMesh_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z-rand() % height);
@@ -120,6 +125,7 @@ void Spawn::GoblinSet()
 	{
 		EnemyJobManager* enemy = new Goblin;
 		enemy->CharaInit(spawn_->enemyName_);
+		enemy->SetModel(enemyMesh_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z - rand() % height);
@@ -140,6 +146,7 @@ void Spawn::SkeletonSet()
 	{
 		EnemyJobManager* enemy = new Skeleton;
 		enemy->CharaInit(spawn_->enemyName_);
+		enemy->SetModel(enemyMesh_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z - rand() % height);

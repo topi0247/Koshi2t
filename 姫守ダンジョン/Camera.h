@@ -30,8 +30,8 @@ public:
 												//D3DXMATRIX GetView()const { return mView_; };
 												//D3DXMATRIX GetProj()const { return mProj_; };
 	void TitleUpdate(float radius);
-
-	void Main_Update();	//XV
+	void Main_Start_Update();
+	void Main_Game_Update();
 	void Render();	//•`‰æˆ—
 	void SetPlayerPos(D3DXVECTOR3 pos);
 	D3DXVECTOR3 GetPos() { return movePow_; };
