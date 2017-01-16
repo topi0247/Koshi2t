@@ -18,6 +18,7 @@ private:
 	unsigned int spaceNo_;
 	Collision* col_;
 	CD3DXMESH* weaponBall_;
+	CharactorCreator* creator_;
 	CharaType user_;
 	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
 	bool delFlg_;

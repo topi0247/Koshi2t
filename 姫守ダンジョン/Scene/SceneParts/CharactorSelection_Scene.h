@@ -46,6 +46,7 @@ private:
 	void MeshRender(jobName name, int type);
 	float HandAnimation(float size);
 	D3DXVECTOR2 StartAnimation(D3DXVECTOR2 pos);
+
 public:
 	CharactorSelection_Scene();
 	virtual ~CharactorSelection_Scene();

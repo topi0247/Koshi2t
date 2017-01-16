@@ -10,6 +10,12 @@
 
     <model fileName="bomber.x" charName="”š’eŽm"/>
 
+    <model fileName="bomb.x" charName="”š’e"/>
+
+    <model fileName="shieldOnly.x" charName="‚"/>
+
+    <model fileName="magicball.x" charName="–‚–@‹…"/>
+
 </Models>
 
 <Models Type="Enemy">

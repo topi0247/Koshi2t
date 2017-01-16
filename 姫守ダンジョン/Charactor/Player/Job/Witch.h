@@ -22,6 +22,7 @@ private:
 	std::vector<WeaponBall*> magicBall_;
 
 	void InstanceMagicBall(int count);
+	void RazorBeam();
 	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();

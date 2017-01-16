@@ -15,13 +15,14 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	atkNo_ = noAtk;
 	attackCount_ = 0;
 	magic_ = new WeaponBall;
-
+	magic_->Init("魔法球");
 	Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
 Witch::~Witch()
 {
 	delete magic_;
+	magic_ = nullptr;
 	delete Witch_UI["WITCH_UI"];
 	magic_ = nullptr;
 }
@@ -139,7 +140,7 @@ void Witch::Normal_Attack()
 		//timeEnd_ = motion_->GetMotion("attack")->frame_;
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		//motionCount_ = 0;
-		ChangeMotion(motion_, "attack");
+		ChangeMotion(motion_, "attack1");
 	}
 
 	if (++motionCount_%motionFrame_ == 0)
@@ -159,7 +160,7 @@ void Witch::Normal_Attack()
 void Witch::Special_Attack()
 {
 	
-	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("attack")->id_;
@@ -167,7 +168,7 @@ void Witch::Special_Attack()
 		//timeEnd_ = motion_->GetMotion("attack")->frame_;
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		//motionCount_ = 0;
-		ChangeMotion(motion_, "attack");
+		ChangeMotion(motion_, "attack1");
 	}
 
 	if (++motionCount_%motionFrame_ == 0)
@@ -176,7 +177,8 @@ void Witch::Special_Attack()
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
-		InstanceMagicBall(param_->spChainWeapon_);
+		//InstanceMagicBall(param_->spChainWeapon_);
+		RazorBeam();
 	}
 
 	
@@ -196,7 +198,7 @@ void Witch::InstanceMagicBall(int count)
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)
 		{
-			WeaponBall* magic = new WeaponBall;
+			WeaponBall* magic = magic_;
 			int degree = 90 / (magicBallCount_ / 2 + 1);
 			float temp = angle - 90 + degree + degree*i;
 			temp = D3DXToRadian(temp);
@@ -241,6 +243,13 @@ void Witch::WeaponUpdate()
 			magicFlg_ = false;
 		}
 	}
+}
+
+//
+//	@brief	レーザービーム
+void Witch::RazorBeam()
+{
+	
 }
 
 //

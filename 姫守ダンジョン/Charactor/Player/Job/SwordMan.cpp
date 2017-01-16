@@ -70,36 +70,34 @@ void SwordMan::Attack()
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	/* 修正の必要あり */
-	unsigned int inputTime = (FPS*param_->chargeTime_) / 2;
+	unsigned int inputTime = motionSpeed_;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
 		atkNo_ = normalAtk;
 	}
-	else if (inputTime < attackCount_)
-	{
-		atkNo_ = charge;
-		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
-		{
-			motionChange_ = false;
-			//motionNo_ = motion_->GetMotion("charge")->id_;
-			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			//timeEnd_ = motion_->GetMotion("charge")->frame_;
-			//motionSpeed_ = 1 / (float)timeEnd_;
-			ChangeMotion(motion_, "charge");
-			motionSpeed_ *= 5;
-			motionFrame_ /= 2;
-		}
-	}
+	//else if (inputTime < attackCount_)
+	//{
+	//	atkNo_ = charge;
+	//	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+	//	{
+	//		motionChange_ = false;
+	//		//motionNo_ = motion_->GetMotion("charge")->id_;
+	//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//		//timeEnd_ = motion_->GetMotion("charge")->frame_;
+	//		//motionSpeed_ = 1 / (float)timeEnd_;
+	//		ChangeMotion(motion_, "charge");
+	//	}
+	//}
 
 	if (atkNo_ == normalAtk)
 	{
 		Normal_Attack();
 	}
-	else if (atkNo_ == specialAtk)
+	/*else if (atkNo_ == specialAtk)
 	{
 		Special_Attack();
-	}
+	}*/
 }
 
 //
@@ -113,10 +111,6 @@ void SwordMan::Normal_Attack()
 		motionChange_ = false;
 		ChangeMotion(motion_, "attack1");
 
-		/*モーション自体が遅い為丁度良い感じに修正
-		　修正の必要があり。*/
-		motionSpeed_ *= 10;
-		motionFrame_ /= 5;
 
 		Normal_Attack_Collision();
 
@@ -189,8 +183,6 @@ void SwordMan::Special_Attack()
 		//timeEnd_ = motion_->GetMotion("special")->frame_;
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		ChangeMotion(motion_, "special");
-		motionSpeed_ *= 5;
-		motionFrame_ /= 2;
 	}
 
 	if (++motionCount_ > motionFrame_)

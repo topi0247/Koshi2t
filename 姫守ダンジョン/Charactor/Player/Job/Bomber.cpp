@@ -17,7 +17,7 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	invisibleCount_ = 0;
 	invinsibleFlg_ = false;
 	bomb_ = new WeaponBall;
-
+	bomb_->Init("”š’e");
 	bom_UI["BOM_UI"] = new TD_Graphics;
 
 }
@@ -25,6 +25,7 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 Bomber::~Bomber()
 {
 	delete bomb_;
+	bomb_ = nullptr;
 	delete bom_UI["BOM_UI"];
 	bomb_ = nullptr;
 }
@@ -291,7 +292,7 @@ void Bomber::Normal_Attack()
 		motionChange_ = true;
 		if (bombList_.empty() || bombList_.size() < size)
 		{
-			WeaponBall* bomb = new WeaponBall;
+			WeaponBall* bomb = bomb_;
 			bomb->SetStartPos(m_Pos);
 			bomb->SetScale(param_->weaponScale_);
 			bomb->SetAttack(param_->normalAtk_);

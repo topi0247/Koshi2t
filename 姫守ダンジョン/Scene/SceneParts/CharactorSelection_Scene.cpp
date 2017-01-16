@@ -45,7 +45,7 @@ void CharactorSelection_Scene::Init()
 	strcpy(CharactorCreator::player3_, null);
 	strcpy(CharactorCreator::player4_, null);
 	creator_ = new CharactorCreator;
-	
+
 	sword_ = creator_->LoadChara("Œ•Žm");
 	shield_ = creator_->LoadChara("‚Žm");
 	bomber_ = creator_->LoadChara("”š’eŽm");
@@ -55,7 +55,7 @@ void CharactorSelection_Scene::Init()
 	{
 		choiceJob_[i] = not;
 		keyWait_[i] = 0;
-		pos_[i] = D3DXVECTOR2(100 + i * 500, 50);
+		pos_[i] = D3DXVECTOR2(100 + i * 500, 890);
 		meshPos_[i] = D3DXVECTOR3(-3.5 + i * 2.3, 0, 0);
 	}
 	//meshPos_[0] = D3DXVECTOR3(-3.5, 0, 0);
@@ -66,7 +66,7 @@ void CharactorSelection_Scene::Init()
 	//meshPos_[3] = D3DXVECTOR3(2, 0, 0);
 
 	//charaSelect_UI["FINGER_UI"]->Init(L"./UI/UI_Tex/finger.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	charaSelect_UI["player1"]->Init(L"./UI/UI_Tex/finger.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	charaSelect_UI["player1"]->Init(L"./UI/UI_Tex/player_plate1.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["player2"]->Init(L"./UI/UI_Tex/player_plate2.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["player3"]->Init(L"./UI/UI_Tex/player_plate3.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["player4"]->Init(L"./UI/UI_Tex/player_plate4.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
@@ -143,6 +143,7 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 
 void CharactorSelection_Scene::Update()
 {
+
 	for (int i = 0; i < 4; i++)
 	{
 		++keyWait_[i];
@@ -161,7 +162,7 @@ void CharactorSelection_Scene::Update()
 			}
 		}
 	}
-
+	choiceJob_[Player4] = witch;
 	int count = 0;
 	for (int i = 0; i < 4; i++)
 	{
@@ -297,11 +298,11 @@ void CharactorSelection_Scene::CancelJob(int type)
 
 float CharactorSelection_Scene::HandAnimation(float size)
 {
-	static float scale=size;
+	static float scale = size;
 	static bool big = true;
 	float mag = 0.001;
 	float maxScale = 1.05;
-	float minScale=0.95;
+	float minScale = 0.95;
 
 	if (size > maxScale)
 	{
@@ -380,17 +381,17 @@ void CharactorSelection_Scene::Render()
 	}
 	else
 	{
-		startUIPos= D3DXVECTOR2(WINDOW_WIDTH, 400);
+		startUIPos = D3DXVECTOR2(WINDOW_WIDTH, 400);
 	}
 
 	static float fingerUIScale = 1.0f;
 	fingerUIScale = HandAnimation(fingerUIScale);
 	//for (int i = 0; i < 4; i++)
 	//{
-		charaSelect_UI["player1"]->Render(pos_[Player1], D3DXVECTOR2(fingerUIScale,fingerUIScale), true);
-		charaSelect_UI["player2"]->Render(pos_[Player2], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
-		charaSelect_UI["player3"]->Render(pos_[Player3], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
-		charaSelect_UI["player4"]->Render(pos_[Player4], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
+	charaSelect_UI["player1"]->Render(pos_[Player1], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
+	charaSelect_UI["player2"]->Render(pos_[Player2], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
+	charaSelect_UI["player3"]->Render(pos_[Player3], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
+	charaSelect_UI["player4"]->Render(pos_[Player4], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
 	//}
 
 	//static D3DXVECTOR2 mag(1, 1);
@@ -399,7 +400,7 @@ void CharactorSelection_Scene::Render()
 
 
 	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
-	/*static D3DXVECTOR2 pos(0, 0); 
+	/*static D3DXVECTOR2 pos(0, 0);
 	float speed_= 0.01;
 	pos.x += (GetKeyState(VK_RIGHT) & 0x80)*speed_ + -(GetKeyState(VK_LEFT) & 0x80)*speed_;
 	pos.y += (GetKeyState(VK_DOWN) & 0x80)*speed_ + -(GetKeyState(VK_UP) & 0x80)*speed_;*/
@@ -449,3 +450,4 @@ void CharactorSelection_Scene::Render()
 
 
 }
+

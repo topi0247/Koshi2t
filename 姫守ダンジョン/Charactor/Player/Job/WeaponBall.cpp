@@ -14,7 +14,7 @@ WeaponBall::WeaponBall()
 	:delCount_(0)
 {
 	weaponBall_ = new CD3DXMESH;
-
+	creator_ = new CharactorCreator;
 	weaponBall_->m_fScale = 0.5;
 	delFlg_ = false;
 	col_ = new Collision;
@@ -34,12 +34,13 @@ WeaponBall::~WeaponBall()
 //	@brief	“Ç‚Ýž‚Ý
 void WeaponBall::Init(char* name)
 {
-	char FileName[80] = "./Model/XFiles/Player/";
+	weaponBall_ = creator_->LoadStage(name);
+	/*char FileName[80] = "./Model/XFiles/Player/";
 	strcat(FileName, name);
 	if (FAILED(weaponBall_->LoadXMesh(FileName)))
 	{
 		return;
-	}
+	}*/
 }
 
 //
