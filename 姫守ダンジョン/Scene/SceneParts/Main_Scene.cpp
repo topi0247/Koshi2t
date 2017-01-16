@@ -35,7 +35,7 @@ Main_Scene::~Main_Scene()
 //	@param (m_pDeviceContext)	デバイスコンテキスト
 void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContext* m_pDeviceContext*/)
 {
-
+	creator_->LoadData();
 	camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
 	camera_->gazePoint_ = D3DXVECTOR3(0, -7, 0);
 
@@ -50,7 +50,6 @@ void Main_Scene::Init(/*HWND m_hWnd, ID3D11Device* m_pDevice, ID3D11DeviceContex
 	{
 		player_.push_back(ply);
 	}
-	creator_->LoadData();
 	player_[Player1] = SetCharaJob(CharactorCreator::player1_, Player1);
 	player_[Player1]->CharaInit(CharactorCreator::player1_);
 	player_[Player1]->m_Pos = D3DXVECTOR3(0, 0, 0);
@@ -246,12 +245,12 @@ void Main_Scene::GameStart()
 	//	scene_ = MainS;
 	//}
 	spawnFlg_ = false;
-	if (GetKeyState(VK_RETURN) & 0x80)
-	{
+	//if (GetKeyState(VK_RETURN) & 0x80)
+	//{
 		scene_ = MainS;
 		Sound::getInstance().BGM_play("SENTOU");
 
-	}
+	//}
 }
 
 //

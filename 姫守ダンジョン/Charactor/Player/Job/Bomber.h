@@ -14,7 +14,7 @@
 class Bomber :public JobManager
 {
 private:
-	WeaponBall* bomb_;
+	CD3DXMESH* bomb_;
 
 	bool bombFlg_;	//爆弾が発動中かどうか
 	bool invinsibleFlg_;	//無敵中かどうか
@@ -24,12 +24,13 @@ private:
 	//WeaponBall** bomb_;
 	std::vector<WeaponBall*> bombList_;
 
+	void InstanceWeapon();
 	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
-	virtual void MoveCharaHit();
+	//virtual void MoveCharaHit();
 	virtual void DeadSound();
-	virtual void Move(float speed);
+	//virtual void Move(float speed);
 	virtual void DamegeSound() {};
 
 	map<string, TD_Graphics*> bom_UI;
@@ -41,6 +42,6 @@ public:
 	virtual void Reset();
 	virtual void Attack();
 	//virtual void Move_Update();
-	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
+	//virtual void DamageCalc(unsigned int atk);					//ダメージ計算
 	virtual void CharaRender();
 };

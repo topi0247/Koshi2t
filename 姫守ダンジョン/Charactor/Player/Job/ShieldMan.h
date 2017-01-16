@@ -16,10 +16,11 @@ class ShieldMan :public JobManager
 private:
 	bool spMoveFlg_;
 	D3DXVECTOR3 spMove_;
+	CD3DXMESH* shield_;
+	
 	void Attack_Collision(float hitAngle);
 	//void Normal_Attack_Collision();
 	//void Special_Attack_Collision();
-
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
 	virtual void Move(float speed);
@@ -34,5 +35,6 @@ public:
 	virtual ~ShieldMan();
 	virtual void Reset();
 	virtual void Attack();
-	virtual void DamageCalc(unsigned int atk);					//ダメージ計算
+	virtual void DamageCalc(unsigned int atk);	//ダメージ計算
+	virtual void CharaRender();					//描画
 };

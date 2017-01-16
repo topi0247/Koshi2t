@@ -56,6 +56,13 @@ void EnemyManager::SetParameter(char* name)
 }
 
 //
+//	@brief	モデルの設定
+void EnemyManager::SetModel(CD3DXSKINMESH* mesh)
+{
+	mesh_ = mesh;
+}
+
+//
 //	@brief	バス停セット
 void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 {

@@ -11,6 +11,13 @@
 SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
+	chainCount_ = 0;
+	atkMotion_[0] = "attack1";
+	atkMotion_[1] = "attack2";
+	atkMotion_[2] = "attack3";
+	atkMotion_[3] = "attack4";
+	atkMotion_[4] = "attack5";
+	atkMotion_[5] = "attack6";
 }
 
 SwordMan::~SwordMan()
@@ -34,7 +41,7 @@ void SwordMan::Reset()
 	revivalFlg_ = false;
 	callTiming_ = 0;
 	attackCount_ = 0;
-
+	chainCount_ = 0;
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
 }
 
@@ -43,12 +50,14 @@ void SwordMan::Reset()
 //	@brief	UŒ‚
 void SwordMan::Attack()
 {
-	if (GamePad::checkInput(charaType_, GamePad::InputName::A)
-		/*|| GetKeyState('1') & 0x80*/)
+	static int keyWait= 0;
+	if (GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
+		keyWait = 0;
 		++attackCount_;
-		atkNo_ = waitAtk;
+		atkNo_ = normalAtk;
 		moveAbleFlg_ = false;
+		//keyWait = 0;
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -60,66 +69,55 @@ void SwordMan::Attack()
 		//atkNo_ = noAtk;
 		//Special_Attack();
 	}
-	else if (atkNo_ == charge)
+	else if (atkNo_ == noAtk)
 	{
-		attackCount_ = 0;
-		motionCount_ = 0;
-		motionChange_ = true;
-		atkNo_ = specialAtk;
+		if (++keyWait > 10)
+		{
+			chainCount_ = 0;
+		}
 	}
+
+	//else if (atkNo_ == charge)
+	//{
+	//	attackCount_ = 0;
+	//	motionCount_ = 0;
+	//	motionChange_ = true;
+	//	atkNo_ = specialAtk;
+	//}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
-	/* C³‚Ì•K—v‚ ‚è */
-	unsigned int inputTime = motionSpeed_;
+	///* C³‚Ì•K—v‚ ‚è */
+	//unsigned int inputTime = motionSpeed_;
 
-	if (0 < attackCount_ && attackCount_ <= inputTime)
-	{
-		atkNo_ = normalAtk;
-	}
-	//else if (inputTime < attackCount_)
+	//if (0 < attackCount_ && attackCount_ <= inputTime)
 	//{
-	//	atkNo_ = charge;
-	//	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
-	//	{
-	//		motionChange_ = false;
-	//		//motionNo_ = motion_->GetMotion("charge")->id_;
-	//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-	//		//timeEnd_ = motion_->GetMotion("charge")->frame_;
-	//		//motionSpeed_ = 1 / (float)timeEnd_;
-	//		ChangeMotion(motion_, "charge");
-	//	}
+	//	atkNo_ = normalAtk;
 	//}
+
 
 	if (atkNo_ == normalAtk)
 	{
 		Normal_Attack();
 	}
-	/*else if (atkNo_ == specialAtk)
-	{
-		Special_Attack();
-	}*/
 }
 
 //
 //	@breif	’ÊíUŒ‚
 void SwordMan::Normal_Attack()
 {
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("attack1")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion(atkMotion_[chainCount_%ChainAmount])->id_)
 	{
 		Sound::getInstance().SE_play("S_NORMALATK");
-
 		motionChange_ = false;
-		ChangeMotion(motion_, "attack1");
-
-
+		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
 		Normal_Attack_Collision();
-
 	}
 
 	if (++motionCount_ > motionFrame_)
 	{
 		atkNo_ = noAtk;
 		//attackCount_ = 0;
+		++chainCount_;
 		motionCount_ = 0;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
@@ -167,33 +165,33 @@ void SwordMan::DamageSound()
 	Sound::getInstance().SE_play("S_DAMAGE");
 }
 
+////
+////	@brief	“ÁêUŒ‚
+//void SwordMan::Special_Attack()
+//{
+//	Special_Attack_Collision();
 //
-//	@brief	“ÁêUŒ‚
-void SwordMan::Special_Attack()
-{
-	Special_Attack_Collision();
-
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
-	{
-		Sound::getInstance().SE_play("S_SPECIAL");
-
-		motionChange_ = false;
-		//motionNo_ = motion_->GetMotion("special")->id_;
-		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		//timeEnd_ = motion_->GetMotion("special")->frame_;
-		//motionSpeed_ = 1 / (float)timeEnd_;
-		ChangeMotion(motion_, "special");
-	}
-
-	if (++motionCount_ > motionFrame_)
-	{
-		atkNo_ = noAtk;
-		//attackCount_ = 0;
-		motionCount_ = 0;
-		motionChange_ = true;
-		moveAbleFlg_ = true;
-	}
-}
+//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
+//	{
+//		Sound::getInstance().SE_play("S_SPECIAL");
+//
+//		motionChange_ = false;
+//		//motionNo_ = motion_->GetMotion("special")->id_;
+//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
+//		//timeEnd_ = motion_->GetMotion("special")->frame_;
+//		//motionSpeed_ = 1 / (float)timeEnd_;
+//		ChangeMotion(motion_, "special");
+//	}
+//
+//	if (++motionCount_ > motionFrame_)
+//	{
+//		atkNo_ = noAtk;
+//		//attackCount_ = 0;
+//		motionCount_ = 0;
+//		motionChange_ = true;
+//		moveAbleFlg_ = true;
+//	}
+//}
 
 //
 //	@brief	€–S‰¹Ä¶
@@ -202,28 +200,28 @@ void SwordMan::DeadSound()
 	Sound::getInstance().SE_play("S_DEAD");
 }
 
-//
-//	@brief	“ÁêUŒ‚“–‚½‚è”»’è
-void SwordMan::Special_Attack_Collision()
-{
-	float atkRange = param_->attackRange_;
-	float atkDist = param_->attackReach_;
-	float backDist = param_->knockbackDist_;
-	float backSpeed = param_->knockbackSpeed_;
-	if (!aroundCharaList_.empty())
-	{
-		for (auto chara : aroundCharaList_)
-		{
-			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
-			{
-				chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
-				if (chara->GetCharaType() == Enemy)
-				{
-					//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½‚ÌSE
-					Sound::getInstance().SE_play("S_DAMAGE_HIT");
-					chara->DamageCalc(param_->specialAtk_);
-				}
-			}
-		}
-	}
-}
+////
+////	@brief	“ÁêUŒ‚“–‚½‚è”»’è
+//void SwordMan::Special_Attack_Collision()
+//{
+//	float atkRange = param_->attackRange_;
+//	float atkDist = param_->attackReach_;
+//	float backDist = param_->knockbackDist_;
+//	float backSpeed = param_->knockbackSpeed_;
+//	if (!aroundCharaList_.empty())
+//	{
+//		for (auto chara : aroundCharaList_)
+//		{
+//			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
+//			{
+//				chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
+//				if (chara->GetCharaType() == Enemy)
+//				{
+//					//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½‚ÌSE
+//					Sound::getInstance().SE_play("S_DAMAGE_HIT");
+//					chara->DamageCalc(param_->specialAtk_);
+//				}
+//			}
+//		}
+//	}
+//}

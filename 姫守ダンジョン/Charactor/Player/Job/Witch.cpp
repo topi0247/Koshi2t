@@ -14,8 +14,8 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	magicFlg_ = false;
 	atkNo_ = noAtk;
 	attackCount_ = 0;
-	magic_ = new WeaponBall;
-	magic_->Init("魔法球");
+	magic_ = new CD3DXMESH;
+	magic_ = creator_->LoadStage("魔法球");
 	Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
@@ -76,11 +76,11 @@ void Witch::Reset()
 void Witch::Attack()
 {
 	//atkNo_ = noAtk;
-	if (magicFlg_ == false && GamePad::checkInput(charaType_, GamePad::InputName::A)
+	if (/*magicFlg_ == false && */GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
-		atkNo_ = waitAtk;
+		//atkNo_ = waitAtk;
 		moveAbleFlg_ = false;
 	}
 	else if (atkNo_ == normalAtk)
@@ -96,6 +96,7 @@ void Witch::Attack()
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = FPS*param_->chargeTime_;
+	static bool chargeMotionFlg = false;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -104,23 +105,31 @@ void Witch::Attack()
 	else if (inputTime < attackCount_)
 	{
 		atkNo_ = charge;
-		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+		moveAbleFlg_ = false;
+		if (!chargeMotionFlg && motionNo_ != motion_->GetMotion("charge1")->id_)
 		{
 			motionChange_ = false;
+			chargeMotionFlg = true;
 			//motionNo_ = motion_->GetMotion("charge")->id_;
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			//timeEnd_ = motion_->GetMotion("charge")->frame_;
+			//timeEnd_ = motion_->GetMotion("attack")->frame_;
 			//motionSpeed_ = 1 / (float)timeEnd_;
-			ChangeMotion(motion_, "charge");
+			//motionCount_ = 0;
+			ChangeMotion(motion_, "charge1");
+		}
+		else if (++motionCount_% motionFrame_ == 0 && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		{
+			ChangeMotion(motion_, "charge2");
 		}
 	}
 
 	if (atkNo_ == specialAtk)
 	{
+		chargeMotionFlg = false;
 		Special_Attack();
 	}
 
-	
+
 }
 
 //
@@ -132,7 +141,7 @@ void Witch::Normal_Attack()
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	magicBallCount_ = param_->chainWeapon_;
-	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
+	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("attack")->id_;
@@ -152,14 +161,14 @@ void Witch::Normal_Attack()
 		InstanceMagicBall(param_->chainWeapon_);
 	}
 
-	
+
 }
 
 //
 //	@brief	特殊攻撃
 void Witch::Special_Attack()
 {
-	
+
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		motionChange_ = false;
@@ -181,7 +190,7 @@ void Witch::Special_Attack()
 		RazorBeam();
 	}
 
-	
+
 }
 
 //
@@ -192,20 +201,20 @@ void Witch::InstanceMagicBall(int count)
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	magicBallCount_ = count;
-
+	magicSpeed_ = 1.0f;
 	if (!magicFlg_)
 	{
 		float angle = D3DXToDegree(m_Yaw);
 		for (int i = 0; i < magicBallCount_; i++)
 		{
-			WeaponBall* magic = magic_;
+			WeaponBall* magic = new WeaponBall;
 			int degree = 90 / (magicBallCount_ / 2 + 1);
 			float temp = angle - 90 + degree + degree*i;
 			temp = D3DXToRadian(temp);
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
 			magic->SetDir(vec);
 			magic->SetScale(param_->weaponScale_);
-			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y+0.03, m_Pos.z));
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 			magic->SetAttack(param_->specialAtk_);
@@ -224,10 +233,9 @@ void Witch::WeaponUpdate()
 	{
 		int count = 0;
 		float kDist = param_->weaponDelDist_;
-		float speed = 1;
 		for (size_t i = 0; i < magicBall_.size(); i++)
 		{
-			magicBall_[i]->Move_Weapon(kDist, speed);
+			magicBall_[i]->Move_Weapon(kDist, magicSpeed_);
 			magicBall_[i]->SetDamageList(allCharaList_, charaType_);
 			if (magicBall_[i]->GetDelFlg())
 			{
@@ -249,7 +257,25 @@ void Witch::WeaponUpdate()
 //	@brief	レーザービーム
 void Witch::RazorBeam()
 {
-	
+	magicSpeed_ = 3.0f;
+	float kRange = param_->weaponHitReach_;
+	float kDist = param_->knockbackDist_;
+	float kSpeed = param_->knockbackSpeed_;
+	if (!magicFlg_)
+	{
+		WeaponBall* magic = new WeaponBall;
+		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
+		magic->SetDir(vec);
+		magic->SetScale(0);
+		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
+		magic->SetDamageList(allCharaList_, charaType_);
+		magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
+		magic->SetAttack(param_->specialAtk_);
+		magic->SetHitSound("M_DAMAGE_HIT");
+		magicBall_.push_back(magic);
+
+		magicFlg_ = true;
+	}
 }
 
 //
@@ -289,12 +315,12 @@ void Witch::CharaRender()
 		float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
-	
+
 	if (!magicBall_.empty())
 	{
-		for (auto m:magicBall_)
+		for (auto m : magicBall_)
 		{
-			magic_->Render(m->GetPosition());
+			magic_->Render(m->GetPosition(), D3DXVECTOR3(0, 0, 0), m->GetScale());
 		}
 	}
 }

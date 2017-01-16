@@ -46,9 +46,11 @@ CharactorManager::~CharactorManager()
 //	@brief モデル読み込み・初期化
 void CharactorManager::CharaInit(char* name)
 {
-	mesh_ = new CD3DXSKINMESH;
-	mesh_ = creator_->LoadChara(name);
-
+	if (charaType_ != Enemy)
+	{
+		mesh_ = new CD3DXSKINMESH;
+		mesh_ = creator_->LoadChara(name);
+	}
 	//XFileRead* xfileRead = new XFileRead;
 	MotionRead* motionRead = new MotionRead;
 	//XFile* xfile = xfileRead->GetXFile(name);
@@ -263,8 +265,6 @@ int CharactorManager::GetSpaceNo()
 
 //
 //	@brief			描画
-//	@param (mView)	描画用マトリックス
-//	@param (mProj)	射影変換用マトリックス
 void CharactorManager::CharaRender()
 {
 	bool drawFlg = true;

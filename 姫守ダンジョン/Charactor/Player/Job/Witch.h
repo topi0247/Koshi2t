@@ -18,7 +18,8 @@ private:
 
 	bool magicFlg_;	//‹Z‚ª”­“®’†‚©‚Ç‚¤‚©
 	int magicBallCount_;
-	WeaponBall* magic_;
+	float magicSpeed_;
+	CD3DXMESH* magic_;
 	std::vector<WeaponBall*> magicBall_;
 
 	void InstanceMagicBall(int count);

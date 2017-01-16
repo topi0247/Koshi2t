@@ -9,14 +9,19 @@
 #include "./../../../Origin.h"
 #include "./../../Player/JobManager.h"
 
+#define ChainAmount 6
+
 //	Œ•ŽmƒNƒ‰ƒX
 class SwordMan :public JobManager
 {
 private:
+	std::map<int, char*> atkMotion_;
+	int chainCount_;
+
 	void Normal_Attack_Collision();
-	void Special_Attack_Collision();
+	//void Special_Attack_Collision();
 	virtual void Normal_Attack();
-	virtual void Special_Attack();
+	virtual void Special_Attack() {};
 	virtual void DeadSound();
 	virtual void DamageSound();
 public:

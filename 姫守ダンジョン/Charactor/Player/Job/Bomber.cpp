@@ -16,8 +16,8 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	bombCount_ = 1;
 	invisibleCount_ = 0;
 	invinsibleFlg_ = false;
-	bomb_ = new WeaponBall;
-	bomb_->Init("爆弾");
+	bomb_ = new CD3DXMESH;
+	bomb_ = creator_->LoadStage("爆弾");
 	bom_UI["BOM_UI"] = new TD_Graphics;
 
 }
@@ -75,134 +75,134 @@ void Bomber::Reset()
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
 }
 
+////
+////	@brief	移動方向にキャラクターがいるか
+////	@note	移動方向にキャラクターがいたら、そのキャラクターの重さを取得
+//void Bomber::MoveCharaHit()
+//{
+//	float dist = 1;
+//	float degree = D3DXToDegree(m_Yaw);
+//	CharactorManager* opp = nullptr;
+//	for (auto c : aroundCharaList_)
+//	{
+//		if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
+//		{
+//			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
+//			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+//			angle = D3DXToDegree(angle);
 //
-//	@brief	移動方向にキャラクターがいるか
-//	@note	移動方向にキャラクターがいたら、そのキャラクターの重さを取得
-void Bomber::MoveCharaHit()
-{
-	float dist = 1;
-	float degree = D3DXToDegree(m_Yaw);
-	CharactorManager* opp = nullptr;
-	for (auto c : aroundCharaList_)
-	{
-		if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
-		{
-			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
-			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-			angle = D3DXToDegree(angle);
-
-			float hitAngle = 90 / 2;
-			if (fabsf(degree - angle) <= hitAngle)
-			{
-				/*opponentWeight_ = c->ownWeight_;*/
-				opponentWeight_ = 0;
-				opp = c;
-			}
-		}
-	}
-	if (opp == nullptr || invinsibleFlg_ == true)
-	{
-		opponentWeight_ = 1;
-	}
-}
-
+//			float hitAngle = 90 / 2;
+//			if (fabsf(degree - angle) <= hitAngle)
+//			{
+//				/*opponentWeight_ = c->ownWeight_;*/
+//				opponentWeight_ = 0;
+//				opp = c;
+//			}
+//		}
+//	}
+//	if (opp == nullptr || invinsibleFlg_ == true)
+//	{
+//		opponentWeight_ = 1;
+//	}
+//}
 //
-//	@brief			移動処理
-//	@param (speed)	移動速度
-void Bomber::Move(float speed)
-{
-	if (damageFlg_)
-	{
-		damageDrawTime_ = FPS * 0.5;
-		if (damageCount_ >= damageDrawTime_)
-		{
-			damageFlg_ = false;
-			damageCount_ = 0;
-		}
-		return;
-	}
-
-	if (atkNo_ == specialAtk)
-	{
-		knockBackFlg_ = false;
-	}
-
-	if (knockBackFlg_ == true)
-	{
-		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-		return;
-	}
-
-	//スティックの傾き取得
-	D3DXVECTOR3 inputStick;
-	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
-	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
-
-	//回転処理
-	const float rotEpsilon = 0.3;
-	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
-	{
-		Rotation(inputStick);
-	}
-
-
-	//移動
-	const float moveEpsilon = 0.2;	//誤作防止用
-	float sp = 0;
-	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
-	{
-		if (atkNo_ != specialAtk)
-		{
-			sp = speed;
-		}
-		else
-		{
-			sp = param_->specialMoveSpeed_;
-		}
-
-		if (motionChange_ == true)
-		{
-			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("walk")->id_)
-			{
-				ChangeMotion(motion_, "walk");
-			}
-			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
-			{
-				ChangeMotion(motion_, "specialWalk");
-			}
-			if (atkNo_ == specialAtk)
-			{
-				Sound::getInstance().SE_play("Sh_SPECIAL");
-			}
-		}
-	}
-	else
-	{
-
-		if (motionChange_ == true)
-		{
-			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
-			{
-				ChangeMotion(motion_, "wait");
-			}
-		}
-	}
-
-	//opponentWeight_ = 1;
-
-	MoveCharaHit();
-
-
-	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
-
-	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
-
-	GamePad::update();
-
-	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
-	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
-
-}
+////
+////	@brief			移動処理
+////	@param (speed)	移動速度
+//void Bomber::Move(float speed)
+//{
+//	if (damageFlg_)
+//	{
+//		damageDrawTime_ = FPS * 0.5;
+//		if (damageCount_ >= damageDrawTime_)
+//		{
+//			damageFlg_ = false;
+//			damageCount_ = 0;
+//		}
+//		return;
+//	}
+//
+//	if (atkNo_ == specialAtk)
+//	{
+//		knockBackFlg_ = false;
+//	}
+//
+//	if (knockBackFlg_ == true)
+//	{
+//		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+//		return;
+//	}
+//
+//	//スティックの傾き取得
+//	D3DXVECTOR3 inputStick;
+//	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+//	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+//
+//	//回転処理
+//	const float rotEpsilon = 0.3;
+//	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+//	{
+//		Rotation(inputStick);
+//	}
+//
+//
+//	//移動
+//	const float moveEpsilon = 0.2;	//誤作防止用
+//	float sp = 0;
+//	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+//	{
+//		if (atkNo_ != specialAtk)
+//		{
+//			sp = speed;
+//		}
+//		else
+//		{
+//			sp = param_->specialMoveSpeed_;
+//		}
+//
+//		if (motionChange_ == true)
+//		{
+//			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("walk")->id_)
+//			{
+//				ChangeMotion(motion_, "walk");
+//			}
+//			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
+//			{
+//				ChangeMotion(motion_, "specialWalk");
+//			}
+//			if (atkNo_ == specialAtk)
+//			{
+//				Sound::getInstance().SE_play("Sh_SPECIAL");
+//			}
+//		}
+//	}
+//	else
+//	{
+//
+//		if (motionChange_ == true)
+//		{
+//			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
+//			{
+//				ChangeMotion(motion_, "wait");
+//			}
+//		}
+//	}
+//
+//	//opponentWeight_ = 1;
+//
+//	MoveCharaHit();
+//
+//
+//	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+//
+//	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+//
+//	GamePad::update();
+//
+//	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+//	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+//
+//}
 
 //
 //	@brief	攻撃
@@ -224,12 +224,12 @@ void Bomber::Attack()
 		moveAbleFlg_ = true;
 		attackCount_ = 0;
 		atkNo_ = specialAtk;
-		invinsibleFlg_ = true;
+		//invinsibleFlg_ = true;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = FPS*param_->chargeTime_;
-
+	static bool chargeMotionFlg = false;
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
 		atkNo_ = normalAtk;
@@ -238,24 +238,30 @@ void Bomber::Attack()
 	{
 		atkNo_ = charge;
 		moveAbleFlg_ = false;
-		if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("charge")->id_)
+		if (!chargeMotionFlg && motionNo_ != motion_->GetMotion("charge1")->id_)
 		{
 			motionChange_ = false;
+			chargeMotionFlg = true;
 			//motionNo_ = motion_->GetMotion("charge")->id_;
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//timeEnd_ = motion_->GetMotion("attack")->frame_;
 			//motionSpeed_ = 1 / (float)timeEnd_;
 			//motionCount_ = 0;
-			ChangeMotion(motion_, "charge");
+			ChangeMotion(motion_, "charge1");
+		}
+		else if (++motionCount_% motionFrame_==0 && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		{
+			ChangeMotion(motion_, "charge2");
 		}
 	}
 
 	if (atkNo_ == specialAtk)
 	{
+		chargeMotionFlg = false;
 		Special_Attack();
 	}
 
-	if (invinsibleFlg_)
+	/*if (invinsibleFlg_)
 	{
 		int invincibleTime = param_->specialAttackTime_;
 		if (++invisibleCount_ % (FPS * invincibleTime) == 0)
@@ -263,18 +269,13 @@ void Bomber::Attack()
 			invinsibleFlg_ = false;
 			invisibleCount_ = 0;
 		}
-	}
+	}*/
 }
 
 //
 //	@brief	通常攻撃
 void Bomber::Normal_Attack()
 {
-	size_t size = param_->chainWeapon_;
-	float range = param_->weaponHitReach_;
-	float kDist = param_->knockbackDist_;
-	float kSpeed = param_->knockbackSpeed_;
-	moveAbleFlg_ = false;
 	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionChange_ = false;
@@ -286,25 +287,7 @@ void Bomber::Normal_Attack()
 		ChangeMotion(motion_, "attack");
 	}
 
-	if (++motionCount_%motionFrame_ == 0)
-	{
-		Sound::getInstance().SE_play("B_SPECIAL");
-		motionChange_ = true;
-		if (bombList_.empty() || bombList_.size() < size)
-		{
-			WeaponBall* bomb = bomb_;
-			bomb->SetStartPos(m_Pos);
-			bomb->SetScale(param_->weaponScale_);
-			bomb->SetAttack(param_->normalAtk_);
-			bomb->SetDamageList(allCharaList_, charaType_);
-			bomb->SetKnockBack(range, kDist, kSpeed,charaType_);
-			bomb->SetHitSound("B_DAMAGE_HIT");
-			bombList_.push_back(bomb);
-		}
-		atkNo_ = noAtk;
-		moveAbleFlg_ = true;
-	}
-
+	InstanceWeapon();
 
 
 	//atkNo_ = noAtk;
@@ -325,13 +308,15 @@ void Bomber::Special_Attack()
 		ChangeMotion(motion_, "special");
 	}
 
-	if (++motionCount_%motionFrame_ == 0)
+	InstanceWeapon();
+
+	/*if (++motionCount_%motionFrame_ == 0)
 	{
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
 	}
-
+*/
 	/*int invincibleTime = param_->specialAttackTime_;
 	if (++motionCount_ % (FPS * invincibleTime) == 0)
 	{
@@ -339,6 +324,35 @@ void Bomber::Special_Attack()
 		motionCount_ = 0;
 	}
 	atkNo_ = noAtk;*/
+}
+
+//
+//	@brief	爆弾の生成
+void Bomber::InstanceWeapon()
+{
+	size_t size = param_->chainWeapon_;
+	float range = param_->weaponHitReach_;
+	float kDist = param_->knockbackDist_;
+	float kSpeed = param_->knockbackSpeed_;
+	moveAbleFlg_ = false;
+	if (++motionCount_%motionFrame_ == 0)
+	{
+		Sound::getInstance().SE_play("B_SPECIAL");
+		motionChange_ = true;
+		if (bombList_.empty() || bombList_.size() < size)
+		{
+			WeaponBall* bomb = new WeaponBall;
+			bomb->SetStartPos(m_Pos);
+			bomb->SetScale(param_->weaponScale_);
+			bomb->SetAttack(param_->normalAtk_);
+			bomb->SetDamageList(allCharaList_, charaType_);
+			bomb->SetKnockBack(range, kDist, kSpeed, charaType_);
+			bomb->SetHitSound("B_DAMAGE_HIT");
+			bombList_.push_back(bomb);
+		}
+		atkNo_ = noAtk;
+		moveAbleFlg_ = true;
+	}
 }
 
 //
@@ -386,30 +400,30 @@ void Bomber::WeaponUpdate()
 //}
 
 
+////
+////	@brief			ダメージ計算
+////	@param (atk)	攻撃者の攻撃力
+//void Bomber::DamageCalc(unsigned int atk)
+//{
+//	if (!(damageFlg_ && invinsibleFlg_))
+//	{
+//		damageFlg_ = true;
+//		Sound::getInstance().SE_play("B_DAMAGE");
+//		float damage = 0;
+//		//if (invinsibleFlg_ == false)
+//		//{
+//			damage = atk / (1 + ((float)param_->def_ / 100));
+//		//}
 //
-//	@brief			ダメージ計算
-//	@param (atk)	攻撃者の攻撃力
-void Bomber::DamageCalc(unsigned int atk)
-{
-	if (!(damageFlg_ && invinsibleFlg_))
-	{
-		damageFlg_ = true;
-		Sound::getInstance().SE_play("B_DAMAGE");
-		float damage = 0;
-		//if (invinsibleFlg_ == false)
-		//{
-			damage = atk / (1 + ((float)param_->def_ / 100));
-		//}
-
-		hp_ -= damage;
-		if (hp_ <= 0 || param_->hp_ < hp_)
-		{
-			hp_ = 0;
-			aliveFlg_ = false;
-			damageFlg_ = false;
-		}
-	}
-}
+//		hp_ -= damage;
+//		if (hp_ <= 0 || param_->hp_ < hp_)
+//		{
+//			hp_ = 0;
+//			aliveFlg_ = false;
+//			damageFlg_ = false;
+//		}
+//	}
+//}
 
 
 //
@@ -450,7 +464,7 @@ void Bomber::CharaRender()
 			if (b != nullptr)
 			{
 				//b->Render();
-				bomb_->Render(b->GetPosition());
+				bomb_->Render(b->GetPosition(), D3DXVECTOR3(0, 0, 0), b->GetScale());
 			}
 		}
 	}

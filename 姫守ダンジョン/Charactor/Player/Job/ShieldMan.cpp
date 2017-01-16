@@ -11,12 +11,14 @@ ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
 	spMoveFlg_ = false;
-
+	shield_ = new CD3DXMESH;
+	shield_ = creator_->LoadStage("‚");
 	//ShieldMan_UI["SHIELDMAN_UI"] = new TD_Graphics;
 }
 
 ShieldMan::~ShieldMan()
 {
+	SAFE_DELETE(shield_);
 	//delete ShieldMan_UI["SHIELDMAN_UI"];
 }
 
@@ -349,6 +351,44 @@ void ShieldMan::DeadSound()
 {
 	Sound::getInstance().SE_play("Sh_DEAD");
 }
+
+//
+//	@brief	•`‰æ
+void ShieldMan::CharaRender()
+{
+	bool drawFlg = true;
+
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	float scale = 0.2f;
+	if (drawFlg)
+	{
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
+	}
+
+	if (atkNo_ == specialAtk)
+	{
+		float yaw = D3DXToDegree(m_Yaw)+50.0f;
+		float dist = -0.8;
+		yaw = D3DXToRadian(yaw);
+		D3DXVECTOR3 pos(sinf(yaw)*dist, 0, cosf(yaw) * dist);
+		pos += m_Pos;
+		shield_->Render(pos, D3DXVECTOR3(0,yaw,0),scale); 
+		yaw = D3DXToDegree(m_Yaw) - 50.0f;
+		yaw = D3DXToRadian(yaw);
+		pos=D3DXVECTOR3(sinf(yaw)*dist, 0, cosf(yaw) * dist);
+		pos += m_Pos;
+		shield_->Render(pos, D3DXVECTOR3(0, yaw, 0), scale);
+	}
+}
+
 //
 //
 ////

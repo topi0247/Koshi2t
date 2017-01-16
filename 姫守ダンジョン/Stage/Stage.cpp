@@ -105,7 +105,7 @@ CD3DXMESH* Stage::GetMeshInfo()const
 void Stage::Render()
 {
 	stage_->Render(D3DXVECTOR3(0, -0.5, 0), D3DXVECTOR3(0, 0, 0), 1);
-	abyssGround_->Render(D3DXVECTOR3(0, -1, 0), D3DXVECTOR3(0, 0, 0), 1);
+	//abyssGround_->Render(D3DXVECTOR3(0, -1, 0), D3DXVECTOR3(0, 0, 0), 1);
 	gate_->Render(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), 1);
 
 	/*for (auto s : stage_)

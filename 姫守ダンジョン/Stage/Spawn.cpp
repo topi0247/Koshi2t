@@ -98,7 +98,8 @@ void Spawn::SlimeSet()
 	for (int i = 0; i < amount_; i++)
 	{
 		EnemyJobManager* enemy = new Slim;
-		enemy->CharaInit(spawn_->enemyName_);
+		//enemy->SetModel()
+		//enemy->CharaInit(spawn_->enemyName_);
 		enemy->SetTarget(tempCharactor_);
 		enemy->m_Scale = D3DXVECTOR3(0.2, 0.2, 0.2);
 		enemy->m_Pos = D3DXVECTOR3(rand() % width + tempPos.x, 0, tempPos.z-rand() % height);

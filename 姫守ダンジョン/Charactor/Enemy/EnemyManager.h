@@ -62,7 +62,7 @@ public:
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 
 	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
-
+	void SetModel(CD3DXSKINMESH* mesh);
 	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
 	EnemyParam* GetParam() { return param_; };
 	CharactorManager* GetTarget() { return targetChar_; };

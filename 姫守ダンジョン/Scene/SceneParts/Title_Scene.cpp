@@ -108,12 +108,12 @@ void Title_Scene::Render()
 	mesh_bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), 0, D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
+	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), D3DXToRadian(-45), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_princess_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 	//ステージの描画
 	mesh_stage_->Render(D3DXVECTOR3(0, 0.8, 0), D3DXVECTOR3(0, 0, 0), 2);
-	//mesh_enemy_->Render(D3DXVECTOR3(0, 0, 8), 0, D3DXVECTOR3(0.5, 0.5, 0.5));
+	////mesh_enemy_->Render(D3DXVECTOR3(0, 0, 8), 0, D3DXVECTOR3(0.5, 0.5, 0.5));
 	for (int i = 0; i < enemyMax; i++)
 	{
 		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[i].x, 0, 0 - enemyPos_[i].z);

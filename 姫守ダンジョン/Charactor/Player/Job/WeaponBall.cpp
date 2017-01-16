@@ -145,6 +145,13 @@ D3DXVECTOR3 WeaponBall::GetPosition()const
 }
 
 //
+//	@brief	スケール取得
+float WeaponBall::GetScale()const
+{
+	return weaponBall_->m_fScale;
+}
+
+//
 //	@brief	攻撃ヒット
 void WeaponBall::Hit()
 {

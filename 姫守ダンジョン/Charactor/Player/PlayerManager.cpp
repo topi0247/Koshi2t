@@ -20,7 +20,7 @@ void PlayerManager::SetParameter(char* name)
 	ParameterRead* parameter = new ParameterRead;
 	//parameter->SetJobParameter(/*"./../ReadData/JobParameterData.csv"*/);
 	JobParameter* job = parameter->GetJobParamList(name);
-	
+
 
 	memset(param_->name_, 0, sizeof(param_->name_));
 	memcpy(param_->name_, job->GetName(), sizeof(param_->name_));
@@ -77,7 +77,7 @@ void PlayerManager::Move(float speed)
 		}
 	}
 
-	
+
 
 	//スティックの傾き取得
 	D3DXVECTOR3 inputStick;
@@ -158,7 +158,7 @@ void PlayerManager::DamageCalc(unsigned int atk)
 void PlayerManager::Dead()
 {
 	//aliveFlg_ = false;
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_)
 	{
 		moveAbleFlg_ = false;
 		//motionChange_ = false;
@@ -166,16 +166,13 @@ void PlayerManager::Dead()
 		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 		//motionSpeed_ = 1 / (float)motion_->GetMotion("dead")->frame_;
 		DeadSound();
-		ChangeMotion(motion_, "dead");
+		ChangeMotion(motion_, "dead1");
 	}
-
-	if (motionNo_ == motion_->GetMotion("dead")->id_)
+	if (++motionCount_%motionFrame_ == 0 && motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
-		if (++motionCount_%motionFrame_ == 0)
-		{
-			//motionChange_ = true;
-			motionCount_ = 0;
-		}
+		//motionChange_ = true;
+		ChangeMotion(motion_, "dead2");
+		motionCount_ = 0;
 	}
 }
 

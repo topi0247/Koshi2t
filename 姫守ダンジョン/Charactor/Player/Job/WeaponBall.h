@@ -46,8 +46,6 @@ public:
 	void SetHitSound(std::string name);
 	void Render(D3DXVECTOR3 pos);
 	bool GetDelFlg()const;
-	
-	//float GetHitDist()const;
-	//float GetKnockBackDist()const;
+	float GetScale()const;
 	D3DXVECTOR3 GetPosition()const;
 };
