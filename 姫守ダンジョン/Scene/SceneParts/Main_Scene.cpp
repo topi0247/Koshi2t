@@ -41,8 +41,10 @@ Main_Scene::~Main_Scene()
 void Main_Scene::Init()
 {
 	creator_->LoadData();
-	camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
-	camera_->gazePoint_ = D3DXVECTOR3(0, -7, 0);
+	//camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
+	//camera_->gazePoint_ = D3DXVECTOR3(0, 0, -12);
+	camera_->movePow_ = D3DXVECTOR3(-3, 1, -15);
+	//camera_->gazePoint_ = D3DXVECTOR3(-3, 0, -10);
 
 	stage_ = new Stage;
 	spawnManager_ = new SpawnManager;
@@ -87,6 +89,8 @@ void Main_Scene::Init()
 	uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 	failedFlg_ = false;
+	startCameraMovefirstFlg_ = true;
+	startCameraMoveSecFlg_ = false;
 	time_ = 0;
 	scene_ = StartS;
 }
@@ -184,6 +188,31 @@ void Main_Scene::Destroy()
 //	return S_OK;
 //}
 
+
+
+//
+//	@brief	シーン遷移更新
+SceneBase* Main_Scene::Update(SceneRoot* root)
+{
+	SceneBase* next = this;
+
+	Update();
+
+	if (scene_ == NextS)
+	{
+		if (!failedFlg_)
+		{
+			next = new Result_Scene;
+		}
+		else
+		{
+			next = new Title_Scene;
+		}
+	}
+
+	return next;
+}
+
 //
 //	@brief	更新
 void Main_Scene::Update()
@@ -200,7 +229,6 @@ void Main_Scene::Update()
 		break;
 	case StartS:
 		GameStart();
-		camera_->Main_Start_Update();
 		break;
 	default:
 		break;
@@ -229,28 +257,6 @@ void Main_Scene::Update()
 	//camera_->Update(princess_->m_Pos);
 }
 
-//
-//	@brief	シーン遷移更新
-SceneBase* Main_Scene::Update(SceneRoot* root)
-{
-	SceneBase* next = this;
-
-	Update();
-
-	if (scene_ == NextS)
-	{
-		if (!failedFlg_)
-		{
-			next = new Result_Scene;
-		}
-		else
-		{
-			next = new Title_Scene;
-		}
-	}
-
-	return next;
-}
 
 //
 //	@brief	ゲーム開始
@@ -266,8 +272,18 @@ void Main_Scene::GameStart()
 	//{
 	Sound::getInstance().BGM_play("SENTOU");
 	//}
-	static int startCount = 0;
-	if (++startCount % (FPS * 5) == 0)
+	if (startCameraMovefirstFlg_)
+	{
+		startCameraMoveSecFlg_ = camera_->Main_Start_FirstUpdate();
+	}
+	bool next = false;
+	if (startCameraMoveSecFlg_)
+	{
+		startCameraMovefirstFlg_ = false;
+		next = camera_->Main_Start_SecondUpdate();
+	}
+
+	if (next)
 	{
 		scene_ = MainS;
 	}
@@ -373,10 +389,16 @@ void Main_Scene::GameMain()
 		}
 	}
 
-	//ゲーム終了(姫死亡 又は プレイヤー全滅 又はクリア)
+	//ゲーム終了
+	//姫死亡 又は プレイヤー全滅
 	if (!(princess_->GetAliveFlg() || deadCount == 4))
 	{
 		failedFlg_ = true;
+		scene_ = EndS;
+	}
+	//スポーンゲートすべて破壊
+	if (spawnManager_->GetSpawnList().empty())
+	{
 		scene_ = EndS;
 	}
 }
@@ -518,13 +540,15 @@ void Main_Scene::Render()
 
 
 	//UI描画
-	if (scene_ == StartS)
+	float posY = 380;
+	if (scene_ == StartS && startCameraMoveSecFlg_)
 	{
-		uiStart_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), true);
+		static float posX = 180;
+		uiStart_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
 	else if (scene_ == EndS && failedFlg_)
 	{
-		uiFailed_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), true);
+		uiFailed_->Render(D3DXVECTOR2(0, posY), D3DXVECTOR2(1, 1), true);
 	}
 
 #ifdef _DEBUG

@@ -27,6 +27,8 @@ class Main_Scene :public Scene
 {
 private:
 	bool failedFlg_;
+	bool startCameraMovefirstFlg_;
+	bool startCameraMoveSecFlg_;
 
 	TD_Graphics* uiStart_;
 	TD_Graphics* uiClear_;
