@@ -343,7 +343,7 @@ void Bomber::InstanceWeapon()
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	moveAbleFlg_ = false;
-	if (++motionCount_%motionFrame_ == 0)
+	if (++motionCount_>motionFrame_ )
 	{
 		Sound::getInstance().SE_play("B_SPECIAL");
 		motionChange_ = true;

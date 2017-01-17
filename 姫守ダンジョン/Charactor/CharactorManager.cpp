@@ -46,10 +46,8 @@ CharactorManager::~CharactorManager()
 void CharactorManager::CharaInit(char* name)
 {
 	mesh_ = new CD3DXSKINMESH;
-	if (charaType_ != Enemy)
-	{
-		mesh_ = creator_->LoadChara(name);
-	}
+	mesh_ = creator_->LoadChara(name);
+
 	//XFileRead* xfileRead = new XFileRead;
 	MotionRead* motionRead = new MotionRead;
 	//XFile* xfile = xfileRead->GetXFile(name);
@@ -62,7 +60,10 @@ void CharactorManager::CharaInit(char* name)
 //	@brief	‰ð•ú
 void CharactorManager::Destroy()
 {
-	SAFE_DELETE(mesh_);
+	if (mesh_)
+	{
+		SAFE_DELETE(mesh_);
+	}
 }
 
 //
@@ -258,7 +259,9 @@ void CharactorManager::ChangeMotion(Motion* motion, char* name)
 	motionNo_ = motion->GetMotion(name)->id_;
 	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
 	motionFrame_ = motion->GetMotion(name)->frame_;
+	//motionFrame_ *= 0.5f;
 	motionSpeed_ = 1 / (float)motionFrame_;
+	motionSpeed_*=0.5f;
 	motionCount_ = 0;
 }
 
@@ -289,6 +292,6 @@ void CharactorManager::CharaRender()
 	if (drawFlg)
 	{
 		float scale = 0.2f;
-		mesh_->Render(m_Pos,m_Yaw,D3DXVECTOR3(scale,scale,scale));
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 }

@@ -58,7 +58,7 @@ void SwordMan::Reset()
 //	@brief	çUåÇ
 void SwordMan::Attack()
 {
-	static int keyWait= 0;
+	static int keyWait = 0;
 	int maxKeyWait = 10;
 	static bool atkAble = true;
 	if (atkAble && GamePad::checkInput(charaType_, GamePad::InputName::A))
@@ -70,7 +70,7 @@ void SwordMan::Attack()
 		moveAbleFlg_ = false;
 		//keyWait = 0;
 	}
-	else if(!atkAble && !GamePad::checkInput(charaType_, GamePad::InputName::A))
+	else if (!atkAble && !GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
 		atkAble = true;
 	}
@@ -144,6 +144,10 @@ void SwordMan::Normal_Attack()
 		motionCount_ = 0;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
+
+		float speed = -0.3;
+		D3DXVECTOR3 dir(sinf(m_Yaw)*speed, 0, cosf(m_Yaw)*speed);
+		m_Dir = dir;
 	}
 }
 

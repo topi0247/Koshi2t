@@ -3,8 +3,6 @@
 #include "D3D11_SPRITE.h"
 //#include "../MAIN.h"
 
-#define TexMax 100
-
 struct SIMPLESHADER_CONSTANT_BUFFER
 {
 	D3DXMATRIX mWVP;
@@ -77,7 +75,7 @@ private:
 	static D3DXMATRIX					m_mProj;
 
 	ID3D11Buffer*				m_pVertexBuffer;
-	ID3D11ShaderResourceView*	m_pAsciiTexture[TexMax];
+	ID3D11ShaderResourceView*	m_pAsciiTexture;
 	ID3D11Buffer*				m_RectBuffer;
 	float						m_fScale;				//25pixelÇäÓèÄ 25pixel=1.0f
 	float						m_fAlpha;

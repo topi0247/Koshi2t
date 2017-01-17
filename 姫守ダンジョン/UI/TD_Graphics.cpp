@@ -27,14 +27,8 @@ TD_Graphics::TD_Graphics()
 //=======================================================
 TD_Graphics::~TD_Graphics()
 {
-	for (int i = 0; i < TexMax; i++)
-	{
-		if (m_pAsciiTexture[i] == NULL)
-		{
-			break;
-		}
-		SAFE_RELEASE(m_pAsciiTexture[i]);
-	}
+
+	SAFE_RELEASE(m_pAsciiTexture);
 }
 
 HRESULT TD_Graphics::Init(LPCWSTR textname, /*int texnum, */D3DXVECTOR2 drawpos, D3DXVECTOR2 texsize, D3DXVECTOR4 vColor, GrapRect _Rect)
@@ -45,13 +39,22 @@ HRESULT TD_Graphics::Init(LPCWSTR textname, /*int texnum, */D3DXVECTOR2 drawpos,
 	float left = drawpos.x, top = drawpos.y, right = texsize.x + left, bottom = texsize.y + top;
 	m_Size = texsize;
 	GrapRect rect = GrapRect(0.0f, 0.0f, 1.0f / m_Size.x, 1.0f / m_Size.y);
+	//SimpleVertex vertices[] =
+	//{
+	//	D3DXVECTOR3(left, bottom, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_bottom),//頂点1,
+	//	D3DXVECTOR3(left, top, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_top),//頂点2
+	//	D3DXVECTOR3(right, bottom, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_bottom), //頂点3
+	//	D3DXVECTOR3(right, top, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_top), //頂点4
+	//};
 	SimpleVertex vertices[] =
 	{
-		D3DXVECTOR3(left, bottom, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_bottom),//頂点1,
-		D3DXVECTOR3(left, top, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_top),//頂点2
-		D3DXVECTOR3(right, bottom, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_bottom), //頂点3
-		D3DXVECTOR3(right, top, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_top), //頂点4
+		D3DXVECTOR3(0, texsize.y, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_bottom),//頂点1,
+		D3DXVECTOR3(0, 0, 0), D3DXVECTOR2(_Rect.m_left, _Rect.m_top),//頂点2
+		D3DXVECTOR3(texsize.x,texsize.y, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_bottom), //頂点3
+		D3DXVECTOR3(texsize.x, 0, 0), D3DXVECTOR2(_Rect.m_right, _Rect.m_top), //頂点4
 	};
+
+
 	//SimpleVertex vertices[] =
 	//{
 	//	D3DXVECTOR3(0, bottom, 0), D3DXVECTOR2(rect.m_left, rect.m_bottom),//頂点1,
@@ -77,7 +80,7 @@ HRESULT TD_Graphics::Init(LPCWSTR textname, /*int texnum, */D3DXVECTOR2 drawpos,
 
 	LPCWSTR texturename = textname;
 	//テクスチャーを作成
-	if (FAILED(D3DX11CreateShaderResourceViewFromFile(device, texturename, NULL, NULL, &m_pAsciiTexture[0], NULL)))
+	if (FAILED(D3DX11CreateShaderResourceViewFromFile(device, texturename, NULL, NULL, &m_pAsciiTexture, NULL)))
 	{
 		return E_FAIL;
 	}
@@ -335,7 +338,7 @@ void TD_Graphics::Render(D3DXVECTOR2 pos, D3DXVECTOR2 scale, bool flg)
 
 	//テクスチャーをシェーダーに渡す
 	m_pDeviceContext->PSSetSamplers(0, 1, &m_pSampleLinear);
-	m_pDeviceContext->PSSetShaderResources(0, 1, &m_pAsciiTexture[0]);
+	m_pDeviceContext->PSSetShaderResources(0, 1, &m_pAsciiTexture);
 
 	//ワールド変換
 	float z = 0;

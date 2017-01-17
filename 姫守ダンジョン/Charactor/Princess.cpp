@@ -112,7 +112,7 @@ void Princess::DamageCalc(unsigned int atk)
 		ChangeMotion(motion_, "dead1");
 		motionCount_ = 0;
 	}
-	if (++motionCount_%motionFrame_ == 0 && motionNo_ == motion_->GetMotion("dead1")->id_)
+	if (++motionCount_>motionFrame_ && motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
 		ChangeMotion(motion_, "dead2");
 		motionCount_ = 0;
@@ -171,7 +171,7 @@ Spawn* Princess::SealSpawn()
 			ChangeMotion(motion_, "prayer");
 		}
 
-		if (++motionCount_%motion_->GetMotion("prayer")->frame_ == 0)
+		if (++motionCount_>motion_->GetMotion("prayer")->frame_)
 		{
 			sealFlg_ = false;
 			motionCount_ = 0;

@@ -47,12 +47,15 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 	{
 		m_fKerning[i]=20;
 	}
+#pragma region DeviceContext.WindowSize
 	//デバイスとコンテキストをコピー
 	m_pDeviceContext=pContext;
 	m_pDeviceContext->GetDevice(&m_pDevice);
 	//window サイズ
 	m_dwWindowWidth=width;
 	m_dwWindowHeight=height;
+#pragma endregion
+
 	//フォントごとにクアッド作成
 	float left=0,top=0,right=0,bottom=0;
 	int cnt=0;
@@ -91,6 +94,9 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 			cnt++;
 		}
 	}
+
+
+#pragma region Shader
 	//テクスチャー用サンプラー作成
 	D3D11_SAMPLER_DESC SamDesc;
 	ZeroMemory(&SamDesc,sizeof(D3D11_SAMPLER_DESC));
@@ -177,6 +183,7 @@ HRESULT D3D11_TEXT::Init(ID3D11DeviceContext* pContext,DWORD width,DWORD height,
 	{
 		return E_FAIL;
 	}
+#pragma endregion
 
 	return S_OK;
 }

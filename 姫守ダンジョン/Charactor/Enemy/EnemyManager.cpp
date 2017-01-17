@@ -58,6 +58,22 @@ void EnemyManager::SetParameter(char* name)
 }
 
 //
+//	@brief モデル読み込み・初期化
+void EnemyManager::CharaInit(char* name)
+{
+	mesh_ = new CD3DXSKINMESH;
+	//mesh_ = creator_->LoadChara(name);
+
+	//XFileRead* xfileRead = new XFileRead;
+	MotionRead* motionRead = new MotionRead;
+	//XFile* xfile = xfileRead->GetXFile(name);
+	//CreateFromX(xfile->GetFilePath());
+	SetMotionData(motionRead->GetMotionUser(name));
+	SetParameter(name);
+	motionPlayPos_ = 0.0f;
+}
+
+//
 //	@brief	モデルの設定
 void EnemyManager::SetModel(CD3DXSKINMESH* mesh)
 {
@@ -85,7 +101,7 @@ void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 void EnemyManager::SetTarget(CharactorManager* chara)
 {
 	targetChar_ = chara;
-	
+
 }
 
 //
@@ -114,14 +130,14 @@ void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
 		D3DXVECTOR3 tempVec = p - m_Pos;
 		float tempAngle = (atan2(tempVec.z, tempVec.x)*-1) - (D3DX_PI / 2.0f);
 		tempAngle = D3DXToDegree(tempAngle);
-		if (temp < dist && fabsf(degree - angle) <= 90)
+		if (temp < dist && fabsf(degree - angle) <= 45)
 		{
 			targetPos_ = p;
 			dist = temp;
 		}
 	}
 
-	
+
 }
 
 //
@@ -158,51 +174,51 @@ void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * pr
 	SetTargetPos(temp->m_Pos);
 }
 
+////
+////	@brief　			ターゲットポジションの更新
+////	@param (position)	座標
+//void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
+//{
+//	////現在のターゲットとチェックするプレイヤーが一致するか
+//	//if (targetChar_->GetCharaType() == checkChar->GetCharaType())
+//	//{
+//	//	//チェックする(現在ターゲットのプレイヤー）が生存しているか
+//	//	if (checkChar->GetAliveFlg())
+//	//	{
+//	//		//ターゲット更新
+//	//		targetChar_ = checkChar;
+//	//		targetPos_ = targetChar_->m_Pos;
+//	//	}
+//	//	else
+//	//	{
+//	//		//ターゲットを姫に変更
+//	//		targetChar_ = princess;
+//	//		targetPos_ = targetChar_->m_Pos;
+//	//	}
+//	//}
+//	//else if (targetChar_->GetCharaType() == princess->GetCharaType()/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
+//	//{
+//	//	//近くに生きているプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
+//	//	if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
+//	//	{
+//	//		//ターゲットをプレイヤーに変更
+//	//		targetChar_ = checkChar;
+//	//		targetPos_ = targetChar_->m_Pos;
+//	//	}
+//	//	else         //近くに生きているプレイヤーがいない
+//	//	{
+//	//		//ターゲット更新
+//	//		targetChar_ = princess;
+//	//		targetPos_ = targetChar_->m_Pos;
+//	//	}
+//	//}
 //
-//	@brief　			ターゲットポジションの更新
-//	@param (position)	座標
-void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
-{
-	////現在のターゲットとチェックするプレイヤーが一致するか
-	//if (targetChar_->GetCharaType() == checkChar->GetCharaType())
-	//{
-	//	//チェックする(現在ターゲットのプレイヤー）が生存しているか
-	//	if (checkChar->GetAliveFlg())
-	//	{
-	//		//ターゲット更新
-	//		targetChar_ = checkChar;
-	//		targetPos_ = targetChar_->m_Pos;
-	//	}
-	//	else
-	//	{
-	//		//ターゲットを姫に変更
-	//		targetChar_ = princess;
-	//		targetPos_ = targetChar_->m_Pos;
-	//	}
-	//}
-	//else if (targetChar_->GetCharaType() == princess->GetCharaType()/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
-	//{
-	//	//近くに生きているプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
-	//	if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
-	//	{
-	//		//ターゲットをプレイヤーに変更
-	//		targetChar_ = checkChar;
-	//		targetPos_ = targetChar_->m_Pos;
-	//	}
-	//	else         //近くに生きているプレイヤーがいない
-	//	{
-	//		//ターゲット更新
-	//		targetChar_ = princess;
-	//		targetPos_ = targetChar_->m_Pos;
-	//	}
-	//}
-
-	////if (!targetChar_->GetAliveFlg())
-	////{
-	////	targetChar_ = princess;
-	////	targetPos_ = targetChar_->m_Pos;
-	////}
-}
+//	////if (!targetChar_->GetAliveFlg())
+//	////{
+//	////	targetChar_ = princess;
+//	////	targetPos_ = targetChar_->m_Pos;
+//	////}
+//}
 
 //
 //	@brief			移動処理
@@ -231,7 +247,7 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	if (motionNo_ != motion_->GetMotion("walk")->id_)
+	if (motionChange_ && motionNo_ != motion_->GetMotion("walk")->id_)
 	{
 		ChangeMotion(motion_, "walk");
 		//motionNo_ = motion_->GetMotion("walk")->id_;
@@ -285,5 +301,42 @@ void EnemyManager::Attack()
 	{
 		moveAbleFlg_ = true;
 		atkWaitTime_ = 0;
+	}
+
+	/*if (!moveAbleFlg_ && motionNo_ != motion_->GetMotion("attack")->id_)
+	{
+		motionChange_ = false;
+		ChangeMotion(motion_, "attack");
+	}
+	if (motionNo_ == motion_->GetMotion("attack")->id_ && ++motionCount_ > motion_->GetMotion("attack")->frame_)
+	{
+		motionChange_ = true;
+	}*/
+}
+
+
+//
+//	@brief			描画
+void EnemyManager::CharaRender()
+{
+	bool drawFlg = true;
+	//if (charaType_ != Enemy)
+	//{
+	mesh_->m_pD3dxMesh->m_pAnimController->SetTrackPosition(0, motionPlayPos_);
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	motionPlayPos_ += motionSpeed_;
+	//}
+	if (damageFlg_)
+	{
+		if (++damageCount_ % 5 == 0)
+		{
+			drawFlg = false;
+		}
+	}
+
+	if (drawFlg)
+	{
+		float scale = 0.2f;
+		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 }

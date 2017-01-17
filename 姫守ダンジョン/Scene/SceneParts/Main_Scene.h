@@ -23,6 +23,9 @@
 #include "./../SceneParts/Title_Scene.h"
 #include "./../SceneParts/Result_Scene.h"
 
+#define UI_TIME 12 //éûä‘ï\é¶Ç…égópÇ∑ÇÈUIÇÃêî
+#define SEMICOLON 10
+
 class Main_Scene :public Scene
 {
 private:
@@ -33,6 +36,8 @@ private:
 	TD_Graphics* uiStart_;
 	TD_Graphics* uiClear_;
 	TD_Graphics* uiFailed_;
+	TD_Graphics* uiTime_[UI_TIME]; //0~9 ; ,
+	TD_Graphics* uiDebug_;
 	
 	enum scene
 	{

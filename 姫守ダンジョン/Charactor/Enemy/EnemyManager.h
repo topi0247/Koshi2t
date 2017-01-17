@@ -27,16 +27,17 @@ struct EnemyParam
 class EnemyManager : public CharactorManager
 {
 private:
-	D3DXVECTOR3 targetPos_;
-	static std::vector<D3DXVECTOR3> busStop_;
-	static std::vector<int> busStopSpaceNo_;
-
 	enum TargetObject
 	{
 		princess = 0,
 		player,
 	};
 	TargetObject targetObj_;
+	D3DXVECTOR3 targetPos_;
+	float motionPlayPos_;		//モーションの再生位置
+
+	static std::vector<D3DXVECTOR3> busStop_;
+	static std::vector<int> busStopSpaceNo_;
 
 
 	void SetTargetPos(D3DXVECTOR3 pos);
@@ -57,11 +58,15 @@ public:
 	EnemyManager();
 	virtual ~EnemyManager();
 
+
+	virtual void CharaInit(char* name);		//初期化・読み込み
+	virtual void CharaRender();				//描画
+
 	static void SetBusStop(std::vector<D3DXVECTOR3> pos);
 	void SetTarget(CharactorManager* chara);
 	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 
-	void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
+	//void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
 	void SetModel(CD3DXSKINMESH* mesh);
 	D3DXVECTOR3 GetTargetPos() { return targetPos_; };	//ターゲットポジション取得デバック用
 	EnemyParam* GetParam() { return param_; };

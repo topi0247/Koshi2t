@@ -55,6 +55,9 @@ void Slim::NormalAttack()
 	targetChar_->DamageCalc(param_->atk_);
 	//targetChar_->KnockBack(m_Pos,dist,speed);
 	targetChar_->SetKnockBack(m_Pos, dist, speed,charaType_);
+
+	
+	
 }
 
 //=======ƒSƒuƒŠƒ“========//

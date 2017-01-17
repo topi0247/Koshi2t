@@ -125,7 +125,7 @@ void Witch::Attack()
 			//motionCount_ = 0;
 			ChangeMotion(motion_, "charge1");
 		}
-		else if (++motionCount_% motionFrame_ == 0 && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		else if (++motionCount_>motionFrame_&& chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
 			ChangeMotion(motion_, "charge2");
 		}
@@ -160,7 +160,7 @@ void Witch::Normal_Attack()
 		ChangeMotion(motion_, "attack1");
 	}
 
-	if (++motionCount_%motionFrame_ == 0)
+	if (++motionCount_>motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
@@ -188,7 +188,7 @@ void Witch::Special_Attack()
 		ChangeMotion(motion_, "attack1");
 	}
 
-	if (++motionCount_%motionFrame_ == 0)
+	if (++motionCount_>motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_SPECIAL");
 		atkNo_ = noAtk;

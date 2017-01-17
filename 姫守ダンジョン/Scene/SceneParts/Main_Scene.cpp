@@ -18,6 +18,11 @@ Main_Scene::Main_Scene()
 	uiStart_ = new TD_Graphics;
 	uiClear_ = new TD_Graphics;
 	uiFailed_ = new TD_Graphics;
+	for (int i = 0; i < UI_TIME; i++)
+	{
+		uiTime_[i] = new TD_Graphics;
+	}
+	uiDebug_ = new TD_Graphics;
 }
 
 //
@@ -34,6 +39,14 @@ Main_Scene::~Main_Scene()
 	uiClear_ = nullptr;
 	delete uiFailed_;
 	uiFailed_ = nullptr;
+
+	for (int i = 0; i < UI_TIME; i++)
+	{
+		delete uiTime_[i];
+		uiTime_[i] = nullptr;
+	}
+	delete uiDebug_;
+	uiDebug_ = nullptr;
 }
 
 //
@@ -87,7 +100,13 @@ void Main_Scene::Init()
 	uiStart_->Init(L"./UI/UI_Tex/start_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	uiClear_->Init(L"./UI/UI_Tex/clear_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-
+	scale = D3DXVECTOR2(128, 256);
+	float rect = 0.083;
+	for (int i = 0; i < UI_TIME; i++)
+	{
+		uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
+	}
+	uiDebug_->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 0.1f));
 	failedFlg_ = false;
 	startCameraMovefirstFlg_ = true;
 	startCameraMoveSecFlg_ = false;
@@ -124,10 +143,13 @@ JobManager* Main_Scene::SetCharaJob(char* name, CharaType type)
 //	@brief	解放
 void Main_Scene::Destroy()
 {
-	for (int i = 0; i < charList_.size(); i++)
+	charList_.clear();
+	enemyList_.clear();
+	player_.clear();
+	/*for (int i = 0; i < charList_.size(); i++)
 	{
 		charList_[i]->Destroy();
-	}
+	}*/
 }
 
 ////
@@ -262,16 +284,7 @@ void Main_Scene::Update()
 //	@brief	ゲーム開始
 void Main_Scene::GameStart()
 {
-	//int count = 5;
-	//if (++time_ % (FPS * count) == 0)
-	//{
-	//	scene_ = MainS;
-	//}
-	//spawnFlg_ = false;
-	//if (GetKeyState(VK_RETURN) & 0x80)
-	//{
 	Sound::getInstance().BGM_play("SENTOU");
-	//}
 	if (startCameraMovefirstFlg_)
 	{
 		startCameraMoveSecFlg_ = camera_->Main_Start_FirstUpdate();
@@ -293,20 +306,9 @@ void Main_Scene::GameStart()
 //	@brief	ゲームメイン
 void Main_Scene::GameMain()
 {
+	//時間カウント
+	++time_;
 
-	////デバッグ用
-	//if (GetKeyState('E') & 0x80)
-	//{
-	//	scene_ = EndS;
-	//}
-	//if (GetKeyState('S') & 0x80)
-	//{
-	//	spawnFlg_ = true;
-	//}
-
-	//////エネミースポーン処理
-	//if (spawnFlg_ == true)
-	//{
 	if (enemyList_.size() < 50)
 	{
 		spawnManager_->Update(princess_);
@@ -540,16 +542,49 @@ void Main_Scene::Render()
 
 
 	//UI描画
+	//if (scene_ == MainS)
+	//{
+	//時間描画
+	float posX = 1400;
+	float space = 80;
+	D3DXVECTOR2 scale(0.5,0.5);
+	//分
+	int minutes10 = time_ / (FPS*FPS * 10) % 6;// time_ / FPS % 6;
+	int minutes1 = time_ / (FPS*FPS) % 10;// time_ / FPS;
+	uiTime_[minutes10]->Render(D3DXVECTOR2(posX, 0),scale, true);
+	uiTime_[minutes1]->Render(D3DXVECTOR2(posX + space * 1, 0),scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.5, 0),scale, true);
+	//秒
+	int second10 = time_ / (FPS * 10) % 6;
+	int second1 = time_ / FPS % 10;
+	uiTime_[second10]->Render(D3DXVECTOR2(posX + space * 2, 0),scale, true);
+	uiTime_[second1]->Render(D3DXVECTOR2(posX + space * 3, 0),scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.5, 0),scale, true);
+	//ミリ秒
+	int conma10 = time_ / 10 % 6;
+	int conma1 = time_ % 10;
+	uiTime_[conma10]->Render(D3DXVECTOR2(posX + space * 4, 0),scale, true);
+	uiTime_[conma1]->Render(D3DXVECTOR2(posX + space * 5, 0),scale, true);
+
 	float posY = 380;
+	posX = 180;
 	if (scene_ == StartS && startCameraMoveSecFlg_)
 	{
-		static float posX = 180;
+		//static float posX = 180;
 		uiStart_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
 	else if (scene_ == EndS && failedFlg_)
 	{
-		uiFailed_->Render(D3DXVECTOR2(0, posY), D3DXVECTOR2(1, 1), true);
+		uiFailed_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
+
+
+	////デバッグ描画
+	//char str[256];
+	//sprintf(str, "%d", second1);
+	//debugText_->Render(str, 0, 50);
+	//sprintf(str, "%d", second10);
+	//debugText_->Render(str, 0, 80);
 
 #ifdef _DEBUG
 	//PlayerDebug();
@@ -566,16 +601,16 @@ void Main_Scene::PlayerDebug()
 
 
 #ifdef _DEBUG
-	sprintf(str, "chara:%d", player_[Player1]->GetAroundC());
-	debugText_->Render(str, 0, 50);
+	//sprintf(str, "chara:%d", player_[Player1]->GetAroundC());
+	//debugText_->Render(str, 0, 50);
 #endif // _DEBUG
 
 
 	if (scene_ == MainS)
 	{
-		float high = 960;
+		float high = 50;
 		sprintf(str, "%f  %f  %f", player_[Player1]->m_Pos.x, player_[Player1]->m_Pos.y, player_[Player1]->m_Pos.z);
-		debugText_->Render(str, 248, high);
+		debugText_->Render(str, 0, high);
 		/*sprintf(str, "%d", player_[Player2]->m_Pos);
 		debugText_->Render(str, 760, high);
 		sprintf(str, "%d", player_[Player3]->m_Pos);

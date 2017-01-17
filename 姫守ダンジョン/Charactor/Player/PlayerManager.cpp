@@ -166,7 +166,7 @@ void PlayerManager::Dead()
 		ChangeMotion(motion_, "dead1");
 		motionCount_ = 0;
 	}
-	if (++motionCount_%motionFrame_ == 0 && motionNo_ == motion_->GetMotion("dead1")->id_)
+	if (++motionCount_>motionFrame_&& motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
 		ChangeMotion(motion_, "dead2");
 		motionCount_ = 0;
@@ -191,7 +191,7 @@ void PlayerManager::Revival()
 
 	if (motionNo_ == motion_->GetMotion("alive")->id_)
 	{
-		if (++motionCount_%motionFrame_ == 0)
+		if (++motionCount_>motionFrame_)
 		{
 			moveAbleFlg_ = true;
 			motionChange_ = true;

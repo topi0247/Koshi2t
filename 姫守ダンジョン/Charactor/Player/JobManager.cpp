@@ -114,9 +114,9 @@ void JobManager::CharaUpdate()
 void JobManager::UIRender()
 {
 	D3DXVECTOR2 scale(1, 1);
-	jobMarkUI_->Render(D3DXVECTOR2(0, 0), scale, true);
-	backUI_->Render(D3DXVECTOR2(0, 0), scale, true);
+	jobMarkUI_->Render(jobUIPos_, scale, true);
+	backUI_->Render(backUIPos_, scale, true);
 	float hpX = (float)hp_ / (float)param_->hp_;
 	scale = D3DXVECTOR2(hpX, 1);
-	hpGageUI_->Render(D3DXVECTOR2(0, 0), scale, true);
+	hpGageUI_->Render(hpGazePos_, scale, true);
 }
