@@ -77,6 +77,7 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 		nextFlg = false;
 	}
 
+
 	GamePad::update();
 
 #ifdef _DEBUG

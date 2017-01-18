@@ -28,12 +28,13 @@ private:
 	SpawnGateAttr** spawnGateList_;
 	std::vector<D3DXVECTOR3> busStop_;
 
-	void PosRead(XMLElement* element,D3DXVECTOR3 &pos);
+	void PosRead(XMLElement* element, D3DXVECTOR3 &pos);
 public:
 	SpawnGate(XMLElement* element);
 	~SpawnGate();
 	const char* GetStageName()const { return stageName_; };
 	int GetCount()const { return count_; };
+	std::vector<D3DXVECTOR3> GetBusStop()const { return busStop_; };
 	std::vector<SpawnGateAttr*> GetStageAllSpawnGate();
 };
 

@@ -66,10 +66,13 @@ void SpawnManager::SpawnSet()
 	spawnGateRead_->SpawnGate_Read();
 	spawnGate_ = spawnGateRead_->GetSpawnGate("stage5");
 	std::vector<SpawnGateAttr*> tempAttr = spawnGate_->GetStageAllSpawnGate();
+	EnemyManager::SetBusStop(spawnGate_->GetBusStop());
+
 	for (int i = 0; i < spawnGate_->GetCount(); i++)
 	{
 		Spawn* temp = new Spawn;
-		temp->SpawnInit(tempAttr[i]);
+		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
+		temp->SpawnInit(tempAttr[i],mesh);
 		spawnList_.push_back(temp);
 		//functionList_.push_back(temp);
 		//renderList_.push_back(temp);
@@ -93,7 +96,8 @@ void SpawnManager::Reset()
 	for (int i = 0; i < spawnGate_->GetCount(); i++)
 	{
 		Spawn* temp = new Spawn;
-		temp->SpawnInit(tempAttr[i]);
+		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
+		temp->SpawnInit(tempAttr[i], mesh);
 		spawnList_.push_back(temp);
 		//functionList_.push_back(temp);
 		//renderList_.push_back(temp);

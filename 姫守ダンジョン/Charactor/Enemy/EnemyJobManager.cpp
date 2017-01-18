@@ -43,7 +43,7 @@ void EnemyJobManager::CharaUpdate()
 
 	Attack();
 
-	if (strcmp(motionName_, "attack")==0)
+	if (motionNo_==motion_->GetMotion("attack")->id_)
 	{
 		if (++motionCount_ > motionFrame_)
 		{

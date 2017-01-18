@@ -10,6 +10,7 @@
 
 #pragma comment(lib, "XInput.lib")
 
+
 //ゲームパッドに関する処理をまとめた名前空間
 namespace GamePad
 {
@@ -81,4 +82,7 @@ namespace GamePad
 
 	//数値取得用
 	float getAnalogValue(int, AnalogName);	//アナログの入力値を返す（値は正規化）
+
+	void setVibration(DWORD);//振動セット
+	void stopVibration(DWORD);//振動ストップ
 };

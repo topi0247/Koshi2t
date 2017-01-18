@@ -112,7 +112,7 @@ void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
 
 	for (auto no : busStopSpaceNo_)
 	{
-		if (collision_->CheckSpaceNo(spaceNo_, no))
+		if (!collision_->CheckSpaceNo(spaceNo_, no))
 		{
 			return;
 		}
@@ -242,11 +242,25 @@ void EnemyManager::Move(float speed)
 
 	//向いている角度から単位ベクトルを取得
 	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
-	//D3DXVECTOR3 vec = E_Lock;
+	D3DXVECTOR3 dir;
 	float sp = speed;
-	//opponentWeight_ = 1;
-	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
+	//進行方向にキャラがいなかったら進む。いたら滑って進む
+	if (opponentWeight_ != 0)
+	{
+		//opponentWeight_ = 1;
+		dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
+	}
+	else
+	{
+		float fDistance = 0;
+		D3DXVECTOR3 vNormal = m_Pos;
+		collision_->SlideVector(&vec, vec, vNormal);
+		dir = D3DXVECTOR3(vec.x*sp, 0, vec.z*sp);
+	}
+
+	m_Dir = dir;
+	
 	//strcpy(motionName_, "walk");
 
 	//if (motionChange_ && motionNo_ != motion_->GetMotion("walk")->id_)
@@ -287,7 +301,7 @@ void EnemyManager::Attack()
 	float atkableDist = 2;//param_->attackReach_;
 	int time = 3;
 
-	if (collision_->CharaNear(m_Pos, targetPos_, atkableDist))
+	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist))
 	{
 		if (++atkWaitTime_ % (FPS*time) == 0)
 		{

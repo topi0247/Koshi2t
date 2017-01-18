@@ -162,6 +162,14 @@ bool Collision::RayIntersect(CD3DXSKINMESH* pMeshA, CD3DXMESH* pMeshB, float* pf
 	return false;
 }
 
+D3DXVECTOR3* Collision::SlideVector(D3DXVECTOR3 * out, const D3DXVECTOR3 & front, const D3DXVECTOR3 & normal)
+{
+	D3DXVECTOR3 normal_n;
+	D3DXVec3Normalize(&normal_n, &normal);
+	return D3DXVec3Normalize(out, &(front - D3DXVec3Dot(&front, &normal_n) * normal_n));
+}
+
+
 D3DXVECTOR3 Collision::Slip(D3DXVECTOR3 L, D3DXVECTOR3 N)
 {
 	D3DXVECTOR3 S; //滑りベクトル（滑る方向）

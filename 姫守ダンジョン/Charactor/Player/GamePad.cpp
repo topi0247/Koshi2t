@@ -90,11 +90,11 @@ namespace GamePad
 				now[i].AnalogValue[AnalogName::AnalogName_LeftStick_X] = state[i].Gamepad.sThumbLX;		//左スティックX軸
 				now[i].AnalogValue[AnalogName::AnalogName_RightStick_Y] = state[i].Gamepad.sThumbRY;	//右スティックY軸
 				now[i].AnalogValue[AnalogName::AnalogName_RightStick_X] = state[i].Gamepad.sThumbRX;	//右スティックX軸
+
+
 			}
 		}
 	}
-
-
 
 	//入力してればtrueを返す
 	bool checkInput(int index,InputName Name)
@@ -163,5 +163,25 @@ namespace GamePad
 			return 0;
 			break;
 		}
+	}
+
+	//振動処理
+	void setVibration(DWORD index)
+	{
+
+		XINPUT_VIBRATION vibration;
+		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+		vibration.wLeftMotorSpeed = 32000; // use any value between 0-65535 here
+		vibration.wRightMotorSpeed = 32000; // use any value between 0-65535 here
+		XInputSetState(index, &vibration);	//振動
+	}
+	void stopVibration(DWORD index)
+	{
+
+		XINPUT_VIBRATION vibration;
+		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+		vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
+		vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
+		XInputSetState(index, &vibration);	//振動
 	}
 }

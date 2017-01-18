@@ -99,6 +99,16 @@ void JobManager::CharaUpdate()
 
 	}
 
+	//ダメージを食らったときコントローラの振動
+	if (damageFlg_)
+	{
+		GamePad::setVibration(charaType_);
+	}
+	else
+	{
+		GamePad::stopVibration(charaType_);
+	}
+
 	//飛び道具の更新
 	WeaponUpdate();
 

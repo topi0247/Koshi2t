@@ -142,7 +142,8 @@ void Princess::SetSpawn(std::vector<Spawn*> spawn)
 //	@brief	••ˆó
 void Princess::Seal()
 {
-	float dist = 5;
+
+	float dist = 7;
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)
