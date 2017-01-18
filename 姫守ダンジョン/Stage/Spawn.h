@@ -30,15 +30,15 @@ private:
 	//char enemyName_[30];	//生成するエネミー名
 	std::vector<EnemyJobManager*> insEnemyList_;
 
-	/*void SlimeSet();
-	void GoblinSet();
-	void SkeletonSet();*/
+	//void SlimeSet();
+	//void GoblinSet();
+	//void SkeletonSet();
 public:
 	Spawn();
 	~Spawn();
 	std::vector<EnemyJobManager*> EnemySpawn();
 	//void SpawnInit(const char* name);
-	void SpawnInit(SpawnGateAttr* spawnInfo,CD3DXSKINMESH* mesh);
+	void SpawnInit(SpawnGateAttr* spawnInfo, CD3DXSKINMESH* mesh);
 	//void ListSet(ParameterRead* param,CharactorManager* target);
 	void ListSet(CharactorManager* target);
 	void ListReset();

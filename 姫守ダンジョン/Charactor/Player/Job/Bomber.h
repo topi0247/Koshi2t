@@ -9,6 +9,7 @@
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
 #include "../../../UI/TD_Graphics.h"
+#include "../../../Effekseer/Effect.h"
 
 //	”š’emƒNƒ‰ƒX
 class Bomber :public JobManager

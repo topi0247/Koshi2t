@@ -244,33 +244,24 @@ void EnemyManager::Move(float speed)
 	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
 	D3DXVECTOR3 dir;
 	float sp = speed;
+	//opponentWeight_ = 1;
+	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
 	//進行方向にキャラがいなかったら進む。いたら滑って進む
 	if (opponentWeight_ != 0)
-	{
-		//opponentWeight_ = 1;
-		dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
-	}
+		 {
+				//opponentWeight_ = 1;
+			dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
+		}
 	else
-	{
+		 {
 		float fDistance = 0;
 		D3DXVECTOR3 vNormal = m_Pos;
 		collision_->SlideVector(&vec, vec, vNormal);
 		dir = D3DXVECTOR3(vec.x*sp, 0, vec.z*sp);
-	}
-
-	m_Dir = dir;
+		}
 	
-	//strcpy(motionName_, "walk");
-
-	//if (motionChange_ && motionNo_ != motion_->GetMotion("walk")->id_)
-	//{
-	//	ChangeMotion(motion_, "walk");
-	//	//motionNo_ = motion_->GetMotion("walk")->id_;
-	//	//mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
-	//	//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-	//}
-
+		m_Dir = dir;
 }
 
 //
@@ -301,7 +292,7 @@ void EnemyManager::Attack()
 	float atkableDist = 2;//param_->attackReach_;
 	int time = 3;
 
-	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist))
+	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist)) 
 	{
 		if (++atkWaitTime_ % (FPS*time) == 0)
 		{

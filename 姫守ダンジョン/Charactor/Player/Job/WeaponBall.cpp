@@ -18,6 +18,9 @@ WeaponBall::WeaponBall()
 	weaponBall_->m_fScale = 0.5;
 	delFlg_ = false;
 	col_ = new Collision;
+	effectflg_ = false;
+	w_ball = false;
+	pos_ = weaponBall_->m_vPos;
 }
 
 //
@@ -66,6 +69,11 @@ void WeaponBall::SetStartPos(D3DXVECTOR3 pos)
 	startPos_ = pos;
 	weaponBall_->m_vPos = pos;
 	spaceNo_ = col_->SetSpaceNo(startPos_);
+
+	Effect::getInstance().Update("beam2", startPos_);
+	w_ball = true;
+	Effect::getInstance().Effect_Play("magicball", weaponBall_->m_vPos);
+	Effect::getInstance().SetScale("magicball", 0.2f);
 }
 //
 //	@brief	攻撃力セット
@@ -82,6 +90,12 @@ void WeaponBall::Move_Weapon(float dist,float speed)
 	if (col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
 	{
 		weaponBall_->m_vPos += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
+		if (w_ball || col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
+		{
+			Effect::getInstance().Update("magicball", weaponBall_->m_vPos);
+			w_ball = false;
+		}
+		//Effect::getInstance().Draw();
 	}
 	else
 	{
@@ -101,7 +115,11 @@ void WeaponBall::Time_Del_Weapon(int frame)
 	{
 		Hit();
 		delFlg_ = true;
+		effectflg_ = true;
 		delCount_ = 0;
+		//Effect::getInstance().Effect_Stop("magicball");
+		Effect::getInstance().Effect_Play("explosion", weaponBall_->m_vPos);
+		Effect::getInstance().SetScale("explosion", 0.8f);
 	}
 }
 
@@ -196,6 +214,13 @@ void WeaponBall::SetHitSound(std::string name)
 	hitSoundName_ = name;
 }
 
+//
+//	@brief	当たったら消えるかどうかフラグ設定
+void WeaponBall::SetHitDelFlg(bool flg)
+{
+	hitDel_ = flg;
+}
+
 ////
 ////	@brief	攻撃の当たる範囲取得
 //float WeaponBall::GetHitDist()const
@@ -215,4 +240,12 @@ void WeaponBall::SetHitSound(std::string name)
 void WeaponBall::Render(D3DXVECTOR3 pos)
 {
 	weaponBall_->Render(pos,D3DXVECTOR3(0,0,0),weaponBall_->m_fScale);
+	
+	if (effectflg_)
+	{
+		Effect::getInstance().Update("explosion", weaponBall_->m_vPos);
+		effectflg_ = false;
+	}
+
+	Effect::getInstance().Draw();
 }

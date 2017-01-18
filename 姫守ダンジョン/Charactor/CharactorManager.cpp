@@ -7,7 +7,7 @@
 
 #include "./CharactorManager.h"
 
-std::vector<CharactorManager*> CharactorManager::allCharaList_;
+//std::vector<CharactorManager*> CharactorManager::allCharaList_;
 
 //
 //	@brief	コンストラクタ
@@ -48,8 +48,10 @@ CharactorManager::~CharactorManager()
 void CharactorManager::CharaInit(char* name)
 {
 	mesh_ = new CD3DXSKINMESH;
-	mesh_ = creator_->LoadChara(name);
-
+	if (charaType_ != Enemy)
+	{
+		mesh_ = creator_->LoadChara(name);
+	}
 	//XFileRead* xfileRead = new XFileRead;
 	MotionRead* motionRead = new MotionRead;
 	//XFile* xfile = xfileRead->GetXFile(name);
@@ -245,12 +247,12 @@ CharaType CharactorManager::GetCharaType()const
 	return charaType_;
 }
 
-////
-////	@brief	全キャラクターセット
-//void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
-//{
-//	allCharaList_ = list;
-//}
+//
+//	@brief	全キャラクターセット
+void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
+{
+	allCharaList_ = list;
+}
 
 //
 //	@brief			モーション変更
@@ -258,13 +260,18 @@ CharaType CharactorManager::GetCharaType()const
 //	@param (name)	モーション名
 void CharactorManager::ChangeMotion(Motion* motion, char* name)
 {
-		motionNo_ = motion->GetMotion(name)->id_;
-		mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		motionFrame_ = motion->GetMotion(name)->frame_;
-		//motionFrame_ *= 0.5f;
-		motionSpeed_ = 1 / (float)motionFrame_;
-		motionSpeed_ *= 0.5f;
-		motionCount_ = 0;
+	/*motionNo_ = motion->GetMotion(name)->id_;
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	motionFrame_ = motion->GetMotion(name)->frame_;
+	motionFrame_ *= 0.5f;
+	motionSpeed_ = 1 / (float)motionFrame_;
+	motionSpeed_ *= 0.5f;
+	motionCount_ = 0;*/
+	motionNo_ = motion->GetMotion(name)->id_;
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	motionFrame_ = motion->GetMotion(name)->frame_;
+	motionSpeed_ = 1 / (float)motionFrame_;
+	motionCount_ = 0;
 }
 
 //

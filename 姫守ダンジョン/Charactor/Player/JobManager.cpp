@@ -18,7 +18,7 @@ JobManager::JobManager(CharaType charaType)
 
 	//UI
 	backUI_ = new TD_Graphics;
-	backUIPos_ = D3DXVECTOR2(0 + charaType * UI_INTERVAL +UI_SPACE, 830);
+	backUIPos_ = D3DXVECTOR2(0 + charaType * UI_INTERVAL + UI_SPACE, 830);
 	D3DXVECTOR2 backScale(440, 220);
 	switch (charaType)
 	{
@@ -36,7 +36,7 @@ JobManager::JobManager(CharaType charaType)
 		break;
 	}
 	hpGageUI_ = new TD_Graphics;
-	hpGazePos_=D3DXVECTOR2(20+charaType*UI_INTERVAL+UI_SPACE, 975);
+	hpGazePos_ = D3DXVECTOR2(20 + charaType*UI_INTERVAL + UI_SPACE, 975);
 	D3DXVECTOR2 hpScale(420, 60);
 	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png", hpGazePos_, hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }

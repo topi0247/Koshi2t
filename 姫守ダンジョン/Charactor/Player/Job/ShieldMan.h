@@ -8,6 +8,7 @@
 #pragma once
 #include "./../../../Origin.h"
 #include "./../JobManager.h"
+#include "../../../Effekseer/Effect.h"
 //#include "../../../UI/TD_Graphics.h"
 
 //	‚mƒNƒ‰ƒX

@@ -140,6 +140,17 @@ void SwordMan::Normal_Attack()
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion(atkMotion_[chainCount_%ChainAmount])->id_)
 	{
 		Sound::getInstance().SE_play("S_NORMALATK");
+
+		//=======//
+		Effect::getInstance().Effect_Play("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
+		Effect::getInstance().SetScale("s_Atk", 0.5f);
+		float yaw = D3DXToDegree(m_Yaw) + 180;
+		//float roll = D3DXToDegree(m_Roll) + 180;
+		Effect::getInstance().SetRotation("s_Atk", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
+		//Effect::getInstance().SetRotation("s_Atk", D3DXVECTOR3(0, 1, 0), m_Yaw - 90);
+		//Effect::getInstance().SetRotation("s_Atk",D3DXVECTOR3(0, m_Yaw + 90,180));
+		//=======//
+
 		motionChange_ = false;
 		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
 		Normal_Attack_Collision();
@@ -158,6 +169,11 @@ void SwordMan::Normal_Attack()
 	//	motionChange_ = true;
 	//	moveAbleFlg_ = true;
 	//}
+
+	//=======//
+	Effect::getInstance().Update("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
+	Effect::getInstance().Draw();
+	//=======//
 }
 
 //

@@ -50,8 +50,11 @@ void Load_Scene::Render()
 	loading_UI->Render(pos, scale, rot);
 
 	camera_->Render();
-
+#ifdef _DEBUG
 	char str[256];
 	sprintf(str, "pos.x:%f pos.y:%f pos.z:%f", camera_->movePow_.x, camera_->movePow_.y, camera_->movePow_.z);
 	debugText_->Render(str, 0, 50);
+#endif // _DEBUG
+
+
 }

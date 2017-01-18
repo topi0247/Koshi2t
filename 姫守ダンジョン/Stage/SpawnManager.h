@@ -12,6 +12,7 @@
 #include "./../Charactor/CharactorCreator.h"
 #include "./../UI/TD_Graphics.h"
 #include "./../Camera.h"
+#include "./../Effekseer/Effect.h"
 
 class SpawnManager
 {
@@ -25,12 +26,12 @@ private:
 	int timeCount_;
 	bool uiDrawFlg_;
 
-	//char stageTye[30];						//現在のステージタイプ
-	std::vector<Spawn*> spawnList_;				//現在存在しているスポーンゲートリスト
-	std::vector<Spawn*> functionList_;			//機能しているスポーンゲートリスト
-	std::vector<Spawn*> renderList_;			//描画するスポーンゲートリストリスト
+	//char stageTye[30];					//現在のステージタイプ
+	std::vector<Spawn*> spawnList_;			//現在存在しているスポーンゲートリスト
+	std::vector<Spawn*> functionList_;		//機能しているスポーンゲートリスト
+	std::vector<Spawn*> renderList_;		//描画するスポーンゲートリストリスト
 	std::vector<CD3DXSKINMESH*> enemyMesh_List;	//描画されるエネミーメッシュリスト
-	Spawn* sealSpawn_;							//封印されるスポーンゲート
+	Spawn* sealSpawn_;						//封印されるスポーンゲート
 	
 	void SpawnSet();	//スポーンゲートの準備
 

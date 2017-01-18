@@ -8,6 +8,7 @@
 #pragma once
 #include "./../../../Origin.h"
 #include "./../../CharactorManager.h"
+#include "./../../../Effekseer/Effect.h"
 
 //
 //	@brief	飛び道具
@@ -22,6 +23,9 @@ private:
 	CharaType user_;
 	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
 	bool delFlg_;
+	bool effectflg_;
+	bool w_ball;
+	bool hitDel_;
 	int delCount_;
 	unsigned int atk_;
 	float dist_;
@@ -29,6 +33,7 @@ private:
 	float kSpeed_;
 	D3DXVECTOR3 startPos_;
 	D3DXVECTOR3 dir_;
+	D3DXVECTOR3 pos_;
 	void Hit();
 public:
 	WeaponBall();
@@ -44,6 +49,7 @@ public:
 	void SetAttack(unsigned int atk);
 	void SetKnockBack(float dist, float kDist,float kSpeed,CharaType charatype);
 	void SetHitSound(std::string name);
+	void SetHitDelFlg(bool flg);
 	void Render(D3DXVECTOR3 pos);
 	bool GetDelFlg()const;
 	float GetScale()const;

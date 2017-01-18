@@ -72,11 +72,13 @@ void SpawnManager::SpawnSet()
 	{
 		Spawn* temp = new Spawn;
 		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
-		temp->SpawnInit(tempAttr[i],mesh);
+		temp->SpawnInit(tempAttr[i], mesh);
 		spawnList_.push_back(temp);
+		Effect::getInstance().Effect_Play("spwner", D3DXVECTOR3(tempAttr[i]->pos_.x, 60, tempAttr[i]->pos_.z));
 		//functionList_.push_back(temp);
 		//renderList_.push_back(temp);
 	}
+	Effect::getInstance().SetScale("spwner", 2.0f);
 }
 
 //
@@ -113,6 +115,7 @@ void SpawnManager::Update(/*ParameterRead* param, */CharactorManager* target)
 		for (auto s : spawnList_)
 		{
 			s->ListSet(target);
+			Effect::getInstance().Update("spwner", D3DXVECTOR3(s->GetPos().x, 0, s->GetPos().z));
 		}
 	}
 }
@@ -152,7 +155,7 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 		auto elS = std::find(spawnList_.begin(), spawnList_.end(), sealSpawn_);
 		//auto elF = std::find(functionList_.begin(), functionList_.end(), sealSpawn_);
 		//auto elR = std::find(renderList_.begin(), renderList_.end(), sealSpawn_);
-
+		
 		delete(*elS);
 		spawnList_.erase(elS);
 		//functionList_.erase(elF);
@@ -164,13 +167,12 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 //	@brief	•`‰æ
 void SpawnManager::Render()
 {
-
-
 	if (!spawnList_.empty())
 	{
 		for (auto s : spawnList_)
 		{
 			spawnMesh_->Render(s->GetPos(), s->GetRot(), s->GetScale());
+			Effect::getInstance().Draw();
 		}
 	}
 

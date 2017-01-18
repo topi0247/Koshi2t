@@ -10,7 +10,6 @@
 
 #pragma comment(lib, "XInput.lib")
 
-
 //ゲームパッドに関する処理をまとめた名前空間
 namespace GamePad
 {

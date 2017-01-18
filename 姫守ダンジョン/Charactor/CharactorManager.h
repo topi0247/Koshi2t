@@ -35,6 +35,7 @@ class CharactorManager:public CD3DXSKINMESH
 protected:
 	CD3DXSKINMESH* mesh_;
 	CharactorCreator* creator_;
+	bool effectFlg_;
 
 	Motion* motion_;			//モーション管理クラス
 	unsigned int motionNo_;		//現在のモーション番号
@@ -67,6 +68,7 @@ protected:
 
 	CharaType charaType_;								//自分のキャラクタータイプ
 	std::vector<CharactorManager*> aroundCharaList_;	//周辺にいるキャラ
+	std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
 
 	virtual void Move(float speed) = 0;					//移動
 	virtual void Attack() = 0;							//攻撃
@@ -81,7 +83,7 @@ public:
 	CharactorManager();
 	virtual ~CharactorManager();
 	
-	static std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
+	//static std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
 
 	virtual void CharaInit(char* name);		//初期化・読み込み
 	virtual void CharaUpdate()=0;								//更新
@@ -96,7 +98,7 @@ public:
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
 	void SetAroundChara(CharactorManager* charactor);			//周辺にいるキャラクターをリストにセット
-	//void SetAllCharaList(std::vector<CharactorManager*> list);	//存在している全てのキャラクターセット
+	void SetAllCharaList(std::vector<CharactorManager*> list);	//存在している全てのキャラクターセット
 	void SetOppWeight(float weight);							//進行方向にいるキャラクターの重さセット
 	void SetKnockBack(D3DXVECTOR3 pos, float dist,float speed,CharaType charatype);	//ノックバック情報セット
 	void SetKnockBackFlg(bool flg) { knockBackFlg_ = flg; };	//ノックバックフラグセット

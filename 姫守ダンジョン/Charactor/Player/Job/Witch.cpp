@@ -191,6 +191,11 @@ void Witch::Special_Attack()
 	if (++motionCount_>motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_SPECIAL");
+
+		Effect::getInstance().Effect_Play("beam2", m_Pos);
+		float yaw = D3DXToDegree(m_Yaw) + 180;
+		Effect::getInstance().SetRotation("beam2", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
+
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
@@ -221,12 +226,13 @@ void Witch::InstanceMagicBall(int count)
 			temp = D3DXToRadian(temp);
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
 			magic->SetDir(vec);
-			magic->SetScale(param_->weaponScale_);
+			magic->SetScale(0/*param_->weaponScale_*/);
 			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 			magic->SetAttack(param_->normalAtk_);
 			magic->SetHitSound("M_DAMAGE_HIT");
+			magic->SetHitDelFlg(true);
 			magicBall_.push_back(magic);
 		}
 		magicFlg_ = true;
@@ -237,6 +243,8 @@ void Witch::InstanceMagicBall(int count)
 //	@brief	マジックボールの更新
 void Witch::WeaponUpdate()
 {
+	std::vector<WeaponBall*> dellist;
+
 	if (magicFlg_ == true && !magicBall_.empty())
 	{
 		int count = 0;
@@ -255,6 +263,7 @@ void Witch::WeaponUpdate()
 		}
 		if (magicBall_.empty())
 		{
+			Effect::getInstance().Effect_Stop("magicball");
 			magicBall_.clear();
 			magicFlg_ = false;
 		}
@@ -280,6 +289,7 @@ void Witch::RazorBeam()
 		magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 		magic->SetAttack(param_->specialAtk_);
 		magic->SetHitSound("M_DAMAGE_HIT");
+		magic->SetHitDelFlg(false);
 		magicBall_.push_back(magic);
 
 		magicFlg_ = true;

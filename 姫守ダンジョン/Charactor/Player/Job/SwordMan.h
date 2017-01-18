@@ -8,6 +8,7 @@
 #pragma once
 #include "./../../../Origin.h"
 #include "./../../Player/JobManager.h"
+#include "../../../Effekseer/Effect.h"
 
 #define ChainAmount 6
 

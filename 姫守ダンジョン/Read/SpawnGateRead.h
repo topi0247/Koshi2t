@@ -28,7 +28,8 @@ private:
 	SpawnGateAttr** spawnGateList_;
 	std::vector<D3DXVECTOR3> busStop_;
 
-	void PosRead(XMLElement* element, D3DXVECTOR3 &pos);
+	void PosRead(XMLElement* element,D3DXVECTOR3 &pos);
+
 public:
 	SpawnGate(XMLElement* element);
 	~SpawnGate();

@@ -228,7 +228,8 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 		}
 		else
 		{
-			next = new Title_Scene;
+			//next = new Title_Scene;
+			next = new CharactorSelection_Scene;
 		}
 	}
 
@@ -325,7 +326,7 @@ void Main_Scene::GameMain()
 	}
 
 	//存在しているすべてのキャラクターセット
-	CharactorManager::allCharaList_ = charList_;
+//	CharactorManager::allCharaList_ = charList_;
 
 
 	//エネミーターゲット更新
@@ -530,8 +531,6 @@ void Main_Scene::CollisionControl()
 //	@brief			描画
 void Main_Scene::Render()
 {
-	//スポーンゲートの描画
-	spawnManager_->Render();
 
 	//ステージの描画
 	stage_->Render();
@@ -542,6 +541,10 @@ void Main_Scene::Render()
 		chara->CharaRender();
 	}
 
+	//スポーンゲートの描画
+	spawnManager_->Render();
+
+	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);
 
 	//UI描画
 	//if (scene_ == MainS)

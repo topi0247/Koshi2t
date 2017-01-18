@@ -174,8 +174,10 @@ void Effect::EffectSet()
 	//全体
 	effect_["charge1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge1.efk");
 	effect_["charge2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge2.efk");
+	effect_["spwner"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/spwner.efk");
 
 	//剣士
+	effect_["s_Atk"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/剣士/slash3.efk");
 
 	//盾士
 	effect_["smork"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/盾士/smork.efk");
@@ -185,7 +187,7 @@ void Effect::EffectSet()
 
 	//魔導士
 	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/魔導士/beam1.efk");
-
+	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/魔導士/magicball2.efk");
 	effect_["beam2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/魔導士/bi-m2.efk");
 
 	//姫
@@ -248,6 +250,19 @@ void Effect::SetScale(string name, float scale)
 	g_manager->SetScale(g_handle[effect_[name]], scale, scale, scale);
 }
 
+//  @param (rotation)　回転
+//  @param (r_pos)   　回転軸
+void Effect::SetRotation(string name, D3DXVECTOR3 pos, float angle)
+{
+	::Effekseer::Vector3D r_pos(pos.x, pos.y, pos.z);
+	g_manager->SetRotation(g_handle[effect_[name]], r_pos, angle);
+}
+
+void Effect::SetRotation(string name, D3DXVECTOR3 angle)
+{
+	g_manager->SetRotation(g_handle[effect_[name]], angle.x, angle.y, angle.z);
+}
+
 //
 //	@brief			更新
 //	@param(name)	更新するエフェクト名
@@ -258,6 +273,15 @@ void Effect::Update(string name, D3DXVECTOR3 pos)
 	::Effekseer::Vector3D e_pos(pos.x, pos.y, pos.z);
 	//　移動更新
 	g_manager->SetLocation(g_handle[effect_[name]], e_pos);
+	// エフェクトの更新処理を行う
+	g_manager->Update();
+}
+
+
+//
+//	@brief			更新
+void Effect::Update()
+{
 	// エフェクトの更新処理を行う
 	g_manager->Update();
 }

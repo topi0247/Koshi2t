@@ -286,8 +286,8 @@ void MAIN::Render()
 	TD_Graphics::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
-	Camera* camera_ = new Camera;
-	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);
+	/*Camera* camera_ = new Camera;
+	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);*/
 
 	scene_->Render();
 
