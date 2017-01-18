@@ -35,7 +35,7 @@ private:
 	int okButon_;
 	int keyWait_[4];
 	jobName choiceJob_[4];
-	D3DXVECTOR2 pos_[4];
+	D3DXVECTOR2 playerUIPos_[4];
 	D3DXVECTOR3 meshPos_[4];
 
 	D3DXVECTOR2 Move(int type);
@@ -44,6 +44,7 @@ private:
 	void CancelJob(int type);
 	void Update();
 	void MeshRender(jobName name, int type);
+	void ChoiceJobUIRender(jobName, int type);
 	float HandAnimation(float size);
 	D3DXVECTOR2 StartAnimation(D3DXVECTOR2 pos);
 

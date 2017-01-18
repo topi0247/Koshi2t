@@ -225,7 +225,7 @@ void Witch::InstanceMagicBall(int count)
 			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
-			magic->SetAttack(param_->specialAtk_);
+			magic->SetAttack(param_->normalAtk_);
 			magic->SetHitSound("M_DAMAGE_HIT");
 			magicBall_.push_back(magic);
 		}

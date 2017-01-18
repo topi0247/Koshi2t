@@ -7,6 +7,8 @@
 
 #include "./CharactorManager.h"
 
+std::vector<CharactorManager*> CharactorManager::allCharaList_;
+
 //
 //	@brief	コンストラクタ
 CharactorManager::CharactorManager()
@@ -243,12 +245,12 @@ CharaType CharactorManager::GetCharaType()const
 	return charaType_;
 }
 
-//
-//	@brief	全キャラクターセット
-void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
-{
-	allCharaList_ = list;
-}
+////
+////	@brief	全キャラクターセット
+//void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
+//{
+//	allCharaList_ = list;
+//}
 
 //
 //	@brief			モーション変更
@@ -256,13 +258,13 @@ void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
 //	@param (name)	モーション名
 void CharactorManager::ChangeMotion(Motion* motion, char* name)
 {
-	motionNo_ = motion->GetMotion(name)->id_;
-	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
-	motionFrame_ = motion->GetMotion(name)->frame_;
-	//motionFrame_ *= 0.5f;
-	motionSpeed_ = 1 / (float)motionFrame_;
-	motionSpeed_*=0.5f;
-	motionCount_ = 0;
+		motionNo_ = motion->GetMotion(name)->id_;
+		mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+		motionFrame_ = motion->GetMotion(name)->frame_;
+		//motionFrame_ *= 0.5f;
+		motionSpeed_ = 1 / (float)motionFrame_;
+		motionSpeed_ *= 0.5f;
+		motionCount_ = 0;
 }
 
 //

@@ -121,6 +121,15 @@ void SwordMan::Attack()
 	if (atkNo_ == normalAtk)
 	{
 		Normal_Attack();
+		if (++motionCount_ > motionFrame_)
+		{
+			atkNo_ = noAtk;
+			//attackCount_ = 0;
+			++chainCount_;
+			motionCount_ = 0;
+			motionChange_ = true;
+			moveAbleFlg_ = true;
+		}
 	}
 }
 
@@ -134,21 +143,21 @@ void SwordMan::Normal_Attack()
 		motionChange_ = false;
 		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
 		Normal_Attack_Collision();
-	}
-
-	if (++motionCount_ > motionFrame_)
-	{
-		atkNo_ = noAtk;
-		//attackCount_ = 0;
-		++chainCount_;
-		motionCount_ = 0;
-		motionChange_ = true;
-		moveAbleFlg_ = true;
-
+		
 		float speed = -0.3;
 		D3DXVECTOR3 dir(sinf(m_Yaw)*speed, 0, cosf(m_Yaw)*speed);
 		m_Dir = dir;
 	}
+
+	//if (++motionCount_ > motionFrame_)
+	//{
+	//	atkNo_ = noAtk;
+	//	//attackCount_ = 0;
+	//	++chainCount_;
+	//	motionCount_ = 0;
+	//	motionChange_ = true;
+	//	moveAbleFlg_ = true;
+	//}
 }
 
 //

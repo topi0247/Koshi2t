@@ -130,29 +130,29 @@ bool Camera::Main_Start_SecondUpdate()
 	{
 		movePow_.z -= speed;
 	}
-	//gazePoint_ = firstGazePos;
-	//注視点座標移動
-	//x軸移動
-	speed = 0.1;
-	if (gazePoint_.x > firstGazePos.x)
-	{
-		gazePoint_.x -= speed;
-	}
-	//y軸移動
-	if (gazePoint_.y > firstGazePos.y)
-	{
-		gazePoint_.y -= speed;
-	}
-	//z軸移動
-	if (gazePoint_.z > firstGazePos.z)
-	{
-		gazePoint_.z -= speed;
-	}
-
-	if (tempPos == movePow_ && tempGaze == gazePoint_)
+	////gazePoint_ = firstGazePos;
+	////注視点座標移動
+	////x軸移動
+	//speed = 0.1;
+	//if (gazePoint_.x > firstGazePos.x)
+	//{
+	//	gazePoint_.x -= speed;
+	//}
+	////y軸移動
+	//if (gazePoint_.y > firstGazePos.y)
+	//{
+	//	gazePoint_.y -= speed;
+	//}
+	////z軸移動
+	//if (gazePoint_.z > firstGazePos.z)
+	//{
+	//	gazePoint_.z -= speed;
+	//}
+	gazePoint_ = firstGazePos;
+	if (tempPos == movePow_/* && tempGaze == gazePoint_*/)
 	{
 		movePow_ = firstMovePos;
-		gazePoint_ = firstGazePos;
+		//gazePoint_ = firstGazePos;
 		return true;
 	}
 

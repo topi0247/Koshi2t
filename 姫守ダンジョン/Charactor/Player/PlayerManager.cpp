@@ -63,18 +63,20 @@ void PlayerManager::Move(float speed)
 		damageDrawTime_ = FPS * 0.5;
 		if (damageCount_ >= damageDrawTime_)
 		{
+			moveAbleFlg_ = true;
 			damageFlg_ = false;
 			damageCount_ = 0;
 		}
-		else
+	}
+
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		if (motionNo_ != motion_->GetMotion("wait")->id_)
 		{
-			if (knockBackFlg_)
-			{
-				KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-				//return;
-			}
-			return;
+			ChangeMotion(motion_, "wait");
 		}
+		return;
 	}
 
 
@@ -101,10 +103,6 @@ void PlayerManager::Move(float speed)
 
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
-			//motionNo_ = motion_->GetMotion("walk")->id_;
-			//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
-			//ƒ‚[ƒVƒ‡ƒ“‘¬“x
-			//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
 			ChangeMotion(motion_, "walk");
 		}
 	}
@@ -112,9 +110,6 @@ void PlayerManager::Move(float speed)
 	{
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 		{
-			//motionNo_ = motion_->GetMotion("wait")->id_;
-			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-			//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
 			ChangeMotion(motion_, "wait");
 		}
 	}
@@ -159,7 +154,7 @@ void PlayerManager::Dead()
 {
 	//aliveFlg_ = false;
 
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_ && motionNo_ != motion_->GetMotion("dead2")->id_)
+	if (/*motionChange_ == true &&*/ motionNo_ != motion_->GetMotion("dead1")->id_ && motionNo_ != motion_->GetMotion("dead2")->id_)
 	{
 		moveAbleFlg_ = false;
 		DeadSound();

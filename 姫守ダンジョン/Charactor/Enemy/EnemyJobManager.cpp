@@ -27,6 +27,7 @@ void EnemyJobManager::Reset()
 	aroundCharaList_.clear();
 	allCharaList_.clear();
 
+	
 }
 
 void EnemyJobManager::CharaUpdate()
@@ -41,7 +42,30 @@ void EnemyJobManager::CharaUpdate()
 	Move(speed);
 
 	Attack();
+
+	if (strcmp(motionName_, "attack")==0)
+	{
+		if (++motionCount_ > motionFrame_)
+		{
+			ChangeMotion(motion_, "walk");
+		}
+	}
+
+	//if (state_ == walk)
+	//{
+	//	//motionNo_ = motion_->GetMotion("walk")->id_;
+	//}
+	//else if (state_ == attack)
+	//{
+	//	//motionNo_ = motion_->GetMotion("attack")->id_;
+	//	if (++motionCount_ > motionFrame_)
+	//	{
+	//		state_ == walk;
+	//		motionCount_ = 0;
+	//	}
+	//}
 }
+
 
 //=======スライム=======//
 //Slim::Slim()
@@ -50,23 +74,22 @@ void EnemyJobManager::CharaUpdate()
 
 void Slim::NormalAttack()
 {
-	float dist = 3;
-	float speed = 0.01;
+	float dist = 1;
+	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
 	//targetChar_->KnockBack(m_Pos,dist,speed);
-	targetChar_->SetKnockBack(m_Pos, dist, speed,charaType_);
-
-	
-	
+	targetChar_->SetKnockBack(m_Pos, dist, speed, charaType_);
+	ChangeMotion(motion_, "attack");
 }
 
 //=======ゴブリン========//
 void Goblin::NormalAttack()
 {
-	float dist = 3;
-	float speed = 0.01;
+	float dist = 1;
+	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
-	targetChar_->SetKnockBack(m_Pos, dist, speed,charaType_);
+	targetChar_->SetKnockBack(m_Pos, dist, speed, charaType_);
+	ChangeMotion(motion_, "attack");
 }
 
 //=======スケルトン======//
@@ -89,13 +112,14 @@ void Skeleton::NormalAttack()
 {
 	float dist = 1;
 	float speed = 0.01;
-	WeaponBall* atkBall=new WeaponBall();
+	WeaponBall* atkBall = new WeaponBall();
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
 	atkBall->SetDamageList(allCharaList_, charaType_);
-	atkBall->SetKnockBack(dist, param_->attackReach_,speed,charaType_);
+	atkBall->SetKnockBack(dist, param_->attackReach_, speed, charaType_);
 	atkBall->SetAttack(param_->atk_);
 	atkList_.push_back(atkBall);
+	ChangeMotion(motion_, "attack");
 }
 
 
@@ -121,7 +145,7 @@ void Skeleton::CharaRender()
 	{
 		for (auto a : atkList_)
 		{
-			//a->Render();
+			a->Render(a->GetPosition());
 		}
 	}
 }

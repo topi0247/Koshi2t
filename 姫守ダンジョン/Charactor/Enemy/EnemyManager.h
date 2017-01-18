@@ -34,7 +34,6 @@ private:
 	};
 	TargetObject targetObj_;
 	D3DXVECTOR3 targetPos_;
-	float motionPlayPos_;		//モーションの再生位置
 
 	static std::vector<D3DXVECTOR3> busStop_;
 	static std::vector<int> busStopSpaceNo_;
@@ -43,10 +42,13 @@ private:
 	void SetTargetPos(D3DXVECTOR3 pos);
 protected:
 	unsigned int atkWaitTime_;	//攻撃する間隔
+	char motionName_[10];		//現在再生しているモーション名
+	float motionPlayPos_;		//モーションの再生位置
 
 	EnemyParam* param_;
 	CharactorManager* targetChar_;
 	D3DXVECTOR3 getpos_;
+	virtual void ChangeMotion(Motion* motion, char* name);
 	virtual void Move(float speed);		//移動処理
 	virtual void Attack();
 	virtual void NormalAttack() = 0;

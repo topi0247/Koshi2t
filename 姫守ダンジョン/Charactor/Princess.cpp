@@ -234,7 +234,7 @@ void Princess::CharaUpdate()
 	spaceNo_ = collision_->SetSpaceNo(m_Pos);
 
 	//ˆÚ“®
-	float speed = 0.01;
+	float speed = 0.05;
 	MoveCharaHit();
 	Move(speed);
 

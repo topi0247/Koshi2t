@@ -247,13 +247,15 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	if (motionChange_ && motionNo_ != motion_->GetMotion("walk")->id_)
-	{
-		ChangeMotion(motion_, "walk");
-		//motionNo_ = motion_->GetMotion("walk")->id_;
-		//mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
-		//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
-	}
+	//strcpy(motionName_, "walk");
+
+	//if (motionChange_ && motionNo_ != motion_->GetMotion("walk")->id_)
+	//{
+	//	ChangeMotion(motion_, "walk");
+	//	//motionNo_ = motion_->GetMotion("walk")->id_;
+	//	//mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//	//motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+	//}
 
 }
 
@@ -314,6 +316,18 @@ void EnemyManager::Attack()
 	}*/
 }
 
+//
+//	@brief	ƒ‚[ƒVƒ‡ƒ“‘JˆÚ
+void EnemyManager::ChangeMotion(Motion* motion, char* name)
+{
+	motionNo_ = motion->GetMotion(name)->id_;
+	motionFrame_ = motion->GetMotion(name)->frame_;
+	motionSpeed_ = 1 / (float)motionFrame_;
+	motionSpeed_ *= 0.5f;
+	motionCount_ = 0;
+	motionPlayPos_ = 0;
+	strcpy(motionName_, name);
+}
 
 //
 //	@brief			•`‰æ
@@ -322,8 +336,20 @@ void EnemyManager::CharaRender()
 	bool drawFlg = true;
 	//if (charaType_ != Enemy)
 	//{
-	mesh_->m_pD3dxMesh->m_pAnimController->SetTrackPosition(0, motionPlayPos_);
-	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	/*if (motionName_ == "walk")
+	{
+		ChangeMotion(motion_, "walk");
+	}
+	else if (motionName_ == "attack")
+	{
+		ChangeMotion(motion_, "attack");
+	}*/
+
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
+	//anim->SetTrackAnimationSet(0, mesh_->m_pD3dxMesh->m_pAnimSet[motionNo_]);
+	anim->SetTrackPosition(0, motionPlayPos_);
+	anim->AdvanceTime(motionSpeed_, NULL);
 	motionPlayPos_ += motionSpeed_;
 	//}
 	if (damageFlg_)

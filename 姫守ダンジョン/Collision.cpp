@@ -106,14 +106,16 @@ bool Collision::CheckSpaceNo(int ownNo, int oppNo)
 //	@param(distance)	”»’è‹——£
 bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 {
-	if (pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2) <= distance*distance)
+	float x = pow(posA.x - posB.x, 2);
+	float z = pow(posA.z - posB.z, 2);
+	float d1 = x + z;
+	float d2 = pow(distance, 2);
+	if (d1 <= d2)
 	{
-		//hitCount_ = 0;
 		return true;
 	}
 	else
 	{
-		//hitCount_++;
 		return false;
 	}
 }

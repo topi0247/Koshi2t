@@ -65,37 +65,48 @@ void ShieldMan::Attack()
 	else if (atkNo_ == normalAtk)
 	{
 		attackCount_ = 0;
-		//atkNo_ = noAtk;
 		Normal_Attack();
-		//hit = false;
-		//atkNo_ = noAtk;
-		//Special_Attack();
+		if (++motionCount_ > motionFrame_)
+		{
+			atkNo_ = noAtk;
+			//attackCount_ = 0;
+			motionCount_ = 0;
+			motionChange_ = true;
+			moveAbleFlg_ = true;
+			ChangeMotion(motion_, "wait");
+		}
+
 	}
 	else
 	{
 		spMoveFlg_ = false;
+		moveAbleFlg_ = true;
 		attackCount_ = 0;
 		atkNo_ = noAtk;
-		motionChange_ = true;
 		spMove_ = D3DXVECTOR3(1, 0, 1);
+		/*if (!motionChange_&&motionNo_ != motion_->GetMotion("wait")->id_)
+		{
+			ChangeMotion(motion_, "wait");
+			motionChange_ = true;
+
+		}*/
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = FPS*param_->chargeTime_;
-	unsigned int tempFrame = motion_->GetMotion("special")->frame_;
+	//unsigned int tempFrame = motion_->GetMotion("special")->frame_;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
 		atkNo_ = normalAtk;
 	}
-	else if (inputTime < attackCount_ && attackCount_ - inputTime < tempFrame)
+	else if (inputTime < attackCount_ /*&& attackCount_ - inputTime < tempFrame*/)
 	{
 		atkNo_ = specialAtk;
-	}
-	else
-	{
 		spMoveFlg_ = true;
 	}
+
+
 
 	if (atkNo_ == specialAtk)
 	{
@@ -111,7 +122,7 @@ void ShieldMan::Normal_Attack()
 	float hitAngle = param_->attackRange_;
 
 	//Normal_Attack_Collision();
-	if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("attack1")->id_)
+	if (motionChange_ == true && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		Sound::getInstance().SE_play("Sh_NORMALATK");
 
@@ -127,14 +138,13 @@ void ShieldMan::Normal_Attack()
 
 	}
 
-	if (++motionCount_ > motionFrame_)
-	{
-		atkNo_ = noAtk;
-		//attackCount_ = 0;
-		motionChange_ = true;
-		motionCount_ = 0;
-		moveAbleFlg_ = true;
-	}
+	//if (++motionCount_ > motionFrame_)
+	//{
+	//	atkNo_ = noAtk;
+	//	//attackCount_ = 0;
+	//	motionChange_ = true;
+	//	moveAbleFlg_ = true;
+	//}
 }
 
 //
@@ -144,7 +154,7 @@ void ShieldMan::Special_Attack()
 	//spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
 	//Special_Attack_Collision();
 	float hitAngle = param_->specialAtkRange_;
-
+	Attack_Collision(hitAngle);
 	if (spMoveFlg_ == false)
 	{
 		if (motionNo_ != motion_->GetMotion("special")->id_)
@@ -154,8 +164,6 @@ void ShieldMan::Special_Attack()
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//motionSpeed_ = 1 / (float)motion_->GetMotion("special")->frame_;
 			ChangeMotion(motion_, "special");
-
-			Attack_Collision(hitAngle);
 		}
 	}
 	//if (/*motionChange_ == true && */motionNo_ != motion_->GetMotion("special")->id_)
@@ -265,10 +273,10 @@ void ShieldMan::Move(float speed)
 		damageDrawTime_ = FPS * 0.5;
 		if (damageCount_ >= damageDrawTime_)
 		{
+			moveAbleFlg_ = true;
 			damageFlg_ = false;
 			damageCount_ = 0;
 		}
-		return;
 	}
 
 	if (atkNo_ == specialAtk)
@@ -327,21 +335,20 @@ void ShieldMan::Move(float speed)
 	}
 	else
 	{
-
-		if (motionChange_ == true)
-		{
-			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
+		//if (motionChange_ == true)
+		//{
+			if (atkNo_ != specialAtk&& motionNo_ != motion_->GetMotion("wait")->id_)
 			{
 				ChangeMotion(motion_, "wait");
 			}
-		}
+		//}
 	}
 
 	//opponentWeight_ = 1;
 
 	MoveCharaHit();
 
-	
+
 	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
 
 	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
@@ -370,7 +377,7 @@ void ShieldMan::CharaRender()
 	bool drawFlg = true;
 	if (damageFlg_)
 	{
-		if (++damageCount_ % 5 == 0)
+		if (++damageCount_ % 5==0)
 		{
 			drawFlg = false;
 		}
@@ -385,15 +392,15 @@ void ShieldMan::CharaRender()
 	//‚‚Ì•`‰æ
 	if (atkNo_ == specialAtk)
 	{
-		float yaw = D3DXToDegree(m_Yaw)+50.0f;
+		float yaw = D3DXToDegree(m_Yaw) + 50.0f;
 		float dist = -0.8;
 		yaw = D3DXToRadian(yaw);
 		D3DXVECTOR3 pos(sinf(yaw)*dist, 0, cosf(yaw) * dist);
 		pos += m_Pos;
-		shield_->Render(pos, D3DXVECTOR3(0,yaw,0),scale); 
+		shield_->Render(pos, D3DXVECTOR3(0, yaw, 0), scale);
 		yaw = D3DXToDegree(m_Yaw) - 50.0f;
 		yaw = D3DXToRadian(yaw);
-		pos=D3DXVECTOR3(sinf(yaw)*dist, 0, cosf(yaw) * dist);
+		pos = D3DXVECTOR3(sinf(yaw)*dist, 0, cosf(yaw) * dist);
 		pos += m_Pos;
 		shield_->Render(pos, D3DXVECTOR3(0, yaw, 0), scale);
 	}

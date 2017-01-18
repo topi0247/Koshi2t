@@ -324,6 +324,9 @@ void Main_Scene::GameMain()
 		}
 	}
 
+	//存在しているすべてのキャラクターセット
+	CharactorManager::allCharaList_ = charList_;
+
 
 	//エネミーターゲット更新
 	if (!enemyList_.empty())
@@ -343,7 +346,6 @@ void Main_Scene::GameMain()
 	for (auto chara : charList_)
 	{
 		chara->CharaUpdate();
-		chara->SetAllCharaList(charList_);
 	}
 
 	//姫の目的地更新
@@ -587,7 +589,7 @@ void Main_Scene::Render()
 	//debugText_->Render(str, 0, 80);
 
 #ifdef _DEBUG
-	//PlayerDebug();
+	PlayerDebug();
 	//EnemyDebug();
 #endif // _DEBUG
 
@@ -600,17 +602,19 @@ void Main_Scene::PlayerDebug()
 	char str[256];
 
 
-#ifdef _DEBUG
 	//sprintf(str, "chara:%d", player_[Player1]->GetAroundC());
 	//debugText_->Render(str, 0, 50);
-#endif // _DEBUG
+
 
 
 	if (scene_ == MainS)
 	{
-		float high = 50;
-		sprintf(str, "%f  %f  %f", player_[Player1]->m_Pos.x, player_[Player1]->m_Pos.y, player_[Player1]->m_Pos.z);
+		float high = 300;
+		sprintf(str, "m_no%d", player_[Player1]->GetMotionNo());
 		debugText_->Render(str, 0, high);
+		sprintf(str, "atk_no%d", player_[Player1]->GetAtkState());
+		debugText_->Render(str, 0, high+30);
+
 		/*sprintf(str, "%d", player_[Player2]->m_Pos);
 		debugText_->Render(str, 760, high);
 		sprintf(str, "%d", player_[Player3]->m_Pos);
