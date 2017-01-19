@@ -11,6 +11,7 @@
 PlayerManager::PlayerManager()
 {
 	revivalFlg_ = false;
+	callFlg_ = false;
 	callTiming_ = 0;
 }
 
@@ -78,8 +79,6 @@ void PlayerManager::Move(float speed)
 		}
 		return;
 	}
-
-
 
 	//スティックの傾き取得
 	D3DXVECTOR3 inputStick;
@@ -161,7 +160,7 @@ void PlayerManager::Dead()
 		ChangeMotion(motion_, "dead1");
 		motionCount_ = 0;
 	}
-	if (++motionCount_>motionFrame_&& motionNo_ == motion_->GetMotion("dead1")->id_)
+	if (++motionCount_ > motionFrame_&& motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
 		ChangeMotion(motion_, "dead2");
 		motionCount_ = 0;
@@ -186,7 +185,7 @@ void PlayerManager::Revival()
 
 	if (motionNo_ == motion_->GetMotion("alive")->id_)
 	{
-		if (++motionCount_>motionFrame_)
+		if (++motionCount_ > motionFrame_)
 		{
 			moveAbleFlg_ = true;
 			motionChange_ = true;
@@ -202,69 +201,94 @@ void PlayerManager::Revival()
 //	@brief	姫呼び
 void PlayerManager::Princess_Call()
 {
-	//static int pushButtonTime = 0;
-	static bool callFlg = false;
 	if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_ == noAtk)
 	{
-		//++pushButtonTime;
-		callFlg = true;
+		++callCount_;
+		callFlg_ = true;
+		motionChange_ = false;
 		moveAbleFlg_ = false;
 		callPos_ = m_Pos;
 		callTiming_ = clock();
-		if (motionNo_ != motion_->GetMotion("call1")->id_ && motionNo_ != motion_->GetMotion("call2")->id_)
+	}
+	else if (!GamePad::checkInput(charaType_, GamePad::InputName::B) && callFlg_)
+	{
+		if (motionNo_ != motion_->GetMotion("call3")->id_)
 		{
-			moveAbleFlg_ = false;
-			motionChange_ = false;
+			ChangeMotion(motion_, "call3");
+			callCount_ = 0;
+		}
+	}
+
+	//モーション遷移
+	if (0 < callCount_ && callCount_ < motion_->GetMotion("call1")->frame_)
+	{
+		if (motionNo_ != motion_->GetMotion("call1")->id_)
+		{
 			ChangeMotion(motion_, "call1");
 		}
 	}
-
-	if (!GamePad::checkInput(charaType_, GamePad::InputName::B))
+	else if (motion_->GetMotion("call1")->frame_ < callCount_)
 	{
-		if (callFlg && !moveAbleFlg_)
+		if (motionNo_ != motion_->GetMotion("call2")->id_)
 		{
-			callFlg = false;
-			ChangeMotion(motion_, "call3");
-		}
-
-	/*	if (callFlg&&motionNo_ == motion_->GetMotion("call1")->id_)
-		{
-			if (++motionCount_ > motionFrame_)
-			{
-				ChangeMotion(motion_, "call2");
-			}
-		}*/
-		if (motionNo_ == motion_->GetMotion("call3")->id_)
-		{
-			if (++motionCount_ > motionFrame_)
-			{
-				//revivalFlg_ = false;
-				moveAbleFlg_ = true;
-				motionChange_ = true;
-				ChangeMotion(motion_, "wait");
-			}
+			ChangeMotion(motion_, "call2");
 		}
 	}
-	//if (0 < pushButtonTime)
+
+	if (motionNo_ == motion_->GetMotion("call3")->id_)
+	{
+		if (++motionCount_ > motionFrame_)
+		{
+			ChangeMotion(motion_, "wait");
+			motionChange_ = true;
+			moveAbleFlg_ = true;
+			callFlg_ = false;
+		}
+	}
+
+	//static bool callFlg = false;
+	//if (GamePad::checkInput(charaType_, GamePad::InputName::B) && atkNo_ == noAtk)
 	//{
-	//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("call1")->id_)
+	//	//++pushButtonTime;
+	//	callFlg = true;
+	//	moveAbleFlg_ = false;
+	//	callPos_ = m_Pos;
+	//	callTiming_ = clock();
+	//	if (motionNo_ != motion_->GetMotion("call1")->id_ && motionNo_ != motion_->GetMotion("call2")->id_)
 	//	{
+	//		moveAbleFlg_ = false;
 	//		motionChange_ = false;
-	//		//motionNo_ = motion_->GetMotion("call")->id_;
-	//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-	//		//motionSpeed_ =  1/(float)motion_->GetMotion("call")->frame_;
 	//		ChangeMotion(motion_, "call1");
 	//	}
 	//}
-	//else if (motion_->GetMotion("call1")->frame_ < pushButtonTime)
+
+	//if (!GamePad::checkInput(charaType_, GamePad::InputName::B))
 	//{
-	//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("call2")->id_)
+	//	if (callFlg && !moveAbleFlg_)
 	//	{
-	//		ChangeMotion(motion_, "call2");
+	//		callFlg = false;
+	//		ChangeMotion(motion_, "call3");
+	//	}
+
+	///*	if (callFlg&&motionNo_ == motion_->GetMotion("call1")->id_)
+	//	{
+	//		if (++motionCount_ > motionFrame_)
+	//		{
+	//			ChangeMotion(motion_, "call2");
+	//		}
+	//	}*/
+	//	if (motionNo_ == motion_->GetMotion("call3")->id_)
+	//	{
+	//		if (++motionCount_ > motionFrame_)
+	//		{
+	//			//revivalFlg_ = false;
+	//			moveAbleFlg_ = true;
+	//			motionChange_ = true;
+	//			ChangeMotion(motion_, "wait");
+	//		}
 	//	}
 	//}
 
-	
 }
 
 //
@@ -275,11 +299,19 @@ void PlayerManager::SetRevivalFlg()
 }
 
 //
+//	@brief	復活フラグ取得
+bool PlayerManager::GetRevivalFlg()const
+{
+	return revivalFlg_;
+}
+
+//
 //	@brief	生存フラグ取得
 bool PlayerManager::GetAliveFlg()const
 {
 	return aliveFlg_;
 }
+
 
 //
 //	@brief	姫を呼んだクロック時間取得
@@ -293,4 +325,19 @@ double PlayerManager::GetCallTiming()const
 D3DXVECTOR3 PlayerManager::GetCallPos()const
 {
 	return callPos_;
+}
+
+//
+//	@brief			ゲーム終了時のモーションセット
+//	@param(failed)	失敗したかどうか
+void PlayerManager::SetEndMotion(bool failed)
+{
+	if (failed)
+	{
+		ChangeMotion(motion_,"wait");
+	}
+	else
+	{
+		ChangeMotion(motion_, "dead2");
+	}
 }

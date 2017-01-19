@@ -43,6 +43,7 @@ void Title_Scene::Init()
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
 	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
 }
 
 void Title_Scene::Destroy()
@@ -92,6 +93,7 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 
 void Title_Scene::Render()
 {
+
 	D3DXVECTOR2 pos(350, 0);
 	D3DXVECTOR2 size(0.6, 0.4);
 	title_UI["TITLE_UI"]->Render(pos, size, true);
@@ -120,9 +122,6 @@ void Title_Scene::Render()
 		mesh_enemy_->Render(enemyPos_[i], angel, D3DXVECTOR3(scale, scale, scale));
 	}
 	mesh_enemy_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-
-	//Effect::getInstance().Update(name, D3DXVECTOR3(0, 0, 0));
-	//Effect::getInstance().Draw();
 
 	camera_->Render();
 }

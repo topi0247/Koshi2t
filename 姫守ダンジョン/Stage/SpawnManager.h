@@ -44,6 +44,7 @@ public:
 	void Update(/*ParameterRead* param, */CharactorManager* target);
 	void SealSpawn(Spawn* spawn);
 	void Render();
+	CD3DXMESH* GetMesh()const { return spawnMesh_; };
 	std::vector<EnemyJobManager*> OutEnemy();
 	std::vector<Spawn*> GetSpawnList() { return spawnList_; };
 

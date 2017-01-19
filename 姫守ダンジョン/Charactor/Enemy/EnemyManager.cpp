@@ -249,26 +249,31 @@ void EnemyManager::Move(float speed)
 
 	//進行方向にキャラがいなかったら進む。いたら滑って進む
 	if (opponentWeight_ != 0)
-		 {
-				//opponentWeight_ = 1;
-			dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
-		}
+	{
+		//opponentWeight_ = 1;
+		dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
+	}
 	else
-		 {
+	{
 		float fDistance = 0;
 		D3DXVECTOR3 vNormal = m_Pos;
 		collision_->SlideVector(&vec, vec, vNormal);
 		dir = D3DXVECTOR3(vec.x*sp, 0, vec.z*sp);
-		}
-	
-		m_Dir = dir;
+	}
+
+	if (motionNo_ != motion_->GetMotion("attack")->id_)
+	{
+		motionNo_ = motion_->GetMotion("walk")->id_;
+	}
+
+	m_Dir = dir;
 }
 
 //
 //	@brief	ダメージ計算
 void EnemyManager::DamageCalc(unsigned int atk)
 {
-
+	damageFlg_ = true;
 	float damage = atk / (1 + ((float)param_->def_ / 100));
 	hp_ -= damage;
 
@@ -292,7 +297,7 @@ void EnemyManager::Attack()
 	float atkableDist = 2;//param_->attackReach_;
 	int time = 3;
 
-	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist)) 
+	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist))
 	{
 		if (++atkWaitTime_ % (FPS*time) == 0)
 		{
@@ -331,43 +336,42 @@ void EnemyManager::ChangeMotion(Motion* motion, char* name)
 	motionSpeed_ *= 0.5f;
 	motionCount_ = 0;
 	motionPlayPos_ = 0;
-	strcpy(motionName_, name);
+	//strcpy(motionName_, name);
 }
 
 //
 //	@brief			描画
 void EnemyManager::CharaRender()
 {
-	bool drawFlg = true;
-	//if (charaType_ != Enemy)
-	//{
-	/*if (motionName_ == "walk")
-	{
-		ChangeMotion(motion_, "walk");
-	}
-	else if (motionName_ == "attack")
-	{
-		ChangeMotion(motion_, "attack");
-	}*/
-
+	//モーション番号セット
 	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//再生地点をセット
 	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
 	//anim->SetTrackAnimationSet(0, mesh_->m_pD3dxMesh->m_pAnimSet[motionNo_]);
 	anim->SetTrackPosition(0, motionPlayPos_);
+	//再生
 	anim->AdvanceTime(motionSpeed_, NULL);
+	//再生地点の更新
 	motionPlayPos_ += motionSpeed_;
-	//}
+	
+	//ダメージ時点滅描画
+	bool drawFlg = true;
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)
 		{
 			drawFlg = false;
 		}
+		if(damageCount_ > FPS*0.5)
+		{
+			damageCount_ = 0;
+			damageFlg_ = false;
+		}
 	}
 
 	if (drawFlg)
 	{
-		float scale = 0.2f;
-		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
+		m_Scale= D3DXVECTOR3(0.2f,0.2f,0.2f);
+		mesh_->Render(m_Pos, m_Yaw, m_Scale);
 	}
 }

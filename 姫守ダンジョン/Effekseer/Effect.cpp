@@ -174,7 +174,8 @@ void Effect::EffectSet()
 	//全体
 	effect_["charge1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge1.efk");
 	effect_["charge2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/charge2.efk");
-	effect_["spwner"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/spwner.efk");
+	effect_["spwner1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/spawn.efk"); //要修正
+	effect_["spwner2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/全体/spawn.efk");	//要修正
 
 	//剣士
 	effect_["s_Atk"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/剣士/slash3.efk");
@@ -241,6 +242,12 @@ void Effect::Effect_Stop(string name)
 	g_manager->StopEffect(g_handle[effect_[name]]);
 }
 
+//
+//	@brief		全てのエフェクトを停止
+void Effect::Effect_All_Stop(string name)
+{
+	g_manager->StopAllEffects();
+}
 //
 //	@brief			スケールの設定
 //	@param (name)	スケールを設定するエフェクト

@@ -74,11 +74,13 @@ void SpawnManager::SpawnSet()
 		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
 		temp->SpawnInit(tempAttr[i], mesh);
 		spawnList_.push_back(temp);
-		Effect::getInstance().Effect_Play("spwner", D3DXVECTOR3(tempAttr[i]->pos_.x, 0, tempAttr[i]->pos_.z));
-		Effect::getInstance().SetScale("spwner", 2.0f);
 		//functionList_.push_back(temp);
 		//renderList_.push_back(temp);
 	}
+
+	/*	要修正の必要あり　*/
+	Effect::getInstance().Effect_Play("spwner1", tempAttr[0]->pos_);
+	Effect::getInstance().Effect_Play("spwner2", tempAttr[1]->pos_);
 }
 
 //
@@ -151,11 +153,21 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 	sealSpawn_ = spawn;
 	if (sealSpawn_ != nullptr)
 	{
+		/*-要修正------------------------------------------------*/
+		if (sealSpawn_->GetSpawnGateAttr()->id_ == 0)
+		{
+			Effect::getInstance().Effect_Stop("spwner1");
+		}
+		else if (sealSpawn_->GetSpawnGateAttr()->id_ == 0)
+		{
+			Effect::getInstance().Effect_Stop("spwner2");
+		}
+		/*-----------------------------------------------------*/
 		uiDrawFlg_ = true;
 		auto elS = std::find(spawnList_.begin(), spawnList_.end(), sealSpawn_);
+
 		//auto elF = std::find(functionList_.begin(), functionList_.end(), sealSpawn_);
 		//auto elR = std::find(renderList_.begin(), renderList_.end(), sealSpawn_);
-		Effect::getInstance().Effect_Stop("spwner");
 		delete(*elS);
 		spawnList_.erase(elS);
 		//functionList_.erase(elF);

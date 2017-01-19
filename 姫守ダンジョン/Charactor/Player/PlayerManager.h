@@ -59,6 +59,8 @@ protected:
 	PlayerParameter* param_;
 
 	bool revivalFlg_;		//復活フラグ
+	bool callFlg_;			//姫呼びフラグ
+	int callCount_;			//姫呼びカウント
 	D3DXVECTOR3 callPos_;	//読んだ瞬間の座標
 
 	virtual void Normal_Attack() = 0;	//通常攻撃
@@ -75,9 +77,11 @@ public:
 
 	virtual void DamageCalc(unsigned int atk);		//ダメージ計算
 	void Princess_Call();							//姫呼び
-	void SetRevivalFlg();
+	void SetRevivalFlg();							//復活フラグセット
+	void SetEndMotion(bool failed);					//終了時のモーションセット
 	bool GetAliveFlg()const;						//生存フラグ取得
-	double GetCallTiming()const;
+	bool GetRevivalFlg()const;						//復活フラグ取得
+	double GetCallTiming()const;					//呼んだ瞬間のクロック
 	D3DXVECTOR3 GetCallPos()const;					//呼んだ瞬間の座標取得
 
 	//デバッグ用

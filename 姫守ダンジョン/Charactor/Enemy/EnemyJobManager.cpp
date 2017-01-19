@@ -36,13 +36,18 @@ void EnemyJobManager::CharaUpdate()
 
 	//空間番号の更新
 	spaceNo_ = collision_->SetSpaceNo(m_Pos);
-
-	float speed = param_->moveSpeed_;
+	
+	//進行方向にキャラクターがいるか
 	MoveCharaHit();
+
+	//移動処理
+	float speed = param_->moveSpeed_;
 	Move(speed);
 
+	//攻撃処理
 	Attack();
 
+	//攻撃モーションからの遷移
 	if (motionNo_ == motion_->GetMotion("attack")->id_)
 	{
 		if (++motionCount_ > motionFrame_)

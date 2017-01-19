@@ -93,10 +93,9 @@ void JobManager::CharaUpdate()
 		Princess_Call();
 	}
 	//死亡
-	else
+	else if(!revivalFlg_)
 	{
 		Dead();
-
 	}
 
 	//ダメージを食らったときコントローラの振動
@@ -113,7 +112,7 @@ void JobManager::CharaUpdate()
 	WeaponUpdate();
 
 	//蘇生
-	if (revivalFlg_ == true)
+	if (revivalFlg_)
 	{
 		Revival();
 	}

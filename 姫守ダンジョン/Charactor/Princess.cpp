@@ -204,7 +204,6 @@ void Princess::Resuscitation()
 			//if (collision_->CharaNear(m_Pos, c->m_Pos, resDist))
 			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo()))
 			{
-
 				//if(motionNo_!=motion_->GetMotion("prayer"))
 				c->SetRevivalFlg();
 				resList.push_back(c);

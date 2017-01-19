@@ -42,7 +42,7 @@ private:
 	void SetTargetPos(D3DXVECTOR3 pos);
 protected:
 	unsigned int atkWaitTime_;	//攻撃する間隔
-	char motionName_[10];		//現在再生しているモーション名
+	//char motionName_[10];		//現在再生しているモーション名
 	float motionPlayPos_;		//モーションの再生位置
 
 	EnemyParam* param_;

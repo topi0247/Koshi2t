@@ -365,7 +365,6 @@ void Main_Scene::GameMain()
 	{
 		pos = player_[no]->GetCallPos();
 	}
-
 	princess_->SetDestination(pos);
 
 	//スポーンゲート消滅
@@ -387,7 +386,7 @@ void Main_Scene::GameMain()
 	int deadCount = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (!player_[i]->GetAliveFlg())
+		if (!player_[i]->GetAliveFlg() && !player_[i]->GetRevivalFlg())
 		{
 			princess_->SetDeadCharaList(player_[i]);
 			++deadCount;
@@ -412,7 +411,15 @@ void Main_Scene::GameMain()
 //	@brief	ゲーム終了
 void Main_Scene::GameEnd()
 {
-	princess_->DeadMotion();
+	//モーションセット
+	if (failedFlg_)
+	{
+		princess_->DeadMotion();
+	}
+	for (auto p : player_)
+	{
+		p->SetEndMotion(failedFlg_);
+	}
 
 	static int endCount = 0;
 	if (++endCount % (FPS * 5) == 0)
@@ -512,7 +519,6 @@ void Main_Scene::CollisionControl()
 				}
 			}
 		}
-
 	}
 
 	//周辺にキャラクターがいるかどうか
@@ -636,10 +642,8 @@ void Main_Scene::PlayerDebug()
 	if (scene_ == MainS)
 	{
 		float high = 300;
-		sprintf(str, "m_no%d", player_[Player1]->GetMotionNo());
+		sprintf(str, "x : %f z : %f", player_[Player1]->m_Pos.x,player_[Player1]->m_Pos.z);
 		debugText_->Render(str, 0, high);
-		sprintf(str, "atk_no%d", player_[Player1]->GetAtkState());
-		debugText_->Render(str, 0, high + 30);
 
 		/*sprintf(str, "%d", player_[Player2]->m_Pos);
 		debugText_->Render(str, 760, high);
