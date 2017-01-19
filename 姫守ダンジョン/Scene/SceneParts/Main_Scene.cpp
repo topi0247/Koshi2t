@@ -17,7 +17,7 @@ Main_Scene::Main_Scene()
 	creator_ = new CharactorCreator;
 	uiStart_ = new TD_Graphics;
 	uiClear_ = new TD_Graphics;
-	uiFailed_ = new TD_Graphics;
+	//uiFailed_ = new TD_Graphics;
 	for (int i = 0; i < UI_TIME; i++)
 	{
 		uiTime_[i] = new TD_Graphics;
@@ -37,8 +37,8 @@ Main_Scene::~Main_Scene()
 	uiStart_ = nullptr;
 	delete uiClear_;
 	uiClear_ = nullptr;
-	delete uiFailed_;
-	uiFailed_ = nullptr;
+	//delete uiFailed_;
+	//uiFailed_ = nullptr;
 
 	for (int i = 0; i < UI_TIME; i++)
 	{
@@ -99,7 +99,7 @@ void Main_Scene::Init()
 	D3DXVECTOR2 scale(1623, 336);
 	uiStart_->Init(L"./UI/UI_Tex/start_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	uiClear_->Init(L"./UI/UI_Tex/clear_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	scale = D3DXVECTOR2(128, 256);
 	float rect = 0.083;
 	for (int i = 0; i < UI_TIME; i++)
@@ -412,6 +412,8 @@ void Main_Scene::GameMain()
 //	@brief	ƒQ[ƒ€I—¹
 void Main_Scene::GameEnd()
 {
+	princess_->DeadMotion();
+
 	static int endCount = 0;
 	if (++endCount % (FPS * 5) == 0)
 	{
@@ -560,19 +562,19 @@ void Main_Scene::Render()
 	int minutes10 = time_ / (FPS*FPS * 10) % 6;// time_ / FPS % 6;
 	int minutes1 = time_ / (FPS*FPS) % 10;// time_ / FPS;
 	uiTime_[minutes10]->Render(D3DXVECTOR2(posX, 0), scale, true);
-	uiTime_[minutes1]->Render(D3DXVECTOR2(posX + space * 1, 0), scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.5, 0), scale, true);
+	uiTime_[minutes1]->Render(D3DXVECTOR2(posX + space * 0.8, 0), scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.33, 0), scale, true);
 	//•b
 	int second10 = time_ / (FPS * 10) % 6;
 	int second1 = time_ / FPS % 10;
 	uiTime_[second10]->Render(D3DXVECTOR2(posX + space * 2, 0), scale, true);
-	uiTime_[second1]->Render(D3DXVECTOR2(posX + space * 3, 0), scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.5, 0), scale, true);
+	uiTime_[second1]->Render(D3DXVECTOR2(posX + space * 2.8, 0), scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.3, 0), scale, true);
 	//ƒ~ƒŠ•b
 	int conma10 = time_ / 10 % 6;
 	int conma1 = time_ % 10;
 	uiTime_[conma10]->Render(D3DXVECTOR2(posX + space * 4, 0), scale, true);
-	uiTime_[conma1]->Render(D3DXVECTOR2(posX + space * 5, 0), scale, true);
+	uiTime_[conma1]->Render(D3DXVECTOR2(posX + space * 4.8, 0), scale, true);
 
 	float posY = 380;
 	posX = 180;
@@ -583,9 +585,27 @@ void Main_Scene::Render()
 	}
 	else if (scene_ == EndS && failedFlg_)
 	{
-		uiFailed_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
+		Result_Scene::m10_Time = minutes10;
+		Result_Scene::m1_Time = minutes1;
+		Result_Scene::s10_Time = second10;
+		Result_Scene::s1_Time = second1;
+		Result_Scene::c10_Time = conma10;
+		Result_Scene::c1_Time = conma1;
+
+		//uiFailed_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
 
+	if (scene_ == EndS)
+	{
+		Sound::getInstance().BGM_stop("SENTOU");
+	}
+
+	Result_Scene::m10_Time = minutes10;
+	Result_Scene::m1_Time = minutes1;
+	Result_Scene::s10_Time = second10;
+	Result_Scene::s1_Time = second1;
+	Result_Scene::c10_Time = conma10;
+	Result_Scene::c1_Time = conma1;
 
 	////ƒfƒoƒbƒO•`‰æ
 	//char str[256];

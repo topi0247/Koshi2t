@@ -35,7 +35,7 @@ private:
 
 	TD_Graphics* uiStart_;
 	TD_Graphics* uiClear_;
-	TD_Graphics* uiFailed_;
+	//TD_Graphics* uiFailed_;
 	TD_Graphics* uiTime_[UI_TIME]; //0~9 ; ,
 	TD_Graphics* uiDebug_;
 	
