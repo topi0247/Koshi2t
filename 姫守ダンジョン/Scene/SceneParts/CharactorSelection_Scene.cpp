@@ -139,11 +139,11 @@ void CharactorSelection_Scene::Update()
 		}
 	}
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	choiceJob_[Player2] = shield;
 	choiceJob_[Player3] = bomber;
 	choiceJob_[Player4] = witch;
-//#endif
+#endif
 
 	int count = 0;
 	for (int i = 0; i < 4; i++)

@@ -11,9 +11,9 @@ class SceneBase
 {
 public:
 	virtual ~SceneBase() {};
-	
 	virtual SceneBase* Update(SceneBase* scene) = 0;	//XVˆ—
 	virtual void Render() = 0;		//•`‰æ
 	virtual void Init() = 0;		//‰Šú‰»
 	virtual void Destroy() = 0;		//I—¹ˆ—
 };
+

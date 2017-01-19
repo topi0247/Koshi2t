@@ -275,6 +275,7 @@ void MAIN::Render()
 	//scene_ = nullptr;
 	//scene_ = root_->Update(root_);
 
+
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 0,0,0,0 };// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア

@@ -173,10 +173,6 @@ void Camera::Main_Game_Update()
 
 void Camera::TitleUpdate(float radius)
 {
-	//static float move = 0;
-	//movePow_.x += cosf(move);
-	//movePow_.z += sinf(move);
-	//move += 0.01;
 	static float degree = -100;
 	float radian = D3DX_PI / 180 * degree;
 	movePow_.x = gazePoint_.x + radius*cosf(radian);

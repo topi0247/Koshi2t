@@ -379,6 +379,11 @@ void TD_Graphics::Render(D3DXVECTOR2 pos, D3DXVECTOR2 scale, bool flg)
 	m_pDeviceContext->Draw(4, 0);
 }
 
+void TD_Graphics::SetAlfa(float alfa)
+{
+	m_fAlpha = alfa;
+}
+
 void TD_Graphics::SetCamera(D3DXMATRIX view, D3DXMATRIX proj)
 {
 	m_mView = view;

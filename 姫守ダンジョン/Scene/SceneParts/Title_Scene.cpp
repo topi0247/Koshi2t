@@ -15,7 +15,7 @@ Title_Scene::~Title_Scene()
 	camera_ = nullptr;
 	delete creator_;
 	creator_ = nullptr;
-	
+
 }
 
 void Title_Scene::Init()
@@ -27,13 +27,23 @@ void Title_Scene::Init()
 	mesh_bomber_ = creator_->LoadChara("爆弾士");
 	mesh_witch_ = creator_->LoadChara("魔導士");
 	mesh_princess_ = creator_->LoadChara("姫");
-	mesh_enemy_ = creator_->LoadChara("スライム");
+	mesh_slime_ = creator_->LoadChara("スライム");
+	mesh_goblin_ = creator_->LoadChara("ゴブリン");
+	mesh_skelton_ = creator_->LoadChara("スケルトン");
 	mesh_stage_ = creator_->LoadStage("タイトル");
-	int i = 0;
 	//while (i < enemyMax)
-	for(int i=0;i<enemyMax;i++)
+	float dist = 10;
+	for (int i = 0; i < enemyMax; i++)
 	{
-		enemyPos_[i] = D3DXVECTOR3(rand() % 20 - 10, 0, rand() % 20 - 10);
+		while (1)
+		{
+			enemyPos_[i] = D3DXVECTOR3(rand() % enemyInsRange - enemyInsRange/2, 0, rand() % enemyInsRange- enemyInsRange/2);
+			if (enemyPos_[i].x < -dist || dist < enemyPos_[i].x
+				||enemyPos_[i].z < -dist || dist < enemyPos_[i].z)
+			{
+				break;
+			}
+		}
 		/*if ((enemyPos_[i].x < -5 || enemyPos_[i].x>5 )&& (enemyPos_[i].z<-5 && enemyPos_[i].z > 5))
 		{
 			++i;
@@ -42,8 +52,9 @@ void Title_Scene::Init()
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
-	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 0.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
+	alfa_ = 0;
 }
 
 void Title_Scene::Destroy()
@@ -53,7 +64,9 @@ void Title_Scene::Destroy()
 	SAFE_DELETE(mesh_bomber_);
 	SAFE_DELETE(mesh_witch_);
 	SAFE_DELETE(mesh_princess_);
-	SAFE_DELETE(mesh_enemy_);
+	SAFE_DELETE(mesh_slime_);
+	SAFE_DELETE(mesh_goblin_);
+	SAFE_DELETE(mesh_skelton_);
 	//SAFE_DELETE(mesh_stage_);
 }
 
@@ -96,6 +109,11 @@ void Title_Scene::Render()
 
 	D3DXVECTOR2 pos(350, 0);
 	D3DXVECTOR2 size(0.6, 0.4);
+	if (alfa_ < 1.0f)
+	{
+		title_UI["TITLE_UI"]->SetAlfa(alfa_);
+		alfa_ += 0.01f;
+	}
 	title_UI["TITLE_UI"]->Render(pos, size, true);
 
 	float scale = 0.5;
@@ -114,15 +132,32 @@ void Title_Scene::Render()
 
 	//ステージの描画
 	mesh_stage_->Render(D3DXVECTOR3(0, 0.8, 0), D3DXVECTOR3(0, 0, 0), 2);
-	////mesh_enemy_->Render(D3DXVECTOR3(0, 0, 8), 0, D3DXVECTOR3(0.5, 0.5, 0.5));
-	for (int i = 0; i < enemyMax; i++)
+	////mesh_slime_->Render(D3DXVECTOR3(0, 0, 8), 0, D3DXVECTOR3(0.5, 0.5, 0.5));
+	int enemyCount = 0;
+	for (int i = 0; i < oneEnemyMax; i++)
 	{
-		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[i].x, 0, 0 - enemyPos_[i].z);
+		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
 		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
-		mesh_enemy_->Render(enemyPos_[i], angel, D3DXVECTOR3(scale, scale, scale));
+		mesh_slime_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		++enemyCount;
 	}
-	mesh_enemy_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-
+	for (int i=0; i < oneEnemyMax; i++)
+	{
+		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
+		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
+		mesh_goblin_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		++enemyCount;
+	}
+	for (int i=0; i < oneEnemyMax; i++)
+	{
+		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
+		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
+		mesh_skelton_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		++enemyCount;
+	}
+	mesh_slime_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	mesh_goblin_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
+	mesh_skelton_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	camera_->Render();
 }
 

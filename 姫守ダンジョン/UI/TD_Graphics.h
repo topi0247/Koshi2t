@@ -59,7 +59,7 @@ public:
 	// @param (flg)		モデルとの前後関係(真ならモデルより前)
 	void	Render(D3DXVECTOR2 pos,D3DXVECTOR2 scale,bool flg);
 
-
+	void SetAlfa(float alpha);
 
 private:
 	static ID3D11Device*				m_pDevice;
