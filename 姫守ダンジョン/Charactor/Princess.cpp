@@ -106,17 +106,23 @@ void Princess::Move(float speed)
 void Princess::DamageCalc(unsigned int atk)
 {
 	aliveFlg_ = false;
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("dead1")->id_ && motionNo_ != motion_->GetMotion("dead2")->id_)
-	{
+	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
+	//{
 		moveAbleFlg_ = false;
 		ChangeMotion(motion_, "dead1");
 		motionCount_ = 0;
-	}
-	if (++motionCount_>motionFrame_ && motionNo_ == motion_->GetMotion("dead1")->id_)
+	//}
+}
+
+//
+//	@Ž€–Sƒ‚[ƒVƒ‡ƒ“•ÏX
+void Princess::DeadMotion()
+{
+	static bool change = false;
+	if (!change && ++motionCount_ > motionFrame_)
 	{
 		ChangeMotion(motion_, "dead2");
-		motionCount_ = 0;
-		motionChange_ = true;
+		change = true;
 	}
 }
 

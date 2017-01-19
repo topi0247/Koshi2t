@@ -43,5 +43,6 @@ public:
 	void SetDestination(D3DXVECTOR3 pos);			//目的地セット
 	void SetDeadCharaList(PlayerManager* chara);
 	void SetSpawn(std::vector<Spawn*> spawn);
+	void DeadMotion();
 };
 

@@ -11,6 +11,7 @@ ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
 	spMoveFlg_ = false;
+	effectFlg_ = false;
 	shield_ = new CD3DXMESH;
 	shield_ = creator_->LoadStage("‚");
 	//ShieldMan_UI["SHIELDMAN_UI"] = new TD_Graphics;
@@ -330,36 +331,44 @@ void ShieldMan::Move(float speed)
 			if (atkNo_ == specialAtk)
 			{
 				Sound::getInstance().SE_play("Sh_SPECIAL");
-				effectFlg_ = true;
+				if (!effectFlg_)
+				{
+					Effect::getInstance().Effect_Play("smork", m_Pos);
+					effectFlg_ = true;
+				}
 			}
+		}
+		if (effectFlg_ && ++motionCount_ % motion_->GetMotion("specialWalk")->frame_==0)
+		{
+			effectFlg_ = false;
 		}
 	}
 	else
 	{
 		//if (motionChange_ == true)
 		//{
-			if (atkNo_ != specialAtk&& motionNo_ != motion_->GetMotion("wait")->id_)
-			{
-				ChangeMotion(motion_, "wait");
-			}
+		if (atkNo_ != specialAtk&& motionNo_ != motion_->GetMotion("wait")->id_)
+		{
+			ChangeMotion(motion_, "wait");
+			effectFlg_ = false;
+		}
 		//}
 	}
+
+
 
 	//opponentWeight_ = 1;
 
 	MoveCharaHit();
 
-
 	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
-	
-	//=======//
-	if (effectFlg_)
-	{
-		Effect::getInstance().Effect_Play("smork", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-		//Effect::getInstance().SetScale("smork", 0.09f);
-		effectFlg_ = false;
-	}
-	//=======//
+	////=======//
+	//if (effectFlg_)
+	//{
+	//	//Effect::getInstance().SetScale("smork", 0.09f);
+	//	effectFlg_ = false;
+	//}
+	////=======//
 
 	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
 
@@ -369,8 +378,7 @@ void ShieldMan::Move(float speed)
 	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
 
 	//=======//
-	Effect::getInstance().Update("smork", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-	Effect::getInstance().Draw();
+	//Effect::getInstance().Draw();
 	//=======//
 
 }
@@ -392,7 +400,7 @@ void ShieldMan::CharaRender()
 	bool drawFlg = true;
 	if (damageFlg_)
 	{
-		if (++damageCount_ % 5==0)
+		if (++damageCount_ % 5 == 0)
 		{
 			drawFlg = false;
 		}

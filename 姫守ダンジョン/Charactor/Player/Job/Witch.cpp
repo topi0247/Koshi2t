@@ -19,7 +19,7 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 
 	//UI
 	jobMarkUI_ = new TD_Graphics;
-	jobUIPos_ = D3DXVECTOR2(30+charaType*UI_INTERVAL+UI_SPACE, 860);
+	jobUIPos_ = D3DXVECTOR2(30 + charaType*UI_INTERVAL + UI_SPACE, 860);
 	D3DXVECTOR2 scale(105, 100);
 	jobMarkUI_->Init(L"./UI/UI_Tex/mage.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	//Witch_UI["WITCH_UI"] = new TD_Graphics;
@@ -125,7 +125,7 @@ void Witch::Attack()
 			//motionCount_ = 0;
 			ChangeMotion(motion_, "charge1");
 		}
-		else if (++motionCount_>motionFrame_&& chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		else if (++motionCount_ > motionFrame_&& chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
 			ChangeMotion(motion_, "charge2");
 		}
@@ -160,13 +160,15 @@ void Witch::Normal_Attack()
 		ChangeMotion(motion_, "attack1");
 	}
 
-	if (++motionCount_>motionFrame_)
+	if (++motionCount_ > motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
 		InstanceMagicBall(param_->chainWeapon_);
+		Effect::getInstance().Effect_Play("magicball", m_Pos);
+		Effect::getInstance().SetScale("magicball", 0.2);
 	}
 
 
@@ -188,11 +190,11 @@ void Witch::Special_Attack()
 		ChangeMotion(motion_, "attack1");
 	}
 
-	if (++motionCount_>motionFrame_)
+	if (++motionCount_ > motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_SPECIAL");
 
-		Effect::getInstance().Effect_Play("beam2", m_Pos);
+		Effect::getInstance().Effect_Play("beam2", D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.0, m_Pos.z));
 		float yaw = D3DXToDegree(m_Yaw) + 180;
 		Effect::getInstance().SetRotation("beam2", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
 
@@ -227,13 +229,14 @@ void Witch::InstanceMagicBall(int count)
 			D3DXVECTOR3 vec(sinf(temp)*-0.1, 0, cosf(temp)*-0.1);
 			magic->SetDir(vec);
 			magic->SetScale(0/*param_->weaponScale_*/);
-			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
+			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
 			magic->SetDamageList(allCharaList_, charaType_);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 			magic->SetAttack(param_->normalAtk_);
 			magic->SetHitSound("M_DAMAGE_HIT");
 			magic->SetHitDelFlg(true);
 			magicBall_.push_back(magic);
+
 		}
 		magicFlg_ = true;
 	}
@@ -245,29 +248,62 @@ void Witch::WeaponUpdate()
 {
 	std::vector<WeaponBall*> dellist;
 
-	if (magicFlg_ == true && !magicBall_.empty())
+	if (magicFlg_ && !magicBall_.empty())
 	{
-		int count = 0;
 		float kDist = param_->weaponDelDist_;
-		for (size_t i = 0; i < magicBall_.size(); i++)
+		for (auto m : magicBall_)
 		{
-			magicBall_[i]->Move_Weapon(kDist, magicSpeed_);
-			magicBall_[i]->SetDamageList(allCharaList_, charaType_);
-			if (magicBall_[i]->GetDelFlg())
+			m->Move_Weapon(kDist, magicSpeed_);
+			m->SetDamageList(allCharaList_, charaType_);
+			Effect::getInstance().Update("magicball", m->GetPosition());
+			if (m->GetDelFlg())
 			{
-				magicBall_.erase(magicBall_.begin() + count);
-				/*atkNo_ = noAtk;*/
-				--count;
+				dellist.push_back(m);
 			}
-			++count;
-		}
-		if (magicBall_.empty())
-		{
-			Effect::getInstance().Effect_Stop("magicball");
-			magicBall_.clear();
-			magicFlg_ = false;
 		}
 	}
+	else
+	{
+		magicBall_.clear();
+		magicFlg_ = false;
+	}
+
+	if (!dellist.empty())
+	{
+		for (auto d:dellist)
+		{
+			auto e = std::find(magicBall_.begin(), magicBall_.end(), d);
+			delete (*e);
+			magicBall_.erase(e);
+		}
+		Effect::getInstance().Effect_Stop("magicball");
+		dellist.empty();
+	}
+
+	//if (magicFlg_ == true && !magicBall_.empty())
+	//{
+	//	int count = 0;
+	//	float kDist = param_->weaponDelDist_;
+	//	for (size_t i = 0; i < magicBall_.size(); i++)
+	//	{
+	//		magicBall_[i]->Move_Weapon(kDist, magicSpeed_);
+	//		magicBall_[i]->SetDamageList(allCharaList_, charaType_);
+	//		Effect::getInstance().Update("magicball", magicBall_[i]->GetPosition());
+	//		if (magicBall_[i]->GetDelFlg())
+	//		{
+	//			magicBall_.erase(magicBall_.begin() + count);
+	//			/*atkNo_ = noAtk;*/
+	//			--count;
+	//		}
+	//		++count;
+	//	}
+	//	if (magicBall_.empty())
+	//	{
+	//		Effect::getInstance().Effect_Stop("magicball");
+	//		magicBall_.clear();
+	//		magicFlg_ = false;
+	//	}
+	//}
 }
 
 //
@@ -284,7 +320,7 @@ void Witch::RazorBeam()
 		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 		magic->SetDir(vec);
 		magic->SetScale(0);
-		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 0.03, m_Pos.z));
+		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
 		magic->SetDamageList(allCharaList_, charaType_);
 		magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 		magic->SetAttack(param_->specialAtk_);
@@ -342,6 +378,7 @@ void Witch::CharaRender()
 		}
 	}
 
+	//Effect::getInstance().Draw();
 
 	//UI•`‰æ
 	UIRender();

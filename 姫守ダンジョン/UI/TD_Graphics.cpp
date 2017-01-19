@@ -81,7 +81,7 @@ HRESULT TD_Graphics::Init(LPCWSTR textname, /*int texnum, */D3DXVECTOR2 drawpos,
 	LPCWSTR texturename = textname;
 	//テクスチャーを作成
 	if (FAILED(D3DX11CreateShaderResourceViewFromFile(device, texturename, NULL, NULL, &m_pAsciiTexture, NULL)))
-	{
+	{		
 		return E_FAIL;
 	}
 

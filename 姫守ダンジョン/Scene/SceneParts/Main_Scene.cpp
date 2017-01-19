@@ -326,7 +326,7 @@ void Main_Scene::GameMain()
 	}
 
 	//存在しているすべてのキャラクターセット
-//	CharactorManager::allCharaList_ = charList_;
+	CharactorManager::allCharaList_ = charList_;
 
 
 	//エネミーターゲット更新
@@ -544,7 +544,10 @@ void Main_Scene::Render()
 	//スポーンゲートの描画
 	spawnManager_->Render();
 
+	//エフェクトの更新と描画
 	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);
+	Effect::getInstance().Update();
+	Effect::getInstance().Draw();
 
 	//UI描画
 	//if (scene_ == MainS)
@@ -552,24 +555,24 @@ void Main_Scene::Render()
 	//時間描画
 	float posX = 1400;
 	float space = 80;
-	D3DXVECTOR2 scale(0.5,0.5);
+	D3DXVECTOR2 scale(0.5, 0.5);
 	//分
 	int minutes10 = time_ / (FPS*FPS * 10) % 6;// time_ / FPS % 6;
 	int minutes1 = time_ / (FPS*FPS) % 10;// time_ / FPS;
-	uiTime_[minutes10]->Render(D3DXVECTOR2(posX, 0),scale, true);
-	uiTime_[minutes1]->Render(D3DXVECTOR2(posX + space * 1, 0),scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.5, 0),scale, true);
+	uiTime_[minutes10]->Render(D3DXVECTOR2(posX, 0), scale, true);
+	uiTime_[minutes1]->Render(D3DXVECTOR2(posX + space * 1, 0), scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.5, 0), scale, true);
 	//秒
 	int second10 = time_ / (FPS * 10) % 6;
 	int second1 = time_ / FPS % 10;
-	uiTime_[second10]->Render(D3DXVECTOR2(posX + space * 2, 0),scale, true);
-	uiTime_[second1]->Render(D3DXVECTOR2(posX + space * 3, 0),scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.5, 0),scale, true);
+	uiTime_[second10]->Render(D3DXVECTOR2(posX + space * 2, 0), scale, true);
+	uiTime_[second1]->Render(D3DXVECTOR2(posX + space * 3, 0), scale, true);
+	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.5, 0), scale, true);
 	//ミリ秒
 	int conma10 = time_ / 10 % 6;
 	int conma1 = time_ % 10;
-	uiTime_[conma10]->Render(D3DXVECTOR2(posX + space * 4, 0),scale, true);
-	uiTime_[conma1]->Render(D3DXVECTOR2(posX + space * 5, 0),scale, true);
+	uiTime_[conma10]->Render(D3DXVECTOR2(posX + space * 4, 0), scale, true);
+	uiTime_[conma1]->Render(D3DXVECTOR2(posX + space * 5, 0), scale, true);
 
 	float posY = 380;
 	posX = 180;
@@ -616,7 +619,7 @@ void Main_Scene::PlayerDebug()
 		sprintf(str, "m_no%d", player_[Player1]->GetMotionNo());
 		debugText_->Render(str, 0, high);
 		sprintf(str, "atk_no%d", player_[Player1]->GetAtkState());
-		debugText_->Render(str, 0, high+30);
+		debugText_->Render(str, 0, high + 30);
 
 		/*sprintf(str, "%d", player_[Player2]->m_Pos);
 		debugText_->Render(str, 760, high);

@@ -29,7 +29,6 @@ void Title_Scene::Init()
 	mesh_princess_ = creator_->LoadChara("姫");
 	mesh_enemy_ = creator_->LoadChara("スライム");
 	mesh_stage_ = creator_->LoadStage("タイトル");
-
 	int i = 0;
 	//while (i < enemyMax)
 	for(int i=0;i<enemyMax;i++)

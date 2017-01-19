@@ -218,27 +218,31 @@ void PlayerManager::Princess_Call()
 			ChangeMotion(motion_, "call1");
 		}
 	}
-	else if (callFlg && !moveAbleFlg_)
-	{
-		callFlg = false;
-		ChangeMotion(motion_, "call3");
-	}
 
-	if (callFlg&&motionNo_ == motion_->GetMotion("call1")->id_)
+	if (!GamePad::checkInput(charaType_, GamePad::InputName::B))
 	{
-		if (++motionCount_ > motionFrame_)
+		if (callFlg && !moveAbleFlg_)
 		{
-			ChangeMotion(motion_, "call2");
+			callFlg = false;
+			ChangeMotion(motion_, "call3");
 		}
-	}
-	else if (motionNo_ == motion_->GetMotion("call3")->id_)
-	{
-		if (++motionCount_ > motionFrame_)
+
+	/*	if (callFlg&&motionNo_ == motion_->GetMotion("call1")->id_)
 		{
-			//revivalFlg_ = false;
-			moveAbleFlg_ = true;
-			motionChange_ = true;
-			ChangeMotion(motion_, "wait");
+			if (++motionCount_ > motionFrame_)
+			{
+				ChangeMotion(motion_, "call2");
+			}
+		}*/
+		if (motionNo_ == motion_->GetMotion("call3")->id_)
+		{
+			if (++motionCount_ > motionFrame_)
+			{
+				//revivalFlg_ = false;
+				moveAbleFlg_ = true;
+				motionChange_ = true;
+				ChangeMotion(motion_, "wait");
+			}
 		}
 	}
 	//if (0 < pushButtonTime)

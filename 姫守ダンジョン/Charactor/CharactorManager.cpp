@@ -7,7 +7,7 @@
 
 #include "./CharactorManager.h"
 
-//std::vector<CharactorManager*> CharactorManager::allCharaList_;
+std::vector<CharactorManager*> CharactorManager::allCharaList_;
 
 //
 //	@brief	コンストラクタ
@@ -286,10 +286,8 @@ int CharactorManager::GetSpaceNo()
 void CharactorManager::CharaRender()
 {
 	bool drawFlg = true;
-	if (charaType_ != Enemy)
-	{
-		mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
-	}
+	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)

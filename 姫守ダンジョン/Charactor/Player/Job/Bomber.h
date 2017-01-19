@@ -24,6 +24,7 @@ private:
 	float bombScale_;
 	//WeaponBall** bomb_;
 	std::vector<WeaponBall*> bombList_;
+	std::vector<D3DXVECTOR3> effectPos_;
 
 	void InstanceWeapon();
 	virtual void WeaponUpdate();

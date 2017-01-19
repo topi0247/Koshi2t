@@ -172,7 +172,7 @@ void SwordMan::Normal_Attack()
 
 	//=======//
 	Effect::getInstance().Update("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-	Effect::getInstance().Draw();
+	//Effect::getInstance().Draw();
 	//=======//
 }
 

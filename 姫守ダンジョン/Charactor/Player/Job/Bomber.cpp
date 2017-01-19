@@ -343,6 +343,10 @@ void Bomber::InstanceWeapon()
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	moveAbleFlg_ = false;
+	if (bombList_.empty())
+	{
+		effectPos_.clear();
+	}
 	if (++motionCount_>motionFrame_ )
 	{
 		Sound::getInstance().SE_play("B_SPECIAL");
@@ -357,6 +361,7 @@ void Bomber::InstanceWeapon()
 			bomb->SetKnockBack(range, kDist, kSpeed, charaType_);
 			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
+			effectPos_.push_back(m_Pos);
 		}
 		atkNo_ = noAtk;
 		moveAbleFlg_ = true;
@@ -378,6 +383,8 @@ void Bomber::WeaponUpdate()
 		}
 		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{
+			Effect::getInstance().Effect_Play("explosion", effectPos_[0]);
+			effectPos_.erase(effectPos_.begin());
 			bombList_.erase(bombList_.begin());
 			Sound::getInstance().SE_play("B_NORMALATK");
 		}
@@ -475,6 +482,8 @@ void Bomber::CharaRender()
 			}
 		}
 	}
+
+	//Effect::getInstance().Draw();
 
 
 	//UI•`‰æ

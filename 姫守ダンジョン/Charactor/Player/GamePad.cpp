@@ -97,7 +97,7 @@ namespace GamePad
 
 
 	//ì¸óÕÇµÇƒÇÍÇŒtrueÇï‘Ç∑
-	bool checkInput(int index,InputName Name)
+	bool checkInput(int index, InputName Name)
 	{
 		//NUMÇæÇ¡ÇΩÇÁóvëfêîoverÇ»ÇÃÇ≈èúäOÇ∑ÇÈ
 		if (Name == InputName_NUM)
@@ -167,21 +167,20 @@ namespace GamePad
 
 	//êUìÆèàóù
 	void setVibration(DWORD index)
-		 {
-		
-			XINPUT_VIBRATION vibration;
+	{
+		XINPUT_VIBRATION vibration;
 		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-		vibration.wLeftMotorSpeed = 32000; // use any value between 0-65535 here
-		vibration.wRightMotorSpeed = 32000; // use any value between 0-65535 here
+		vibration.wLeftMotorSpeed = 14000; // use any value between 0-65535 here
+		vibration.wRightMotorSpeed = 14000; // use any value between 0-65535 here
 		XInputSetState(index, &vibration);	//êUìÆ
-		}
+	}
 	void stopVibration(DWORD index)
-		 {
-		
-			XINPUT_VIBRATION vibration;
+	{
+
+		XINPUT_VIBRATION vibration;
 		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 		vibration.wLeftMotorSpeed = 0; // use any value between 0-65535 here
 		vibration.wRightMotorSpeed = 0; // use any value between 0-65535 here
 		XInputSetState(index, &vibration);	//êUìÆ
-		}
+	}
 }

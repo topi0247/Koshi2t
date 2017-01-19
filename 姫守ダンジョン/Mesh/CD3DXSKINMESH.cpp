@@ -954,7 +954,7 @@ HRESULT CD3DXSKINMESH::CreateFromX(CHAR* szFileName)
 		//テクスチャーを作成
 		if (m_pMaterial[i].szTextureName[0] != 0 && FAILED(D3DX11CreateShaderResourceViewFromFileA(m_pDevice, m_pMaterial[i].szTextureName, NULL, NULL, &m_pMaterial[i].pTexture, NULL)))//絶対パスファイル名は、まず失敗すると思うが、、、
 		{
-			MessageBox(0, L"テクスチャー読み込み失敗", NULL, MB_OK);
+			MessageBox(0, L"スキンメッシュテクスチャー読み込み失敗", NULL, MB_OK);
 			return E_FAIL;
 		}
 

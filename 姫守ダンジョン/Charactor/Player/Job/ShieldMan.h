@@ -16,6 +16,7 @@ class ShieldMan :public JobManager
 {
 private:
 	bool spMoveFlg_;
+	bool effectFlg_;
 	D3DXVECTOR3 spMove_;
 	CD3DXMESH* shield_;
 	

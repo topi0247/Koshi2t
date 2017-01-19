@@ -35,7 +35,7 @@ class CharactorManager:public CD3DXSKINMESH
 protected:
 	CD3DXSKINMESH* mesh_;
 	CharactorCreator* creator_;
-	bool effectFlg_;
+	//bool effectFlg_;
 
 	Motion* motion_;			//モーション管理クラス
 	unsigned int motionNo_;		//現在のモーション番号
@@ -68,7 +68,6 @@ protected:
 
 	CharaType charaType_;								//自分のキャラクタータイプ
 	std::vector<CharactorManager*> aroundCharaList_;	//周辺にいるキャラ
-	std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
 
 	virtual void Move(float speed) = 0;					//移動
 	virtual void Attack() = 0;							//攻撃
@@ -83,8 +82,7 @@ public:
 	CharactorManager();
 	virtual ~CharactorManager();
 	
-	//static std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
-
+	static std::vector<CharactorManager*> allCharaList_;		//全てのキャラ
 	virtual void CharaInit(char* name);		//初期化・読み込み
 	virtual void CharaUpdate()=0;								//更新
 	virtual void Reset()=0;										//リセット

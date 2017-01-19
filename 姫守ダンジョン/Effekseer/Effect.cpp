@@ -274,7 +274,7 @@ void Effect::Update(string name, D3DXVECTOR3 pos)
 	//　移動更新
 	g_manager->SetLocation(g_handle[effect_[name]], e_pos);
 	// エフェクトの更新処理を行う
-	g_manager->Update();
+	//g_manager->Update();
 }
 
 
