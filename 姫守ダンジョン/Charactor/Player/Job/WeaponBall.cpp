@@ -130,7 +130,7 @@ void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType c
 {
 	for (auto c : chara)
 	{
-		if (c->GetCharaType() != cType)
+		if (c->GetCharaType() == Enemy)
 		{
 			if (col_->CheckSpaceNo(spaceNo_,c->GetSpaceNo()))
 			{

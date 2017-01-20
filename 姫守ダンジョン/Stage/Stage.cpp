@@ -38,17 +38,14 @@ Stage::~Stage()
 //	@brief	Xƒtƒ@ƒCƒ‹“Ç‚İ‚İ
 //void Stage::Read(std::vector<XFile*> xfile, char* name)
 //{
-
 	////int stageCount = 0;
 	////int stageSizeZ = 32;
 	//for (auto x : xfile)
 	//{
-
 	//	char FileNameF[80];
 	//	memset(FileNameF, 0, sizeof(FileNameF));
 	//	strcpy_s(FileNameF, sizeof(FileNameF), "./Model/XFiles/Stage/");
 	//	strcat_s(FileNameF, sizeof(FileNameF), x->GetFileName());
-
 	//	if (strcmp(x->GetCharName(), name) == 0)
 	//	{
 	//		if (FAILED(stage_->LoadXMesh(FileNameF)))

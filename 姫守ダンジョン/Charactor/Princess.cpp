@@ -111,6 +111,7 @@ void Princess::DamageCalc(unsigned int atk)
 		moveAbleFlg_ = false;
 		ChangeMotion(motion_, "dead1");
 		motionCount_ = 0;
+		Sound::getInstance().SE_play("P_DEAD");
 	//}
 }
 
@@ -149,6 +150,11 @@ void Princess::SetSpawn(std::vector<Spawn*> spawn)
 void Princess::Seal()
 {
 	float dist = 7;
+
+	/*if (GetKeyState(VK_SPACE))
+	{
+		dist = 100;
+	}*/
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)

@@ -3,6 +3,7 @@
 Title_Scene::Title_Scene()
 {
 	title_UI["TITLE_UI"] = new TD_Graphics;
+	title_UI["PUSH_A"] = new TD_Graphics;
 	camera_ = new Camera;
 	creator_ = new CharactorCreator;
 }
@@ -11,6 +12,8 @@ Title_Scene::~Title_Scene()
 {
 	delete title_UI["TITLE_UI"];
 	title_UI["TITLE_UI"] = nullptr;
+	delete title_UI["PUSH_A"];
+	title_UI["PUSH_A"] = nullptr;
 	delete camera_;
 	camera_ = nullptr;
 	delete creator_;
@@ -52,13 +55,15 @@ void Title_Scene::Init()
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
-	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 0.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-
+	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	title_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	Sound::getInstance().BGM_play("TITLE");
 	alfa_ = 0;
 }
 
 void Title_Scene::Destroy()
 {
+	Sound::getInstance().BGM_stop("TITLE");
 	SAFE_DELETE(mesh_sword_);
 	SAFE_DELETE(mesh_shiled_);
 	SAFE_DELETE(mesh_bomber_);
@@ -82,6 +87,7 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 		if (GamePad::checkInput(i, GamePad::InputName::A))
 		{
 			nextFlg = true;
+			Sound::getInstance().SE_play("DECISION_SE");
 		}
 	}
 	if (nextFlg)
@@ -109,12 +115,13 @@ void Title_Scene::Render()
 
 	D3DXVECTOR2 pos(350, 0);
 	D3DXVECTOR2 size(0.6, 0.4);
-	if (alfa_ < 1.0f)
+	/*if (alfa_ < 1.0f)
 	{
 		title_UI["TITLE_UI"]->SetAlfa(alfa_);
 		alfa_ += 0.01f;
-	}
+	}*/
 	title_UI["TITLE_UI"]->Render(pos, size, true);
+	title_UI["PUSH_A"]->Render(D3DXVECTOR2(870, 900), D3DXVECTOR2(0.1, 0.07), true);
 
 	float scale = 0.5;
 	float dist = 5;

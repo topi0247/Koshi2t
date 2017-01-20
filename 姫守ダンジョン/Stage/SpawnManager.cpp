@@ -158,7 +158,7 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 		{
 			Effect::getInstance().Effect_Stop("spwner1");
 		}
-		else if (sealSpawn_->GetSpawnGateAttr()->id_ == 0)
+		else if (sealSpawn_->GetSpawnGateAttr()->id_ == 1)
 		{
 			Effect::getInstance().Effect_Stop("spwner2");
 		}

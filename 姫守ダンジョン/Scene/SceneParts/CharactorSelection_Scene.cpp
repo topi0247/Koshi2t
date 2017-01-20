@@ -10,6 +10,7 @@ CharactorSelection_Scene::CharactorSelection_Scene()
 	charaSelect_UI["player3"] = new TD_Graphics;
 	charaSelect_UI["player4"] = new TD_Graphics;
 	charaSelect_UI["Start_UI"] = new TD_Graphics;
+	charaSelect_UI["PUSH_A"] = new TD_Graphics;
 	camera_ = new Camera;
 	text_ = new D3D11_TEXT;
 }
@@ -30,6 +31,8 @@ CharactorSelection_Scene::~CharactorSelection_Scene()
 	charaSelect_UI["player1"] = nullptr;
 	delete charaSelect_UI["Start_UI"];
 	charaSelect_UI["Start_UI"] = nullptr;
+	delete charaSelect_UI["PUSH_A"];
+	charaSelect_UI["PUSH_A"] = nullptr;
 	delete camera_;
 	camera_ = nullptr;
 	delete text_;
@@ -72,13 +75,15 @@ void CharactorSelection_Scene::Init()
 	charaSelect_UI["player4"]->Init(L"./UI/UI_Tex/player_plate4.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["CHARASELECT_UI"]->Init(L"./UI/UI_Tex/character_select.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["Start_UI"]->Init(L"./UI/UI_Tex/ready.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(1290, 327), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-
+	charaSelect_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(280, 70), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	camera_->gazePoint_ = D3DXVECTOR3(0, 2.4, 0);
 	camera_->movePow_ = D3DXVECTOR3(0, 2.4, -10);
+	Sound::getInstance().BGM_play("CHARACTERSELECT");
 }
 
 void CharactorSelection_Scene::Destroy()
 {
+	Sound::getInstance().BGM_stop("CHARACTERSELECT");
 	SAFE_DELETE(sword_);
 	SAFE_DELETE(shield_);
 	SAFE_DELETE(bomber_);
@@ -95,10 +100,15 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::A))
+			if (keyWait_[i] < okButon_)
+			{
+				break;
+			}
+			else if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::A))
 			{
 				DecideJob();
 				next = new Main_Scene;
+				Sound::getInstance().SE_play("DECISION_SE");
 			}
 		}
 	}
@@ -106,7 +116,11 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::B))
+			if (keyWait_[i] < okButon_)
+			{
+				break;
+			}
+			else if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::BACK))
 			{
 				next = new Title_Scene;
 			}
@@ -226,7 +240,7 @@ void CharactorSelection_Scene::SetCharaJob(int type)
 	{
 		return;
 	}
-
+	Sound::getInstance().SE_play("DECISION_SE");
 	choiceJob_[type] = temp;
 }
 
@@ -385,6 +399,7 @@ void CharactorSelection_Scene::Render()
 	if (nextFlg_)
 	{
 		startUIPos = StartAnimation(startUIPos);
+		charaSelect_UI["PUSH_A"]->Render(D3DXVECTOR2(750, 700), D3DXVECTOR2(1.7, 0.8), true);
 		charaSelect_UI["Start_UI"]->Render(startUIPos, D3DXVECTOR2(1.7, 0.8), true);
 	}
 	else
@@ -433,7 +448,7 @@ void CharactorSelection_Scene::Render()
 
 	for (int i = 0; i < 4; i++)
 	{
-		ChoiceJobUIRender(choiceJob_[i], i);
+		//ChoiceJobUIRender(choiceJob_[i], i);
 		MeshRender(choiceJob_[i], i);
 	}
 

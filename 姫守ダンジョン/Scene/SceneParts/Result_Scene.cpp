@@ -75,10 +75,13 @@ void Result_Scene::Init()
 		uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), time_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
 	}
 	//--------//
+	Sound::getInstance().SE_play("P_CLEAR");
+	Sound::getInstance().BGM_play("CLEAR");
 }
 
 void Result_Scene::Destroy()
 {
+	Sound::getInstance().BGM_stop("CLEAR");
 	SAFE_DELETE(mesh_princess_);
 }
 
@@ -133,9 +136,11 @@ void Result_Scene::Render()
 	//ステージの描画
 	mesh_stage_->Render(D3DXVECTOR3(0, 0.8, 0), D3DXVECTOR3(0, 0, 0), 2);
 
+#ifdef _DEBUG
 	char str[256];
 	sprintf(str, "pos.x:%f pos.y:%f pos.z:%f", camera_->movePow_.x, camera_->movePow_.y, camera_->movePow_.z);
 	debugText_->Render(str, 0, 50);
+#endif //_DEBUG
 
 	//---------------//
 	//時間描画

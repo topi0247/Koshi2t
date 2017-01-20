@@ -22,7 +22,8 @@ void SceneRoot::Init()
 	//scene_ = new SceneTitle();
 
 	loadScene_ = new Load_Scene;
-	scene_ = new Title_Scene;
+	//scene_ = new Title_Scene;
+	scene_ = new Load_Scene;
 	scene_->Init();
 }
 

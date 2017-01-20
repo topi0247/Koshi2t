@@ -5,8 +5,11 @@
 //	@author　吉越大騎
 //	@author	仁科香苗
 
+
 #include "EnemyManager.h"
 
+CharactorManager* EnemyManager::princess_;
+std::vector<JobManager*> EnemyManager::playerList_;
 std::vector<D3DXVECTOR3> EnemyManager::busStop_;
 std::vector<int> EnemyManager::busStopSpaceNo_;
 
@@ -20,6 +23,9 @@ EnemyManager::EnemyManager()
 	//targetPos_ = D3DXVECTOR3(0, 0, 0);
 	collision_ = new Collision;
 	param_ = new EnemyParam;
+	static float temp = 0;
+	motionPlayPos_ = 0+temp;
+	temp += 3.0f;
 }
 
 EnemyManager::~EnemyManager()
@@ -70,7 +76,7 @@ void EnemyManager::CharaInit(char* name)
 	//CreateFromX(xfile->GetFilePath());
 	SetMotionData(motionRead->GetMotionUser(name));
 	SetParameter(name);
-	motionPlayPos_ = 0.0f;
+	//motionPlayPos_ = 0.0f;
 }
 
 //
@@ -101,7 +107,6 @@ void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 void EnemyManager::SetTarget(CharactorManager* chara)
 {
 	targetChar_ = chara;
-
 }
 
 //
@@ -144,15 +149,24 @@ void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
 //	@brief　					ターゲットの更新
 //	@param (chara)			プレイヤー
 //	@param (princess)		姫
-void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * princess)
+void EnemyManager::Target_Update(/*CharactorManager * chara, CharactorManager * princess*/)
 {
 	CharactorManager* temp = targetChar_;
 	//float dist = 5;
 
-	if (perpetrator_ == chara->GetCharaType())
+
+	for (auto p : playerList_)
+	{
+		if (perpetrator_ == p->GetCharaType())
+		{
+			temp = p;
+		}
+	}
+
+	/*if (perpetrator_ == chara->GetCharaType())
 	{
 		temp = chara;
-	}
+	}*/
 
 	////現在のターゲットが姫
 	//if (targetChar_->GetCharaType() == princess->GetCharaType())
@@ -166,7 +180,7 @@ void EnemyManager::Target_Update(CharactorManager * chara, CharactorManager * pr
 	//ターゲットが死んでいる
 	if (!targetChar_->GetAliveFlg())
 	{
-		temp = princess;
+		temp = princess_;
 	}
 
 	//ターゲットの更新
@@ -348,6 +362,7 @@ void EnemyManager::CharaRender()
 	//再生地点をセット
 	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
 	//anim->SetTrackAnimationSet(0, mesh_->m_pD3dxMesh->m_pAnimSet[motionNo_]);
+	//anim->SetTrackEnable(motionNo_, true);
 	anim->SetTrackPosition(0, motionPlayPos_);
 	//再生
 	anim->AdvanceTime(motionSpeed_, NULL);

@@ -26,8 +26,6 @@ void EnemyJobManager::Reset()
 	moveAbleFlg_ = true;
 	aroundCharaList_.clear();
 	allCharaList_.clear();
-
-	
 }
 
 void EnemyJobManager::CharaUpdate()
@@ -43,6 +41,9 @@ void EnemyJobManager::CharaUpdate()
 	//移動処理
 	float speed = param_->moveSpeed_;
 	Move(speed);
+
+	//ターゲットキャラの更新
+	Target_Update();
 
 	//攻撃処理
 	Attack();

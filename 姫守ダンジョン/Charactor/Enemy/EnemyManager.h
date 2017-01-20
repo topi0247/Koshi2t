@@ -9,6 +9,7 @@
 #include "./../CharactorManager.h"
 #include "./../../DebugDraw/D3D11_TEXT.h"
 #include "./../../Read/ParameterRead.h"
+#include "./../Player/JobManager.h"
 
 //	パラメータ
 struct EnemyParam
@@ -48,6 +49,8 @@ protected:
 	EnemyParam* param_;
 	CharactorManager* targetChar_;
 	D3DXVECTOR3 getpos_;
+
+	void Target_Update();
 	virtual void ChangeMotion(Motion* motion, char* name);
 	virtual void Move(float speed);		//移動処理
 	virtual void Attack();
@@ -59,14 +62,15 @@ protected:
 public:
 	EnemyManager();
 	virtual ~EnemyManager();
-
+	
+	static CharactorManager* princess_;
+	static std::vector<JobManager*> playerList_;
 
 	virtual void CharaInit(char* name);		//初期化・読み込み
 	virtual void CharaRender();				//描画
 
 	static void SetBusStop(std::vector<D3DXVECTOR3> pos);
 	void SetTarget(CharactorManager* chara);
-	void Target_Update(CharactorManager* chara, CharactorManager* princess);
 
 	//void SetTargetChar(CharactorManager* checkChar, CharactorManager* princess);	//近くにいるか判別
 	void SetModel(CD3DXSKINMESH* mesh);

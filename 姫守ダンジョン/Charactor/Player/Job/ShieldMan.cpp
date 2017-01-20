@@ -243,7 +243,7 @@ void ShieldMan::DamageCalc(unsigned int atk)
 		damageFlg_ = true;
 
 		float damage = 0;
-		float constant = 1;
+		float constant = 20;
 		if (atkNo_ != specialAtk)
 		{
 			damage = atk / (1 + ((float)param_->def_ / 100));
@@ -297,10 +297,13 @@ void ShieldMan::Move(float speed)
 	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
 
 	//‰ñ“]ˆ—
-	const float rotEpsilon = 0.3;
-	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	if (atkNo_!= specialAtk)
 	{
-		Rotation(inputStick);
+		const float rotEpsilon = 0.3;
+		if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+		{
+			Rotation(inputStick);
+		}
 	}
 
 

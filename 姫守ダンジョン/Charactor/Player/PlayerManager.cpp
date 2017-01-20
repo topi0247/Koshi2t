@@ -12,6 +12,7 @@ PlayerManager::PlayerManager()
 {
 	revivalFlg_ = false;
 	callFlg_ = false;
+	callCount_ = 0;
 	callTiming_ = 0;
 }
 
@@ -334,10 +335,10 @@ void PlayerManager::SetEndMotion(bool failed)
 {
 	if (failed)
 	{
-		ChangeMotion(motion_,"wait");
+		ChangeMotion(motion_, "dead2");
 	}
 	else
 	{
-		ChangeMotion(motion_, "dead2");
+		ChangeMotion(motion_, "wait");
 	}
 }

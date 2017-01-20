@@ -112,6 +112,9 @@ void Main_Scene::Init()
 	startCameraMoveSecFlg_ = false;
 	time_ = 0;
 	scene_ = StartS;
+	enemyCount_ = 0;
+
+	Sound::getInstance().BGM_play("SENTOU");
 }
 
 //
@@ -143,9 +146,15 @@ JobManager* Main_Scene::SetCharaJob(char* name, CharaType type)
 //	@brief	解放
 void Main_Scene::Destroy()
 {
+	Sound::getInstance().BGM_stop("SENTOU");
 	charList_.clear();
-	enemyList_.clear();
+	//enemyList_.clear();
 	player_.clear();
+
+	delete stage_;
+	stage_ = nullptr;
+	delete spawnManager_;
+	spawnManager_ = nullptr;
 	/*for (int i = 0; i < charList_.size(); i++)
 	{
 		charList_[i]->Destroy();
@@ -165,7 +174,6 @@ void Main_Scene::Destroy()
 //	}
 //	return S_OK;
 //}
-
 //HRESULT Main_Scene::EffectInit(ID3D11DeviceContext* m_pDeviceContext)
 //{
 //	
@@ -211,7 +219,6 @@ void Main_Scene::Destroy()
 //}
 
 
-
 //
 //	@brief	シーン遷移更新
 SceneBase* Main_Scene::Update(SceneRoot* root)
@@ -232,6 +239,7 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 			next = new CharactorSelection_Scene;
 		}
 	}
+
 
 	return next;
 }
@@ -264,7 +272,7 @@ void Main_Scene::Update()
 		{
 			c->Reset();
 		}
-		enemyList_.clear();
+		//enemyList_.clear();
 		charList_.clear();
 
 		for (int i = 0; i < 4; i++)
@@ -285,7 +293,6 @@ void Main_Scene::Update()
 //	@brief	ゲーム開始
 void Main_Scene::GameStart()
 {
-	Sound::getInstance().BGM_play("SENTOU");
 	if (startCameraMovefirstFlg_)
 	{
 		startCameraMoveSecFlg_ = camera_->Main_Start_FirstUpdate();
@@ -310,7 +317,8 @@ void Main_Scene::GameMain()
 	//時間カウント
 	++time_;
 
-	if (enemyList_.size() < 50)
+	//if (enemyList_.size() < 50)
+	if(enemyCount_<50)
 	{
 		spawnManager_->Update(princess_);
 		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
@@ -318,7 +326,8 @@ void Main_Scene::GameMain()
 		{
 			for (auto e : temp)
 			{
-				enemyList_.push_back(e);
+				++enemyCount_;
+				//enemyList_.push_back(e);
 				charList_.push_back(e);
 			}
 			temp.clear();
@@ -328,25 +337,30 @@ void Main_Scene::GameMain()
 	//存在しているすべてのキャラクターセット
 	CharactorManager::allCharaList_ = charList_;
 
-
-	//エネミーターゲット更新
-	if (!enemyList_.empty())
-	{
-		for (auto enemy : enemyList_)
-		{
-			//プレイヤーループ
-			for (int i = 0; i < 4; i++)
-			{
-				enemy->Target_Update(player_[i], princess_);
-			}
-		}
-	}
+	//エネミー、プレイヤーと姫情報の更新
+	EnemyManager::princess_ = princess_;
+	EnemyManager::playerList_ = player_;
+	//if (!enemyList_.empty())
+	//{
+	//	for (auto enemy : enemyList_)
+	//	{
+	//		//プレイヤーループ
+	//		for (int i = 0; i < 4; i++)
+	//		{
+	//			enemy->Target_Update(player_[i], princess_);
+	//		}
+	//	}
+	//}
 	//}
 
 	//キャラ更新
 	for (auto chara : charList_)
 	{
 		chara->CharaUpdate();
+		if (chara->GetCharaType() == Enemy&&!chara->GetAliveFlg())
+		{
+			killList_.push_back(chara);
+		}
 	}
 
 	//姫の目的地更新
@@ -415,6 +429,7 @@ void Main_Scene::GameEnd()
 	if (failedFlg_)
 	{
 		princess_->DeadMotion();
+		Sound::getInstance().BGM_stop("SENTOU");
 	}
 	for (auto p : player_)
 	{
@@ -457,7 +472,7 @@ void Main_Scene::GameEnd()
 //	@brief	エネミー死亡処理
 void Main_Scene::EnemyDestroy()
 {
-	if (!enemyList_.empty())
+	/*if (!enemyList_.empty())
 	{
 		for (auto c : enemyList_)
 		{
@@ -466,7 +481,7 @@ void Main_Scene::EnemyDestroy()
 				killList_.push_back(c);
 			}
 		}
-	}
+	}*/
 
 	if (!killList_.empty())
 	{
@@ -475,14 +490,15 @@ void Main_Scene::EnemyDestroy()
 			//キャラリストから探す
 			auto cl = std::find(std::begin(charList_), std::end(charList_), c);
 
-			//エネミーリストから探す
-			auto el = std::find(std::begin(enemyList_), std::end(enemyList_), c);
+			////エネミーリストから探す
+			//auto el = std::find(std::begin(enemyList_), std::end(enemyList_), c);
 
 			//　オブジェクトの終了処理
 			delete (*cl);
 			//	リストから外す
 			charList_.erase(cl);
-			enemyList_.erase(el);
+			--enemyCount_;
+			//enemyList_.erase(el);
 		}
 		killList_.clear();
 	}
@@ -589,7 +605,7 @@ void Main_Scene::Render()
 		//static float posX = 180;
 		uiStart_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
-	else if (scene_ == EndS && failedFlg_)
+	else if (scene_ == EndS && !failedFlg_)
 	{
 		Result_Scene::m10_Time = minutes10;
 		Result_Scene::m1_Time = minutes1;
@@ -601,10 +617,6 @@ void Main_Scene::Render()
 		//uiFailed_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);
 	}
 
-	if (scene_ == EndS)
-	{
-		Sound::getInstance().BGM_stop("SENTOU");
-	}
 
 	Result_Scene::m10_Time = minutes10;
 	Result_Scene::m1_Time = minutes1;
@@ -639,19 +651,27 @@ void Main_Scene::PlayerDebug()
 
 
 
-	if (scene_ == MainS)
-	{
-		float high = 300;
-		sprintf(str, "x : %f z : %f", player_[Player1]->m_Pos.x,player_[Player1]->m_Pos.z);
-		debugText_->Render(str, 0, high);
+	//if (scene_ == MainS)
+	//{
+	//	if (!enemyList_.empty())
+	//	{
+	//		float temp = 0;
+	//		for (auto e : enemyList_)
+	//		{
+	//			float high = 300+temp;
+	//			sprintf(str, "motionNo_ : %d", e->GetMotionNo());
+	//			debugText_->Render(str, 0, high);
+	//			temp += 30;
+	//		}
 
-		/*sprintf(str, "%d", player_[Player2]->m_Pos);
-		debugText_->Render(str, 760, high);
-		sprintf(str, "%d", player_[Player3]->m_Pos);
-		debugText_->Render(str, 1240, high);
-		sprintf(str, "%d", player_[Player4]->m_Pos);
-		debugText_->Render(str, 1740, high);*/
-	}
+	//	}
+	//	/*sprintf(str, "%d", player_[Player2]->m_Pos);
+	//	debugText_->Render(str, 760, high);
+	//	sprintf(str, "%d", player_[Player3]->m_Pos);
+	//	debugText_->Render(str, 1240, high);
+	//	sprintf(str, "%d", player_[Player4]->m_Pos);
+	//	debugText_->Render(str, 1740, high);*/
+	//}
 
 
 }

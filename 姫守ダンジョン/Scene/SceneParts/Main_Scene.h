@@ -62,8 +62,9 @@ private:
 	void CollisionControl();			//衝突判定管理
 
 	std::vector<CharactorManager*> charList_;	//ステージ上に存在するキャラクター
-	std::vector<EnemyJobManager*> enemyList_;	//ステージ上に存在するエネミー
-	std::vector<EnemyJobManager*> killList_;	//死亡エネミーリスト
+	//std::vector<EnemyJobManager*> enemyList_;	//ステージ上に存在するエネミー
+	std::vector<CharactorManager*> killList_;	//死亡エネミーリスト
+	int enemyCount_;
 	unsigned int time_;
 
 	void GameStart();	//ゲーム開始導入部分
@@ -73,7 +74,7 @@ private:
 	void EnemyDestroy();	//エネミー死亡処理
 	JobManager* SetCharaJob(char* name, CharaType type);
 
-							//エフェクト	
+	//エフェクト	
 	//D3D11_SPRITE* uisword_;
 	//D3D11_SPRITE* uiseeld_;
 	//D3D11_SPRITE* uimagic_;

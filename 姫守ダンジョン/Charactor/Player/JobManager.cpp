@@ -39,6 +39,7 @@ JobManager::JobManager(CharaType charaType)
 	hpGazePos_ = D3DXVECTOR2(20 + charaType*UI_INTERVAL + UI_SPACE, 975);
 	D3DXVECTOR2 hpScale(420, 60);
 	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png", hpGazePos_, hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
 }
 
 //

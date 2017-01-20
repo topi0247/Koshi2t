@@ -192,17 +192,18 @@ void Witch::Special_Attack()
 
 	if (++motionCount_ > motionFrame_)
 	{
-		Sound::getInstance().SE_play("M_SPECIAL");
+	/*	Sound::getInstance().SE_play("M_SPECIAL");
 
-		Effect::getInstance().Effect_Play("beam2", D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.0, m_Pos.z));
+		Effect::getInstance().Effect_Play("magicball", D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.0, m_Pos.z));
 		float yaw = D3DXToDegree(m_Yaw) + 180;
-		Effect::getInstance().SetRotation("beam2", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
+		Effect::getInstance().SetRotation("magicball", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));*/
+		//Effect::getInstance().SetScale("magicball", 1.2);
 
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		moveAbleFlg_ = true;
 		//InstanceMagicBall(param_->spChainWeapon_);
-		RazorBeam();
+		//RazorBeam();
 	}
 
 
@@ -277,6 +278,7 @@ void Witch::WeaponUpdate()
 			magicBall_.erase(e);
 		}
 		Effect::getInstance().Effect_Stop("magicball");
+		//Effect::getInstance().Effect_Stop("beam2");
 		dellist.empty();
 	}
 
