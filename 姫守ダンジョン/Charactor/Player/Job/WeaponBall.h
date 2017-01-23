@@ -44,7 +44,7 @@ public:
 	void SetStartPos(D3DXVECTOR3 pos);
 	void Move_Weapon(float dist,float speed);
 	void Time_Del_Weapon(int frame);
-	void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType);
+	void SetDamageList(/*std::vector<CharactorManager*> chara,CharaType cType*/);
 	void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
 	void SetKnockBack(float dist, float kDist,float kSpeed,CharaType charatype);

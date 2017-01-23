@@ -261,26 +261,26 @@ void EnemyManager::Move(float speed)
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-	//進行方向にキャラがいなかったら進む。いたら滑って進む
-	if (opponentWeight_ != 0)
-	{
-		//opponentWeight_ = 1;
-		dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
-	}
-	else
-	{
-		float fDistance = 0;
-		D3DXVECTOR3 vNormal = m_Pos;
-		collision_->SlideVector(&vec, vec, vNormal);
-		dir = D3DXVECTOR3(vec.x*sp, 0, vec.z*sp);
-	}
+	////進行方向にキャラがいなかったら進む。いたら滑って進む
+	//if (opponentWeight_ != 0)
+	//{
+	//	//opponentWeight_ = 1;
+	//	dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
+	//}
+	//else
+	//{
+	//	float fDistance = 0;
+	//	D3DXVECTOR3 vNormal = m_Pos;
+	//	collision_->SlideVector(&vec, vec, vNormal);
+	//	dir = D3DXVECTOR3(vec.x*sp, 0, vec.z*sp);
+	//}
 
 	if (motionNo_ != motion_->GetMotion("attack")->id_)
 	{
 		motionNo_ = motion_->GetMotion("walk")->id_;
 	}
 
-	m_Dir = dir;
+	//m_Dir = dir;
 }
 
 //

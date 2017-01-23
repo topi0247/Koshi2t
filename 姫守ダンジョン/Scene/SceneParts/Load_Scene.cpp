@@ -71,9 +71,12 @@ void Load_Scene::Render()
 	loading_UI->Render(pos, scale, rot);*/
 
 	descriptionUI_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
-
-	++uiAnimCount_;
-	loadingUI_[uiAnimCount_%LOADUI_SPRITE]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), true);
+	static int count = 0;
+	if (++count % 10==0)
+	{
+		++uiAnimCount_;
+	}
+	loadingUI_[uiAnimCount_%LOADUI_SPRITE]->Render(D3DXVECTOR2(930, 920), D3DXVECTOR2(0.8, 0.8), true);
 
 
 	//camera_->Render();

@@ -299,16 +299,16 @@ void MAIN::Render()
 	sprintf(Str, "fps:%f", start);
 	SetWindowTextA(m_hWnd, Str);*/
 
-	////FPSŒvŽZ•\Ž¦
-	//static DWORD time = 0;
-	//static int frame = 0;
-	//frame++;
-	//char str[50];
-	//sprintf(str, "fps=%d", frame);
-	//if (timeGetTime() - time>1000)
-	//{
-	//	time = timeGetTime();
-	//	frame = 0;
-	//	SetWindowTextA(m_hWnd, str);
-	//}
+	//FPSŒvŽZ•\Ž¦
+	static DWORD time = 0;
+	static int frame = 0;
+	frame++;
+	char str[50];
+	sprintf(str, "fps=%d", frame);
+	if (timeGetTime() - time>1000)
+	{
+		time = timeGetTime();
+		frame = 0;
+		SetWindowTextA(m_hWnd, str);
+	}
 }

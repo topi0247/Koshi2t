@@ -72,7 +72,6 @@ void JobManager::CharaUpdate()
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
 
-
 	//仮スピード
 	//motionSpeed_ = 0.05;
 	//Motion_Update();

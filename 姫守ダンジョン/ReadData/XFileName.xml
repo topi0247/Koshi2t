@@ -38,7 +38,7 @@
     <model fileName="sky.x" charName="空"/>
     <model fileName="gate.x" charName="門"/>
     <model fileName="mapbase.x" charName="地面"/>
-    <model fileName="mastermap.x" charName="ステージ5"/>
+    <model fileName="stage5_map.x" charName="ステージ5"/>
     <model fileName="stage1_map.x" charName="ステージ1"/>
 
     <model fileName="stage2_map.x" charName="ステージ2"/>

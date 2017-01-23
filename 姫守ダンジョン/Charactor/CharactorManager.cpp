@@ -218,7 +218,7 @@ void CharactorManager::MoveCharaHit()
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
 
-			float hitAngle = 90 / 2;
+			float hitAngle = 45 / 2;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
 				/*opponentWeight_ = c->ownWeight_;*/

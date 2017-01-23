@@ -231,7 +231,7 @@ void Witch::InstanceMagicBall(int count)
 			magic->SetDir(vec);
 			magic->SetScale(0/*param_->weaponScale_*/);
 			magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
-			magic->SetDamageList(allCharaList_, charaType_);
+			magic->SetDamageList(/*allCharaList_, charaType_*/);
 			magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 			magic->SetAttack(param_->normalAtk_);
 			magic->SetHitSound("M_DAMAGE_HIT");
@@ -255,7 +255,7 @@ void Witch::WeaponUpdate()
 		for (auto m : magicBall_)
 		{
 			m->Move_Weapon(kDist, magicSpeed_);
-			m->SetDamageList(allCharaList_, charaType_);
+			m->SetDamageList(/*allCharaList_, charaType_*/);
 			Effect::getInstance().Update("magicball", m->GetPosition());
 			if (m->GetDelFlg())
 			{
@@ -323,7 +323,7 @@ void Witch::RazorBeam()
 		magic->SetDir(vec);
 		magic->SetScale(0);
 		magic->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-		magic->SetDamageList(allCharaList_, charaType_);
+		magic->SetDamageList(/*allCharaList_, charaType_*/);
 		magic->SetKnockBack(kRange, kDist, kSpeed, charaType_);
 		magic->SetAttack(param_->specialAtk_);
 		magic->SetHitSound("M_DAMAGE_HIT");

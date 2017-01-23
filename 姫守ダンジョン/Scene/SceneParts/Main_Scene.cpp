@@ -161,62 +161,7 @@ void Main_Scene::Destroy()
 	}*/
 }
 
-////
-////	@brief	デバッグ用初期化
-//HRESULT Main_Scene::DebugInit(ID3D11DeviceContext* m_pDeviceContext)
-//{
-//	debugText_ = new D3D11_TEXT;
-//	ID3D11DeviceContext* deviceContext_ = m_pDeviceContext;
-//	D3DXVECTOR4 vColor(0, 0, 0, 1);
-//	if (FAILED(debugText_->Init(deviceContext_, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor)))
-//	{
-//		return E_FAIL;
-//	}
-//	return S_OK;
-//}
-//HRESULT Main_Scene::EffectInit(ID3D11DeviceContext* m_pDeviceContext)
-//{
-//	
-//	deviceContext_ = m_pDeviceContext;
-//	float scaleF = 8;
-//	D3DXVECTOR3 scale(scaleF, 5, scaleF);
-//
-//	uititle_ = new D3D11_SPRITE;
-//	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
-//	if (FAILED(uititle_->CreateEffects(L"./Effect/Effect_Tex/title.png", true, D3DXVECTOR2(1, 1), 1,D3DXVECTOR3(20,20,20))))
-//	{
-//		return E_FAIL;
-//	}
-//
-//	uisword_ = new D3D11_SPRITE;
-//	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
-//	if (FAILED(uisword_->CreateEffects(L"./Effect/Effect_Tex/UISword.png", true, D3DXVECTOR2(1, 1), 5, scale)))
-//	{
-//		return E_FAIL;
-//	}
-//	uiseeld_ = new D3D11_SPRITE;
-//	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
-//	if (FAILED(uiseeld_->CreateEffects(L"./Effect/Effect_Tex/UISeeld.png", true, D3DXVECTOR2(1, 1), 5, scale)))
-//	{
-//		return E_FAIL;
-//	}
-//	uimagic_ = new D3D11_SPRITE;
-//	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
-//	if (FAILED(uimagic_->CreateEffects(L"./Effect/Effect_Tex/UIMagic.png", true, D3DXVECTOR2(1, 1), 5, scale)))
-//	{
-//		return E_FAIL;
-//	}
-//	uibom_ = new D3D11_SPRITE;
-//	//パス、透過フラグ、レクトサイズ、スピード、スケール（等倍）	
-//	if (FAILED(uibom_->CreateEffects(L"./Effect/Effect_Tex/UIBom.png", true, D3DXVECTOR2(1, 1), 5, scale)))
-//	{
-//		return E_FAIL;
-//	}
-//
-//	
-//
-//	return S_OK;
-//}
+
 
 
 //
@@ -318,7 +263,7 @@ void Main_Scene::GameMain()
 	++time_;
 
 	//if (enemyList_.size() < 50)
-	if(enemyCount_<50)
+	if(enemyCount_<Enemy_Max)
 	{
 		spawnManager_->Update(princess_);
 		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
@@ -442,7 +387,7 @@ void Main_Scene::GameEnd()
 		scene_ = NextS;
 	}
 
-#ifdef _DEBUG
+#if 0
 	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		scene_ = StartS;
@@ -453,7 +398,7 @@ void Main_Scene::GameEnd()
 		{
 			c->Reset();
 		}
-		enemyList_.clear();
+		//enemyList_.clear();
 		charList_.clear();
 
 		for (int i = 0; i < 4; i++)
@@ -465,23 +410,14 @@ void Main_Scene::GameEnd()
 
 		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
-#endif //_DEBUG
+#endif
 }
 
 //
 //	@brief	エネミー死亡処理
 void Main_Scene::EnemyDestroy()
 {
-	/*if (!enemyList_.empty())
-	{
-		for (auto c : enemyList_)
-		{
-			if (!c->GetAliveFlg())
-			{
-				killList_.push_back(c);
-			}
-		}
-	}*/
+
 
 	if (!killList_.empty())
 	{
@@ -508,7 +444,6 @@ void Main_Scene::EnemyDestroy()
 //	@brief	衝突判定管理
 void Main_Scene::CollisionControl()
 {
-
 	//当たり判定
 	float fDistance = 0;
 	D3DXVECTOR3 vNormal;
@@ -618,23 +553,16 @@ void Main_Scene::Render()
 	}
 
 
-	Result_Scene::m10_Time = minutes10;
+	/*Result_Scene::m10_Time = minutes10;
 	Result_Scene::m1_Time = minutes1;
 	Result_Scene::s10_Time = second10;
 	Result_Scene::s1_Time = second1;
 	Result_Scene::c10_Time = conma10;
-	Result_Scene::c1_Time = conma1;
-
-	////デバッグ描画
-	//char str[256];
-	//sprintf(str, "%d", second1);
-	//debugText_->Render(str, 0, 50);
-	//sprintf(str, "%d", second10);
-	//debugText_->Render(str, 0, 80);
+	Result_Scene::c1_Time = conma1;*/
 
 #ifdef _DEBUG
+	////デバッグ描画
 	PlayerDebug();
-	//EnemyDebug();
 #endif // _DEBUG
 
 	camera_->Render();
@@ -644,45 +572,7 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-
-
-	//sprintf(str, "chara:%d", player_[Player1]->GetAroundC());
-	//debugText_->Render(str, 0, 50);
-
-
-
-	//if (scene_ == MainS)
-	//{
-	//	if (!enemyList_.empty())
-	//	{
-	//		float temp = 0;
-	//		for (auto e : enemyList_)
-	//		{
-	//			float high = 300+temp;
-	//			sprintf(str, "motionNo_ : %d", e->GetMotionNo());
-	//			debugText_->Render(str, 0, high);
-	//			temp += 30;
-	//		}
-
-	//	}
-	//	/*sprintf(str, "%d", player_[Player2]->m_Pos);
-	//	debugText_->Render(str, 760, high);
-	//	sprintf(str, "%d", player_[Player3]->m_Pos);
-	//	debugText_->Render(str, 1240, high);
-	//	sprintf(str, "%d", player_[Player4]->m_Pos);
-	//	debugText_->Render(str, 1740, high);*/
-	//}
-
-
+	sprintf(str, "%d", enemyCount_);
+	debugText_->Render(str, 0, 80);
+	
 }
-
-//void Main_Scene::EnemyDebug()
-//{
-//	char str[256];
-//	if (!enemyList_.empty())
-//	{
-//		sprintf(str, "count:%d", enemyList_.size());
-//		debugText_->Render(str, 0, 30);
-//		
-//	}
-//}

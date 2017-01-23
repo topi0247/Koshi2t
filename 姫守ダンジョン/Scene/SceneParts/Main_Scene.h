@@ -25,6 +25,7 @@
 
 #define UI_TIME 12 //ŠÔ•\¦‚Ég—p‚·‚éUI‚Ì”
 #define SEMICOLON 10
+#define Enemy_Max 50
 
 class Main_Scene :public Scene
 {

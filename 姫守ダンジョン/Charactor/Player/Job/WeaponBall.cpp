@@ -126,9 +126,9 @@ void WeaponBall::Time_Del_Weapon(int frame)
 //
 //	@brief			被弾する可能性のあるキャラクターリスト
 //	@param (chara)	ダメージを食らうキャラ
-void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType cType)
+void WeaponBall::SetDamageList(/*std::vector<CharactorManager*> chara, CharaType cType*/)
 {
-	for (auto c : chara)
+	for (auto c : CharactorManager::allCharaList_)
 	{
 		if (c->GetCharaType() == Enemy)
 		{
