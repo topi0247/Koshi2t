@@ -120,6 +120,18 @@ void CharactorManager::Rotation(D3DXVECTOR3 dirVec)
 //	@brief	壁滑り用移動
 void CharactorManager::SlipMove(D3DXVECTOR3 slipVec)
 {
+	D3DXVECTOR3 pos = m_Pos + slipVec;
+	int no = collision_->SetSpaceNo(pos, 1);
+	for (auto c : aroundCharaList_)
+	{
+
+		int cNo = collision_->SetSpaceNo(c->m_Pos, 1);
+		if (cNo == no)
+		{
+			return;
+		}
+	}
+
 	m_Dir = slipVec;
 
 }
@@ -189,7 +201,7 @@ void CharactorManager::AroundCharaCheck()
 
 	for (auto c : aroundCharaList_)
 	{
-		if (!(collision_->CheckSpaceNo(spaceNo_, c->spaceNo_) && c->GetAliveFlg()))
+		if (!(collision_->CheckSpaceNo(spaceNo_, c->spaceNo_,1,2) && c->GetAliveFlg()))
 		{
 			delList.push_back(c);
 		}
@@ -204,33 +216,41 @@ void CharactorManager::AroundCharaCheck()
 
 //
 //	@brief	移動方向にキャラクターがいるか
-//	@note	移動方向にキャラクターがいたら、そのキャラクターの重さを取得
 void CharactorManager::MoveCharaHit()
 {
-	float dist = 1;
-	float degree = D3DXToDegree(m_Yaw);
-	CharactorManager* opp = nullptr;
-	for (auto c : aroundCharaList_)
-	{
-		if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
-		{
-			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
-			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-			angle = D3DXToDegree(angle);
-
-			float hitAngle = 45 / 2;
-			if (fabsf(degree - angle) <= hitAngle)
-			{
-				/*opponentWeight_ = c->ownWeight_;*/
-				opponentWeight_ = 0;
-				opp = c;
-			}
-		}
-	}
-	if (opp == nullptr)
+	float dist = -1;
+	//float degree = D3DXToDegree(m_Yaw);
+	D3DXVECTOR3 pos(sinf(m_Yaw)*dist, 0, cosf(m_Yaw) * dist);
+	pos += m_Pos;
+	int no = collision_->SetSpaceNo(pos, 1);
+	//CharactorManager* opp = nullptr;
+	/*if (collision_->GetStageSpace(no) == Not)
 	{
 		opponentWeight_ = 1;
+	}*/
+	for (auto c : aroundCharaList_)
+	{
+		int cNo = collision_->SetSpaceNo(c->m_Pos, 1);
+		if (cNo == no)
+		{
+			opponentWeight_ = 0;
+			return;
+		}
+		//if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
+		//{
+		//	D3DXVECTOR3 vec = c->m_Pos - m_Pos;
+		//	float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+		//	angle = D3DXToDegree(angle);
+		//	float hitAngle = 90 / 2;
+		//	if (fabsf(degree - angle) <= hitAngle)
+		//	{
+		//		/*opponentWeight_ = c->ownWeight_;*/
+		//		opponentWeight_ = 0;
+		//		opp = c;
+		//	}
+		//}
 	}
+	opponentWeight_ = 1;
 }
 
 //
@@ -247,12 +267,6 @@ CharaType CharactorManager::GetCharaType()const
 	return charaType_;
 }
 
-//
-//	@brief	全キャラクターセット
-void CharactorManager::SetAllCharaList(std::vector<CharactorManager*> list)
-{
-	allCharaList_ = list;
-}
 
 //
 //	@brief			モーション変更

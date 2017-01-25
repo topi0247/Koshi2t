@@ -13,8 +13,8 @@
 class Load_Scene :public Scene
 {
 private:
-	//D3D11_SPRITE* loading_UI;
-	TD_Graphics* loadingUI_[LOADUI_SPRITE];
+	D3D11_SPRITE* loading_UI;
+	//TD_Graphics* loadingUI_[LOADUI_SPRITE];
 	TD_Graphics* descriptionUI_;
 	D3D11_TEXT* debugText_;
 	Camera* camera_;

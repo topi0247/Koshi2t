@@ -46,16 +46,16 @@
     <OutDir>.\Debug</OutDir>
     <IntDir>.\Debug</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\Compiled\lib\VS2015\Debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\user\Desktop\ソースツリー\姫守ダンジョン\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\user\Desktop\ソースツリー\姫守ダンジョン\Compiled\lib\VS2015\Debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>プリンセスコール</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\OutputDirectory</OutDir>
     <IntDir>.\MiddleDirectory</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\Compiled\lib\VS2015\Release;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\user\Desktop\ソースツリー\姫守ダンジョン\Compiled\include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\user\Desktop\ソースツリー\姫守ダンジョン\Compiled\lib\VS2015\Release;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>プリンセスコール</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

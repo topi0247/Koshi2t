@@ -36,6 +36,7 @@ private:
 	TargetObject targetObj_;
 	D3DXVECTOR3 targetPos_;
 
+
 	static std::vector<D3DXVECTOR3> busStop_;
 	static std::vector<int> busStopSpaceNo_;
 

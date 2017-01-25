@@ -121,7 +121,7 @@ void ShieldMan::Attack()
 void ShieldMan::Normal_Attack()
 {
 	float hitAngle = param_->attackRange_;
-
+	float atk = param_->normalAtk_;
 	//Normal_Attack_Collision();
 	if (motionChange_ == true && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
@@ -135,7 +135,7 @@ void ShieldMan::Normal_Attack()
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack1");
 
-		Attack_Collision(hitAngle);
+		Attack_Collision(atk,hitAngle);
 
 	}
 
@@ -155,7 +155,8 @@ void ShieldMan::Special_Attack()
 	//spMove_ = D3DXVECTOR3(param_->specialMoveSpeed_, param_->specialMoveSpeed_, param_->specialMoveSpeed_);
 	//Special_Attack_Collision();
 	float hitAngle = param_->specialAtkRange_;
-	Attack_Collision(hitAngle);
+	float atk = param_->specialAtk_;
+	Attack_Collision(atk,hitAngle);
 	if (spMoveFlg_ == false)
 	{
 		if (motionNo_ != motion_->GetMotion("special")->id_)
@@ -190,7 +191,7 @@ void ShieldMan::Special_Attack()
 
 //
 //	@brief	UŒ‚‚Ì“–‚½‚è”»’è
-void ShieldMan::Attack_Collision(float hitAngle)
+void ShieldMan::Attack_Collision(float atk, float hitAngle)
 {
 	float degree = D3DXToDegree(m_Yaw);
 	//float hitAngle = param_->attackRange_;
@@ -221,7 +222,7 @@ void ShieldMan::Attack_Collision(float hitAngle)
 					chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
 					if (chara->GetCharaType() == Enemy && atkNo_ == normalAtk)
 					{
-						chara->DamageCalc(param_->normalAtk_);
+						chara->DamageCalc(atk);
 
 						//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½Žž‚ÌSE
 						Sound::getInstance().SE_play("Sh_DAMAGE_HIT");
@@ -434,30 +435,3 @@ void ShieldMan::CharaRender()
 	//UI•`‰æ
 	UIRender();
 }
-
-//
-//
-////
-////	@breif	‚Žm—pˆÚ“®ˆ—
-//void ShieldMan::Move_Update()
-//{
-//	float backSpeed = param_->knockbackSpeed_;
-//
-//	if (aliveFlg_ == true)
-//	{
-//		m_Pos += m_Dir;
-//		/*if (knockBackFlg_ == false && atkNo_ == (!normalAtk || !specialAtk))
-//		{
-//			m_Pos += m_Dir;
-//		}
-//		else if (knockBackFlg_ == true && atkNo_ != specialAtk)
-//		{
-//			KnockBack(knockBackPos_, knockBackDis_, backSpeed);
-//		}
-//		else if (spMoveFlg_ == true && atkNo_ == specialAtk)
-//		{
-//			float sp = param_->specialMoveSpeed_;
-//			m_Pos += D3DXVECTOR3(m_Dir.x*sp, 0, m_Dir.z*sp);
-//		}*/
-//	}
-//}

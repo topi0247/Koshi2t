@@ -93,7 +93,7 @@ SceneBase* Result_Scene::Update(SceneRoot* root)
 
 	for (int i = 0; i < 4; i++)
 	{
-		if (GamePad::checkInput(i, GamePad::InputName::B)/*GetKeyState(VK_SPACE) & 0x80*/)
+		if (GamePad::checkInput(i, GamePad::InputName::BACK)/*GetKeyState(VK_SPACE) & 0x80*/)
 		{
 			nextSceneFlg = true;
 		}

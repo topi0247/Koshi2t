@@ -56,15 +56,14 @@ void Princess::Move(float speed)
 	if (knockBackFlg_ == true)
 	{
 		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-		D3DXVECTOR3 temp = m_Pos + m_Dir;
-		destination_ = temp;
 		return;
 	}
 
 	float dist = 1;
 	//int spNo = collision_->SetSpaceNo(destination_);
 	//if (!collision_->CheckSpaceNo(spaceNo_, spNo))
-	if(!collision_->CharaNear(m_Pos,destination_,dist))
+	int no = collision_->SetSpaceNo(m_Pos, 1);
+	if (!collision_->CheckSpaceNo(no,destinationSpaceNo_,1,1))
 	{
 		//方向ベクトル
 		D3DXVECTOR3 move = { 0,0,0 };
@@ -81,7 +80,7 @@ void Princess::Move(float speed)
 		float sp = speed;
 		m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
 
-		if (motionChange_==true && motionNo_ != motion_->GetMotion("walk")->id_)
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
 			motionNo_ = motion_->GetMotion("walk")->id_;
 			mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
@@ -107,27 +106,25 @@ void Princess::Move(float speed)
 //	@note	姫の場合は死亡
 void Princess::DamageCalc(unsigned int atk)
 {
-#if 0
+#ifdef _RELEASE
 	aliveFlg_ = false;
 	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
 	//{
-		moveAbleFlg_ = false;
-		ChangeMotion(motion_, "dead1");
-		motionCount_ = 0;
-		Sound::getInstance().SE_play("P_DEAD");
+	moveAbleFlg_ = false;
+	ChangeMotion(motion_, "dead1");
+	motionCount_ = 0;
+	Sound::getInstance().SE_play("P_DEAD");
 	//}
-#endif
+#endif //_DEBUG
 }
 
 //
 //	@死亡モーション変更
 void Princess::DeadMotion()
 {
-	static bool change = false;
-	if (!change && ++motionCount_ > motionFrame_)
+	if (++motionCount_ > motionFrame_)
 	{
 		ChangeMotion(motion_, "dead2");
-		change = true;
 	}
 }
 
@@ -136,6 +133,7 @@ void Princess::DeadMotion()
 void Princess::SetDestination(D3DXVECTOR3 pos)
 {
 	destination_ = pos;
+	destinationSpaceNo_ = collision_->SetSpaceNo(destination_, 1);
 }
 
 
@@ -153,7 +151,7 @@ void Princess::SetSpawn(std::vector<Spawn*> spawn)
 //	@brief	封印
 void Princess::Seal()
 {
-	float dist = 7;
+	//float dist = 7;
 
 	/*if (GetKeyState(VK_SPACE))
 	{
@@ -163,7 +161,8 @@ void Princess::Seal()
 	{
 		for (auto spawn : spawnPosList_)
 		{
-			if (collision_->CharaNear(m_Pos, spawn->GetPos(), dist))
+			int no = collision_->SetSpaceNo(spawn->GetPos(), 2);
+			if (collision_->CheckSpaceNo(spaceNo_, no, 1,2))
 			{
 				sealFlg_ = true;
 				sealSpawn_ = spawn;
@@ -187,7 +186,7 @@ Spawn* Princess::SealSpawn()
 			ChangeMotion(motion_, "prayer");
 		}
 
-		if (++motionCount_>motion_->GetMotion("prayer")->frame_)
+		if (++motionCount_ > motion_->GetMotion("prayer")->frame_)
 		{
 			sealFlg_ = false;
 			motionCount_ = 0;
@@ -212,7 +211,7 @@ void Princess::Resuscitation()
 		for (auto c : deadCharaList_)
 		{
 			//if (collision_->CharaNear(m_Pos, c->m_Pos, resDist))
-			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo()))
+			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1,2))
 			{
 				//if(motionNo_!=motion_->GetMotion("prayer"))
 				c->SetRevivalFlg();
@@ -246,7 +245,7 @@ void Princess::SetDeadCharaList(PlayerManager* chara)
 void Princess::CharaUpdate()
 {
 	//空間番号の更新
-	spaceNo_ = collision_->SetSpaceNo(m_Pos);
+	spaceNo_ = collision_->SetSpaceNo(m_Pos, 2);
 
 	//移動
 	float speed = 0.05;

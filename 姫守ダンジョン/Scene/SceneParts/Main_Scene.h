@@ -25,7 +25,7 @@
 
 #define UI_TIME 12 //時間表示に使用するUIの数
 #define SEMICOLON 10
-#define Enemy_Max 50
+#define ENEMY_MAX 50
 
 class Main_Scene :public Scene
 {
@@ -108,4 +108,7 @@ public:
 
 	SceneBase* Update(SceneRoot* root);
 
+
+	//デバッグ用
+	DWORD start1, start2, end1, end2,result1,result2;
 };

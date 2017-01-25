@@ -23,7 +23,6 @@ void SceneRoot::Init()
 
 	loadScene_ = new Load_Scene;
 	scene_ = new Title_Scene;
-	//scene_ = new Load_Scene;
 	scene_->Init();
 }
 

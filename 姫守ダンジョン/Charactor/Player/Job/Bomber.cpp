@@ -14,7 +14,7 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	bombList_.clear();
 	bombScale_ = 1;
 	bombCount_ = 1;
-	invisibleCount_ = 0;
+	invisibleCount_ = 1;
 	invinsibleFlg_ = false;
 	bomb_ = new CD3DXMESH;
 	bomb_ = creator_->LoadStage("”š’e");
@@ -83,134 +83,6 @@ void Bomber::Reset()
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
 }
 
-////
-////	@brief	ˆÚ“®•ûŒü‚ÉƒLƒƒƒ‰ƒNƒ^[‚ª‚¢‚é‚©
-////	@note	ˆÚ“®•ûŒü‚ÉƒLƒƒƒ‰ƒNƒ^[‚ª‚¢‚½‚çA‚»‚ÌƒLƒƒƒ‰ƒNƒ^[‚Ìd‚³‚ðŽæ“¾
-//void Bomber::MoveCharaHit()
-//{
-//	float dist = 1;
-//	float degree = D3DXToDegree(m_Yaw);
-//	CharactorManager* opp = nullptr;
-//	for (auto c : aroundCharaList_)
-//	{
-//		if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
-//		{
-//			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
-//			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-//			angle = D3DXToDegree(angle);
-//
-//			float hitAngle = 90 / 2;
-//			if (fabsf(degree - angle) <= hitAngle)
-//			{
-//				/*opponentWeight_ = c->ownWeight_;*/
-//				opponentWeight_ = 0;
-//				opp = c;
-//			}
-//		}
-//	}
-//	if (opp == nullptr || invinsibleFlg_ == true)
-//	{
-//		opponentWeight_ = 1;
-//	}
-//}
-//
-////
-////	@brief			ˆÚ“®ˆ—
-////	@param (speed)	ˆÚ“®‘¬“x
-//void Bomber::Move(float speed)
-//{
-//	if (damageFlg_)
-//	{
-//		damageDrawTime_ = FPS * 0.5;
-//		if (damageCount_ >= damageDrawTime_)
-//		{
-//			damageFlg_ = false;
-//			damageCount_ = 0;
-//		}
-//		return;
-//	}
-//
-//	if (atkNo_ == specialAtk)
-//	{
-//		knockBackFlg_ = false;
-//	}
-//
-//	if (knockBackFlg_ == true)
-//	{
-//		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-//		return;
-//	}
-//
-//	//ƒXƒeƒBƒbƒN‚ÌŒX‚«Žæ“¾
-//	D3DXVECTOR3 inputStick;
-//	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
-//	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
-//
-//	//‰ñ“]ˆ—
-//	const float rotEpsilon = 0.3;
-//	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
-//	{
-//		Rotation(inputStick);
-//	}
-//
-//
-//	//ˆÚ“®
-//	const float moveEpsilon = 0.2;	//Œëì–hŽ~—p
-//	float sp = 0;
-//	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
-//	{
-//		if (atkNo_ != specialAtk)
-//		{
-//			sp = speed;
-//		}
-//		else
-//		{
-//			sp = param_->specialMoveSpeed_;
-//		}
-//
-//		if (motionChange_ == true)
-//		{
-//			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("walk")->id_)
-//			{
-//				ChangeMotion(motion_, "walk");
-//			}
-//			else if (atkNo_ == specialAtk && motionNo_ != motion_->GetMotion("specialWalk")->id_)
-//			{
-//				ChangeMotion(motion_, "specialWalk");
-//			}
-//			if (atkNo_ == specialAtk)
-//			{
-//				Sound::getInstance().SE_play("Sh_SPECIAL");
-//			}
-//		}
-//	}
-//	else
-//	{
-//
-//		if (motionChange_ == true)
-//		{
-//			if (atkNo_ != specialAtk && motionNo_ != motion_->GetMotion("wait")->id_)
-//			{
-//				ChangeMotion(motion_, "wait");
-//			}
-//		}
-//	}
-//
-//	//opponentWeight_ = 1;
-//
-//	MoveCharaHit();
-//
-//
-//	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
-//
-//	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
-//
-//	GamePad::update();
-//
-//	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
-//	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
-//
-//}
 
 //
 //	@brief	UŒ‚
@@ -294,8 +166,9 @@ void Bomber::Normal_Attack()
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack");
 	}
-
-	InstanceWeapon();
+	float range = param_->attackRange_;
+	float atk = param_->normalAtk_;
+	InstanceWeapon(atk,range);
 
 
 	//atkNo_ = noAtk;
@@ -315,31 +188,19 @@ void Bomber::Special_Attack()
 		motionCount_ = 0;*/
 		ChangeMotion(motion_, "special");
 	}
+	float range = param_->specialAtkRange_;
+	float atk = param_->specialAtk_;
+	InstanceWeapon(atk,range);
 
-	InstanceWeapon();
-
-	/*if (++motionCount_%motionFrame_ == 0)
-	{
-		atkNo_ = noAtk;
-		motionChange_ = true;
-		moveAbleFlg_ = true;
-	}
-*/
-	/*int invincibleTime = param_->specialAttackTime_;
-	if (++motionCount_ % (FPS * invincibleTime) == 0)
-	{
-		invincibleFlg_ = false;
-		motionCount_ = 0;
-	}
-	atkNo_ = noAtk;*/
+	
 }
 
 //
 //	@brief	”š’e‚Ì¶¬
-void Bomber::InstanceWeapon()
+void Bomber::InstanceWeapon(float atk, float range)
 {
 	size_t size = param_->chainWeapon_;
-	float range = param_->weaponHitReach_;
+	//float range = param_->weaponHitReach_;
 	float kDist = param_->knockbackDist_;
 	float kSpeed = param_->knockbackSpeed_;
 	moveAbleFlg_ = false;
@@ -356,8 +217,8 @@ void Bomber::InstanceWeapon()
 			WeaponBall* bomb = new WeaponBall;
 			bomb->SetStartPos(m_Pos);
 			bomb->SetScale(param_->weaponScale_);
-			bomb->SetAttack(param_->normalAtk_);
-			bomb->SetDamageList(/*allCharaList_, charaType_*/);
+			bomb->SetAttack(atk);
+			bomb->SetDamageList(allCharaList_, charaType_,2);
 			bomb->SetKnockBack(range, kDist, kSpeed, charaType_);
 			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
@@ -379,7 +240,7 @@ void Bomber::WeaponUpdate()
 		for (auto b : bombList_)
 		{
 			b->Time_Del_Weapon(delTime);
-			b->SetDamageList(/*allCharaList_, charaType_*/);
+			b->SetDamageList(allCharaList_, charaType_,2);
 		}
 		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{
@@ -395,51 +256,6 @@ void Bomber::WeaponUpdate()
 		}
 	}
 }
-
-////
-////	@brief	”š’eŽm—pˆÚ“®ˆ—
-//void Bomber::Move_Update()
-//{
-//	float kSpeed = param_->knockbackSpeed_;
-//	if (aliveFlg_ == true)
-//	{
-//		if (knockBackFlg_ == false && moveAbleFlg_==true)
-//		{
-//			m_Pos += m_Dir;
-//		}
-//		else if (knockBackFlg_ == true && invinsibleFlg_ == false)
-//		{
-//			KnockBack(knockBackPos_, knockBackDis_, kSpeed);
-//		}
-//	}
-//}
-
-
-////
-////	@brief			ƒ_ƒ[ƒWŒvŽZ
-////	@param (atk)	UŒ‚ŽÒ‚ÌUŒ‚—Í
-//void Bomber::DamageCalc(unsigned int atk)
-//{
-//	if (!(damageFlg_ && invinsibleFlg_))
-//	{
-//		damageFlg_ = true;
-//		Sound::getInstance().SE_play("B_DAMAGE");
-//		float damage = 0;
-//		//if (invinsibleFlg_ == false)
-//		//{
-//			damage = atk / (1 + ((float)param_->def_ / 100));
-//		//}
-//
-//		hp_ -= damage;
-//		if (hp_ <= 0 || param_->hp_ < hp_)
-//		{
-//			hp_ = 0;
-//			aliveFlg_ = false;
-//			damageFlg_ = false;
-//		}
-//	}
-//}
-
 
 //
 //	@brief	Ž€–S‰¹Ä¶

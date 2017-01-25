@@ -61,8 +61,8 @@ protected:
 
 	unsigned int spaceNo_;		//座標による空間番号
 	float opponentWeight_;		//進行方向にいるキャラの重さ
-	float ownWeight_;			//自身の重さ
 	bool moveAbleFlg_;			//移動可能フラグ
+	bool wallHitFlg_;			//壁との衝突フラグ
 	D3DXVECTOR3 ownPush_;		//自分を押している方向ベクトル
 
 
@@ -96,13 +96,15 @@ public:
 	void SlipMove(D3DXVECTOR3 slopVec);							//壁滑り用移動
 	void StopMove();											//静止用
 	void SetAroundChara(CharactorManager* charactor);			//周辺にいるキャラクターをリストにセット
-	void SetAllCharaList(std::vector<CharactorManager*> list);	//存在している全てのキャラクターセット
+	//void SetAllCharaList(std::vector<CharactorManager*> list);	//存在している全てのキャラクターセット
 	void SetOppWeight(float weight);							//進行方向にいるキャラクターの重さセット
 	void SetKnockBack(D3DXVECTOR3 pos, float dist,float speed,CharaType charatype);	//ノックバック情報セット
 	void SetKnockBackFlg(bool flg) { knockBackFlg_ = flg; };	//ノックバックフラグセット
+	void SetWallHitflg(bool flg) { wallHitFlg_ = flg; };		//壁との衝突フラグセット
 	int GetSpaceNo();											//空間番号取得
 	bool GetAliveFlg() { return aliveFlg_; };					//生存フラグ取得
 	bool GetKnockBackFlg() { return knockBackFlg_; };			//ノックバックフラグ取得
+	bool GetWallHitFlg() { return wallHitFlg_; };				//壁との衝突フラグ取得
 	CharaType GetCharaType()const;								//キャラクタータイプ取得
 
 	//デバッグ用

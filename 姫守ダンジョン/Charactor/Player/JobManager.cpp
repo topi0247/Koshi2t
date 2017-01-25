@@ -67,10 +67,11 @@ JobManager::~JobManager()
 void JobManager::CharaUpdate()
 {
 	//空間番号の更新
-	spaceNo_ = collision_->SetSpaceNo(m_Pos);
+	spaceNo_ = collision_->SetSpaceNo(m_Pos,2);
 
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
+
 
 	//仮スピード
 	//motionSpeed_ = 0.05;

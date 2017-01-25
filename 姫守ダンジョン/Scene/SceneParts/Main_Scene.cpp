@@ -63,6 +63,7 @@ void Main_Scene::Init()
 	spawnManager_ = new SpawnManager;
 	stage_->Init("ステージ5");
 	spawnManager_->Init("スポーン");
+	Collision::StageSlideInit();
 
 
 	JobManager* ply;
@@ -148,8 +149,10 @@ void Main_Scene::Destroy()
 {
 	Sound::getInstance().BGM_stop("SENTOU");
 	charList_.clear();
+	charList_.shrink_to_fit();
 	//enemyList_.clear();
 	player_.clear();
+	player_.shrink_to_fit();
 
 	delete stage_;
 	stage_ = nullptr;
@@ -160,8 +163,6 @@ void Main_Scene::Destroy()
 		charList_[i]->Destroy();
 	}*/
 }
-
-
 
 
 //
@@ -181,7 +182,7 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 		else
 		{
 			//next = new Title_Scene;
-			next = new CharactorSelection_Scene;
+			next = new Result_Scene;
 		}
 	}
 
@@ -263,7 +264,7 @@ void Main_Scene::GameMain()
 	++time_;
 
 	//if (enemyList_.size() < 50)
-	if(enemyCount_<Enemy_Max)
+	if (enemyCount_ < ENEMY_MAX)
 	{
 		spawnManager_->Update(princess_);
 		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
@@ -285,24 +286,23 @@ void Main_Scene::GameMain()
 	//エネミー、プレイヤーと姫情報の更新
 	EnemyManager::princess_ = princess_;
 	EnemyManager::playerList_ = player_;
-	//if (!enemyList_.empty())
-	//{
-	//	for (auto enemy : enemyList_)
-	//	{
-	//		//プレイヤーループ
-	//		for (int i = 0; i < 4; i++)
-	//		{
-	//			enemy->Target_Update(player_[i], princess_);
-	//		}
-	//	}
-	//}
-	//}
+
+	//空間番号のリセットと更新
+	Collision::StageSpaceReset();
+	for (auto chara : charList_)
+	{
+		Collision::SetSpaceNoArray(chara->m_Pos);
+	}
 
 	//キャラ更新
 	for (auto chara : charList_)
 	{
+		start1 = timeGetTime();
 		chara->CharaUpdate();
-		if (chara->GetCharaType() == Enemy&&!chara->GetAliveFlg())
+		end1 = timeGetTime();
+		result1 = end1 - start1;
+
+		if (chara->GetCharaType() == Enemy && !chara->GetAliveFlg())
 		{
 			killList_.push_back(chara);
 		}
@@ -387,7 +387,7 @@ void Main_Scene::GameEnd()
 		scene_ = NextS;
 	}
 
-#if 0
+#ifdef _DEBUG
 	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		scene_ = StartS;
@@ -410,14 +410,23 @@ void Main_Scene::GameEnd()
 
 		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
-#endif
+#endif //_DEBUG
 }
 
 //
 //	@brief	エネミー死亡処理
 void Main_Scene::EnemyDestroy()
 {
-
+	/*if (!enemyList_.empty())
+	{
+		for (auto c : enemyList_)
+		{
+			if (!c->GetAliveFlg())
+			{
+				killList_.push_back(c);
+			}
+		}
+	}*/
 
 	if (!killList_.empty())
 	{
@@ -444,6 +453,7 @@ void Main_Scene::EnemyDestroy()
 //	@brief	衝突判定管理
 void Main_Scene::CollisionControl()
 {
+
 	//当たり判定
 	float fDistance = 0;
 	D3DXVECTOR3 vNormal;
@@ -452,24 +462,27 @@ void Main_Scene::CollisionControl()
 	//bool wallFlg = false;
 	for (auto chara : charList_)
 	{
+		start2 = timeGetTime();
 		if (chara->m_Dir != D3DXVECTOR3(0, 0, 0))
 		{
-			if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
+			if (ray_->RayIntersect(chara->m_Pos, chara->m_Dir, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 			{
 				if (chara->GetKnockBackFlg() == true)
 				{
 					chara->SetKnockBackFlg(false);
 				}
-
+				chara->StopMove();
 				//当たり状態なので、滑らせる
 				chara->SlipMove(ray_->Slip(chara->m_Dir, vNormal));
 				//滑りベクトル先の壁とのレイ判定 ２重に判定	
-				if (ray_->RayIntersect(chara, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+				if (ray_->RayIntersect(chara->m_Pos, chara->m_Dir, stage_->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
 				{
 					chara->StopMove();
 				}
 			}
 		}
+		end2 = timeGetTime();
+		result2 = end2 - start2;
 	}
 
 	//周辺にキャラクターがいるかどうか
@@ -477,7 +490,7 @@ void Main_Scene::CollisionControl()
 	{
 		for (int j = i + 1; j < charList_.size(); j++)
 		{
-			if (ray_->CheckSpaceNo(charList_[i]->GetSpaceNo(), charList_[j]->GetSpaceNo()))
+			if (ray_->CheckSpaceNo(charList_[i]->GetSpaceNo(), charList_[j]->GetSpaceNo(), 1,2))
 			{
 				charList_[i]->SetAroundChara(charList_[j]);
 				charList_[j]->SetAroundChara(charList_[i]);
@@ -553,16 +566,23 @@ void Main_Scene::Render()
 	}
 
 
-	/*Result_Scene::m10_Time = minutes10;
+	Result_Scene::m10_Time = minutes10;
 	Result_Scene::m1_Time = minutes1;
 	Result_Scene::s10_Time = second10;
 	Result_Scene::s1_Time = second1;
 	Result_Scene::c10_Time = conma10;
-	Result_Scene::c1_Time = conma1;*/
+	Result_Scene::c1_Time = conma1;
+
+	////デバッグ描画
+	//char str[256];
+	//sprintf(str, "%d", second1);
+	//debugText_->Render(str, 0, 50);
+	//sprintf(str, "%d", second10);
+	//debugText_->Render(str, 0, 80);
 
 #ifdef _DEBUG
-	////デバッグ描画
 	PlayerDebug();
+	//EnemyDebug();
 #endif // _DEBUG
 
 	camera_->Render();
@@ -572,7 +592,57 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "%d", enemyCount_);
+	sprintf(str, "update:%lu",result1);
+	debugText_->Render(str, 0, 50);
+	sprintf(str, "collision:%lu", result2);
 	debugText_->Render(str, 0, 80);
-	
+
+	//sprintf(str, "enemy:%d", enemyCount_);
+	//debugText_->Render(str, 0, 50);
+	//sprintf(str, "allchara:%d", charList_.size());
+	//debugText_->Render(str, 0, 80);
+	//sprintf(str, "aroundChara:%d", player_[Player1]->GetAroundC());
+	//debugText_->Render(str, 0, 110);
+	//Collision* col = new Collision;
+	//int no = col->SetSpaceNo(player_[Player1]->m_Pos, 1);
+	//sprintf(str, "spaceNo:%d", no);
+	//debugText_->Render(str, 0, 140);
+	//sprintf(str, "spaceNo:%d", player_[Player1]->GetSpaceNo());
+	//debugText_->Render(str, 0, 170);
+
+
+	//if (scene_ == MainS)
+	//{
+	//	if (!enemyList_.empty())
+	//	{
+	//		float temp = 0;
+	//		for (auto e : enemyList_)
+	//		{
+	//			float high = 300+temp;
+	//			sprintf(str, "motionNo_ : %d", e->GetMotionNo());
+	//			debugText_->Render(str, 0, high);
+	//			temp += 30;
+	//		}
+
+	//	}
+	//	/*sprintf(str, "%d", player_[Player2]->m_Pos);
+	//	debugText_->Render(str, 760, high);
+	//	sprintf(str, "%d", player_[Player3]->m_Pos);
+	//	debugText_->Render(str, 1240, high);
+	//	sprintf(str, "%d", player_[Player4]->m_Pos);
+	//	debugText_->Render(str, 1740, high);*/
+	//}
+
+
 }
+
+//void Main_Scene::EnemyDebug()
+//{
+//	char str[256];
+//	if (!enemyList_.empty())
+//	{
+//		sprintf(str, "count:%d", enemyList_.size());
+//		debugText_->Render(str, 0, 30);
+//		
+//	}
+//}
