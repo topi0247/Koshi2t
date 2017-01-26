@@ -26,7 +26,7 @@ private:
 	std::vector<WeaponBall*> bombList_;
 	std::vector<D3DXVECTOR3> effectPos_;
 
-	void InstanceWeapon();
+	void InstanceWeapon(float atk,float range);
 	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();

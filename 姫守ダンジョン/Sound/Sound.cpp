@@ -36,7 +36,7 @@ Sound::~Sound()
 void Sound::BGM_play(string BGM_mode)
 {
 	//PlaySound(bgms[BGM_mode]);//タイトルBGM
-	PlaySound(SE_iSoundIndex[BGM_mode]);
+	PlaySound(SE_iSoundIndex[BGM_mode],true);
 }
 
 void Sound::BGM_stop(string BGM_mode)
@@ -46,7 +46,7 @@ void Sound::BGM_stop(string BGM_mode)
 
 void Sound::SE_play(string SE_mode)
 {
-	PlaySound(SE_iSoundIndex[SE_mode]);
+	PlaySound(SE_iSoundIndex[SE_mode],false);
 	//PlaySound(Normal_ATK[SE_mode]);//通常攻撃
 	//PlaySound(Special_ATK[SE_mode]);//特殊攻撃
 	//PlaySound(Damage[SE_mode]);//ダメージ
@@ -170,7 +170,7 @@ void Sound::Run()
 	SE_iSoundIndex["P_DEAD"] = LoadSound("Sound/SE/princess_sound/princessdamage.wav");
 
 	//クリア失敗
-	SE_iSoundIndex["P_FAILED"] = LoadSound("Sound/SE/princess_sound/princessloos.wav");
+	SE_iSoundIndex["P_FAILED"] = LoadSound("Sound/SE/princess_sound/princesslose.wav");
 
 	//クリア成功
 	SE_iSoundIndex["P_CLEAR"] = LoadSound("Sound/SE/princess_sound/princesswin.wav");
@@ -343,7 +343,7 @@ int Sound::LoadSound(char* szFileName)
 	return iIndex;
 }
 
-void  Sound::PlaySound(int iSoundIndex)
+void  Sound::PlaySound(int iSoundIndex, bool loopflg)
 {
 	m_pSourceVoice[iSoundIndex]->Stop(0, 1);
 	m_pSourceVoice[iSoundIndex]->FlushSourceBuffers();
@@ -351,6 +351,10 @@ void  Sound::PlaySound(int iSoundIndex)
 	buffer.pAudioData = m_pWavBuffer[iSoundIndex];
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	buffer.AudioBytes = m_dwWavSize[iSoundIndex];
+	if (loopflg)
+	{
+		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 	if (FAILED(m_pSourceVoice[iSoundIndex]->SubmitSourceBuffer(&buffer)))
 	{
 		MessageBox(0, L"ソースボイスにサブミット失敗", 0, MB_OK);

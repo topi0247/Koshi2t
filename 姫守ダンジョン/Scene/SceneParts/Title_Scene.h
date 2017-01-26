@@ -15,7 +15,7 @@
 #endif //_DEBUG
 
 #define enemyInsRange 50
-#define oneEnemyMax 20
+#define oneEnemyMax 10
 #define enemyMax oneEnemyMax*3
 class Title_Scene :public Scene
 {
@@ -37,7 +37,7 @@ private:
 	Camera* camera_;
 	CharactorCreator* creator_;
 	D3DXVECTOR3 enemyPos_[enemyMax];
-
+	float enemyRot_[enemyMax];
 	void DebugSetJob();
 public:
 	Title_Scene();

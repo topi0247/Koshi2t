@@ -23,35 +23,30 @@ void PlayerManager::SetParameter(char* name)
 	//parameter->SetJobParameter(/*"./../ReadData/JobParameterData.csv"*/);
 	JobParameter* job = parameter->GetJobParamList(name);
 
-
+	//–¼‘OƒZƒbƒg
 	memset(param_->name_, 0, sizeof(param_->name_));
 	memcpy(param_->name_, job->GetName(), sizeof(param_->name_));
 
-	param_->hp_ = job->GetHP();
-	param_->normalAtk_ = job->GetNormalAtk();
-	param_->specialAtk_ = job->GetSpAtk();
-	param_->def_ = job->GetDefence();
-	param_->chainWeapon_ = job->GetChainWeapon();
-	param_->spChainWeapon_ = job->GetSpChainWeapon();
-	param_->specialAttackTime_ = job->GetSpAtkTime();
-	param_->invisibleTime_ = job->GetInvisivleTime();
-	param_->weaponDelTime_ = job->GetWeaponDelTime();
-	param_->chargeTime_ = job->GetChargeTime();
-	param_->moveSpeed_ = job->GetMoveSpeed();
-	param_->specialMoveSpeed_ = job->GetSpMoveSpeed();
-	param_->weight_ = job->GetWeight();
-	param_->attackReach_ = job->GetAttackReach();
-	param_->attackRange_ = job->GetAttackRange();
-	param_->specialAtkRange_ = job->GetSpAtkRange();
-	param_->scale_ = job->GetScale();
-	param_->knockbackSpeed_ = job->GetKnockBackSpeed();
-	param_->knockbackDist_ = job->GetKnockBackDist();
-	param_->weaponScale_ = job->GetWeaponScale();
-	param_->weaponHitReach_ = job->GetWeaponHitReach();
-	param_->weaponDelDist_ = job->GetWeaponDelDist();
+	param_->hp_ = job->GetHP();							//HP
+	param_->normalAtk_ = job->GetNormalAtk();			//’ÊíUŒ‚—Í
+	param_->specialAtk_ = job->GetSpAtk();				//“ÁŽêUŒ‚—Í
+	param_->def_ = job->GetDefence();					//Žç”õ—Í
+	param_->chainWeapon_ = job->GetChainWeapon();		//’Êí˜A‘±”­“®”(”š’eŽm)
+	param_->spChainWeapon_ = job->GetSpChainWeapon();	//“ÁŽê˜A‘±”­“®”(”š’eŽm)
+	param_->invisibleTime_ = job->GetInvisivleTime();	//–³“GŽžŠÔ
+	param_->weaponDelTime_ = job->GetWeaponDelTime();	//”ò‚Ñ“¹‹ïÁ–ÅŽžŠÔ(”š’eŽm)
+	param_->chargeTime_ = job->GetChargeTime();			//ƒ`ƒƒ[ƒWŽžŠÔ
+	param_->moveSpeed_ = job->GetMoveSpeed();			//ˆÚ“®‘¬“x
+	param_->specialMoveSpeed_ = job->GetSpMoveSpeed();	//“ÁŽêˆÚ“®‘¬“x(‚Žm)
+	param_->attackReach_ = job->GetAttackReach();		//’ÊíUŒ‚‹——£(Œ•ŽmE‚Žm=‹——£)
+	param_->attackRange_ = job->GetAttackRange();		//’ÊíUŒ‚”ÍˆÍ(Œ•ŽmE‚Žm=Šp“xA–‚“±ŽmE”š’eŽm=‹——£)
+	param_->specialAtkRange_ = job->GetSpAtkRange();	//“ÁŽêUŒ‚”ÍˆÍ(Œ•ŽmE‚Žm=Šp“xA–‚“±ŽmE”š’eŽm=‹——£)
+	param_->knockbackSpeed_ = job->GetKnockBackSpeed(); //ƒmƒbƒNƒoƒbƒN‘¬“x
+	param_->knockbackDist_ = job->GetKnockBackDist();	//ƒmƒbƒNƒoƒbƒN‹——£
+	param_->weaponScale_ = job->GetWeaponScale();		//”ò‚Ñ“¹‹ïƒTƒCƒY(–‚“±ŽmE”š’eŽm)
 
-	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
-	ownWeight_ = param_->weight_;
+	float scale = 0.2;
+	m_Scale = D3DXVECTOR3(scale, scale, scale);
 	hp_ = param_->hp_;
 }
 

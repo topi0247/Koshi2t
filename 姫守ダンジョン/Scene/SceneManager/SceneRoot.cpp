@@ -21,18 +21,17 @@ void SceneRoot::Init()
 
 	//scene_ = new SceneTitle();
 
-	loadScene_ = new Load_Scene;
+	//loadScene_ = new Load_Scene;
 	scene_ = new Title_Scene;
-	//scene_ = new Load_Scene;
 	scene_->Init();
 }
 
 void SceneRoot::Destroy()
 {
 	//std::cout << "SceneRoot::Shutdown()" << std::endl;
-	delete loadScene_;
+	//delete loadScene_;
 	delete scene_;
-	//scene_ = nullptr;
+	scene_ = nullptr;
 }
 
 
@@ -60,9 +59,10 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 
 		scene_->Destroy();
 		delete scene_;
+		//scene_ = nullptr;
 		
 		//next = loadScene_;
-		scene_ = loadScene_;
+		scene_ = new Load_Scene;
 		//scene_ = new Load_Scene;
 		scene_->Init();
 		nextScene_ = casted;
@@ -80,7 +80,8 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 	if (loadFlg_)
 	{
 		scene_->Destroy();
-		//delete scene_;
+		delete scene_;
+		//scene_ = nullptr;
 
 		scene_ = nextScene_;
 		loadFlg_ = false;

@@ -28,7 +28,7 @@ public:
 
 	HRESULT InitSound();
 	int LoadSound(char* szFileName);
-	void  PlaySound(int iSoundIndex);
+	void  PlaySound(int iSoundIndex,bool loopflg);
 	void Run();
 	IXAudio2* m_pXAudio2;
 	IXAudio2MasteringVoice* m_pMasteringVoice;

@@ -10,10 +10,9 @@
 #include "./GamePad.h"
 
 //	パラメータ
-/* 訂正の必要あり？ */
 struct PlayerParameter
 {
-	char name_[30];							//職業名
+	char name_[30];						//職業名
 	unsigned int hp_;					//HP
 	unsigned int normalAtk_;			//通常攻撃力
 	unsigned int specialAtk_;			//特殊攻撃力

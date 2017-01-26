@@ -19,6 +19,7 @@ private:
 	Spawn* sealSpawn_;
 	std::vector<PlayerManager*> deadCharaList_;	//死んだプレイヤーリスト
 	D3DXVECTOR3 destination_;					//移動目的地
+	int destinationSpaceNo_;					//移動目的地空間番号
 	float moveSpeed_;							//移動速度
 	unsigned int sealTime_;						//封印にかかる時間
 	unsigned int revivalTime_;					//蘇生にかかる時間

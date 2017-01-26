@@ -68,7 +68,7 @@ void WeaponBall::SetStartPos(D3DXVECTOR3 pos)
 {
 	startPos_ = pos;
 	weaponBall_->m_vPos = pos;
-	spaceNo_ = col_->SetSpaceNo(startPos_);
+	spaceNo_ = col_->SetSpaceNo(startPos_, 2);
 
 	//Effect::getInstance().Update("beam2", startPos_);
 	//w_ball = true;
@@ -85,25 +85,27 @@ void WeaponBall::SetAttack(unsigned int atk)
 //
 //	@brief			飛び道具の移動更新
 //	@param (dist)	移動終了距離
-void WeaponBall::Move_Weapon(float dist,float speed)
+void WeaponBall::Move_Weapon(float speed)
 {
-	if (col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
-	{
-		weaponBall_->m_vPos += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
-		//if (w_ball || col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
-		//{
-		//	//Effect::getInstance().Update("magicball", weaponBall_->m_vPos);
-		//	w_ball = false;
-		//}
-		//Effect::getInstance().Draw();
-	}
-	else
+	//int ownNo = col_->SetSpaceNo(weaponBall_->m_vPos, 1);
+	//if (col_->CharaNear(startPos_, weaponBall_->m_vPos, dist))
+	//{
+	float fDistance = 0;
+	D3DXVECTOR3 vNormal;
+	Stage* stage = new Stage;
+	if (col_->RayIntersect(weaponBall_->m_vPos, dir_, stage->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
 	{
 		delFlg_ = true;
 	}
+	weaponBall_->m_vPos += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
+	//}
+	//else
+	//{
+		//delFlg_ = true;
+	//}
 
-	spaceNo_ = col_->SetSpaceNo(weaponBall_->m_vPos);
-	
+	spaceNo_ = col_->SetSpaceNo(weaponBall_->m_vPos, 2);
+
 	Hit();
 }
 
@@ -123,30 +125,30 @@ void WeaponBall::Time_Del_Weapon(int frame)
 	}
 }
 
+////
+////	@brief			被弾する可能性のあるキャラクターリスト
+////	@param (chara)	ダメージを食らうキャラ
+//void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType cType,int no)
+//{
+//	for (auto c : chara)
+//	{
+//		if (c->GetCharaType() == Enemy)
+//		{			
+//			if (col_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), no, 2))
+//			{
+//				damageList_.push_back(c);
+//			}
+//		}
+//	}
+//}
 //
-//	@brief			被弾する可能性のあるキャラクターリスト
-//	@param (chara)	ダメージを食らうキャラ
-void WeaponBall::SetDamageList(/*std::vector<CharactorManager*> chara, CharaType cType*/)
-{
-	for (auto c : CharactorManager::allCharaList_)
-	{
-		if (c->GetCharaType() == Enemy)
-		{
-			if (col_->CheckSpaceNo(spaceNo_,c->GetSpaceNo()))
-			{
-				damageList_.push_back(c);
-			}
-		}
-	}
-}
-
-//
-//	@brief	被弾するキャラ更新
-//	@param (chara)	被弾するキャラ
-void WeaponBall::SetDamageChara(CharactorManager* chara)
-{
-	damageList_.push_back(chara);
-}
+////
+////	@brief	被弾するキャラ更新
+////	@param (chara)	被弾するキャラ
+//void WeaponBall::SetDamageChara(CharactorManager* chara)
+//{
+//	damageList_.push_back(chara);
+//}
 
 //
 //	@brief 弾が消えるかどうか
@@ -173,26 +175,43 @@ float WeaponBall::GetScale()const
 //	@brief	攻撃ヒット
 void WeaponBall::Hit()
 {
+	//std::vector<CharactorManager*> hitList;
+	//if (!damageList_.empty())
+	//{
+	for (auto c : CharactorManager::allCharaList_)
+	{
+		if (c->GetCharaType() != user_ && col_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1, 2))
+		{
+			damageList_.push_back(c);
+		}
+
+	}
+
+	beforeDamageCharaList_.clear();
 	if (!damageList_.empty())
 	{
-		for (auto c : damageList_)
+		for (auto d : damageList_)
 		{
-			if (col_->CharaNear(weaponBall_->m_vPos, c->m_Pos, dist_))
+			if (!d->GetDamageFlg() && col_->CharaNear(weaponBall_->m_vPos, d->m_Pos, dist_))
 			{
-				c->SetKnockBack(weaponBall_->m_vPos, kDist_,kSpeed_,user_);
+				d->SetKnockBack(weaponBall_->m_vPos, kDist_, kSpeed_, user_);
 				if (hitDel_)
 				{
 					delFlg_ = true;
 				}
-				if (c->GetCharaType() == Enemy)
+
+				if (d->GetCharaType() == damageChara_)
 				{
-					c->DamageCalc(atk_);
+					d->DamageCalc(atk_);
+					beforeDamageCharaList_.push_back(d);
 					//敵にダメージが入った時のSE
-					//Sound::getInstance().SE_play(hitSoundName_);
+					Sound::getInstance().SE_play(hitSoundName_);
 				}
 			}
 		}
+		damageList_.clear();
 	}
+
 }
 
 //
@@ -200,13 +219,16 @@ void WeaponBall::Hit()
 //	@param (dist)		攻撃の範囲
 //	@param (kDist)		ノックバックする距離
 //	@param (kSpeed)		ノックバックスピード
-//	@param (charatype)	使用したキャラクタータイプ
-void WeaponBall::SetKnockBack(float dist, float kDist,float kSpeed, CharaType charatype)
+//	@param (userChara)	攻撃の使用者
+//	@param (damageChara)攻撃が当たるキャラクタータイプ
+void WeaponBall::SetKnockBack(float dist, float kDist, float kSpeed, CharaType userChara, CharaType charatype)
 {
 	dist_ = dist;
 	kDist_ = kDist;
 	kSpeed_ = kSpeed;
-	user_ = charatype;
+	user_ = userChara;
+	damageChara_ = charatype;
+	beforeDamageCharaList_.clear();
 }
 
 //
@@ -241,8 +263,8 @@ void WeaponBall::SetHitDelFlg(bool flg)
 //	@brief	描画
 void WeaponBall::Render(D3DXVECTOR3 pos)
 {
-	weaponBall_->Render(pos,D3DXVECTOR3(0,0,0),weaponBall_->m_fScale);
-	
+	weaponBall_->Render(pos, D3DXVECTOR3(0, 0, 0), weaponBall_->m_fScale);
+
 	//if (effectflg_)
 	//{
 	//	Effect::getInstance().Update("explosion", weaponBall_->m_vPos);

@@ -20,9 +20,9 @@ private:
 	int magicBallCount_;
 	float magicSpeed_;
 	CD3DXMESH* magic_;
-	std::vector<WeaponBall*> magicBall_;
+	WeaponBall* magicBall_;
 
-	void InstanceMagicBall(int count);
+	void InstanceMagicBall(float range,float atk,bool flg);
 	void RazorBeam();
 	virtual void WeaponUpdate();
 	virtual void Normal_Attack();

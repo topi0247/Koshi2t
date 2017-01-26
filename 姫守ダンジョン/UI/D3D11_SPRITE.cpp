@@ -1,11 +1,11 @@
 #include "D3D11_SPRITE.h"
 ID3D11Device* D3D11_SPRITE::m_pDevice = nullptr;
 ID3D11DeviceContext* D3D11_SPRITE::m_pDeviceContext = nullptr;
-ID3D11SamplerState* D3D11_SPRITE::m_pSampleLinear = nullptr;
+//ID3D11SamplerState* D3D11_SPRITE::m_pSampleLinear = nullptr;
 ID3D11VertexShader* D3D11_SPRITE::m_pVertexShader = nullptr;
 ID3D11PixelShader* D3D11_SPRITE::m_pPixelShader = nullptr;
 ID3D11InputLayout* D3D11_SPRITE::m_pVertexLayout = nullptr;
-ID3D11Buffer* D3D11_SPRITE::m_pVertexBuffer = nullptr;
+//ID3D11Buffer* D3D11_SPRITE::m_pVertexBuffer = nullptr;
 ID3D11Buffer* D3D11_SPRITE::m_pConstantBuffer = nullptr;
 ID3D11BlendState* D3D11_SPRITE::m_pBlendState = nullptr;
 DWORD D3D11_SPRITE::m_dwWindowWidth;

@@ -6,6 +6,8 @@
 
 #include "Collision.h"
 
+int* Collision::stageSpace_;
+int Collision::spaceAmount_;
 
 
 Collision::Collision()
@@ -18,52 +20,34 @@ Collision::~Collision()
 {
 }
 
-//bool Collision::RayIntersect(CD3DXMESH_ANIM* Mesh_a, CD3DXMESH_ANIM* Mesh_b,float* fDistance)
-//{
-//	BOOL boHit = false;
-//	D3DXMATRIX mWorld, mRotation, Inv;
-//	D3DXVECTOR3 vStart, vEnd, vDirection;
 //
-//	//レイを出すメッシュの位置・回転をレイに適用
-//	vStart = Mesh_a->m_vPos;
-//	vEnd = D3DXVECTOR3(0, 0, 1);
-//	D3DXMatrixRotationY(&mRotation, Mesh_a->m_fYaw);
-//	D3DXVec3TransformCoord(&vEnd, &vEnd, &mRotation);
-//	vEnd += vStart;
-//
-//	//レイを当てるメッシュが動いていたり回転している場合でも対象のワールド行列の逆行列を用いれば正しくレイが当たる
-//	D3DXMatrixTranslation(&mWorld, Mesh_b->m_vPos.x, Mesh_b->m_vPos.y, Mesh_b->m_vPos.z);
-//	D3DXMatrixInverse(&mWorld, NULL, &mWorld);
-//	D3DXVec3TransformCoord(&vStart, &vStart, &mWorld);
-//	D3DXVec3TransformCoord(&vEnd, &vEnd, &mWorld);
-//
-//	/*float fDistance = 0;*/
-//	DWORD dwIndex = 0;
-//	D3DXVECTOR3 vIntersect;
-//
-//	vDirection = vEnd - vStart;
-//	D3DXIntersect(Mesh_b->m_pMesh, &vStart, &vDirection, &boHit, NULL, NULL, NULL, fDistance, NULL, NULL);
-//	if (boHit)
-//	{
-//		return true;
-//	}
-//	return false;
-//}	
-//
-//
-// L:入射ベクトル（レイ） N:ポリゴンの法線
+//	@brief	ステージ配列の設定
+void Collision::StageSlideInit()
+{
+	//ステージスケール
+	D3DXVECTOR3 stScale = STAGE_SCALE;
+	int no = ((int)stScale.z / 2)*STAGE_SLIDE + (int)stScale.x / 2;
+
+	stageSpace_ = new int[no];
+	spaceAmount_ = no;
+	for (int i = 0; i < no; i++)
+	{
+		stageSpace_[i] = Not;
+	}
+}
 
 //
-//	@brief		空間番号取得
-//	@param(pos)	自身の座標
-//	@note       1ステージ分だけ確認用に用意。変更しやすいよう要修正
-int Collision::SetSpaceNo(D3DXVECTOR3 pos)
+//	@brief			空間番号取得
+//	@param(pos)		自身の座標
+//	@param(slide)	最大分割数に除算する数。数字が大きいほど分割数が少なくなる
+//	@note			1ステージ分だけ確認用に用意。
+int Collision::SetSpaceNo(D3DXVECTOR3 pos, int slide)
 {
 	//x軸分割数
-	int sx = 34;
+	int sx = STAGE_SLIDE / slide;
 
 	//ステージスケール
-	D3DXVECTOR3 stScale = { 34 * 2,0,18 * 2 };
+	D3DXVECTOR3 stScale = STAGE_SCALE;
 
 	//補正値(ステージスケールの半分)
 	D3DXVECTOR3 correction = { stScale.x / 2,0,stScale.z / 2 };
@@ -76,25 +60,79 @@ int Collision::SetSpaceNo(D3DXVECTOR3 pos)
 	//自身の座標補正
 	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
 	//自身の補正された座標から、そのステージにおける空間番号を算出
-	int no = ((int)tempOwnPos.z / 2)*sx + (int)tempOwnPos.x / 2;
+	int no = ((int)tempOwnPos.z / slide)*sx + (int)tempOwnPos.x / slide;
 
 	return no;
 }
 
 //
-//	@brief	周辺のキャラクターとの空間番号の確認
-bool Collision::CheckSpaceNo(int ownNo, int oppNo)
+//	@brief		空間番号取得、ステージ配列にセット
+//	@param(pos)	自身の座標
+//	@return		配列に何もいなければセット。何かいたら-1を返す
+void Collision::SetSpaceNoArray(D3DXVECTOR3 pos)
+{
+	//x軸分割数
+	int sx = STAGE_SLIDE;
+
+	//ステージスケール
+	D3DXVECTOR3 stScale = STAGE_SCALE;
+
+	//補正値(ステージスケールの半分)
+	D3DXVECTOR3 correction = { stScale.x / 2,0,stScale.z / 2 };
+
+	//自身の座標補正
+	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
+	//自身の補正された座標から、そのステージにおける空間番号を算出
+	int no = ((int)tempOwnPos.z / 2)*sx + (int)tempOwnPos.x / 2;
+
+	stageSpace_[no] = Existence;
+}
+
+//
+//	@brief	ステージ配列の更新
+void Collision::StageSpaceReset()
+{
+	for (int i = 0; i < spaceAmount_; i++)
+	{
+		stageSpace_[i] = Not;
+	}
+}
+
+//
+//	@brief		ステージ配列の要素状態の取得
+//	@param(no)	空間番号
+//	@note		最大空間分割数で分割した時の空間番号
+int Collision::GetStageSpace(int no)
+{
+	return stageSpace_[no];
+}
+
+//
+//	@brief			周辺のキャラクターとの空間番号の確認
+//	@param(ownNo)	自身の空間番号
+//	@param(oppNo)	相手の空間番号
+//	@param(no)		探索するマスの範囲(自分からの半径)
+//	@param(slide)	最大分割数に除算する数。数字が大きいほど分割数が少なくなる
+bool Collision::CheckSpaceNo(int ownNo, int oppNo,int no,int slide)
 {
 	//x軸の空間分割数
-	int sx = 34;
+	int sx = STAGE_SLIDE/slide;
 
 	//相手の空間番号が自分と自分の周辺の空間番号と一致するかどうか
-	if ((ownNo - 1 <= oppNo && oppNo <= ownNo + 1)
+	for (int i = -no; i < no; i++)
+	{
+		if (ownNo - sx*i - no <= oppNo && oppNo <= ownNo - sx*i + no)
+		{
+			return true;
+		}
+	}
+
+	/*if ((ownNo - 1 <= oppNo && oppNo <= ownNo + 1)
 		|| (ownNo - sx - 1 <= oppNo && oppNo <= ownNo - sx + 1)
 		|| (ownNo + sx - 1 <= oppNo && oppNo <= ownNo + sx + 1))
 	{
 		return true;
-	}
+	}*/
 
 	return false;
 }
@@ -120,24 +158,24 @@ bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 	}
 }
 
-////
-////	@breif			距離測定
-////	@param (posA)	自身の座標
-////	@param (posB)	相手の座標
-////	@return			距離の二乗
-//float Collision::Distance2(D3DXVECTOR3 posA, D3DXVECTOR3 posB)
-//{
-//	return pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2);
-//}
+//
+//	@breif			距離測定
+//	@param (posA)	自身の座標
+//	@param (posB)	相手の座標
+//	@return			距離の二乗
+float Collision::Distance2(D3DXVECTOR3 posA, D3DXVECTOR3 posB)
+{
+	return pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2);
+}
 
-bool Collision::RayIntersect(CD3DXSKINMESH* pMeshA, CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
+bool Collision::RayIntersect(D3DXVECTOR3 pos, D3DXVECTOR3 dir, CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {
 	BOOL boHit = false;
 	D3DXMATRIX Inv;
-	D3DXVECTOR3 vStart, vEnd, vDirection;
+	D3DXVECTOR3 vStart/*, vEnd*/, vDirection;
 	//レイを出すメッシュの位置・回転をレイに適用
-	vStart = pMeshA->m_Pos;
-	vDirection = pMeshA->m_Dir;
+	vStart = pos;
+	vDirection = dir;
 	//レイを当てるメッシュが動いていたり回転している場合でも対象のワールド行列の逆行列を用いれば正しくレイが当たる
 	D3DXMatrixInverse(&Inv, NULL, &pMeshB->m_World);
 	D3DXVec3TransformCoord(&vStart, &vStart, &Inv);

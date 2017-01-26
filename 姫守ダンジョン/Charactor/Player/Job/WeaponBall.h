@@ -9,6 +9,7 @@
 #include "./../../../Origin.h"
 #include "./../../CharactorManager.h"
 #include "./../../../Effekseer/Effect.h"
+#include "./../../../Stage/Stage.h"
 
 //
 //	@brief	飛び道具
@@ -20,9 +21,12 @@ private:
 	Collision* col_;
 	CD3DXMESH* weaponBall_;
 	CharactorCreator* creator_;
+	CharaType damageChara_;
 	CharaType user_;
-	std::vector<CharactorManager*> damageList_;	//被弾する可能性のあるキャラクターリスト
+	std::vector<CharactorManager*> damageList_;				//被弾する可能性のあるキャラクターリスト
+	std::vector<CharactorManager*> beforeDamageCharaList_;
 	bool delFlg_;
+	bool hitDelFlg_;
 	bool effectflg_;
 	bool w_ball;
 	bool hitDel_;
@@ -42,12 +46,13 @@ public:
 	void SetDir(D3DXVECTOR3 dir);
 	void SetScale(float scale);
 	void SetStartPos(D3DXVECTOR3 pos);
-	void Move_Weapon(float dist,float speed);
+	//void SetHitDelFlg();
+	void Move_Weapon(float speed);
 	void Time_Del_Weapon(int frame);
-	void SetDamageList(/*std::vector<CharactorManager*> chara,CharaType cType*/);
-	void SetDamageChara(CharactorManager* chara);
+	//void SetDamageList(std::vector<CharactorManager*> chara,CharaType cType,int no);
+	//void SetDamageChara(CharactorManager* chara);
 	void SetAttack(unsigned int atk);
-	void SetKnockBack(float dist, float kDist,float kSpeed,CharaType charatype);
+	void SetKnockBack(float dist, float kDist,float kSpeed,CharaType userChara,CharaType damageChara);
 	void SetHitSound(std::string name);
 	void SetHitDelFlg(bool flg);
 	void Render(D3DXVECTOR3 pos);

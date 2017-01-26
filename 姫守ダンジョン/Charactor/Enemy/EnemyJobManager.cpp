@@ -33,7 +33,7 @@ void EnemyJobManager::CharaUpdate()
 	//m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 
 	//空間番号の更新
-	spaceNo_ = collision_->SetSpaceNo(m_Pos);
+	spaceNo_ = collision_->SetSpaceNo(m_Pos,2);
 	
 	//進行方向にキャラクターがいるか
 	MoveCharaHit();
@@ -80,7 +80,7 @@ void EnemyJobManager::CharaUpdate()
 
 void Slim::NormalAttack()
 {
-	float dist = 1;
+	float dist = param_->attackReach_;
 	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
 	//targetChar_->KnockBack(m_Pos,dist,speed);
@@ -91,7 +91,7 @@ void Slim::NormalAttack()
 //=======ゴブリン========//
 void Goblin::NormalAttack()
 {
-	float dist = 1;
+	float dist = param_->attackReach_;
 	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
 	targetChar_->SetKnockBack(m_Pos, dist, speed, charaType_);
@@ -121,8 +121,8 @@ void Skeleton::NormalAttack()
 	WeaponBall* atkBall = new WeaponBall();
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
-	//atkBall->SetDamageList(/*allCharaList_, charaType_*/);
-	atkBall->SetKnockBack(dist, param_->attackReach_, speed, charaType_);
+	//atkBall->SetDamageList(allCharaList_, charaType_,1);
+	//atkBall->SetKnockBack(dist, param_->attackReach_, speed, charaType_,!charaType_);
 	atkBall->SetAttack(param_->atk_);
 	atkList_.push_back(atkBall);
 	ChangeMotion(motion_, "attack");

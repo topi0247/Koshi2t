@@ -154,7 +154,7 @@ void SwordMan::Normal_Attack()
 		motionChange_ = false;
 		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
 		Normal_Attack_Collision();
-		
+
 		float speed = -0.3;
 		D3DXVECTOR3 dir(sinf(m_Yaw)*speed, 0, cosf(m_Yaw)*speed);
 		m_Dir = dir;
@@ -197,7 +197,8 @@ void SwordMan::Normal_Attack_Collision()
 				float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 				angle = D3DXToDegree(angle);
 
-				if (fabsf(degree - angle) <= hitAngle)
+				if (fabsf(degree) - fabsf(angle) <= hitAngle
+					|| fabsf(degree) - fabsf(angle) >= hitAngle)
 				{
 					chara->SetKnockBack(m_Pos, backDist, speed, charaType_);
 					if (chara->GetCharaType() == Enemy)
@@ -217,33 +218,6 @@ void SwordMan::DamageSound()
 	Sound::getInstance().SE_play("S_DAMAGE");
 }
 
-////
-////	@brief	“ÁŽêUŒ‚
-//void SwordMan::Special_Attack()
-//{
-//	Special_Attack_Collision();
-//
-//	if (motionChange_ == true && motionNo_ != motion_->GetMotion("special")->id_)
-//	{
-//		Sound::getInstance().SE_play("S_SPECIAL");
-//
-//		motionChange_ = false;
-//		//motionNo_ = motion_->GetMotion("special")->id_;
-//		//m_pD3dxMesh->ChangeAnimSet(motionNo_);
-//		//timeEnd_ = motion_->GetMotion("special")->frame_;
-//		//motionSpeed_ = 1 / (float)timeEnd_;
-//		ChangeMotion(motion_, "special");
-//	}
-//
-//	if (++motionCount_ > motionFrame_)
-//	{
-//		atkNo_ = noAtk;
-//		//attackCount_ = 0;
-//		motionCount_ = 0;
-//		motionChange_ = true;
-//		moveAbleFlg_ = true;
-//	}
-//}
 
 //
 //	@brief	Ž€–S‰¹Ä¶
@@ -276,29 +250,3 @@ void SwordMan::CharaRender()
 	//UI•`‰æ
 	UIRender();
 }
-
-////
-////	@brief	“ÁŽêUŒ‚“–‚½‚è”»’è
-//void SwordMan::Special_Attack_Collision()
-//{
-//	float atkRange = param_->attackRange_;
-//	float atkDist = param_->attackReach_;
-//	float backDist = param_->knockbackDist_;
-//	float backSpeed = param_->knockbackSpeed_;
-//	if (!aroundCharaList_.empty())
-//	{
-//		for (auto chara : aroundCharaList_)
-//		{
-//			if (collision_->CharaNear(m_Pos, chara->m_Pos, atkDist))
-//			{
-//				chara->SetKnockBack(m_Pos, backDist, backSpeed, charaType_);
-//				if (chara->GetCharaType() == Enemy)
-//				{
-//					//“G‚Éƒ_ƒ[ƒW‚ª“ü‚Á‚½Žž‚ÌSE
-//					Sound::getInstance().SE_play("S_DAMAGE_HIT");
-//					chara->DamageCalc(param_->specialAtk_);
-//				}
-//			}
-//		}
-//	}
-//}

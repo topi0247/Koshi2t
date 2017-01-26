@@ -20,7 +20,7 @@ private:
 	D3DXVECTOR3 spMove_;
 	CD3DXMESH* shield_;
 	
-	void Attack_Collision(float hitAngle);
+	void Attack_Collision(float atk,float hitAngle);
 	//void Normal_Attack_Collision();
 	//void Special_Attack_Collision();
 	virtual void Normal_Attack();

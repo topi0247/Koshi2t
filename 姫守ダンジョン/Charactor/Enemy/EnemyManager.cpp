@@ -24,7 +24,7 @@ EnemyManager::EnemyManager()
 	collision_ = new Collision;
 	param_ = new EnemyParam;
 	static float temp = 0;
-	motionPlayPos_ = 0+temp;
+	motionPlayPos_ = 0 + temp;
 	temp += 3.0f;
 }
 
@@ -58,7 +58,6 @@ void EnemyManager::SetParameter(char* name)
 	param_->scale_ = enemy->GetScale();
 
 	m_Scale = D3DXVECTOR3(param_->scale_, param_->scale_, param_->scale_);
-	ownWeight_ = param_->weight_;
 	hp_ = param_->hp_;
 
 }
@@ -94,7 +93,7 @@ void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 	Collision* col = new Collision;
 	for (auto p : pos)
 	{
-		int no = col->SetSpaceNo(p);
+		int no = col->SetSpaceNo(p, 2);
 		busStopSpaceNo_.push_back(no);
 	}
 	//delete col;
@@ -107,6 +106,7 @@ void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 void EnemyManager::SetTarget(CharactorManager* chara)
 {
 	targetChar_ = chara;
+
 }
 
 //
@@ -115,23 +115,24 @@ void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
 {
 	targetPos_ = pos;
 
-	for (auto no : busStopSpaceNo_)
+	/*for (auto no : busStopSpaceNo_)
 	{
 		if (!collision_->CheckSpaceNo(spaceNo_, no))
 		{
 			return;
 		}
-	}
+	}*/
 
-	float dist = pow(m_Pos.x - targetPos_.x, 2) + pow(m_Pos.z - targetPos_.z, 2);
+
+	/*float dist = pow(m_Pos.x - targetPos_.x, 2) + pow(m_Pos.z - targetPos_.z, 2);
 	float degree = D3DXToDegree(m_Yaw);
 	D3DXVECTOR3 vec = targetPos_ - m_Pos;
 	float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-	angle = D3DXToDegree(angle);
+	angle = D3DXToDegree(angle);*/
 
-	for (auto p : busStop_)
-	{
-		float temp = pow(m_Pos.x - p.x, 2) + pow(m_Pos.z - p.z, 2);
+	//for (auto p : busStop_)
+	//{
+		/*float temp = pow(m_Pos.x - p.x, 2) + pow(m_Pos.z - p.z, 2);
 		D3DXVECTOR3 tempVec = p - m_Pos;
 		float tempAngle = (atan2(tempVec.z, tempVec.x)*-1) - (D3DX_PI / 2.0f);
 		tempAngle = D3DXToDegree(tempAngle);
@@ -139,8 +140,8 @@ void EnemyManager::SetTargetPos(D3DXVECTOR3 pos)
 		{
 			targetPos_ = p;
 			dist = temp;
-		}
-	}
+		}*/
+		//}
 
 
 }
@@ -153,7 +154,6 @@ void EnemyManager::Target_Update(/*CharactorManager * chara, CharactorManager * 
 {
 	CharactorManager* temp = targetChar_;
 	//float dist = 5;
-
 
 	for (auto p : playerList_)
 	{
@@ -188,51 +188,6 @@ void EnemyManager::Target_Update(/*CharactorManager * chara, CharactorManager * 
 	SetTargetPos(temp->m_Pos);
 }
 
-////
-////	@brief　			ターゲットポジションの更新
-////	@param (position)	座標
-//void EnemyManager::SetTargetChar(CharactorManager* checkChar, CharactorManager* princess)
-//{
-//	////現在のターゲットとチェックするプレイヤーが一致するか
-//	//if (targetChar_->GetCharaType() == checkChar->GetCharaType())
-//	//{
-//	//	//チェックする(現在ターゲットのプレイヤー）が生存しているか
-//	//	if (checkChar->GetAliveFlg())
-//	//	{
-//	//		//ターゲット更新
-//	//		targetChar_ = checkChar;
-//	//		targetPos_ = targetChar_->m_Pos;
-//	//	}
-//	//	else
-//	//	{
-//	//		//ターゲットを姫に変更
-//	//		targetChar_ = princess;
-//	//		targetPos_ = targetChar_->m_Pos;
-//	//	}
-//	//}
-//	//else if (targetChar_->GetCharaType() == princess->GetCharaType()/* || targetChar_ == nullptr*/)       //現在のターゲットが姫
-//	//{
-//	//	//近くに生きているプレイヤーがいるかどうか(チェックするプレイヤーが生きている 且つ 距離が一定以内)
-//	//	if (checkChar->GetAliveFlg() && collision_->CharaNear(m_Pos, checkChar->m_Pos, 50.0))
-//	//	{
-//	//		//ターゲットをプレイヤーに変更
-//	//		targetChar_ = checkChar;
-//	//		targetPos_ = targetChar_->m_Pos;
-//	//	}
-//	//	else         //近くに生きているプレイヤーがいない
-//	//	{
-//	//		//ターゲット更新
-//	//		targetChar_ = princess;
-//	//		targetPos_ = targetChar_->m_Pos;
-//	//	}
-//	//}
-//
-//	////if (!targetChar_->GetAliveFlg())
-//	////{
-//	////	targetChar_ = princess;
-//	////	targetPos_ = targetChar_->m_Pos;
-//	////}
-//}
 
 //
 //	@brief			移動処理
@@ -249,14 +204,14 @@ void EnemyManager::Move(float speed)
 	E_Lock.x = targetPos_.x - m_Pos.x;
 	E_Lock.z = targetPos_.z - m_Pos.z;
 
-	D3DXVec3Normalize(&E_Lock, &E_Lock);
+	//D3DXVec3Normalize(&E_Lock, &E_Lock);
 
 	//回転処理
 	Rotation(E_Lock);
 
 	//向いている角度から単位ベクトルを取得
 	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(m_Yaw)*-1, 0, cosf(m_Yaw)*-1);
-	D3DXVECTOR3 dir;
+	//D3DXVECTOR3 dir;
 	float sp = speed;
 	//opponentWeight_ = 1;
 	m_Dir = D3DXVECTOR3(vec.x*sp*opponentWeight_, 0, vec.z*sp*opponentWeight_);
@@ -308,10 +263,12 @@ void EnemyManager::Dead()
 //	@brief	敵通常攻撃
 void EnemyManager::Attack()
 {
-	float atkableDist = 2;//param_->attackReach_;
-	int time = 3;
-
-	if (collision_->CharaNear(m_Pos, targetChar_->m_Pos, atkableDist))
+	//float atkableDist = 2;//param_->attackReach_;
+	int time = 1;
+	int slide = 2;
+	int ownNo = collision_->SetSpaceNo(m_Pos, slide);
+	int targetNo = collision_->SetSpaceNo(targetChar_->m_Pos, slide);
+	if (collision_->CheckSpaceNo(ownNo, targetNo, 1, slide))
 	{
 		if (++atkWaitTime_ % (FPS*time) == 0)
 		{
@@ -368,7 +325,7 @@ void EnemyManager::CharaRender()
 	anim->AdvanceTime(motionSpeed_, NULL);
 	//再生地点の更新
 	motionPlayPos_ += motionSpeed_;
-	
+
 	//ダメージ時点滅描画
 	bool drawFlg = true;
 	if (damageFlg_)
@@ -377,7 +334,7 @@ void EnemyManager::CharaRender()
 		{
 			drawFlg = false;
 		}
-		if(damageCount_ > FPS*0.5)
+		if (damageCount_ > FPS*0.5)
 		{
 			damageCount_ = 0;
 			damageFlg_ = false;
@@ -386,7 +343,7 @@ void EnemyManager::CharaRender()
 
 	if (drawFlg)
 	{
-		m_Scale= D3DXVECTOR3(0.2f,0.2f,0.2f);
+		m_Scale = D3DXVECTOR3(0.2f, 0.2f, 0.2f);
 		mesh_->Render(m_Pos, m_Yaw, m_Scale);
 	}
 }

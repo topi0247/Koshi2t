@@ -47,6 +47,9 @@ void Title_Scene::Init()
 				break;
 			}
 		}
+
+		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[i].x, 0, 0 - enemyPos_[i].z);
+		enemyRot_[i] = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
 		/*if ((enemyPos_[i].x < -5 || enemyPos_[i].x>5 )&& (enemyPos_[i].z<-5 && enemyPos_[i].z > 5))
 		{
 			++i;
@@ -55,8 +58,8 @@ void Title_Scene::Init()
 
 	/*Effect::getInstance().Effect_Play(name, D3DXVECTOR3(0, 0, 0));
 	Effect::getInstance().SetScale(name, 0.5);*/
-	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	title_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	title_UI["TITLE_UI"]->Init(L"./UI/UI_Tex/title.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(6180, 1529), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	title_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1299, 264), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	Sound::getInstance().BGM_play("TITLE");
 	alfa_ = 0;
 }
@@ -114,27 +117,27 @@ void Title_Scene::Render()
 {
 
 	D3DXVECTOR2 pos(350, 0);
-	D3DXVECTOR2 size(0.6, 0.4);
+	D3DXVECTOR2 size(0.2, 0.25);
 	/*if (alfa_ < 1.0f)
 	{
 		title_UI["TITLE_UI"]->SetAlfa(alfa_);
 		alfa_ += 0.01f;
 	}*/
 	title_UI["TITLE_UI"]->Render(pos, size, true);
-	title_UI["PUSH_A"]->Render(D3DXVECTOR2(870, 900), D3DXVECTOR2(0.1, 0.07), true);
+	title_UI["PUSH_A"]->Render(D3DXVECTOR2(610, 880), D3DXVECTOR2(0.5, 0.5), true);
 
 	float scale = 0.5;
 	float dist = 5;
 	float speed = 1.0f / 40.0f;
 	mesh_sword_->Render(D3DXVECTOR3(0, 0, -dist), 0, D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
 	mesh_sword_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
+	mesh_shiled_->Render(D3DXVECTOR3(dist, 0, 0), D3DXToRadian(-90), D3DXVECTOR3(scale, scale, scale));
 	mesh_shiled_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
+	mesh_bomber_->Render(D3DXVECTOR3(0, 0, dist), D3DXToRadian(180), D3DXVECTOR3(scale, scale, scale));
 	mesh_bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
+	mesh_witch_->Render(D3DXVECTOR3(-dist, 0, 0), D3DXToRadian(90), D3DXVECTOR3(scale, scale, scale));
 	mesh_witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
-	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), D3DXToRadian(-45), D3DXVECTOR3(scale, scale, scale), camera_->movePow_);
+	mesh_princess_->Render(D3DXVECTOR3(0, 0, 0), D3DXToRadian(-45), D3DXVECTOR3(scale, scale, scale));
 	mesh_princess_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
 	//ステージの描画
@@ -143,23 +146,17 @@ void Title_Scene::Render()
 	int enemyCount = 0;
 	for (int i = 0; i < oneEnemyMax; i++)
 	{
-		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
-		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
-		mesh_slime_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		mesh_slime_->Render(enemyPos_[enemyCount], enemyRot_[enemyCount], D3DXVECTOR3(scale, scale, scale));
 		++enemyCount;
 	}
 	for (int i=0; i < oneEnemyMax; i++)
 	{
-		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
-		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
-		mesh_goblin_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		mesh_goblin_->Render(enemyPos_[enemyCount], enemyRot_[enemyCount], D3DXVECTOR3(scale, scale, scale));
 		++enemyCount;
 	}
 	for (int i=0; i < oneEnemyMax; i++)
 	{
-		D3DXVECTOR3 pos = D3DXVECTOR3(0 - enemyPos_[enemyCount].x, 0, 0 - enemyPos_[enemyCount].z);
-		float angel = (atan2(pos.z, pos.x)*-1) - (D3DX_PI / 2.0f);
-		mesh_skelton_->Render(enemyPos_[enemyCount], angel, D3DXVECTOR3(scale, scale, scale));
+		mesh_skelton_->Render(enemyPos_[enemyCount], enemyRot_[enemyCount], D3DXVECTOR3(scale, scale, scale));
 		++enemyCount;
 	}
 	mesh_slime_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
