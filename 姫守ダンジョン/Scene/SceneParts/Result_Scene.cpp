@@ -6,6 +6,7 @@ int Result_Scene::s10_Time;
 int Result_Scene::s1_Time;
 int Result_Scene::c10_Time;
 int Result_Scene::c1_Time;
+bool Result_Scene::clearFlg_;
 
 Result_Scene::Result_Scene()
 {
@@ -16,9 +17,12 @@ Result_Scene::Result_Scene()
 
 	//--------//
 	uiResult_ = new TD_Graphics;
-	for (int i = 0; i < UI_TIME; i++)
+	if (clearFlg_)
 	{
-		uiTime_[i] = new TD_Graphics;
+		for (int i = 0; i < UI_TIME; i++)
+		{
+			uiTime_[i] = new TD_Graphics;
+		}
 	}
 	//--------//
 }
@@ -37,10 +41,13 @@ Result_Scene::~Result_Scene()
 	//--------//
 	delete uiResult_;
 	uiResult_ = nullptr;
-	for (int i = 0; i < UI_TIME; i++)
+	if (clearFlg_)
 	{
-		delete uiTime_[i];
-		uiTime_[i] = nullptr;
+		for (int i = 0; i < UI_TIME; i++)
+		{
+			delete uiTime_[i];
+			uiTime_[i] = nullptr;
+		}
 	}
 	//--------//
 }
@@ -65,23 +72,39 @@ void Result_Scene::Init()
 	mesh_stage_ = creator_->LoadStage("ƒ^ƒCƒgƒ‹");
 
 	//--------//
-	D3DXVECTOR2 ui_scale(1623, 600);
-	uiResult_->Init(L"./UI/UI_Tex/clear_font2.png", D3DXVECTOR2(0, 0), ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-
-	D3DXVECTOR2 time_scale(128, 256);
-	float rect = 0.083;
-	for (int i = 0; i < UI_TIME; i++)
+	if (clearFlg_)
 	{
-		uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), time_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
+		D3DXVECTOR2 ui_scale(1623, 600);
+		uiResult_->Init(L"./UI/UI_Tex/clear_font2.png", D3DXVECTOR2(0, 0), ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
+		D3DXVECTOR2 time_scale(128, 256);
+		float rect = 0.083;
+		for (int i = 0; i < UI_TIME; i++)
+		{
+			uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), time_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
+		}
+		//--------//
+		Sound::getInstance().SE_play("P_CLEAR");
+		Sound::getInstance().BGM_play("CLEAR");
 	}
-	//--------//
-	Sound::getInstance().SE_play("P_CLEAR");
-	Sound::getInstance().BGM_play("CLEAR");
+	else
+	{
+		Sound::getInstance().SE_play("P_FAILED");
+		D3DXVECTOR2 ui_scale(1623, 600);
+		uiResult_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	}
 }
 
 void Result_Scene::Destroy()
 {
-	Sound::getInstance().BGM_stop("CLEAR");
+	if (clearFlg_)
+	{
+		Sound::getInstance().BGM_stop("CLEAR");
+	}
+	else
+	{
+
+	}
 	SAFE_DELETE(mesh_princess_);
 	SAFE_DELETE(meshPlayer1_);
 	SAFE_DELETE(meshPlayer2_);
@@ -148,31 +171,34 @@ void Result_Scene::Render()
 #endif //_DEBUG
 
 	//---------------//
-	//ŽžŠÔ•`‰æ
+
+		//ŽžŠÔ•`‰æ
 	float posX = 750;
 	float posY = 270;
 	float space = 80;
 	D3DXVECTOR2 time_scale(0.5, 0.5);
-	//•ª
-	int minutes10 = time_ / (FPS*FPS * 10) % 6;// time_ / FPS % 6;
-	int minutes1 = time_ / (FPS*FPS) % 10;// time_ / FPS;
-	uiTime_[m10_Time]->Render(D3DXVECTOR2(posX, posY), time_scale, true);
-	uiTime_[m1_Time]->Render(D3DXVECTOR2(posX + space * 0.8, posY), time_scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.33, posY), time_scale, true);
+	if (clearFlg_)
+	{
+		//•ª
+		int minutes10 = time_ / (FPS*FPS * 10) % 6;// time_ / FPS % 6;
+		int minutes1 = time_ / (FPS*FPS) % 10;// time_ / FPS;
+		uiTime_[m10_Time]->Render(D3DXVECTOR2(posX, posY), time_scale, true);
+		uiTime_[m1_Time]->Render(D3DXVECTOR2(posX + space * 0.8, posY), time_scale, true);
+		uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 1.33, posY), time_scale, true);
 
-	//•b
-	int second10 = time_ / (FPS * 10) % 6;
-	int second1 = time_ / FPS % 10;
-	uiTime_[s10_Time]->Render(D3DXVECTOR2(posX + space * 2, posY), time_scale, true);
-	uiTime_[s1_Time]->Render(D3DXVECTOR2(posX + space * 2.8, posY), time_scale, true);
-	uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.3, posY), time_scale, true);
+		//•b
+		int second10 = time_ / (FPS * 10) % 6;
+		int second1 = time_ / FPS % 10;
+		uiTime_[s10_Time]->Render(D3DXVECTOR2(posX + space * 2, posY), time_scale, true);
+		uiTime_[s1_Time]->Render(D3DXVECTOR2(posX + space * 2.8, posY), time_scale, true);
+		uiTime_[SEMICOLON]->Render(D3DXVECTOR2(posX + space * 3.3, posY), time_scale, true);
 
-	//ƒ~ƒŠ•b
-	int conma10 = time_ / 10 % 6;
-	int conma1 = time_ % 10;
-	uiTime_[c10_Time]->Render(D3DXVECTOR2(posX + space * 4, posY), time_scale, true);
-	uiTime_[c1_Time]->Render(D3DXVECTOR2(posX + space * 4.8, posY), time_scale, true);
-
+		//ƒ~ƒŠ•b
+		int conma10 = time_ / 10 % 6;
+		int conma1 = time_ % 10;
+		uiTime_[c10_Time]->Render(D3DXVECTOR2(posX + space * 4, posY), time_scale, true);
+		uiTime_[c1_Time]->Render(D3DXVECTOR2(posX + space * 4.8, posY), time_scale, true);
+	}
 	posY = 30;
 	posX = 180;
 	uiResult_->Render(D3DXVECTOR2(posX, posY), D3DXVECTOR2(1, 1), true);

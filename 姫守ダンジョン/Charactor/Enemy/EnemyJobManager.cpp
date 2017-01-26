@@ -80,7 +80,7 @@ void EnemyJobManager::CharaUpdate()
 
 void Slim::NormalAttack()
 {
-	float dist = 1;
+	float dist = param_->attackReach_;
 	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
 	//targetChar_->KnockBack(m_Pos,dist,speed);

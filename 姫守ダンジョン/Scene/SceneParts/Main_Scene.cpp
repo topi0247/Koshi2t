@@ -148,6 +148,10 @@ JobManager* Main_Scene::SetCharaJob(char* name, CharaType type)
 void Main_Scene::Destroy()
 {
 	Sound::getInstance().BGM_stop("SENTOU");
+	/*for (auto c : charList_)
+	{
+		c->Destroy();
+	}*/
 	charList_.clear();
 	charList_.shrink_to_fit();
 	//enemyList_.clear();
@@ -177,11 +181,13 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 	{
 		if (!failedFlg_)
 		{
+			Result_Scene::clearFlg_ = true;
 			next = new Result_Scene;
 		}
 		else
 		{
 			//next = new CharactorSelection_Scene;
+			Result_Scene::clearFlg_ = false;
 			next = new Result_Scene;
 		}
 	}
@@ -567,12 +573,12 @@ void Main_Scene::Render()
 	}
 
 
-	Result_Scene::m10_Time = minutes10;
+	/*Result_Scene::m10_Time = minutes10;
 	Result_Scene::m1_Time = minutes1;
 	Result_Scene::s10_Time = second10;
 	Result_Scene::s1_Time = second1;
 	Result_Scene::c10_Time = conma10;
-	Result_Scene::c1_Time = conma1;
+	Result_Scene::c1_Time = conma1;*/
 
 	////デバッグ描画
 	//char str[256];
@@ -582,7 +588,7 @@ void Main_Scene::Render()
 	//debugText_->Render(str, 0, 80);
 
 #ifdef _DEBUG
-	PlayerDebug();
+	//PlayerDebug();
 	//EnemyDebug();
 #endif // _DEBUG
 

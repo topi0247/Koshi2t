@@ -104,6 +104,7 @@ public:
 	int GetSpaceNo();											//空間番号取得
 	bool GetAliveFlg() { return aliveFlg_; };					//生存フラグ取得
 	bool GetKnockBackFlg() { return knockBackFlg_; };			//ノックバックフラグ取得
+	bool GetDamageFlg() { return damageFlg_; };					//ダメージフラグ取得
 	bool GetWallHitFlg() { return wallHitFlg_; };				//壁との衝突フラグ取得
 	CharaType GetCharaType()const;								//キャラクタータイプ取得
 

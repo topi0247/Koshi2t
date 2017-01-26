@@ -186,27 +186,13 @@ void WeaponBall::Hit()
 		}
 
 	}
-	
 
-	//if (!beforeDamageCharaList_.empty() && !damageList_.empty())
-	//{
-	//	for (auto b : beforeDamageCharaList_)
-	//	{
-	//		/*if (damageList_.empty())
-	//		{
-	//			beforeDamageCharaList_.clear();
-	//			break;
-	//		}*/
-	//		auto el = std::find(damageList_.begin(), damageList_.end(), b);
-	//		damageList_.erase(el);
-	//	}
-	//}
 	beforeDamageCharaList_.clear();
 	if (!damageList_.empty())
 	{
 		for (auto d : damageList_)
 		{
-			if (col_->CharaNear(weaponBall_->m_vPos, d->m_Pos, dist_))
+			if (!d->GetDamageFlg() && col_->CharaNear(weaponBall_->m_vPos, d->m_Pos, dist_))
 			{
 				d->SetKnockBack(weaponBall_->m_vPos, kDist_, kSpeed_, user_);
 				if (hitDel_)
@@ -225,7 +211,7 @@ void WeaponBall::Hit()
 		}
 		damageList_.clear();
 	}
-	
+
 }
 
 //

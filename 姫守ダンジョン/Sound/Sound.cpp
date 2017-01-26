@@ -170,7 +170,7 @@ void Sound::Run()
 	SE_iSoundIndex["P_DEAD"] = LoadSound("Sound/SE/princess_sound/princessdamage.wav");
 
 	//クリア失敗
-	SE_iSoundIndex["P_FAILED"] = LoadSound("Sound/SE/princess_sound/princessloos.wav");
+	SE_iSoundIndex["P_FAILED"] = LoadSound("Sound/SE/princess_sound/princesslose.wav");
 
 	//クリア成功
 	SE_iSoundIndex["P_CLEAR"] = LoadSound("Sound/SE/princess_sound/princesswin.wav");

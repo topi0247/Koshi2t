@@ -49,6 +49,7 @@ public:
 	static int s1_Time;
 	static int c10_Time;
 	static int c1_Time;
+	static bool clearFlg_;
 
 	void Init();
 	SceneBase* Update(SceneRoot* root);

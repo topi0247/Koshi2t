@@ -58,7 +58,7 @@ void CharactorSelection_Scene::Init()
 	{
 		choiceJob_[i] = not;
 		keyWait_[i] = 0;
-		playerUIPos_[i] = D3DXVECTOR2(100 + i * 500, 890);
+		playerUIPos_[i] = D3DXVECTOR2(50 + i * 500, 890);
 		meshPos_[i] = D3DXVECTOR3(-3.5 + i * 2.3, 0, 0);
 	}
 	//meshPos_[0] = D3DXVECTOR3(-3.5, 0, 0);
@@ -89,7 +89,8 @@ void CharactorSelection_Scene::Destroy()
 	SAFE_DELETE(bomber_);
 	SAFE_DELETE(witch_);
 }
-
+//Œã‚ÅÁ‚·(”­•\—p)
+#include "./Result_Scene.h"
 SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 {
 	SceneBase* next = this;
@@ -137,6 +138,31 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 		}
 	}
 
+	if (GamePad::checkInput(Player1, GamePad::InputName::RB))
+	{
+		strcpy(CharactorCreator::player1_, "Œ•Žm");
+		strcpy(CharactorCreator::player2_, "‚Žm");
+		strcpy(CharactorCreator::player3_, "”š’eŽm");
+		strcpy(CharactorCreator::player4_, "–‚“±Žm");
+		Result_Scene::m10_Time = 1;
+		Result_Scene::m1_Time = 2;
+		Result_Scene::s10_Time = 3;
+		Result_Scene::s1_Time = 4;
+		Result_Scene::c10_Time = 5;
+		Result_Scene::c1_Time = 6;
+		Result_Scene::clearFlg_ = true;
+		next = new Result_Scene;
+	}
+	if (GamePad::checkInput(Player1, GamePad::InputName::LB))
+	{
+		strcpy(CharactorCreator::player1_, "Œ•Žm");
+		strcpy(CharactorCreator::player2_, "‚Žm");
+		strcpy(CharactorCreator::player3_, "”š’eŽm");
+		strcpy(CharactorCreator::player4_, "–‚“±Žm");
+		Result_Scene::clearFlg_ = false;
+		next = new Result_Scene;
+	}
+
 	GamePad::update();
 	return next;
 }
@@ -164,9 +190,18 @@ void CharactorSelection_Scene::Update()
 	}
 
 //#ifdef _DEBUG
-	//choiceJob_[Player2] = shield;
-	//choiceJob_[Player3] = bomber;
-	//choiceJob_[Player4] = witch;
+	if (GamePad::checkInput(Player1, GamePad::InputName::RT))
+	{
+		choiceJob_[Player2] = shield;
+		choiceJob_[Player3] = bomber;
+		choiceJob_[Player4] = witch;
+	}
+	if (GamePad::checkInput(Player1, GamePad::InputName::LT))
+	{
+		choiceJob_[Player2] = not;
+		choiceJob_[Player3] = not;
+		choiceJob_[Player4] = not;
+	}
 //#endif
 
 	int count = 0;
@@ -230,27 +265,30 @@ void CharactorSelection_Scene::SetCharaJob(int type)
 		&& playerUIPos_[type].y >up && playerUIPos_[type].y < down)
 	{
 		temp = sword;
+		Sound::getInstance().SE_play("DECISION_SE");
 	}
 	else if (playerUIPos_[type].x > 490 && playerUIPos_[type].x < 960
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = shield;
+		Sound::getInstance().SE_play("DECISION_SE");
 	}
 	else if (playerUIPos_[type].x > 965 && playerUIPos_[type].x < 1430
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = bomber;
+		Sound::getInstance().SE_play("DECISION_SE");
 	}
 	else if (playerUIPos_[type].x > 1440 && playerUIPos_[type].x < 1900
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = witch;
+		Sound::getInstance().SE_play("DECISION_SE");
 	}
 	else
 	{
 		return;
 	}
-	Sound::getInstance().SE_play("DECISION_SE");
 	choiceJob_[type] = temp;
 }
 

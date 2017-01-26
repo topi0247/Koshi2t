@@ -37,10 +37,6 @@ CharactorManager::CharactorManager()
 //	@brief	デストラクタ
 CharactorManager::~CharactorManager()
 {
-	if (mesh_ != NULL)
-	{
-		SAFE_DELETE(mesh_);
-	}
 	delete creator_;
 	creator_ = nullptr;
 	delete collision_;
@@ -68,7 +64,7 @@ void CharactorManager::CharaInit(char* name)
 //	@brief	解放
 void CharactorManager::Destroy()
 {
-	if (mesh_)
+	if (mesh_!=NULL)
 	{
 		SAFE_DELETE(mesh_);
 	}

@@ -59,7 +59,7 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 
 		scene_->Destroy();
 		delete scene_;
-		scene_ = nullptr;
+		//scene_ = nullptr;
 		
 		//next = loadScene_;
 		scene_ = new Load_Scene;
@@ -81,7 +81,7 @@ SceneBase* SceneRoot::Update(SceneBase* scene)
 	{
 		scene_->Destroy();
 		delete scene_;
-		scene_ = nullptr;
+		//scene_ = nullptr;
 
 		scene_ = nextScene_;
 		loadFlg_ = false;
