@@ -188,7 +188,7 @@ void Effect::EffectSet()
 
 	//–‚“±Žm
 	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/beam1.efk");
-	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/magicball2.efk");
+	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/magicball4.efk");
 	effect_["beam2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/bi-m2.efk");
 
 	//•P

@@ -91,7 +91,7 @@ void Slim::NormalAttack()
 //=======ƒSƒuƒŠƒ“========//
 void Goblin::NormalAttack()
 {
-	float dist = 1;
+	float dist = param_->attackReach_;
 	float speed = 0.1;
 	targetChar_->DamageCalc(param_->atk_);
 	targetChar_->SetKnockBack(m_Pos, dist, speed, charaType_);
@@ -121,8 +121,8 @@ void Skeleton::NormalAttack()
 	WeaponBall* atkBall = new WeaponBall();
 	D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
 	atkBall->SetDir(vec);
-	atkBall->SetDamageList(allCharaList_, charaType_,1);
-	atkBall->SetKnockBack(dist, param_->attackReach_, speed, charaType_);
+	//atkBall->SetDamageList(allCharaList_, charaType_,1);
+	//atkBall->SetKnockBack(dist, param_->attackReach_, speed, charaType_,!charaType_);
 	atkBall->SetAttack(param_->atk_);
 	atkList_.push_back(atkBall);
 	ChangeMotion(motion_, "attack");

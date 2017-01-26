@@ -22,7 +22,7 @@ class JobParameter
 	unsigned int chainWeapon_;			//連続飛び道具設置個数/
 	unsigned int spChainWeapon_;		//特殊時連続飛び道具設置個数/
 	unsigned int invisibleTime_;		//無敵時間/
-	unsigned int weaponDelTime_;		//飛び道具消滅時間
+	unsigned int weaponDelTime_;		//飛び道具消滅時間/
 	unsigned int chargeTime_;			//チャージタイム/
 	float moveSpeed_;					//移動速度/
 	float specialMoveSpeed_;			//特殊移動速度/

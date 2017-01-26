@@ -83,6 +83,11 @@ void Result_Scene::Destroy()
 {
 	Sound::getInstance().BGM_stop("CLEAR");
 	SAFE_DELETE(mesh_princess_);
+	SAFE_DELETE(meshPlayer1_);
+	SAFE_DELETE(meshPlayer2_);
+	SAFE_DELETE(meshPlayer3_);
+	SAFE_DELETE(meshPlayer4_);
+	//SAFE_DELETE(mesh_stage_);
 }
 
 SceneBase* Result_Scene::Update(SceneRoot* root)
@@ -101,7 +106,7 @@ SceneBase* Result_Scene::Update(SceneRoot* root)
 
 	if (nextSceneFlg)
 	{
-		next = new Title_Scene;
+		next = new CharactorSelection_Scene;
 		nextSceneFlg = false;
 	}
 

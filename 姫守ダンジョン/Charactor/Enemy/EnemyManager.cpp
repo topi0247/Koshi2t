@@ -93,7 +93,7 @@ void EnemyManager::SetBusStop(std::vector<D3DXVECTOR3> pos)
 	Collision* col = new Collision;
 	for (auto p : pos)
 	{
-		int no = col->SetSpaceNo(p,2);
+		int no = col->SetSpaceNo(p, 2);
 		busStopSpaceNo_.push_back(no);
 	}
 	//delete col;
@@ -265,10 +265,10 @@ void EnemyManager::Attack()
 {
 	//float atkableDist = 2;//param_->attackReach_;
 	int time = 1;
-	int slide = 1;
+	int slide = 2;
 	int ownNo = collision_->SetSpaceNo(m_Pos, slide);
 	int targetNo = collision_->SetSpaceNo(targetChar_->m_Pos, slide);
-	if (collision_->CheckSpaceNo(ownNo,targetNo, 1,slide))
+	if (collision_->CheckSpaceNo(ownNo, targetNo, 1, slide))
 	{
 		if (++atkWaitTime_ % (FPS*time) == 0)
 		{

@@ -181,7 +181,7 @@ SceneBase* Main_Scene::Update(SceneRoot* root)
 		}
 		else
 		{
-			//next = new Title_Scene;
+			//next = new CharactorSelection_Scene;
 			next = new Result_Scene;
 		}
 	}
@@ -287,12 +287,12 @@ void Main_Scene::GameMain()
 	EnemyManager::princess_ = princess_;
 	EnemyManager::playerList_ = player_;
 
-	//空間番号のリセットと更新
-	Collision::StageSpaceReset();
-	for (auto chara : charList_)
-	{
-		Collision::SetSpaceNoArray(chara->m_Pos);
-	}
+	////空間番号のリセットと更新
+	//Collision::StageSpaceReset();
+	//for (auto chara : charList_)
+	//{
+	//	Collision::SetSpaceNoArray(chara->m_Pos);
+	//}
 
 	//キャラ更新
 	for (auto chara : charList_)
@@ -379,6 +379,7 @@ void Main_Scene::GameEnd()
 	for (auto p : player_)
 	{
 		p->SetEndMotion(failedFlg_);
+		GamePad::stopVibration(p->GetCharaType());
 	}
 
 	static int endCount = 0;

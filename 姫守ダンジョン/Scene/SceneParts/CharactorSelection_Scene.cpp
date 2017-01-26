@@ -108,6 +108,16 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 			{
 				DecideJob();
 				next = new Main_Scene;
+				////デバッグ用
+				//next = new Result_Scene;
+				//Result_Scene::m10_Time = 0;
+				//Result_Scene::m1_Time = 0;
+				//Result_Scene::s10_Time = 0;
+				//Result_Scene::s1_Time = 0;
+				//Result_Scene::c10_Time = 0;
+				//Result_Scene::c1_Time = 0;
+
+				//
 				Sound::getInstance().SE_play("DECISION_SE");
 			}
 		}
@@ -153,11 +163,11 @@ void CharactorSelection_Scene::Update()
 		}
 	}
 
-#ifdef _DEBUG
-	choiceJob_[Player2] = shield;
-	choiceJob_[Player3] = bomber;
-	choiceJob_[Player4] = witch;
-#endif
+//#ifdef _DEBUG
+	//choiceJob_[Player2] = shield;
+	//choiceJob_[Player3] = bomber;
+	//choiceJob_[Player4] = witch;
+//#endif
 
 	int count = 0;
 	for (int i = 0; i < 4; i++)

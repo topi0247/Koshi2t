@@ -106,7 +106,7 @@ void Princess::Move(float speed)
 //	@note	•P‚Ìê‡‚ÍŽ€–S
 void Princess::DamageCalc(unsigned int atk)
 {
-#ifdef _RELEASE
+
 	aliveFlg_ = false;
 	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
 	//{
@@ -115,7 +115,6 @@ void Princess::DamageCalc(unsigned int atk)
 	motionCount_ = 0;
 	Sound::getInstance().SE_play("P_DEAD");
 	//}
-#endif //_DEBUG
 }
 
 //

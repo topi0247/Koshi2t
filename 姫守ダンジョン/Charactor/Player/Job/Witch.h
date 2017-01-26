@@ -20,7 +20,7 @@ private:
 	int magicBallCount_;
 	float magicSpeed_;
 	CD3DXMESH* magic_;
-	std::vector<WeaponBall*> magicBall_;
+	WeaponBall* magicBall_;
 
 	void InstanceMagicBall(float range,float atk,bool flg);
 	void RazorBeam();

@@ -218,8 +218,8 @@ void Bomber::InstanceWeapon(float atk, float range)
 			bomb->SetStartPos(m_Pos);
 			bomb->SetScale(param_->weaponScale_);
 			bomb->SetAttack(atk);
-			bomb->SetDamageList(allCharaList_, charaType_,2);
-			bomb->SetKnockBack(range, kDist, kSpeed, charaType_);
+			//bomb->SetDamageList(allCharaList_, charaType_,2);
+			bomb->SetKnockBack(range, kDist, kSpeed, charaType_,Enemy);
 			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
 			effectPos_.push_back(m_Pos);
@@ -240,7 +240,7 @@ void Bomber::WeaponUpdate()
 		for (auto b : bombList_)
 		{
 			b->Time_Del_Weapon(delTime);
-			b->SetDamageList(allCharaList_, charaType_,2);
+			//b->SetDamageList(allCharaList_, charaType_,2);
 		}
 		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{

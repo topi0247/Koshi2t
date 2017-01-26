@@ -27,11 +27,11 @@ class D3D11_SPRITE
 private:
 	static ID3D11Device* m_pDevice;
 	static ID3D11DeviceContext* m_pDeviceContext;
-	static ID3D11SamplerState* m_pSampleLinear;
+	/*static */ID3D11SamplerState* m_pSampleLinear;
 	static ID3D11VertexShader* m_pVertexShader;
 	static ID3D11PixelShader* m_pPixelShader;
 	static ID3D11InputLayout* m_pVertexLayout;
-	static ID3D11Buffer* m_pVertexBuffer;
+	/*static */ID3D11Buffer* m_pVertexBuffer;
 	static ID3D11Buffer* m_pConstantBuffer;
 	static ID3D11BlendState* m_pBlendState;
 	static DWORD m_dwWindowWidth;
