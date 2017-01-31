@@ -63,7 +63,7 @@ void Princess::Move(float speed)
 	//int spNo = collision_->SetSpaceNo(destination_);
 	//if (!collision_->CheckSpaceNo(spaceNo_, spNo))
 	int no = collision_->SetSpaceNo(m_Pos, 1);
-	if (!collision_->CheckSpaceNo(no,destinationSpaceNo_,1,1))
+	if (!collision_->CheckSpaceNo(no, destinationSpaceNo_, 1, 1))
 	{
 		//•ûŒüƒxƒNƒgƒ‹
 		D3DXVECTOR3 move = { 0,0,0 };
@@ -161,7 +161,7 @@ void Princess::Seal()
 		for (auto spawn : spawnPosList_)
 		{
 			int no = collision_->SetSpaceNo(spawn->GetPos(), 2);
-			if (collision_->CheckSpaceNo(spaceNo_, no, 1,2))
+			if (collision_->CheckSpaceNo(spaceNo_, no, 1, 2))
 			{
 				sealFlg_ = true;
 				sealSpawn_ = spawn;
@@ -210,7 +210,7 @@ void Princess::Resuscitation()
 		for (auto c : deadCharaList_)
 		{
 			//if (collision_->CharaNear(m_Pos, c->m_Pos, resDist))
-			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1,2))
+			if (collision_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1, 2))
 			{
 				//if(motionNo_!=motion_->GetMotion("prayer"))
 				c->SetRevivalFlg();

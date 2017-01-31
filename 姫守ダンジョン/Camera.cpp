@@ -19,8 +19,11 @@ Camera::Camera()
 	zoom = 6;
 	farPlayerPos_ = movePow_;
 	//dist_ = zoom;
-	dist_ = 0;
 	temp_ = 27;
+	for (int i = 0; i < 4; i++)
+	{
+		dist_[i] = 0;
+	}
 }
 
 //
@@ -31,17 +34,10 @@ Camera::~Camera()
 
 //
 //	@brief	プレイヤーポジションセット	
-void Camera::SetPlayerPos(D3DXVECTOR3 pos)
+void Camera::SetPlayerPos(D3DXVECTOR3 pos,int no)
 {
-	D3DXVECTOR3 pPos = pos;
 	float distx = powf(pos.x - gazePoint_.x, 2) + powf(pos.z - gazePoint_.z, 2);
-
-	if (dist_ <= distx)
-	{
-		farPlayerPos_ = pos;
-		dist_ = distx;
-		//temp_ = dist_;
-	}
+	dist_[no] = distx;
 }
 
 //
@@ -62,54 +58,13 @@ bool Camera::Main_Start_FirstUpdate()
 	{
 		return true;
 	}
-	//}
-	//else
-	//{
-	//	D3DXVECTOR3 firstMovePos(0, 45, -45);
-	//	D3DXVECTOR3 firstGazePos(0, 0, -12);
-	//	speed = 0.4;
-	//	//カメラ座標移動
-	//	//x軸移動
-	//	if (movePow_.x > firstMovePos.x)
-	//	{
-	//		movePow_.x -= speed;
-	//	}
-	//	//y軸移動
-	//	if (movePow_.y < firstMovePos.y)
-	//	{
-	//		movePow_.y += speed;
-	//	}
-	//	//z軸移動
-	//	if (movePow_.z > firstMovePos.z)
-	//	{
-	//		movePow_.z -= speed;
-	//	}
-	//	//gazePoint_ = firstGazePos;
-	//	//注視点座標移動
-	//	//x軸移動
-	//	speed = 0.1;
-	//	if (gazePoint_.x > firstGazePos.x)
-	//	{
-	//		gazePoint_.x -= speed;
-	//	}
-	//	//y軸移動
-	//	if (gazePoint_.y > firstGazePos.y)
-	//	{
-	//		gazePoint_.y -= speed;
-	//	}
-	//	//z軸移動
-	//	if (gazePoint_.z > firstGazePos.z)
-	//	{
-	//		gazePoint_.z -= speed;
-	//	}
-	//}
 
 	return false;
 }
 
 bool Camera::Main_Start_SecondUpdate()
 {
-	D3DXVECTOR3 firstMovePos(0, 40, -40);
+	D3DXVECTOR3 firstMovePos(0, 33.6, -41.53);
 	D3DXVECTOR3 firstGazePos(0, 0, -12);
 	float speed = 0.4;
 	D3DXVECTOR3 tempPos = movePow_;
@@ -165,10 +120,30 @@ void Camera::Main_Game_Update()
 {
 	static float x = movePow_.x;
 	movePow_.x = gazePoint_.x;
-	movePow_.z = gazePoint_.z - 40;
-	float y = x - movePow_.x;
+	movePow_.z = gazePoint_.z - 30;
+	/*float y = x - movePow_.x;
 	movePow_.y += y;
+	if (movePow_.y<33)
+	{
+		movePow_.y -= y;
+	}*/
 	x = movePow_.x;
+
+
+	//プレイヤーの座標も加味
+	float dist = 0;
+	float fardist = 130.0f;
+	for (int i = 0; i < 4; i++)
+	{
+		if (dist_[i]>fardist && dist < dist_[i])
+		{
+			dist = dist_[i];
+		}
+	}
+
+
+
+	//DebugMove();
 }
 
 void Camera::TitleUpdate(float radius)

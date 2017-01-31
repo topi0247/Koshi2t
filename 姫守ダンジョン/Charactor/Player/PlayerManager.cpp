@@ -154,13 +154,11 @@ void PlayerManager::Dead()
 		moveAbleFlg_ = false;
 		DeadSound();
 		ChangeMotion(motion_, "dead1");
-		motionCount_ = 0;
 	}
-	if (++motionCount_ > motionFrame_&& motionNo_ == motion_->GetMotion("dead1")->id_)
+	if (++motionCount_ > motionFrame_ && motionNo_ == motion_->GetMotion("dead1")->id_)
 	{
 		ChangeMotion(motion_, "dead2");
-		motionCount_ = 0;
-		motionChange_ = true;
+		//motionChange_ = true;
 	}
 
 }
@@ -170,7 +168,7 @@ void PlayerManager::Dead()
 //	@brief	•œŠˆ
 void PlayerManager::Revival()
 {
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("alive")->id_)
+	if (/*motionChange_ == true &&*/ motionNo_ != motion_->GetMotion("alive")->id_)
 	{
 		motionChange_ = false;
 		//motionNo_ = motion_->GetMotion("alive")->id_;
@@ -185,7 +183,6 @@ void PlayerManager::Revival()
 		{
 			moveAbleFlg_ = true;
 			motionChange_ = true;
-			motionCount_ = 0;
 			hp_ = param_->hp_;
 			revivalFlg_ = false;
 			aliveFlg_ = true;

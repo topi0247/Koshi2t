@@ -104,6 +104,7 @@ void Witch::Attack()
 			//motionSpeed_ = 1 / (float)timeEnd_;
 			//motionCount_ = 0;
 			ChangeMotion(motion_, "charge1");
+			Effect::getInstance().Effect_Play("charge2", m_Pos);
 		}
 		else if (++motionCount_ > motionFrame_&& chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
@@ -115,6 +116,7 @@ void Witch::Attack()
 	{
 		chargeMotionFlg = false;
 		Special_Attack();
+		Effect::getInstance().Effect_Stop("charge2");
 	}
 
 

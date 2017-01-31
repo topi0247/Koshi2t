@@ -204,8 +204,6 @@ void Main_Scene::Update()
 	{
 	case MainS:
 		GameMain();
-		camera_->gazePoint_ = princess_->m_Pos;
-		camera_->Main_Game_Update();
 		break;
 	case EndS:
 		GameEnd();
@@ -268,6 +266,14 @@ void Main_Scene::GameMain()
 {
 	//時間カウント
 	++time_;
+
+	//カメラ移動
+	camera_->gazePoint_ = princess_->m_Pos;
+	for (int i=0;i<4;i++)
+	{
+		camera_->SetPlayerPos(player_[i]->m_Pos,i);
+	}
+	camera_->Main_Game_Update();
 
 	//if (enemyList_.size() < 50)
 	if (enemyCount_ < ENEMY_MAX)
@@ -588,7 +594,7 @@ void Main_Scene::Render()
 	//debugText_->Render(str, 0, 80);
 
 #ifdef _DEBUG
-	//PlayerDebug();
+	PlayerDebug();
 	//EnemyDebug();
 #endif // _DEBUG
 
@@ -599,9 +605,9 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "update:%lu",result1);
+	sprintf(str, "pos.x:%f pos.y:%f pos.z:%f",camera_->movePow_.x,camera_->movePow_.y,camera_->movePow_.z);
 	debugText_->Render(str, 0, 50);
-	sprintf(str, "collision:%lu", result2);
+	sprintf(str, "dist:%f", camera_->dist_[Player1]);
 	debugText_->Render(str, 0, 80);
 
 	//sprintf(str, "enemy:%d", enemyCount_);

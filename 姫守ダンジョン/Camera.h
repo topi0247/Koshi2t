@@ -13,7 +13,7 @@ class Camera
 
 
 	D3DXMATRIX oriMat_, tran_, yaw_, pitch_;
-	float dist_, temp_;
+	float temp_;
 	D3DXVECTOR3 farPlayerPos_;
 
 	float zoom;
@@ -27,16 +27,16 @@ public:
 	static D3DXMATRIX mProj_;
 	D3DXVECTOR3 movePow_;				//à⁄ìÆó 
 	D3DXVECTOR3 gazePoint_;				//íçéãì_
-												//D3DXMATRIX GetView()const { return mView_; };
-												//D3DXMATRIX GetProj()const { return mProj_; };
+	float dist_[4];
+
 	void TitleUpdate(float radius);
 	bool Main_Start_FirstUpdate();
 	bool Main_Start_SecondUpdate();
 	void Main_Game_Update();
 	void Render();	//ï`âÊèàóù
-	void SetPlayerPos(D3DXVECTOR3 pos);
+	void SetPlayerPos(D3DXVECTOR3 pos,int no);
 	D3DXVECTOR3 GetPos() { return movePow_; };
-	float GetDist()const { return dist_; };
+	float GetDist()const { return dist_[0]; };
 	float GetZoom()const { return zoom; };
 };
 

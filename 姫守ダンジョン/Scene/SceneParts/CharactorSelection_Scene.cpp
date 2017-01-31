@@ -443,18 +443,7 @@ void CharactorSelection_Scene::ChoiceJobUIRender(jobName name, int type)
 
 void CharactorSelection_Scene::Render()
 {
-	static D3DXVECTOR2 startUIPos(WINDOW_WIDTH, 400);
-	if (nextFlg_)
-	{
-		startUIPos = StartAnimation(startUIPos);
-		charaSelect_UI["PUSH_A"]->Render(D3DXVECTOR2(750, 700), D3DXVECTOR2(1.7, 0.8), true);
-		charaSelect_UI["Start_UI"]->Render(startUIPos, D3DXVECTOR2(1.7, 0.8), true);
-	}
-	else
-	{
-		startUIPos = D3DXVECTOR2(WINDOW_WIDTH, 400);
-	}
-
+	
 	static float fingerUIScale = 1.0f;
 	fingerUIScale = HandAnimation(fingerUIScale);
 	//for (int i = 0; i < 4; i++)
@@ -471,6 +460,17 @@ void CharactorSelection_Scene::Render()
 	//mag.x += -(GetKeyState(VK_LEFT) & 0x80)*0.001f+ (GetKeyState(VK_RIGHT) & 0x80)*0.001f;
 	//mag.y += -(GetKeyState(VK_UP) & 0x80)*0.001f + (GetKeyState(VK_DOWN) & 0x80)*0.001f;
 
+	static D3DXVECTOR2 startUIPos(WINDOW_WIDTH, 400);
+	if (nextFlg_)
+	{
+		startUIPos = StartAnimation(startUIPos);
+		charaSelect_UI["PUSH_A"]->Render(D3DXVECTOR2(750, 700), D3DXVECTOR2(1.7, 0.8), true);
+		charaSelect_UI["Start_UI"]->Render(startUIPos, D3DXVECTOR2(1.7, 0.8), true);
+	}
+	else
+	{
+		startUIPos = D3DXVECTOR2(WINDOW_WIDTH, 400);
+	}
 
 	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
 	/*static D3DXVECTOR2 pos(0, 0);

@@ -270,7 +270,7 @@ void ShieldMan::DamageCalc(unsigned int atk)
 //	@param (speed)	à⁄ìÆë¨ìx
 void ShieldMan::Move(float speed)
 {
-	if (damageFlg_)
+	if (damageFlg_ )
 	{
 		damageDrawTime_ = FPS * 0.5;
 		if (damageCount_ >= damageDrawTime_)
@@ -284,6 +284,7 @@ void ShieldMan::Move(float speed)
 	if (atkNo_ == specialAtk)
 	{
 		knockBackFlg_ = false;
+		moveAbleFlg_ = true;
 	}
 
 	if (knockBackFlg_ == true)
@@ -413,11 +414,11 @@ void ShieldMan::CharaRender()
 	float scale = 0.2f;
 	if (drawFlg)
 	{
-		float scale = 0.2f;
+		//float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 	//èÇÇÃï`âÊ
-	if (atkNo_ == specialAtk)
+	if (atkNo_ == specialAtk && aliveFlg_)
 	{
 		float yaw = D3DXToDegree(m_Yaw) + 50.0f;
 		float dist = -0.8;

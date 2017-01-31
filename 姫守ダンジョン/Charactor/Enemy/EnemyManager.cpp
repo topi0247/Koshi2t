@@ -178,7 +178,7 @@ void EnemyManager::Target_Update(/*CharactorManager * chara, CharactorManager * 
 	//}
 
 	//ターゲットが死んでいる
-	if (!targetChar_->GetAliveFlg())
+	if (!temp->GetAliveFlg())
 	{
 		temp = princess_;
 	}
@@ -265,7 +265,7 @@ void EnemyManager::Attack()
 {
 	//float atkableDist = 2;//param_->attackReach_;
 	int time = 1;
-	int slide = 2;
+	int slide = 1;
 	int ownNo = collision_->SetSpaceNo(m_Pos, slide);
 	int targetNo = collision_->SetSpaceNo(targetChar_->m_Pos, slide);
 	if (collision_->CheckSpaceNo(ownNo, targetNo, 1, slide))

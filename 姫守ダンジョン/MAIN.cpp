@@ -298,7 +298,7 @@ void MAIN::Render()
 	/*char Str[512];
 	sprintf(Str, "fps:%f", start);
 	SetWindowTextA(m_hWnd, Str);*/
-
+#ifdef _DEBUG
 	//FPSŒvŽZ•\Ž¦
 	static DWORD time = 0;
 	static int frame = 0;
@@ -311,4 +311,5 @@ void MAIN::Render()
 		frame = 0;
 		SetWindowTextA(m_hWnd, str);
 	}
+#endif
 }

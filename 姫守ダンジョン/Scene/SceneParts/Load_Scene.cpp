@@ -39,9 +39,12 @@ void Load_Scene::Init()
 		descriptionUI_->Init(L"./UI/UI_Tex/lord.png", D3DXVECTOR2(0, 0), D3DXVECTOR2(xSize, 255), D3DXVECTOR4(1, 1, 1, 1), GrapRect(0, 1, 0+i*x, 1+i*x));
 	}*/
 	descriptionUI_->Init(L"./UI/UI_Tex/loadscene.png",D3DXVECTOR2(0,0), D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT), D3DXVECTOR4(1,1,1,1),GrapRect(0,1,0,1));
-	camera_->gazePoint_ = D3DXVECTOR3(0, 0, -32);
-	camera_->movePow_ = D3DXVECTOR3(-7.2, 6.4, -42);
+	//camera_->gazePoint_ = D3DXVECTOR3(0, 0, -32);
+	camera_->movePow_ = D3DXVECTOR3(-7.2, 9, -42);
 	uiAnimCount_ = 0;
+
+	camera_->gazePoint_ = camera_->movePow_;
+	camera_->gazePoint_.z = camera_->movePow_.z + 10;
 }
 
 void Load_Scene::Destroy()
@@ -60,14 +63,8 @@ void Load_Scene::Render()
 {
 
 	static D3DXVECTOR3 pos(0, 0, 0);
-	D3DXVECTOR2 scale(0.1, 0.05);
+	D3DXVECTOR2 scale(0.1, 0.02);
 	D3DXVECTOR3 rot(0,D3DX_PI,0);
-	float speed = 0.001;
-	camera_->movePow_.x += (GetKeyState(VK_LEFT) & 0x80)*speed + -(GetKeyState(VK_RIGHT) & 0x80)*speed;
-	camera_->movePow_.y += (GetKeyState('W') & 0x80)*speed + -(GetKeyState('S') & 0x80)*speed;
-	camera_->movePow_.z += (GetKeyState(VK_UP) & 0x80)*speed + -(GetKeyState(VK_DOWN) & 0x80)*speed;
-	camera_->gazePoint_ = camera_->movePow_;
-	camera_->gazePoint_.z = camera_->movePow_.z + 10;
 	loading_UI->Render(pos, scale, rot);
 
 	descriptionUI_->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);

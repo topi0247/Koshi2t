@@ -119,9 +119,11 @@ bool Collision::CheckSpaceNo(int ownNo, int oppNo,int no,int slide)
 	int sx = STAGE_SLIDE/slide;
 
 	//‘Šè‚Ì‹óŠÔ”Ô†‚ª©•ª‚Æ©•ª‚Ìü•Ó‚Ì‹óŠÔ”Ô†‚Æˆê’v‚·‚é‚©‚Ç‚¤‚©
-	for (int i = -no; i < no; i++)
+	for (int i = -no; i <= no; i++)
 	{
-		if (ownNo - sx*i - no <= oppNo && oppNo <= ownNo - sx*i + no)
+		int mz = ownNo - sx*i - no;
+		int pz = ownNo - sx*i + no;
+		if (mz <= oppNo && oppNo <=pz)
 		{
 			return true;
 		}
