@@ -74,8 +74,9 @@ void Sound::Run()
 
 	SE_iSoundIndex["TITLE"] = LoadSound("Sound/SE/all_sound/Title.wav");
 	SE_iSoundIndex["CHARACTERSELECT"] = LoadSound("Sound/SE/all_sound/select.wav");
-	SE_iSoundIndex["SENTOU"] = LoadSound("Sound/SE/all_sound/dew21.wav");
+	SE_iSoundIndex["SENTOU"] = LoadSound("Sound/SE/all_sound/game_Main.wav");
 	SE_iSoundIndex["CLEAR"] = LoadSound("Sound/SE/all_sound/result.wav");
+	SE_iSoundIndex["FAILED"] = LoadSound("Sound/SE/all_sound/game_Over.wav");
 	
 	//SE//
 	SE_iSoundIndex["DECISION_SE"] = LoadSound("Sound/SE/all_sound/decision.wav");
@@ -144,6 +145,10 @@ void Sound::Run()
 	SE_iSoundIndex["M_DEAD"] = LoadSound("Sound/SE/magic_sound/magic_hit.wav");
 	m_pSourceVoice[SE_iSoundIndex["M_DEAD"]]->SetVolume(3.0f, 0);
 
+	//ƒ`ƒƒ[ƒW
+	SE_iSoundIndex["M_CHARGE"] = LoadSound("Sound/SE/magic_sound/m_Charge.wav");
+	m_pSourceVoice[SE_iSoundIndex["M_CHARGE"]]->SetVolume(3.0f, 0);
+
 	//============”š’em============//
 	//’ÊíUŒ‚
 	SE_iSoundIndex["B_NORMALATK"] = LoadSound("Sound/SE/bomb_sound/bomb_hit.wav");
@@ -165,6 +170,10 @@ void Sound::Run()
 	SE_iSoundIndex["B_DEAD"] = LoadSound("Sound/SE/bomb_sound/bomb_deth.wav");
 	m_pSourceVoice[SE_iSoundIndex["B_DEAD"]]->SetVolume(3.0f, 0);
 
+	//ƒ`ƒƒ[ƒW
+	SE_iSoundIndex["B_CHARGE"] = LoadSound("Sound/SE/bomb_sound/b_Charge.wav");
+	m_pSourceVoice[SE_iSoundIndex["B_CHARGE"]]->SetVolume(3.0f, 0);
+
 	//============•P============//
 	//€–S
 	SE_iSoundIndex["P_DEAD"] = LoadSound("Sound/SE/princess_sound/princessdamage.wav");
@@ -174,6 +183,13 @@ void Sound::Run()
 
 	//ƒNƒŠƒA¬Œ÷
 	SE_iSoundIndex["P_CLEAR"] = LoadSound("Sound/SE/princess_sound/princesswin.wav");
+
+	//‘h¶
+	SE_iSoundIndex["P_RES"] = LoadSound("Sound/SE/princess_sound/q_Resuscitation.wav");
+	
+	//••ˆó
+	SE_iSoundIndex["P_SEAL"] = LoadSound("Sound/SE/princess_sound/q_Sealed.wav");
+
 #if 0
 	// BGM
 	bgms["TITLE"] = LoadSound("Sound/SE/all_sound/Title.wav");

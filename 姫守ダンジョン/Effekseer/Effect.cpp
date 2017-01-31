@@ -192,7 +192,7 @@ void Effect::EffectSet()
 	effect_["beam2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/bi-m2.efk");
 
 	//•P
-
+	effect_["Res"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/resuscitation.efk");
 	//
 }
 

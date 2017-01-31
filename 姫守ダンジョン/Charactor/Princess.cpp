@@ -183,6 +183,7 @@ Spawn* Princess::SealSpawn()
 			//m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("prayer")->id_);
 			//motionSpeed_ = 1 / (float)motion_->GetMotion("prayer")->frame_;
 			ChangeMotion(motion_, "prayer");
+			Sound::getInstance().SE_play("P_SEAL");
 		}
 
 		if (++motionCount_ > motion_->GetMotion("prayer")->frame_)
@@ -215,6 +216,8 @@ void Princess::Resuscitation()
 				//if(motionNo_!=motion_->GetMotion("prayer"))
 				c->SetRevivalFlg();
 				resList.push_back(c);
+				Sound::getInstance().SE_play("P_RES");
+				Effect::getInstance().Effect_Play("Res",c->m_Pos);
 			}
 		}
 	}

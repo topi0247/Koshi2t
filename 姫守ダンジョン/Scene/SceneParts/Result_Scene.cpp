@@ -90,6 +90,7 @@ void Result_Scene::Init()
 	else
 	{
 		Sound::getInstance().SE_play("P_FAILED");
+		Sound::getInstance().BGM_play("FAILED");
 		D3DXVECTOR2 ui_scale(1623, 600);
 		uiResult_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	}
@@ -103,7 +104,7 @@ void Result_Scene::Destroy()
 	}
 	else
 	{
-
+		Sound::getInstance().BGM_stop("FAILED");
 	}
 	SAFE_DELETE(mesh_princess_);
 	SAFE_DELETE(meshPlayer1_);

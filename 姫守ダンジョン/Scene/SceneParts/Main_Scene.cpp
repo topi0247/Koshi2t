@@ -275,22 +275,22 @@ void Main_Scene::GameMain()
 	}
 	camera_->Main_Game_Update();
 
-	//if (enemyList_.size() < 50)
-	if (enemyCount_ < ENEMY_MAX)
-	{
-		spawnManager_->Update(princess_);
-		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
-		if (!temp.empty())
-		{
-			for (auto e : temp)
-			{
-				++enemyCount_;
-				//enemyList_.push_back(e);
-				charList_.push_back(e);
-			}
-			temp.clear();
-		}
-	}
+	////if (enemyList_.size() < 50)
+	//if (enemyCount_ < ENEMY_MAX)
+	//{
+	//	spawnManager_->Update(princess_);
+	//	std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
+	//	if (!temp.empty())
+	//	{
+	//		for (auto e : temp)
+	//		{
+	//			++enemyCount_;
+	//			//enemyList_.push_back(e);
+	//			charList_.push_back(e);
+	//		}
+	//		temp.clear();
+	//	}
+	//}
 
 	//存在しているすべてのキャラクターセット
 	CharactorManager::allCharaList_ = charList_;
