@@ -231,8 +231,17 @@ void SwordMan::DeadSound()
 //	@brief			描画
 void SwordMan::CharaRender()
 {
+	//モーション番号セット
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//再生地点をセット
+	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
+	anim->SetTrackPosition(0, motionPlayPos_);
+	//再生
+	anim->AdvanceTime(motionSpeed_, NULL);
+	//再生地点の更新
+	motionPlayPos_ += motionSpeed_;
+
 	//モデル描画
-	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
 	if (damageFlg_)
 	{

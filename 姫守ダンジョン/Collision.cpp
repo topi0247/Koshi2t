@@ -3,37 +3,20 @@
 //	@brief	あたり判定管理クラス
 //	@date	2016/11/14
 //	@author　吉越大騎
+//	@note	空間分割による衝突判定追加(仁科香苗)
 
 #include "Collision.h"
 
-int* Collision::stageSpace_;
-int Collision::spaceAmount_;
-
-
+//
+//	@brief	コンストラクタ
 Collision::Collision()
-{
-	float fDistance = 0;
-}
-
-
-Collision::~Collision()
 {
 }
 
 //
-//	@brief	ステージ配列の設定
-void Collision::StageSlideInit()
+//	@brief　デストラクタ
+Collision::~Collision()
 {
-	//ステージスケール
-	D3DXVECTOR3 stScale = STAGE_SCALE;
-	int no = ((int)stScale.z / 2)*STAGE_SLIDE + (int)stScale.x / 2;
-
-	stageSpace_ = new int[no];
-	spaceAmount_ = no;
-	for (int i = 0; i < no; i++)
-	{
-		stageSpace_[i] = Not;
-	}
 }
 
 //
@@ -52,59 +35,12 @@ int Collision::SetSpaceNo(D3DXVECTOR3 pos, int slide)
 	//補正値(ステージスケールの半分)
 	D3DXVECTOR3 correction = { stScale.x / 2,0,stScale.z / 2 };
 
-	////ステージ座標
-	//D3DXVECTOR3 stagePos = { 0,0,0 };
-	////ステージ座標の補正
-	//D3DXVECTOR3 tempStagePos = { stagePos.x + correction.x,0,stagePos.z + correction.z };
-
 	//自身の座標補正
 	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
 	//自身の補正された座標から、そのステージにおける空間番号を算出
 	int no = ((int)tempOwnPos.z / slide)*sx + (int)tempOwnPos.x / slide;
 
 	return no;
-}
-
-//
-//	@brief		空間番号取得、ステージ配列にセット
-//	@param(pos)	自身の座標
-//	@return		配列に何もいなければセット。何かいたら-1を返す
-void Collision::SetSpaceNoArray(D3DXVECTOR3 pos)
-{
-	//x軸分割数
-	int sx = STAGE_SLIDE;
-
-	//ステージスケール
-	D3DXVECTOR3 stScale = STAGE_SCALE;
-
-	//補正値(ステージスケールの半分)
-	D3DXVECTOR3 correction = { stScale.x / 2,0,stScale.z / 2 };
-
-	//自身の座標補正
-	D3DXVECTOR3 tempOwnPos = { pos.x + correction.x,0,pos.z + correction.z };
-	//自身の補正された座標から、そのステージにおける空間番号を算出
-	int no = ((int)tempOwnPos.z / 2)*sx + (int)tempOwnPos.x / 2;
-
-	stageSpace_[no] = Existence;
-}
-
-//
-//	@brief	ステージ配列の更新
-void Collision::StageSpaceReset()
-{
-	for (int i = 0; i < spaceAmount_; i++)
-	{
-		stageSpace_[i] = Not;
-	}
-}
-
-//
-//	@brief		ステージ配列の要素状態の取得
-//	@param(no)	空間番号
-//	@note		最大空間分割数で分割した時の空間番号
-int Collision::GetStageSpace(int no)
-{
-	return stageSpace_[no];
 }
 
 //
@@ -128,13 +64,6 @@ bool Collision::CheckSpaceNo(int ownNo, int oppNo,int no,int slide)
 			return true;
 		}
 	}
-
-	/*if ((ownNo - 1 <= oppNo && oppNo <= ownNo + 1)
-		|| (ownNo - sx - 1 <= oppNo && oppNo <= ownNo - sx + 1)
-		|| (ownNo + sx - 1 <= oppNo && oppNo <= ownNo + sx + 1))
-	{
-		return true;
-	}*/
 
 	return false;
 }
@@ -161,15 +90,12 @@ bool Collision::CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance)
 }
 
 //
-//	@breif			距離測定
-//	@param (posA)	自身の座標
-//	@param (posB)	相手の座標
-//	@return			距離の二乗
-float Collision::Distance2(D3DXVECTOR3 posA, D3DXVECTOR3 posB)
-{
-	return pow(posA.x - posB.x, 2) + pow(posA.z - posB.z, 2);
-}
-
+//	@brief				レイによる衝突判定
+//	@param(pos)			自身の座標
+//	@param(dir)			自身の方向ベクトル
+//	@param(Mesh_b)		衝突対象のメッシュ
+//	@param(pfDistance)	レイの衝突地点
+//	@param(pvNormal)	法線ベクトル
 bool Collision::RayIntersect(D3DXVECTOR3 pos, D3DXVECTOR3 dir, CD3DXMESH* pMeshB, float* pfDistance, D3DXVECTOR3* pvNormal)
 {
 	BOOL boHit = false;
@@ -202,13 +128,10 @@ bool Collision::RayIntersect(D3DXVECTOR3 pos, D3DXVECTOR3 dir, CD3DXMESH* pMeshB
 	return false;
 }
 
-D3DXVECTOR3* Collision::SlideVector(D3DXVECTOR3 * out, const D3DXVECTOR3 & front, const D3DXVECTOR3 & normal)
-{
-	D3DXVECTOR3 normal_n;
-	D3DXVec3Normalize(&normal_n, &normal);
-	return D3DXVec3Normalize(out, &(front - D3DXVec3Dot(&front, &normal_n) * normal_n));
-}
-
+//
+//	@brief		滑りベクトルの取得
+//	@param(L)	方向ベクトル
+//	@param(N)	法線ベクトル
 D3DXVECTOR3 Collision::Slip(D3DXVECTOR3 L, D3DXVECTOR3 N)
 {
 	D3DXVECTOR3 S; //滑りベクトル（滑る方向）
@@ -219,9 +142,12 @@ D3DXVECTOR3 Collision::Slip(D3DXVECTOR3 L, D3DXVECTOR3 N)
 
 	return S;
 }
+
 //
-//
-//そのポリゴンの頂点を見つける
+//	@brief					レイの衝突地点のポリゴン頂点の発見
+//	@param(pMesh)			衝突対象のメッシュ情報
+//	@param(dwPolyIndex)		ポリゴン数
+//	@param(pvVertices)		バーテックス
 HRESULT Collision::FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXVECTOR3* pvVertices)
 {
 	DWORD i, k;
@@ -257,5 +183,3 @@ HRESULT Collision::FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXV
 	}
 	return S_OK;
 }
-
-

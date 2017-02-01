@@ -189,10 +189,11 @@ void Effect::EffectSet()
 	//–‚“±Žm
 	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/beam1.efk");
 	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/magicball4.efk");
-	effect_["beam2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/bi-m2.efk");
+	effect_["aroow"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±Žm/aroow.efk");
 
 	//•P
 	effect_["Res"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/resuscitation.efk");
+	effect_["Seal"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/seal.efk");
 	//
 }
 
@@ -257,14 +258,18 @@ void Effect::SetScale(string name, float scale)
 	g_manager->SetScale(g_handle[effect_[name]], scale, scale, scale);
 }
 
-//  @param (rotation)@‰ñ“]
-//  @param (r_pos)   @‰ñ“]Ž²
-void Effect::SetRotation(string name, D3DXVECTOR3 pos, float angle)
-{
-	::Effekseer::Vector3D r_pos(pos.x, pos.y, pos.z);
-	g_manager->SetRotation(g_handle[effect_[name]], r_pos, angle);
-}
+////  @param (rotation)@‰ñ“]
+////  @param (r_pos)   @‰ñ“]Ž²
+//void Effect::SetRotation(string name, D3DXVECTOR3 pos, float angle)
+//{
+//	::Effekseer::Vector3D r_pos(pos.x, pos.y, pos.z);
+//	g_manager->SetRotation(g_handle[effect_[name]], r_pos, angle);
+//}
 
+//
+//	@brief			ƒGƒtƒFƒNƒg‚Ì‰ñ“]
+//	@param(name)	ƒGƒtƒFƒNƒg–¼
+//	@param(angle)	‰ñ“]•ûŒü‚Æ‰ñ“]Šp“x(ƒ‰ƒWƒAƒ“Šp)
 void Effect::SetRotation(string name, D3DXVECTOR3 angle)
 {
 	g_manager->SetRotation(g_handle[effect_[name]], angle.x, angle.y, angle.z);

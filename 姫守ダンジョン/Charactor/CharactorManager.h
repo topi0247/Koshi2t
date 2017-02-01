@@ -43,7 +43,7 @@ protected:
 	unsigned int motionFrame_;	//現在のモーションの総フレーム数
 	bool motionChange_;			//モーション変更フラグ
 	float motionSpeed_;			//モーションスピード
-
+	float motionPlayPos_;		//モーションの再生位置
 
 	float knockBackDis_;		//ノックバック距離
 	float knockBackSpeed_;		//ノックバックスピード

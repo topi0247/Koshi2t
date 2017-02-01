@@ -144,12 +144,17 @@ void Witch::Normal_Attack()
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		moveAbleFlg_ = true;
+		//moveAbleFlg_ = true;
 		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, true);
 		Effect::getInstance().Effect_Play("magicball", m_Pos);
 		Effect::getInstance().SetScale("magicball", 0.2);
 	}
-
+	if (!magicFlg_)
+	{
+		//motionChange_ = true;
+		//atkNo_ = noAtk;
+		moveAbleFlg_ = true;
+	}
 
 }
 
@@ -173,13 +178,19 @@ void Witch::Special_Attack()
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		moveAbleFlg_ = true;
+		//moveAbleFlg_ = true;
 		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, false);
-		Effect::getInstance().Effect_Play("magicball", m_Pos);
-		Effect::getInstance().SetScale("magicball", 0.2);
+		Effect::getInstance().Effect_Play("aroow", m_Pos);
+		Effect::getInstance().SetRotation("aroow", D3DXVECTOR3(0,m_Yaw,0));
+		//Effect::getInstance().SetScale("aroow", 0.2);
 		//RazorBeam();
 	}
-
+	if (!magicFlg_)
+	{
+		//motionChange_ = true;
+		//atkNo_ = noAtk;
+		moveAbleFlg_ = true;
+	}
 
 }
 
@@ -221,7 +232,14 @@ void Witch::WeaponUpdate()
 	{
 		magicBall_->Move_Weapon(magicSpeed_);
 		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
-		Effect::getInstance().Update("magicball", magicBall_->GetPosition());
+		//if (atkNo_ == normalAtk)
+		//{
+			Effect::getInstance().Update("magicball", magicBall_->GetPosition());
+		//}
+		//else if (atkNo_ == specialAtk)
+		//{
+			Effect::getInstance().Update("aroow", magicBall_->GetPosition());
+		//}
 		if (magicBall_->GetDelFlg())
 		{
 			magicFlg_ = false;
@@ -234,30 +252,30 @@ void Witch::WeaponUpdate()
 
 }
 
+////
+////	@brief	レーザービーム
+//void Witch::RazorBeam()
+//{
+//	magicSpeed_ = 1.0f;
+//	float kRange = param_->weaponHitReach_;
+//	float kDist = param_->knockbackDist_;
+//	float kSpeed = param_->knockbackSpeed_;
+//	if (!magicFlg_)
+//	{
+//		magicBall_ = new WeaponBall;
+//		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
+//		magicBall_->SetDir(vec);
+//		magicBall_->SetScale(0);
+//		magicBall_->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
+//		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
+//		magicBall_->SetKnockBack(kRange, kDist, kSpeed, charaType_,Enemy);
+//		magicBall_->SetAttack(param_->specialAtk_);
+//		magicBall_->SetHitSound("M_DAMAGE_HIT");
+//		magicBall_->SetHitDelFlg(false);
 //
-//	@brief	レーザービーム
-void Witch::RazorBeam()
-{
-	magicSpeed_ = 1.0f;
-	float kRange = param_->weaponHitReach_;
-	float kDist = param_->knockbackDist_;
-	float kSpeed = param_->knockbackSpeed_;
-	if (!magicFlg_)
-	{
-		magicBall_ = new WeaponBall;
-		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-		magicBall_->SetDir(vec);
-		magicBall_->SetScale(0);
-		magicBall_->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
-		magicBall_->SetKnockBack(kRange, kDist, kSpeed, charaType_,Enemy);
-		magicBall_->SetAttack(param_->specialAtk_);
-		magicBall_->SetHitSound("M_DAMAGE_HIT");
-		magicBall_->SetHitDelFlg(false);
-
-		magicFlg_ = true;
-	}
-}
+//		magicFlg_ = true;
+//	}
+//}
 
 //
 //	@brief	被ダメ時のSE再生
@@ -277,12 +295,17 @@ void Witch::DeadSound()
 //	@brief	描画
 void Witch::CharaRender()
 {
-	//D3DXVECTOR2 pos(0, 0);
-	//D3DXVECTOR2 size(1, 1);
-	//Witch_UI["WITCH_UI"]->Render(pos,size);
+	//モーション番号セット
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//再生地点をセット
+	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
+	anim->SetTrackPosition(0, motionPlayPos_);
+	//再生
+	anim->AdvanceTime(motionSpeed_, NULL);
+	//再生地点の更新
+	motionPlayPos_ += motionSpeed_;
 
 	//モデル描画
-	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 	bool drawFlg = true;
 	if (damageFlg_)
 	{

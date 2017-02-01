@@ -152,20 +152,22 @@ void Princess::Seal()
 {
 	float dist = 7;
 
-	/*if (GetKeyState(VK_SPACE))
+	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		dist = 100;
-	}*/
+	}
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)
 		{
 			//int no = collision_->SetSpaceNo(spawn->GetPos(), 2);
 			//if (collision_->CheckSpaceNo(spaceNo_, no, 1, 2))
-			if(collision_->CharaNear(m_Pos,spawn->GetPos(),dist))
+			if (collision_->CharaNear(m_Pos, spawn->GetPos(), dist))
 			{
 				sealFlg_ = true;
 				sealSpawn_ = spawn;
+				Sound::getInstance().SE_play("P_SEAL");
+				Effect::getInstance().Effect_Play("Seal", spawn->GetPos());
 			}
 		}
 	}
@@ -218,7 +220,7 @@ void Princess::Resuscitation()
 				c->SetRevivalFlg();
 				resList.push_back(c);
 				Sound::getInstance().SE_play("P_RES");
-				Effect::getInstance().Effect_Play("Res",c->m_Pos);
+				Effect::getInstance().Effect_Play("Res", c->m_Pos);
 			}
 		}
 	}

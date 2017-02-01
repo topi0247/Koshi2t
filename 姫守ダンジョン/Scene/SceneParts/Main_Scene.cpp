@@ -63,7 +63,6 @@ void Main_Scene::Init()
 	spawnManager_ = new SpawnManager;
 	stage_->Init("ステージ5");
 	spawnManager_->Init("スポーン");
-	Collision::StageSlideInit();
 
 
 	JobManager* ply;
@@ -278,13 +277,8 @@ void Main_Scene::GameMain()
 
 	//カメラ移動
 	camera_->gazePoint_ = princess_->m_Pos;
-	for (int i=0;i<4;i++)
-	{
-		camera_->SetPlayerPos(player_[i]->m_Pos,i);
-	}
 	camera_->Main_Game_Update();
 
-	//if (enemyList_.size() < 50)
 	if (enemyCount_ < ENEMY_MAX)
 	{
 		spawnManager_->Update(princess_);
@@ -384,6 +378,7 @@ void Main_Scene::GameMain()
 	if (spawnManager_->GetSpawnList().empty())
 	{
 		scene_ = EndS;
+		Sound::getInstance().SE_play("P_STEGECLEAR");
 	}
 }
 
@@ -616,8 +611,6 @@ void Main_Scene::PlayerDebug()
 	char str[256];
 	sprintf(str, "pos.x:%f pos.y:%f pos.z:%f",camera_->movePow_.x,camera_->movePow_.y,camera_->movePow_.z);
 	debugText_->Render(str, 0, 50);
-	sprintf(str, "dist:%f", camera_->dist_[Player1]);
-	debugText_->Render(str, 0, 80);
 
 	//sprintf(str, "enemy:%d", enemyCount_);
 	//debugText_->Render(str, 0, 50);

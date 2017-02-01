@@ -21,14 +21,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 		if (SUCCEEDED(g_pMain->InitWindow(hInstance, 0, 0, WINDOW_WIDTH,
 			WINDOW_HEIGHT, APP_NAME)))
 		{
-			//g_pMain->CreateConsoleWindow();
 			if (SUCCEEDED(g_pMain->InitD3D()))
 			{
 				g_pMain->Loop();
 			}
 		}
 		//アプリ終了
-		//g_pMain->CloseConsoleWindow();
 		g_pMain->DestroyD3D();
 		delete g_pMain;
 	}
@@ -100,8 +98,6 @@ LRESULT MAIN::MsgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 //メッセージループとアプリケーション処理の入り口
 void MAIN::Loop()
 {
-
-
 	//初期化
 	//スタティックメッシュ
 	CD3DXMESH::InitShader(m_hWnd, m_pDevice, m_pDeviceContext);
@@ -153,8 +149,10 @@ void MAIN::Loop()
 //
 //アプリケーション処理。アプリのメイン関数。
 void MAIN::App()
-{
+{	
+	//更新
 	Update();
+	//描画
 	Render();
 }
 //
@@ -261,8 +259,6 @@ void MAIN::DestroyD3D()
 //更新処理
 void MAIN::Update()
 {
-	//camera_->Update();
-	//mainScene_->Update();
 	scene_ = nullptr;
 	scene_ = root_->Update(root_);
 }
@@ -272,32 +268,24 @@ void MAIN::Update()
 //シーンを画面にレンダリング
 void MAIN::Render()
 {
-	//scene_ = nullptr;
-	//scene_ = root_->Update(root_);
-
-
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 0,0,0,0 };// クリア色作成　RGBAの順
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBuffer_TexRTV, ClearColor);//画面クリア
 	m_pDeviceContext->ClearDepthStencilView(m_pBackBuffer_DSTexDSV, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 
-
+	//ビュートランスフォームとプロジェクトトランスフォームのセット
 	CD3DXMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	CD3DXSKINMESH::SetCamera(Camera::mView_, Camera::mProj_);
 	TD_Graphics::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_SPRITE::SetCamera(Camera::mView_, Camera::mProj_);
 	D3D11_TEXT::SetCamera(Camera::mView_, Camera::mProj_);
-	/*Camera* camera_ = new Camera;
-	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);*/
-
+	
+	//シーンの描画
 	scene_->Render();
 
 	//画面更新（バックバッファをフロントバッファに）
 	m_pSwapChain->Present(0, 0);
 
-	/*char Str[512];
-	sprintf(Str, "fps:%f", start);
-	SetWindowTextA(m_hWnd, Str);*/
 #ifdef _DEBUG
 	//FPS計算表示
 	static DWORD time = 0;

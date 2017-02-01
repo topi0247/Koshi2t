@@ -22,6 +22,7 @@ CharactorManager::CharactorManager()
 	, motionCount_(0)
 	, motionFrame_(0)
 	, damageCount_(0)
+	,motionPlayPos_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
@@ -281,8 +282,8 @@ void CharactorManager::ChangeMotion(Motion* motion, char* name)
 	motionSpeed_ = 1 / (float)motionFrame_;
 	motionSpeed_ *= 0.5f;
 	motionCount_ = 0;*/
+	motionPlayPos_ = 0;
 	motionNo_ = motion->GetMotion(name)->id_;
-	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
 	motionFrame_ = motion->GetMotion(name)->frame_;
 	motionSpeed_ = 1 / (float)motionFrame_;
 	motionCount_ = 0;

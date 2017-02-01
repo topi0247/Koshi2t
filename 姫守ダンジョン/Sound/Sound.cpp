@@ -190,6 +190,9 @@ void Sound::Run()
 	//封印
 	SE_iSoundIndex["P_SEAL"] = LoadSound("Sound/SE/princess_sound/q_Sealed.wav");
 
+	//ステージクリア
+	SE_iSoundIndex["P_STEGECLEAR"] = LoadSound("Sound/SE/princess_sound/game_Clear.wav");
+
 #if 0
 	// BGM
 	bgms["TITLE"] = LoadSound("Sound/SE/all_sound/Title.wav");

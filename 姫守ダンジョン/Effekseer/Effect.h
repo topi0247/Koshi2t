@@ -43,7 +43,7 @@ public:
 	void Effect_All_Stop(string name);
 	void SetScale(string name, float scale);
 	void SetRotation(string name, D3DXVECTOR3 angle);
-	void SetRotation(string name, D3DXVECTOR3 pos, float angle);
+	//void SetRotation(string name, D3DXVECTOR3 pos, float angle);
 	void Update();
 	void Update(string name, D3DXVECTOR3 pos);
 	void Draw();

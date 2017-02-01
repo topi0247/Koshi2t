@@ -8,22 +8,17 @@
 
 D3DXMATRIX Camera::mView_;
 D3DXMATRIX Camera::mProj_;
-//D3DXVECTOR3 Camera::movePow_;
-//D3DXVECTOR3 Camera::gazePoint_;
 
 //
 //	@brief	コンストラクタ
 Camera::Camera()
+	:titleCmeraSpeed_(0.1)
+	, mainCameraSpeedF_(0.05)
+	, mainCameraSpeedS_(0.4)
+	, zoom_(6)
 {
-
-	zoom = 6;
-	farPlayerPos_ = movePow_;
-	//dist_ = zoom;
-	temp_ = 27;
-	for (int i = 0; i < 4; i++)
-	{
-		dist_[i] = 0;
-	}
+	firstMovePos_ =D3DXVECTOR3(0, 33.6, -41.53);
+	firstGazePos_ =D3DXVECTOR3(0, 0, -12);
 }
 
 //
@@ -33,22 +28,11 @@ Camera::~Camera()
 }
 
 //
-//	@brief	プレイヤーポジションセット	
-void Camera::SetPlayerPos(D3DXVECTOR3 pos,int no)
-{
-	float distx = powf(pos.x - gazePoint_.x, 2) + powf(pos.z - gazePoint_.z, 2);
-	dist_[no] = distx;
-}
-
-//
-//	@brief	メインシーンゲーム開始時更新
+//	@brief	メインゲーム開始時直後更新
 bool Camera::Main_Start_FirstUpdate()
 {
-	//movePow_ = D3DXVECTOR3(0, 45, -45);
 	static bool nextMoveFlg = false;
-	float speed = 0.05;
-	//if (!nextMoveFlg)
-	//{
+	float speed = mainCameraSpeedF_;
 	gazePoint_ = D3DXVECTOR3(movePow_.x, movePow_.y, movePow_.z + 1.0f);
 	if (movePow_.x < 3.0f)
 	{
@@ -62,52 +46,33 @@ bool Camera::Main_Start_FirstUpdate()
 	return false;
 }
 
+//
+//	@brief	メインゲーム開始更新
 bool Camera::Main_Start_SecondUpdate()
 {
-	D3DXVECTOR3 firstMovePos(0, 33.6, -41.53);
-	D3DXVECTOR3 firstGazePos(0, 0, -12);
-	float speed = 0.4;
+	float speed = mainCameraSpeedS_;
 	D3DXVECTOR3 tempPos = movePow_;
 	D3DXVECTOR3 tempGaze = gazePoint_;
 	//カメラ座標移動
 	//x軸移動
-	if (movePow_.x > firstMovePos.x)
+	if (movePow_.x > firstMovePos_.x)
 	{
 		movePow_.x -= speed;
 	}
 	//y軸移動
-	if (movePow_.y < firstMovePos.y)
+	if (movePow_.y < firstMovePos_.y)
 	{
 		movePow_.y += speed;
 	}
 	//z軸移動
-	if (movePow_.z > firstMovePos.z)
+	if (movePow_.z > firstMovePos_.z)
 	{
 		movePow_.z -= speed;
 	}
-	////gazePoint_ = firstGazePos;
-	////注視点座標移動
-	////x軸移動
-	//speed = 0.1;
-	//if (gazePoint_.x > firstGazePos.x)
-	//{
-	//	gazePoint_.x -= speed;
-	//}
-	////y軸移動
-	//if (gazePoint_.y > firstGazePos.y)
-	//{
-	//	gazePoint_.y -= speed;
-	//}
-	////z軸移動
-	//if (gazePoint_.z > firstGazePos.z)
-	//{
-	//	gazePoint_.z -= speed;
-	//}
-	gazePoint_ = firstGazePos;
-	if (tempPos == movePow_/* && tempGaze == gazePoint_*/)
+	gazePoint_ = firstGazePos_;
+	if (tempPos == movePow_)
 	{
-		movePow_ = firstMovePos;
-		//gazePoint_ = firstGazePos;
+		movePow_ = firstMovePos_;
 		return true;
 	}
 
@@ -123,36 +88,23 @@ void Camera::Main_Game_Update()
 	movePow_.z = gazePoint_.z - 30;
 	float y = x - movePow_.x;
 	movePow_.y += y;
-	if (movePow_.y<33)
+	if (movePow_.y < 33)
 	{
 		movePow_.y -= y;
 	}
 	x = movePow_.x;
-
-
-	////プレイヤーの座標も加味
-	//float dist = 0;
-	//float fardist = 130.0f;
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	if (dist_[i]>fardist && dist < dist_[i])
-	//	{
-	//		dist = dist_[i];
-	//	}
-	//}
-
-
-
-	//DebugMove();
 }
 
+//
+//	@brief			タイトル更新
+//	@param(radius)	回転角度
 void Camera::TitleUpdate(float radius)
 {
 	static float degree = -100;
 	float radian = D3DX_PI / 180 * degree;
 	movePow_.x = gazePoint_.x + radius*cosf(radian);
 	movePow_.z = gazePoint_.z + radius*sinf(radian);
-	degree += 0.1f;
+	degree += titleCmeraSpeed_;
 }
 
 //	@brief			描画
@@ -160,14 +112,13 @@ void Camera::TitleUpdate(float radius)
 //	@param (mProj)	射影変換用マトリックス
 void Camera::Render()
 {
-	//ビュートランスフォーム カメラをキャラの後ろに配置するだけ
+	//ビュートランスフォーム
 	D3DXVECTOR3 camPos = movePow_;
 	D3DXVECTOR3 lookPos = gazePoint_;
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);//上方位置
 
 	D3DXMatrixTranslation(&tran_, 0, 0, 0);
 	D3DXMatrixRotationY(&yaw_, 0);
-	//D3DXMatrixRotationZ(&pitch_, gazePoint_.z);
 	oriMat_ = yaw_*tran_;
 
 	D3DXVec3TransformCoord(&camPos, &camPos, &oriMat_);
@@ -176,7 +127,7 @@ void Camera::Render()
 	D3DXMatrixLookAtLH(&mView_, &camPos, &lookPos, &vUpVec);
 
 	// プロジェクショントランスフォーム（射影変換）
-	D3DXMatrixPerspectiveFovLH(&mProj_, D3DX_PI / zoom, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
+	D3DXMatrixPerspectiveFovLH(&mProj_, D3DX_PI / zoom_, (FLOAT)WINDOW_WIDTH / (FLOAT)WINDOW_HEIGHT, 0.1f, 1000.0f);
 }
 
 //

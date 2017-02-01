@@ -23,7 +23,7 @@ private:
 	WeaponBall* magicBall_;
 
 	void InstanceMagicBall(float range,float atk,bool flg);
-	void RazorBeam();
+	//void RazorBeam();
 	virtual void WeaponUpdate();
 	virtual void Normal_Attack();
 	virtual void Special_Attack();
