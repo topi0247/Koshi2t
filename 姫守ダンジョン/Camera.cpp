@@ -121,25 +121,25 @@ void Camera::Main_Game_Update()
 	static float x = movePow_.x;
 	movePow_.x = gazePoint_.x;
 	movePow_.z = gazePoint_.z - 30;
-	/*float y = x - movePow_.x;
+	float y = x - movePow_.x;
 	movePow_.y += y;
 	if (movePow_.y<33)
 	{
 		movePow_.y -= y;
-	}*/
+	}
 	x = movePow_.x;
 
 
-	//プレイヤーの座標も加味
-	float dist = 0;
-	float fardist = 130.0f;
-	for (int i = 0; i < 4; i++)
-	{
-		if (dist_[i]>fardist && dist < dist_[i])
-		{
-			dist = dist_[i];
-		}
-	}
+	////プレイヤーの座標も加味
+	//float dist = 0;
+	//float fardist = 130.0f;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	if (dist_[i]>fardist && dist < dist_[i])
+	//	{
+	//		dist = dist_[i];
+	//	}
+	//}
 
 
 

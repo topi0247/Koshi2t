@@ -40,7 +40,7 @@ void Load_Scene::Init()
 	}*/
 	descriptionUI_->Init(L"./UI/UI_Tex/loadscene.png",D3DXVECTOR2(0,0), D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT), D3DXVECTOR4(1,1,1,1),GrapRect(0,1,0,1));
 	//camera_->gazePoint_ = D3DXVECTOR3(0, 0, -32);
-	camera_->movePow_ = D3DXVECTOR3(-7.2, 9, -42);
+	camera_->movePow_ = D3DXVECTOR3(-7.2, 8.5, -42);
 	uiAnimCount_ = 0;
 
 	camera_->gazePoint_ = camera_->movePow_;

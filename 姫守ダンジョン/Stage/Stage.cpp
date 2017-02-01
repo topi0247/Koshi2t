@@ -88,7 +88,7 @@ void Stage::Init(char* stageName)
 
 //
 //	@brief	現在いるステージのメッシュ情報取得
-CD3DXMESH* Stage::GetMeshInfo()const
+CD3DXMESH* Stage::GetMeshInfo()
 {
 	/*for (auto s : stage_)
 	{

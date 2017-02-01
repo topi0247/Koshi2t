@@ -9,8 +9,10 @@ CharactorSelection_Scene::CharactorSelection_Scene()
 	charaSelect_UI["player2"] = new TD_Graphics;
 	charaSelect_UI["player3"] = new TD_Graphics;
 	charaSelect_UI["player4"] = new TD_Graphics;
-	charaSelect_UI["Start_UI"] = new TD_Graphics;
-	charaSelect_UI["PUSH_A"] = new TD_Graphics;
+	charaSelect_UI["beforeButton"] = new TD_Graphics;
+	charaSelect_UI["decideButton"] = new TD_Graphics;
+	//charaSelect_UI["Start_UI"] = new TD_Graphics;
+	//charaSelect_UI["PUSH_A"] = new TD_Graphics;
 	camera_ = new Camera;
 	text_ = new D3D11_TEXT;
 }
@@ -24,15 +26,20 @@ CharactorSelection_Scene::~CharactorSelection_Scene()
 	delete charaSelect_UI["player1"];
 	charaSelect_UI["player1"] = nullptr;
 	delete charaSelect_UI["player2"];
-	charaSelect_UI["player1"] = nullptr;
+	charaSelect_UI["player2"] = nullptr;
 	delete charaSelect_UI["player3"];
-	charaSelect_UI["player1"] = nullptr;
+	charaSelect_UI["player3"] = nullptr;
 	delete charaSelect_UI["player4"];
-	charaSelect_UI["player1"] = nullptr;
-	delete charaSelect_UI["Start_UI"];
-	charaSelect_UI["Start_UI"] = nullptr;
-	delete charaSelect_UI["PUSH_A"];
-	charaSelect_UI["PUSH_A"] = nullptr;
+	charaSelect_UI["player4"] = nullptr;
+	delete charaSelect_UI["beforeButton"];
+	charaSelect_UI["beforeButton"] = nullptr;
+	delete charaSelect_UI["decideButton"];
+	charaSelect_UI["decideButton"] = nullptr;
+
+	//delete charaSelect_UI["Start_UI"];
+	//charaSelect_UI["Start_UI"] = nullptr;
+	//delete charaSelect_UI["PUSH_A"];
+	//charaSelect_UI["PUSH_A"] = nullptr;
 	delete camera_;
 	camera_ = nullptr;
 	delete text_;
@@ -42,7 +49,7 @@ CharactorSelection_Scene::~CharactorSelection_Scene()
 void CharactorSelection_Scene::Init()
 {
 	nextFlg_ = false;
-	okButon_ = 10;
+	okButon_ = 20;
 	strcpy(CharactorCreator::player1_, null);
 	strcpy(CharactorCreator::player2_, null);
 	strcpy(CharactorCreator::player3_, null);
@@ -59,7 +66,7 @@ void CharactorSelection_Scene::Init()
 		choiceJob_[i] = not;
 		keyWait_[i] = 0;
 		playerUIPos_[i] = D3DXVECTOR2(50 + i * 500, 890);
-		meshPos_[i] = D3DXVECTOR3(-3.5 + i * 2.3, 0, 0);
+		meshPos_[i] = D3DXVECTOR3(-3.5 + i * 2, 0.32, 0);
 	}
 	//meshPos_[0] = D3DXVECTOR3(-3.5, 0, 0);
 
@@ -74,8 +81,12 @@ void CharactorSelection_Scene::Init()
 	charaSelect_UI["player3"]->Init(L"./UI/UI_Tex/player_plate3.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["player4"]->Init(L"./UI/UI_Tex/player_plate4.png", /*0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(115, 150), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	charaSelect_UI["CHARASELECT_UI"]->Init(L"./UI/UI_Tex/character_select.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(WINDOW_WIDTH, WINDOW_HEIGHT), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	charaSelect_UI["Start_UI"]->Init(L"./UI/UI_Tex/ready.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(1290, 327), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	charaSelect_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(280, 70), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//D3DXVECTOR2 pos(1600, 670);
+	D3DXVECTOR2 size(250, 350);
+	charaSelect_UI["beforeButton"]->Init(L"./UI/UI_Tex/CS_start_off.png",/* 0,*/D3DXVECTOR2(0, 0), size, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	charaSelect_UI["decideButton"]->Init(L"./UI/UI_Tex/CS_start_on1.png",/* 0,*/ D3DXVECTOR2(0, 0), size, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//charaSelect_UI["Start_UI"]->Init(L"./UI/UI_Tex/ready.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(1290, 327), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//charaSelect_UI["PUSH_A"]->Init(L"./UI/UI_Tex/start_button.png",/* 0,*/ D3DXVECTOR2(0, 0), D3DXVECTOR2(280, 70), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	camera_->gazePoint_ = D3DXVECTOR3(0, 2.4, 0);
 	camera_->movePow_ = D3DXVECTOR3(0, 2.4, -10);
 	Sound::getInstance().BGM_play("CHARACTERSELECT");
@@ -107,19 +118,23 @@ SceneBase* CharactorSelection_Scene::Update(SceneRoot* root)
 			}
 			else if (keyWait_[i] > okButon_ && GamePad::checkInput(i, GamePad::InputName::A))
 			{
-				DecideJob();
-				next = new Main_Scene;
-				////デバッグ用
-				//next = new Result_Scene;
-				//Result_Scene::m10_Time = 0;
-				//Result_Scene::m1_Time = 0;
-				//Result_Scene::s10_Time = 0;
-				//Result_Scene::s1_Time = 0;
-				//Result_Scene::c10_Time = 0;
-				//Result_Scene::c1_Time = 0;
+				if (playerUIPos_[i].x > 1660 && playerUIPos_[i].x < 1835
+					&& playerUIPos_[i].y>680 && playerUIPos_[i].y < 1020)
+				{
+					DecideJob();
+					next = new Main_Scene;
+					////デバッグ用
+					//next = new Result_Scene;
+					//Result_Scene::m10_Time = 0;
+					//Result_Scene::m1_Time = 0;
+					//Result_Scene::s10_Time = 0;
+					//Result_Scene::s1_Time = 0;
+					//Result_Scene::c10_Time = 0;
+					//Result_Scene::c1_Time = 0;
 
-				//
-				Sound::getInstance().SE_play("DECISION_SE");
+					//
+					Sound::getInstance().SE_play("DECISION_SE");
+				}
 			}
 		}
 	}
@@ -176,10 +191,13 @@ void CharactorSelection_Scene::Update()
 		playerUIPos_[i] = Move(i);
 		if (keyWait_[i] > okButon_)
 		{
-			if (!nextFlg_ && GamePad::checkInput(i, GamePad::InputName::A))
+			if (/*!nextFlg_ &&*/ GamePad::checkInput(i, GamePad::InputName::A))
 			{
 				SetCharaJob(i);
-				keyWait_[i] = 0;
+				if (!nextFlg_)
+				{
+					keyWait_[i] = 0;
+				}
 			}
 			if (choiceJob_[i] != not&&GamePad::checkInput(i, GamePad::InputName::B))
 			{
@@ -189,9 +207,16 @@ void CharactorSelection_Scene::Update()
 		}
 	}
 
-//#ifdef _DEBUG
+	//#ifdef _DEBUG
 	if (GamePad::checkInput(Player1, GamePad::InputName::RT))
 	{
+		choiceJob_[Player2] = shield;
+		choiceJob_[Player3] = bomber;
+		choiceJob_[Player4] = witch;
+	}
+	if (GetKeyState('S') & 0x80)
+	{
+		choiceJob_[Player1] = sword;
 		choiceJob_[Player2] = shield;
 		choiceJob_[Player3] = bomber;
 		choiceJob_[Player4] = witch;
@@ -202,7 +227,14 @@ void CharactorSelection_Scene::Update()
 		choiceJob_[Player3] = not;
 		choiceJob_[Player4] = not;
 	}
-//#endif
+	if (GetKeyState('R') & 0x80)
+	{
+		choiceJob_[Player1] = not;
+		choiceJob_[Player2] = not;
+		choiceJob_[Player3] = not;
+		choiceJob_[Player4] = not;
+	}
+	//#endif
 
 	int count = 0;
 	for (int i = 0; i < 4; i++)
@@ -259,27 +291,27 @@ void CharactorSelection_Scene::SetCharaJob(int type)
 {
 	//座標に基づくキャラクター選択
 	jobName temp = not;
-	float up = 225;
-	float down = 780;
-	if (playerUIPos_[type].x > 18 && playerUIPos_[type].x < 480
+	float up = 170;
+	float down = 625;
+	if (playerUIPos_[type].x > 30 && playerUIPos_[type].x < 470
 		&& playerUIPos_[type].y >up && playerUIPos_[type].y < down)
 	{
 		temp = sword;
 		Sound::getInstance().SE_play("DECISION_SE");
 	}
-	else if (playerUIPos_[type].x > 490 && playerUIPos_[type].x < 960
+	else if (playerUIPos_[type].x > 500 && playerUIPos_[type].x < 940
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = shield;
 		Sound::getInstance().SE_play("DECISION_SE");
 	}
-	else if (playerUIPos_[type].x > 965 && playerUIPos_[type].x < 1430
+	else if (playerUIPos_[type].x > 970 && playerUIPos_[type].x < 1415
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = bomber;
 		Sound::getInstance().SE_play("DECISION_SE");
 	}
-	else if (playerUIPos_[type].x > 1440 && playerUIPos_[type].x < 1900
+	else if (playerUIPos_[type].x > 1450 && playerUIPos_[type].x < 1890
 		&& playerUIPos_[type].y > up && playerUIPos_[type].y < down)
 	{
 		temp = witch;
@@ -344,7 +376,7 @@ float CharactorSelection_Scene::HandAnimation(float size)
 {
 	static float scale = size;
 	static bool big = true;
-	float mag = 0.001;
+	float mag = 0.002;
 	float maxScale = 1.05;
 	float minScale = 0.95;
 
@@ -387,7 +419,7 @@ void CharactorSelection_Scene::MeshRender(jobName name, int type)
 	D3DXVECTOR3 pos(meshPos_[type].x, meshPos_[type].y, meshPos_[type].z);
 	//D3DXVECTOR3 posD(-3.5, 0, 0);
 	//D3DXVECTOR3 posD(-1.2, 0, 0);
-	float scale = 0.1;
+	float scale = 0.11;
 	float speed = 1.0f / 40.0f;
 	switch (name)
 	{
@@ -443,7 +475,7 @@ void CharactorSelection_Scene::ChoiceJobUIRender(jobName name, int type)
 
 void CharactorSelection_Scene::Render()
 {
-	
+
 	static float fingerUIScale = 1.0f;
 	fingerUIScale = HandAnimation(fingerUIScale);
 	//for (int i = 0; i < 4; i++)
@@ -456,21 +488,31 @@ void CharactorSelection_Scene::Render()
 	charaSelect_UI["player4"]->Render(playerUIPos_[Player4], D3DXVECTOR2(fingerUIScale, fingerUIScale), true);
 	//}
 
+	D3DXVECTOR2 pos(1640, 670);
+	if (nextFlg_)
+	{
+		charaSelect_UI["decideButton"]->Render(pos, D3DXVECTOR2(1, 1), true);
+	}
+	else
+	{
+		charaSelect_UI["beforeButton"]->Render(pos, D3DXVECTOR2(1, 1), true);
+	}
+
 	//static D3DXVECTOR2 mag(1, 1);
 	//mag.x += -(GetKeyState(VK_LEFT) & 0x80)*0.001f+ (GetKeyState(VK_RIGHT) & 0x80)*0.001f;
 	//mag.y += -(GetKeyState(VK_UP) & 0x80)*0.001f + (GetKeyState(VK_DOWN) & 0x80)*0.001f;
 
-	static D3DXVECTOR2 startUIPos(WINDOW_WIDTH, 400);
-	if (nextFlg_)
-	{
-		startUIPos = StartAnimation(startUIPos);
-		charaSelect_UI["PUSH_A"]->Render(D3DXVECTOR2(750, 700), D3DXVECTOR2(1.7, 0.8), true);
-		charaSelect_UI["Start_UI"]->Render(startUIPos, D3DXVECTOR2(1.7, 0.8), true);
-	}
-	else
-	{
-		startUIPos = D3DXVECTOR2(WINDOW_WIDTH, 400);
-	}
+	//static D3DXVECTOR2 startUIPos(WINDOW_WIDTH, 400);
+	//if (nextFlg_)
+	//{
+	//	startUIPos = StartAnimation(startUIPos);
+	//	charaSelect_UI["PUSH_A"]->Render(D3DXVECTOR2(750, 700), D3DXVECTOR2(1.7, 0.8), true);
+	//	charaSelect_UI["Start_UI"]->Render(startUIPos, D3DXVECTOR2(1.7, 0.8), true);
+	//}
+	//else
+	//{
+	//	startUIPos = D3DXVECTOR2(WINDOW_WIDTH, 400);
+	//}
 
 	charaSelect_UI["CHARASELECT_UI"]->Render(D3DXVECTOR2(0, 0), D3DXVECTOR2(1, 1), false);
 	/*static D3DXVECTOR2 pos(0, 0);
@@ -506,24 +548,28 @@ void CharactorSelection_Scene::Render()
 	bomber_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 	witch_->m_pD3dxMesh->m_pAnimController->AdvanceTime(speed, NULL);
 
-	/*static D3DXVECTOR3 pos(0, 0, 0);
-	static float scale = 0.1;
-	float speedD = 0.001;
-	pos.x += (GetKeyState(VK_RIGHT) & 0x80)*speedD + -(GetKeyState(VK_LEFT) & 0x80)*speedD;
-	pos.y += (GetKeyState(VK_UP) & 0x80)*speedD + -(GetKeyState(VK_DOWN) & 0x80)*speedD;
-	scale += (GetKeyState('L') & 0x80)*speedD + -(GetKeyState('S') & 0x80)*speedD;
-	sword_->Render(pos, 0, D3DXVECTOR3(scale, scale, scale));
-*/
+	//static D3DXVECTOR3 pos(0, 0, 0);
+	//static float scale = 0.1;
+	//float speedD = 0.0001;
+	//pos.x += (GetKeyState(VK_RIGHT) & 0x80)*speedD + -(GetKeyState(VK_LEFT) & 0x80)*speedD;
+	//pos.y += (GetKeyState(VK_UP) & 0x80)*speedD + -(GetKeyState(VK_DOWN) & 0x80)*speedD;
+	//scale += (GetKeyState('L') & 0x80)*speedD + -(GetKeyState('S') & 0x80)*speedD;
+	//sword_->Render(pos, 0, D3DXVECTOR3(scale, scale, scale));
+
 	camera_->Render();
 
 
 	////デバッグ描画
 	//char str[256];
-	//sprintf(str, "%d", (int)sword_->m_pD3dxMesh->m_pAnimController->GetTime() % 2);
+	//sprintf(str, "x:%f y:%f", playerUIPos_[Player1].x,playerUIPos_[Player1].y);
 	//text_->Render(str, 0, 50);
-	//static int fps = 0;
-	//sprintf(str, "%d", fps++%FPS/10);
+	//sprintf(str, "%d", keyWait_[Player1]);
+	//text_->Render(str, 0, 70);
+	//sprintf(str, "scale:%f",scale);
 	//text_->Render(str, 0, 80);
+	/*static int fps = 0;
+	sprintf(str, "%d", fps++%FPS/10);
+	text_->Render(str, 0, 80);*/
 
 
 }

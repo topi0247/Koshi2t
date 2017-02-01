@@ -16,13 +16,13 @@ Main_Scene::Main_Scene()
 	debugText_ = new D3D11_TEXT;
 	creator_ = new CharactorCreator;
 	uiStart_ = new TD_Graphics;
-	uiClear_ = new TD_Graphics;
+	//uiClear_ = new TD_Graphics;
 	//uiFailed_ = new TD_Graphics;
 	for (int i = 0; i < UI_TIME; i++)
 	{
 		uiTime_[i] = new TD_Graphics;
 	}
-	uiDebug_ = new TD_Graphics;
+	//uiDebug_ = new TD_Graphics;
 }
 
 //
@@ -35,8 +35,8 @@ Main_Scene::~Main_Scene()
 	creator_ = nullptr;
 	delete uiStart_;
 	uiStart_ = nullptr;
-	delete uiClear_;
-	uiClear_ = nullptr;
+	//delete uiClear_;
+	//uiClear_ = nullptr;
 	//delete uiFailed_;
 	//uiFailed_ = nullptr;
 
@@ -45,8 +45,8 @@ Main_Scene::~Main_Scene()
 		delete uiTime_[i];
 		uiTime_[i] = nullptr;
 	}
-	delete uiDebug_;
-	uiDebug_ = nullptr;
+	//delete uiDebug_;
+	//uiDebug_ = nullptr;
 }
 
 //
@@ -99,15 +99,15 @@ void Main_Scene::Init()
 	//UI
 	D3DXVECTOR2 scale(1623, 336);
 	uiStart_->Init(L"./UI/UI_Tex/start_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	uiClear_->Init(L"./UI/UI_Tex/clear_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	//uiClear_->Init(L"./UI/UI_Tex/clear_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	//uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	scale = D3DXVECTOR2(128, 256);
-	float rect = 0.083;
+	float rect = 0.09;
 	for (int i = 0; i < UI_TIME; i++)
 	{
 		uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
 	}
-	uiDebug_->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 0.1f));
+	//uiDebug_->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 0.1f));
 	failedFlg_ = false;
 	startCameraMovefirstFlg_ = true;
 	startCameraMoveSecFlg_ = false;
@@ -156,7 +156,7 @@ void Main_Scene::Destroy()
 	charList_.shrink_to_fit();
 	//enemyList_.clear();
 	player_.clear();
-	player_.shrink_to_fit();
+	//player_.shrink_to_fit();
 
 	delete stage_;
 	stage_ = nullptr;
@@ -214,7 +214,7 @@ void Main_Scene::Update()
 	default:
 		break;
 	}
-
+//#ifdef _DEBUG
 	//リセット処理(デバッグ用)
 	if (GetKeyState('R') & 0x80)
 	{
@@ -234,7 +234,16 @@ void Main_Scene::Update()
 
 		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
-
+	if (GetKeyState('C')&0x80)
+	{
+		scene_ = EndS;
+	}
+	if (GetKeyState('F') & 0x80)
+	{
+		failedFlg_ = true;
+		scene_ = EndS;
+	}
+//#endif
 	//camera_->Update(princess_->m_Pos);
 }
 
@@ -275,22 +284,22 @@ void Main_Scene::GameMain()
 	}
 	camera_->Main_Game_Update();
 
-	////if (enemyList_.size() < 50)
-	//if (enemyCount_ < ENEMY_MAX)
-	//{
-	//	spawnManager_->Update(princess_);
-	//	std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
-	//	if (!temp.empty())
-	//	{
-	//		for (auto e : temp)
-	//		{
-	//			++enemyCount_;
-	//			//enemyList_.push_back(e);
-	//			charList_.push_back(e);
-	//		}
-	//		temp.clear();
-	//	}
-	//}
+	//if (enemyList_.size() < 50)
+	if (enemyCount_ < ENEMY_MAX)
+	{
+		spawnManager_->Update(princess_);
+		std::vector<EnemyJobManager*> temp = spawnManager_->OutEnemy();
+		if (!temp.empty())
+		{
+			for (auto e : temp)
+			{
+				++enemyCount_;
+				//enemyList_.push_back(e);
+				charList_.push_back(e);
+			}
+			temp.clear();
+		}
+	}
 
 	//存在しているすべてのキャラクターセット
 	CharactorManager::allCharaList_ = charList_;
@@ -366,7 +375,7 @@ void Main_Scene::GameMain()
 
 	//ゲーム終了
 	//姫死亡 又は プレイヤー全滅
-	if (!(princess_->GetAliveFlg() || deadCount == 4))
+	if (!princess_->GetAliveFlg() || deadCount == 4)
 	{
 		failedFlg_ = true;
 		scene_ = EndS;

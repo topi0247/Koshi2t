@@ -92,8 +92,7 @@ void WeaponBall::Move_Weapon(float speed)
 	//{
 	float fDistance = 0;
 	D3DXVECTOR3 vNormal;
-	Stage* stage = new Stage;
-	if (col_->RayIntersect(weaponBall_->m_vPos, dir_, stage->GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.2)
+	if (col_->RayIntersect(weaponBall_->m_vPos, dir_, Stage::GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 	{
 		delFlg_ = true;
 	}

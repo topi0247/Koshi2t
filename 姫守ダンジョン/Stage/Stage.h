@@ -37,5 +37,5 @@ public:
 	void Init(char* stageName);
 	void Render();				//描画
 	//void Destroy();
-	CD3DXMESH* GetMeshInfo()const;		//メッシュの取得
+	static CD3DXMESH* GetMeshInfo();		//メッシュの取得
 };

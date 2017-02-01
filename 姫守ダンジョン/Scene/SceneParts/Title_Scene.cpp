@@ -87,7 +87,7 @@ SceneBase* Title_Scene::Update(SceneRoot* root)
 	static bool nextFlg = false;
 	for (int i = 0; i < 4; i++)
 	{
-		if (GamePad::checkInput(i, GamePad::InputName::A))
+		if (GamePad::checkInput(i, GamePad::InputName::A)||GetKeyState(VK_SPACE)&0x80)
 		{
 			nextFlg = true;
 			Sound::getInstance().SE_play("DECISION_SE");

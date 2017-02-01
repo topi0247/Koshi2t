@@ -78,7 +78,7 @@ void Result_Scene::Init()
 		uiResult_->Init(L"./UI/UI_Tex/clear_font2.png", D3DXVECTOR2(0, 0), ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 		D3DXVECTOR2 time_scale(128, 256);
-		float rect = 0.083;
+		float rect = 0.09;
 		for (int i = 0; i < UI_TIME; i++)
 		{
 			uiTime_[i]->Init(L"./UI/UI_Tex/number.png", D3DXVECTOR2(0, 0), time_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));

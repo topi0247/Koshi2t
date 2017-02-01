@@ -12,7 +12,7 @@
 #include "./Job/WeaponBall.h"
 #include "./../../UI/TD_Graphics.h"
 
-#define UI_SPACE	20		//プレイヤー1と画面端の隙間
+#define UI_SPACE	22		//プレイヤー1と画面端の隙間
 #define UI_INTERVAL	480		//UIとUIの間隔(CharaTypeに乗算する)
 
 //	職業管理クラス

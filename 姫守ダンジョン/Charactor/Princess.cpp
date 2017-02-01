@@ -107,14 +107,14 @@ void Princess::Move(float speed)
 void Princess::DamageCalc(unsigned int atk)
 {
 
-	aliveFlg_ = false;
-	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
-	//{
-	moveAbleFlg_ = false;
-	ChangeMotion(motion_, "dead1");
-	motionCount_ = 0;
-	Sound::getInstance().SE_play("P_DEAD");
-	//}
+	//aliveFlg_ = false;
+	////if (motionNo_ != motion_->GetMotion("dead1")->id_)
+	////{
+	//moveAbleFlg_ = false;
+	//ChangeMotion(motion_, "dead1");
+	//motionCount_ = 0;
+	//Sound::getInstance().SE_play("P_DEAD");
+	////}
 }
 
 //
@@ -150,7 +150,7 @@ void Princess::SetSpawn(std::vector<Spawn*> spawn)
 //	@brief	••ˆó
 void Princess::Seal()
 {
-	//float dist = 7;
+	float dist = 7;
 
 	/*if (GetKeyState(VK_SPACE))
 	{
@@ -160,8 +160,9 @@ void Princess::Seal()
 	{
 		for (auto spawn : spawnPosList_)
 		{
-			int no = collision_->SetSpaceNo(spawn->GetPos(), 2);
-			if (collision_->CheckSpaceNo(spaceNo_, no, 1, 2))
+			//int no = collision_->SetSpaceNo(spawn->GetPos(), 2);
+			//if (collision_->CheckSpaceNo(spaceNo_, no, 1, 2))
+			if(collision_->CharaNear(m_Pos,spawn->GetPos(),dist))
 			{
 				sealFlg_ = true;
 				sealSpawn_ = spawn;

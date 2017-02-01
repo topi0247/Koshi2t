@@ -21,9 +21,9 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 
 	//UI
 	jobMarkUI_ = new TD_Graphics;
-	jobUIPos_ = D3DXVECTOR2(30 + charaType*UI_INTERVAL + UI_SPACE, 860);
-	D3DXVECTOR2 scale(105, 100);
-	jobMarkUI_->Init(L"./UI/UI_Tex/bomber.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
+	D3DXVECTOR2 scale(136.5, 148);
+	jobMarkUI_->Init(L"./UI/UI_Tex/icon_ranger.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 
 }

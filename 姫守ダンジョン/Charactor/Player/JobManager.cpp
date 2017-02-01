@@ -18,27 +18,26 @@ JobManager::JobManager(CharaType charaType)
 
 	//UI
 	backUI_ = new TD_Graphics;
-	backUIPos_ = D3DXVECTOR2(0 + charaType * UI_INTERVAL + UI_SPACE, 830);
-	D3DXVECTOR2 backScale(461, 177);
-	/*switch (charaType)
+	backUIPos_ = D3DXVECTOR2(0 + charaType * UI_INTERVAL + UI_SPACE, 910);
+	D3DXVECTOR2 backScale(431.5, 148);
+	switch (charaType)
 	{
 	case Player1:
-		backUI_->Init(L"./UI/UI_Tex/hp_frame.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp1.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player2:
-		backUI_->Init(L"./UI/UI_Tex/hp_frame2.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp2.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player3:
-		backUI_->Init(L"./UI/UI_Tex/hp_frame3.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp3.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player4:
-		backUI_->Init(L"./UI/UI_Tex/hp_frame4.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp4.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
-	}*/
-	backUI_->Init(L"./UI/UI_Tex/hp.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	}
 	hpGageUI_ = new TD_Graphics;
-	hpGazePos_ = D3DXVECTOR2(20 + charaType*UI_INTERVAL + UI_SPACE, 940);
-	D3DXVECTOR2 hpScale(420, 60);
+	hpGazePos_ = D3DXVECTOR2(20 + charaType*UI_INTERVAL + UI_SPACE, 995);
+	D3DXVECTOR2 hpScale(400, 60);
 	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png", hpGazePos_, hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 }
@@ -125,8 +124,8 @@ void JobManager::CharaUpdate()
 void JobManager::UIRender()
 {
 	D3DXVECTOR2 scale(1, 1);
-	//jobMarkUI_->Render(jobUIPos_, scale, true);
 	backUI_->Render(backUIPos_, scale, true);
+	jobMarkUI_->Render(jobUIPos_, scale, true);
 	float hpX = (float)hp_ / (float)param_->hp_;
 	scale = D3DXVECTOR2(hpX, 1);
 	hpGageUI_->Render(hpGazePos_, scale, true);
