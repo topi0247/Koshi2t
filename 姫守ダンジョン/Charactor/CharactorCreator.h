@@ -30,7 +30,7 @@ class CharactorCreator
 {
 	//static std::vector<CharaModel*> charaModelList_;
 	//static std::vector<StageModel*> stageModelList_;
-
+	static XFileRead* xfileRead;
 public:
 	static char player1_[10];
 	static char player2_[10];
@@ -40,6 +40,8 @@ public:
 	//static void LoadModel();
 
 	void LoadData();
+	static void LoadXFileName();
+	static void Destroy();
 	CD3DXSKINMESH* LoadChara(char* name);
 	CD3DXMESH* LoadStage(char* name);
 

@@ -31,6 +31,8 @@ WeaponBall::~WeaponBall()
 	weaponBall_ = nullptr;
 	delete col_;
 	col_ = nullptr;
+	delete creator_;
+	creator_ = nullptr;
 }
 
 //

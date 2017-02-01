@@ -111,7 +111,7 @@ void Result_Scene::Destroy()
 	SAFE_DELETE(meshPlayer2_);
 	SAFE_DELETE(meshPlayer3_);
 	SAFE_DELETE(meshPlayer4_);
-	//SAFE_DELETE(mesh_stage_);
+	SAFE_DELETE(mesh_stage_);
 }
 
 SceneBase* Result_Scene::Update(SceneRoot* root)

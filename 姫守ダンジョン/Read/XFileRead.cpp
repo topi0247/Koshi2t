@@ -6,6 +6,8 @@
 
 #include "XFileRead.h"
 
+XFile** XFileRead::xfileList_;
+int XFileRead::count_;
 //
 //	@brief				XFileクラスコンストラクタ
 //	@param (element)	読み込む要素
@@ -44,8 +46,6 @@ XFile::XFile(XMLElement* element, const char* type)
 //
 //	@brief	XFileReadクラスコンストラクタ
 XFileRead::XFileRead()
-	:count_(0)
-	, xfileList_(0)
 {
 }
 

@@ -15,6 +15,7 @@ CharactorSelection_Scene::CharactorSelection_Scene()
 	//charaSelect_UI["PUSH_A"] = new TD_Graphics;
 	camera_ = new Camera;
 	text_ = new D3D11_TEXT;
+	creator_ = new CharactorCreator;
 }
 
 CharactorSelection_Scene::~CharactorSelection_Scene()
@@ -40,6 +41,8 @@ CharactorSelection_Scene::~CharactorSelection_Scene()
 	//charaSelect_UI["Start_UI"] = nullptr;
 	//delete charaSelect_UI["PUSH_A"];
 	//charaSelect_UI["PUSH_A"] = nullptr;
+	delete creator_;
+	creator_ = nullptr;
 	delete camera_;
 	camera_ = nullptr;
 	delete text_;
@@ -54,7 +57,6 @@ void CharactorSelection_Scene::Init()
 	strcpy(CharactorCreator::player2_, null);
 	strcpy(CharactorCreator::player3_, null);
 	strcpy(CharactorCreator::player4_, null);
-	creator_ = new CharactorCreator;
 
 	sword_ = creator_->LoadChara("Œ•m");
 	shield_ = creator_->LoadChara("‚m");

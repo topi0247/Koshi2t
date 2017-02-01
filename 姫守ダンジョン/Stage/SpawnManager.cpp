@@ -30,8 +30,9 @@ SpawnManager::~SpawnManager()
 	//delete spawnGate_;
 	//spawnGate_ = nullptr;
 
-	//SAFE_DELETE(spawnMesh_);
-	//spawnList_.clear();
+	SAFE_DELETE(spawnMesh_);
+	spawnList_.clear();
+	spawnList_.shrink_to_fit();
 }
 
 //

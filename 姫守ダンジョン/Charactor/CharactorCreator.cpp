@@ -2,6 +2,7 @@
 
 //std::vector<CharaModel*> CharactorCreator::charaModelList_;
 //std::vector<StageModel*> CharactorCreator::stageModelList_;
+XFileRead* CharactorCreator::xfileRead;
 char CharactorCreator::player1_[10];
 char CharactorCreator::player2_[10];
 char CharactorCreator::player3_[10];
@@ -57,6 +58,23 @@ char CharactorCreator::player4_[10];
 //}
 
 //
+//	@brief	Xファイル情報の読み込み
+void CharactorCreator::LoadXFileName()
+{
+	//Xファイルの情報読み込み
+	XFileRead* xfileRead = new XFileRead;
+	xfileRead->ReadXFilePath();
+}
+
+//
+//	@brief	解放
+void CharactorCreator::Destroy()
+{
+	delete xfileRead;
+	xfileRead = nullptr;
+}
+
+//
 //	@brief	モーション・パラメータデータ読み込み
 void CharactorCreator::LoadData()
 {
@@ -74,9 +92,6 @@ void CharactorCreator::LoadData()
 //	@brief	キャラモデルのロード
 CD3DXSKINMESH* CharactorCreator::LoadChara(char* name)
 {
-	//Xファイルの情報読み込み
-	XFileRead* xfileRead = new XFileRead;
-	xfileRead->ReadXFilePath();
 	XFile* chara = xfileRead->GetXFile(name);
 	CD3DXSKINMESH* mesh = new CD3DXSKINMESH;
 	mesh->CreateFromX(chara->GetFilePath());
@@ -87,9 +102,6 @@ CD3DXSKINMESH* CharactorCreator::LoadChara(char* name)
 //	@brief	ステージモデルのロード
 CD3DXMESH* CharactorCreator::LoadStage(char* name)
 {
-	//Xファイルの情報読み込み
-	XFileRead* xfileRead = new XFileRead;
-	xfileRead->ReadXFilePath();
 	XFile* stage = xfileRead->GetXFile(name);
 	CD3DXMESH* mesh = new CD3DXMESH;
 	mesh->LoadXMesh(stage->GetFilePath());

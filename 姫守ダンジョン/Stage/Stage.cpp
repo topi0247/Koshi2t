@@ -27,10 +27,10 @@ Stage::Stage()
 //	@brief	デストラクタ
 Stage::~Stage()
 {
-	//SAFE_DELETE(stage_);
-	////SAFE_DELETE(skyMesh_);
-	//SAFE_DELETE(gate_);
-	//SAFE_DELETE(abyssGround_);
+	SAFE_DELETE(stage_);
+	//SAFE_DELETE(skyMesh_);
+	SAFE_DELETE(gate_);
+	SAFE_DELETE(abyssGround_);
 	delete creator_;
 	creator_ = nullptr;
 }

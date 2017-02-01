@@ -41,8 +41,8 @@ public:
 //	@brief	Xファイル読み込みクラス
 class XFileRead
 {
-	XFile** xfileList_;				//Xファイル管理
-	int count_;						//読み込むXファイル数
+	static XFile** xfileList_;				//Xファイル管理
+	static int count_;						//読み込むXファイル数
 
 public:
 	XFileRead();

@@ -75,7 +75,7 @@ void Title_Scene::Destroy()
 	SAFE_DELETE(mesh_slime_);
 	SAFE_DELETE(mesh_goblin_);
 	SAFE_DELETE(mesh_skelton_);
-	//SAFE_DELETE(mesh_stage_);
+	SAFE_DELETE(mesh_stage_);
 }
 
 SceneBase* Title_Scene::Update(SceneRoot* root)

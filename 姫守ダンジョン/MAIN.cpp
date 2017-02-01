@@ -115,8 +115,8 @@ void MAIN::Loop()
 	Sound::getInstance().Run();
 	//エフェクト
 	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
-	////キャラクターデータ・モデルの読み込み
-	//CharactorCreator::LoadModel();
+	//Xファイル情報の読み込み
+	CharactorCreator::LoadXFileName();
 
 	//シーンマネージャ
 	root_ = new SceneRoot;
@@ -247,7 +247,7 @@ void MAIN::DestroyD3D()
 {
 	//delete camera_;
 	//camera_ = nullptr;
-	//CharactorCreator::Destroy();
+	CharactorCreator::Destroy();
 	root_->Destroy();
 	SAFE_RELEASE(m_pSwapChain);
 	SAFE_RELEASE(m_pBackBuffer_TexRTV);
