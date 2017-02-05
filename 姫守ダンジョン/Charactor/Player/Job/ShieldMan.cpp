@@ -338,12 +338,13 @@ void ShieldMan::Move(float speed)
 				Sound::getInstance().SE_play("Sh_SPECIAL");
 				if (!effectFlg_)
 				{
-					Effect::getInstance().Effect_Play("smork", m_Pos);
+					Effect::getInstance().Effect_Play("smork", m_Pos+m_Dir);
+					Effect::getInstance().SetRotation("smork",D3DXVECTOR3(0,m_Yaw,0));
 					effectFlg_ = true;
 				}
 			}
 		}
-		if (effectFlg_ && ++motionCount_ % motion_->GetMotion("specialWalk")->frame_==0)
+		if (effectFlg_ && ++motionCount_ % 10==0)
 		{
 			effectFlg_ = false;
 		}
@@ -356,6 +357,10 @@ void ShieldMan::Move(float speed)
 		{
 			ChangeMotion(motion_, "wait");
 			effectFlg_ = false;
+		}
+		else if (atkNo_==specialAtk&&motionNo_!=motion_->GetMotion("specialwait")->id_)
+		{
+			ChangeMotion(motion_, "specialwait");
 		}
 		//}
 	}

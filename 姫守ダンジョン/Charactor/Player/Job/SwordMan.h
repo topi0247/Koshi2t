@@ -17,7 +17,9 @@ class SwordMan :public JobManager
 {
 private:
 	std::map<int, char*> atkMotion_;
+	std::map<int, char*> atkEffect_;
 	int chainCount_;
+	bool atkFlg_;
 
 	void Normal_Attack_Collision();
 	//void Special_Attack_Collision();

@@ -53,7 +53,7 @@ Main_Scene::~Main_Scene()
 //	@brief	初期化
 void Main_Scene::Init()
 {
-	creator_->LoadData();
+	//creator_->LoadData();
 	//camera_->movePow_ = D3DXVECTOR3(0, 45, -45);
 	//camera_->gazePoint_ = D3DXVECTOR3(0, 0, -12);
 	camera_->movePow_ = D3DXVECTOR3(-3, 1, -15);
@@ -230,7 +230,7 @@ void Main_Scene::Update()
 		}
 		charList_.push_back(princess_);
 		spawnManager_->Reset();
-
+		enemyCount_ = 0;
 		princess_->SetSpawn(spawnManager_->GetSpawnList());
 	}
 	if (GetKeyState('C')&0x80)
@@ -277,6 +277,7 @@ void Main_Scene::GameMain()
 
 	//カメラ移動
 	camera_->gazePoint_ = princess_->m_Pos;
+	//camera_->gazePoint_ = player_[Player1]->m_Pos;
 	camera_->Main_Game_Update();
 
 	if (enemyCount_ < ENEMY_MAX)
@@ -597,10 +598,10 @@ void Main_Scene::Render()
 	//sprintf(str, "%d", second10);
 	//debugText_->Render(str, 0, 80);
 
-#ifdef _DEBUG
-	PlayerDebug();
+//#ifdef _DEBUG
+	//PlayerDebug();
 	//EnemyDebug();
-#endif // _DEBUG
+//#endif // _DEBUG
 
 	camera_->Render();
 }
@@ -609,8 +610,10 @@ void Main_Scene::PlayerDebug()
 {
 	//デバッグ描画
 	char str[256];
-	sprintf(str, "pos.x:%f pos.y:%f pos.z:%f",camera_->movePow_.x,camera_->movePow_.y,camera_->movePow_.z);
-	debugText_->Render(str, 0, 50);
+	sprintf(str, "no:%d",player_[Player1]->GetMotionNo());
+	debugText_->Render(str, 0, 50); 
+	sprintf(str, "count:%d", player_[Player1]->GetMotionCount());
+	debugText_->Render(str, 0, 80);
 
 	//sprintf(str, "enemy:%d", enemyCount_);
 	//debugText_->Render(str, 0, 50);

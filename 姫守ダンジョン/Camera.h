@@ -18,6 +18,7 @@ class Camera
 	const float mainCameraSpeedS_;	//メインシーン移動速度、開始後
 	D3DXVECTOR3 firstMovePos_;		//メインシーン、ゲーム開始時の座標
 	D3DXVECTOR3 firstGazePos_;		//メインシーン、ゲーム開始時の注視点
+	float mainDist_;				//カメラと注視点とのZ座標の差分
 	float zoom_;					//ズーム値
 	void DebugMove();				//デバッグ用カメラ移動
 public:

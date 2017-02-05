@@ -30,6 +30,7 @@ D3D11_SPRITE::D3D11_SPRITE()
 //
 D3D11_SPRITE::~D3D11_SPRITE()
 {
+	SAFE_RELEASE(m_pAsciiTexture);
 }
 void D3D11_SPRITE::InitShader(ID3D11DeviceContext* pContext, DWORD width, DWORD height)
 {

@@ -19,6 +19,7 @@ Camera::Camera()
 {
 	firstMovePos_ =D3DXVECTOR3(0, 33.6, -41.53);
 	firstGazePos_ =D3DXVECTOR3(0, 0, -12);
+	mainDist_ = 20;
 }
 
 //
@@ -85,7 +86,7 @@ void Camera::Main_Game_Update()
 {
 	static float x = movePow_.x;
 	movePow_.x = gazePoint_.x;
-	movePow_.z = gazePoint_.z - 30;
+	movePow_.z = gazePoint_.z - mainDist_;
 	float y = x - movePow_.x;
 	movePow_.y += y;
 	if (movePow_.y < 33)

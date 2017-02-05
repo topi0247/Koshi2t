@@ -82,9 +82,10 @@ void Princess::Move(float speed)
 
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
 		{
-			motionNo_ = motion_->GetMotion("walk")->id_;
+			/*motionNo_ = motion_->GetMotion("walk")->id_;
 			mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("walk")->id_);
-			motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;
+			motionSpeed_ = 1 / (float)motion_->GetMotion("walk")->frame_;*/
+			ChangeMotion(motion_,"walk");
 		}
 	}
 	else
@@ -93,9 +94,10 @@ void Princess::Move(float speed)
 
 		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
 		{
-			motionNo_ = motion_->GetMotion("wait")->id_;
-			mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("wait")->id_);
-			motionSpeed_ = 1 / (float)motion_->GetMotion("wait")->frame_;
+			//motionNo_ = motion_->GetMotion("wait")->id_;
+			//mesh_->m_pD3dxMesh->ChangeAnimSet(motion_->GetMotion("wait")->id_);
+			//motionSpeed_ = 1 / (float)motion_->GetMotion("wait")->frame_;
+			ChangeMotion(motion_, "wait");
 		}
 	}
 }
@@ -106,15 +108,14 @@ void Princess::Move(float speed)
 //	@note	•P‚Ìê‡‚ÍŽ€–S
 void Princess::DamageCalc(unsigned int atk)
 {
-
-	//aliveFlg_ = false;
-	////if (motionNo_ != motion_->GetMotion("dead1")->id_)
-	////{
-	//moveAbleFlg_ = false;
-	//ChangeMotion(motion_, "dead1");
-	//motionCount_ = 0;
-	//Sound::getInstance().SE_play("P_DEAD");
-	////}
+	aliveFlg_ = false;
+	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
+	//{
+	moveAbleFlg_ = false;
+	ChangeMotion(motion_, "dead1");
+	motionCount_ = 0;
+	Sound::getInstance().SE_play("P_DEAD");
+	//}
 }
 
 //
@@ -152,10 +153,10 @@ void Princess::Seal()
 {
 	float dist = 7;
 
-	if (GetKeyState(VK_SPACE) & 0x80)
+	/*if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		dist = 100;
-	}
+	}*/
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)
@@ -187,6 +188,9 @@ Spawn* Princess::SealSpawn()
 			//motionSpeed_ = 1 / (float)motion_->GetMotion("prayer")->frame_;
 			ChangeMotion(motion_, "prayer");
 			Sound::getInstance().SE_play("P_SEAL");
+			auto el = std::find(spawnPosList_.begin(), spawnPosList_.end(), sealSpawn_);
+			spawnPosList_.erase(el);
+			return sealSpawn_;
 		}
 
 		if (++motionCount_ > motion_->GetMotion("prayer")->frame_)
@@ -195,9 +199,6 @@ Spawn* Princess::SealSpawn()
 			motionCount_ = 0;
 			motionChange_ = true;
 			//ChangeMotion(motion_, "wait");
-			auto el = std::find(spawnPosList_.begin(), spawnPosList_.end(), sealSpawn_);
-			spawnPosList_.erase(el);
-			return sealSpawn_;
 		}
 	}
 	return nullptr;
@@ -219,8 +220,7 @@ void Princess::Resuscitation()
 				//if(motionNo_!=motion_->GetMotion("prayer"))
 				c->SetRevivalFlg();
 				resList.push_back(c);
-				Sound::getInstance().SE_play("P_RES");
-				Effect::getInstance().Effect_Play("Res", c->m_Pos);
+				//Sound::getInstance().SE_play("P_RES");
 			}
 		}
 	}
@@ -231,6 +231,8 @@ void Princess::Resuscitation()
 	{
 		for (auto c : resList)
 		{
+			Effect::getInstance().Effect_Play("Res", c->m_Pos);
+			Effect::getInstance().SetScale("Res", 0.8);
 			auto res = std::find(deadCharaList_.begin(), deadCharaList_.end(), c);
 			deadCharaList_.erase(res);
 		}

@@ -12,6 +12,7 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 {
 	charaType_ = charaType;
 	magicFlg_ = false;
+	chargeMotionFlg_ = false;
 	atkNo_ = noAtk;
 	attackCount_ = 0;
 	magic_ = new CD3DXMESH;
@@ -63,13 +64,13 @@ void Witch::Reset()
 //	@brief	UŒ‚
 void Witch::Attack()
 {
-	//atkNo_ = noAtk;
 	if (/*magicFlg_ == false && */GamePad::checkInput(charaType_, GamePad::InputName::A)
 		/*|| GetKeyState('1') & 0x80*/)
 	{
 		++attackCount_;
 		//atkNo_ = waitAtk;
 		moveAbleFlg_ = false;
+
 	}
 	else if (atkNo_ == normalAtk)
 	{
@@ -84,7 +85,6 @@ void Witch::Attack()
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = FPS*param_->chargeTime_;
-	static bool chargeMotionFlg = false;
 
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
@@ -94,10 +94,10 @@ void Witch::Attack()
 	{
 		atkNo_ = charge;
 		moveAbleFlg_ = false;
-		if (!chargeMotionFlg && motionNo_ != motion_->GetMotion("charge1")->id_)
+		if (!chargeMotionFlg_ && motionNo_ != motion_->GetMotion("charge1")->id_)
 		{
 			motionChange_ = false;
-			chargeMotionFlg = true;
+			chargeMotionFlg_ = true;
 			//motionNo_ = motion_->GetMotion("charge")->id_;
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//timeEnd_ = motion_->GetMotion("attack")->frame_;
@@ -107,7 +107,8 @@ void Witch::Attack()
 			Sound::getInstance().SE_play("M_CHARGE");
 			Effect::getInstance().Effect_Play("charge2", m_Pos);
 		}
-		else if (++motionCount_ > motionFrame_&& chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		else if (++motionCount_ > motion_->GetMotion("charge1")->frame_
+			&& chargeMotionFlg_ &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
 			ChangeMotion(motion_, "charge2");
 		}
@@ -115,12 +116,17 @@ void Witch::Attack()
 
 	if (atkNo_ == specialAtk)
 	{
-		chargeMotionFlg = false;
+		chargeMotionFlg_ = false;
 		Special_Attack();
 		Effect::getInstance().Effect_Stop("charge2");
+		Sound::getInstance().SE_stop("M_CHARGE");
 	}
-
-
+	if (!magicFlg_)
+	{
+		ballFlg_ = false;
+		arrowFlg_ = false;
+		moveAbleFlg_ = true;
+	}
 }
 
 //
@@ -137,6 +143,10 @@ void Witch::Normal_Attack()
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack1");
+		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, true);
+		ballFlg_ = true;
+		Effect::getInstance().Effect_Play("magicball", magicBall_->GetPosition());
+		Effect::getInstance().SetScale("magicball", 0.2);
 	}
 
 	if (++motionCount_ > motionFrame_)
@@ -145,17 +155,7 @@ void Witch::Normal_Attack()
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		//moveAbleFlg_ = true;
-		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, true);
-		Effect::getInstance().Effect_Play("magicball", m_Pos);
-		Effect::getInstance().SetScale("magicball", 0.2);
 	}
-	if (!magicFlg_)
-	{
-		//motionChange_ = true;
-		//atkNo_ = noAtk;
-		moveAbleFlg_ = true;
-	}
-
 }
 
 //
@@ -171,26 +171,23 @@ void Witch::Special_Attack()
 		//motionSpeed_ = 1 / (float)timeEnd_;
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack1");
+		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, false);
+		arrowFlg_ = true;
+		Effect::getInstance().Effect_Play("arrow", magicBall_->GetPosition());
+		Effect::getInstance().SetRotation("arrow", D3DXVECTOR3(0, m_Yaw, 0));
 	}
 
 	if (++motionCount_ > motionFrame_)
 	{
+		Sound::getInstance().SE_stop("M_CHARGE");
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
 		//moveAbleFlg_ = true;
-		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, false);
-		Effect::getInstance().Effect_Play("aroow", m_Pos);
-		Effect::getInstance().SetRotation("aroow", D3DXVECTOR3(0,m_Yaw,0));
-		//Effect::getInstance().SetScale("aroow", 0.2);
+		//Effect::getInstance().SetScale("arrow", 0.2);
 		//RazorBeam();
 	}
-	if (!magicFlg_)
-	{
-		//motionChange_ = true;
-		//atkNo_ = noAtk;
-		moveAbleFlg_ = true;
-	}
+	
 
 }
 
@@ -215,7 +212,7 @@ void Witch::InstanceMagicBall(float range, float atk, bool flg)
 		magicBall_->SetScale(0/*param_->weaponScale_*/);
 		magicBall_->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1, m_Pos.z));
 		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
-		magicBall_->SetKnockBack(range, kDist, kSpeed, charaType_,Enemy);
+		magicBall_->SetKnockBack(range, kDist, kSpeed, charaType_, Enemy);
 		magicBall_->SetAttack(atk);
 		magicBall_->SetHitSound("M_DAMAGE_HIT");
 		magicBall_->SetHitDelFlg(flg);
@@ -232,14 +229,14 @@ void Witch::WeaponUpdate()
 	{
 		magicBall_->Move_Weapon(magicSpeed_);
 		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
-		//if (atkNo_ == normalAtk)
-		//{
+		if (ballFlg_)
+		{
 			Effect::getInstance().Update("magicball", magicBall_->GetPosition());
-		//}
-		//else if (atkNo_ == specialAtk)
-		//{
-			Effect::getInstance().Update("aroow", magicBall_->GetPosition());
-		//}
+		}
+		else if (arrowFlg_)
+		{
+			Effect::getInstance().Update("arrow", magicBall_->GetPosition());
+		}
 		if (magicBall_->GetDelFlg())
 		{
 			magicFlg_ = false;

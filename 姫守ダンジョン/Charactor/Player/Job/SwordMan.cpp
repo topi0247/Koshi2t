@@ -19,6 +19,15 @@ SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 	atkMotion_[4] = "attack5";
 	atkMotion_[5] = "attack6";
 
+	atkEffect_[0] = "s_Atk1";
+	atkEffect_[1] = "s_Atk2";
+	atkEffect_[2] = "s_Atk3";
+	atkEffect_[3] = "s_Atk4";
+	atkEffect_[4] = "s_Atk5";
+	atkEffect_[5] = "s_Atk6";
+
+	atkFlg_ = false;
+
 	//UI
 	jobMarkUI_ = new TD_Graphics;
 	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
@@ -60,19 +69,20 @@ void SwordMan::Attack()
 {
 	static int keyWait = 0;
 	int maxKeyWait = 10;
-	static bool atkAble = true;
-	if (atkAble && GamePad::checkInput(charaType_, GamePad::InputName::A))
+	//static bool atkAble = true;
+	if (!atkFlg_&& GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
 		keyWait = 0;
 		//++attackCount_;
 		atkNo_ = normalAtk;
-		atkAble = false;
+		//atkAble = false;
 		moveAbleFlg_ = false;
+		Normal_Attack();
 		//keyWait = 0;
 	}
-	else if (!atkAble && !GamePad::checkInput(charaType_, GamePad::InputName::A))
+	else if (/*!atkAble && */!GamePad::checkInput(charaType_, GamePad::InputName::A))
 	{
-		atkAble = true;
+		atkFlg_ = false;
 	}
 	//else if (atkNo_ == normalAtk)
 	//{
@@ -120,15 +130,14 @@ void SwordMan::Attack()
 
 	if (atkNo_ == normalAtk)
 	{
-		Normal_Attack();
-		if (++motionCount_ > motionFrame_)
+		if (++motionCount_ >= motionFrame_/*motion_->GetMotion(atkMotion_[chainCount_%ChainAmount])->frame_*/)
 		{
 			atkNo_ = noAtk;
 			//attackCount_ = 0;
 			++chainCount_;
-			motionCount_ = 0;
 			motionChange_ = true;
 			moveAbleFlg_ = true;
+			motionCount_ = 0;
 		}
 	}
 }
@@ -137,25 +146,27 @@ void SwordMan::Attack()
 //	@breif	’ÊíUŒ‚
 void SwordMan::Normal_Attack()
 {
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion(atkMotion_[chainCount_%ChainAmount])->id_)
+	if (motionChange_&& !atkFlg_)//&& motionNo_ != motion_->GetMotion(atkMotion_[chainCount_%ChainAmount])->id_)
 	{
+		atkFlg_ = true;
 		Sound::getInstance().SE_play("S_NORMALATK");
 
 		//=======//
-		Effect::getInstance().Effect_Play("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-		Effect::getInstance().SetScale("s_Atk", 0.5f);
+		Effect::getInstance().Effect_Play(atkEffect_[chainCount_%ChainAmount], D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
+		Effect::getInstance().SetScale(atkEffect_[chainCount_%ChainAmount], 0.5f);
 		float yaw = D3DXToDegree(m_Yaw) + 180;
 		//float roll = D3DXToDegree(m_Roll) + 180;
-		Effect::getInstance().SetRotation("s_Atk", D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
+		Effect::getInstance().SetRotation(atkEffect_[chainCount_%ChainAmount], D3DXVECTOR3(0, D3DXToRadian(yaw), 0));
 		//Effect::getInstance().SetRotation("s_Atk", D3DXVECTOR3(0, 1, 0), m_Yaw - 90);
 		//Effect::getInstance().SetRotation("s_Atk",D3DXVECTOR3(0, m_Yaw + 90,180));
 		//=======//
 
 		motionChange_ = false;
 		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
+		//motionSpeed_ *= 0.01f;
 		Normal_Attack_Collision();
 
-		float speed = -0.3;
+		float speed = -0.1;
 		D3DXVECTOR3 dir(sinf(m_Yaw)*speed, 0, cosf(m_Yaw)*speed);
 		m_Dir = dir;
 	}
@@ -171,7 +182,7 @@ void SwordMan::Normal_Attack()
 	//}
 
 	//=======//
-	Effect::getInstance().Update("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
+	//Effect::getInstance().Update("s_Atk", D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
 	//Effect::getInstance().Draw();
 	//=======//
 }

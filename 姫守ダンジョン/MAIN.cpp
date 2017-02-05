@@ -15,6 +15,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 //アプリケーションのエントリー関数 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 {
+	// メモリリーク検出
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	g_pMain = new MAIN;
 	if (g_pMain != NULL)
 	{
@@ -113,6 +116,8 @@ void MAIN::Loop()
 	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
 	//Xファイル情報の読み込み
 	CharactorCreator::LoadXFileName();
+	//伽クター情報の読み込み
+	CharactorCreator::LoadData();
 
 	//シーンマネージャ
 	root_ = new SceneRoot;
@@ -299,5 +304,5 @@ void MAIN::Render()
 		frame = 0;
 		SetWindowTextA(m_hWnd, str);
 	}
-#endif
+#endif // _DEBUG
 }

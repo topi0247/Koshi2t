@@ -14,8 +14,7 @@ Bomber::Bomber(CharaType charaType) :JobManager(charaType)
 	bombList_.clear();
 	bombScale_ = 1;
 	bombCount_ = 1;
-	invisibleCount_ = 1;
-	invinsibleFlg_ = false;
+	chargeMotionFlg_ = false;
 	bomb_ = new CD3DXMESH;
 	bomb_ = creator_->LoadStage("爆弾");
 
@@ -77,7 +76,7 @@ void Bomber::Reset()
 	callTiming_ = 0;
 	attackCount_ = 0;
 	bombFlg_ = false;
-	invinsibleFlg_ = false;
+	chargeMotionFlg_ = false;
 	bombList_.clear();
 
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
@@ -109,7 +108,6 @@ void Bomber::Attack()
 	//unsigned int inputTime = playerParam_.chargeTime_;
 
 	unsigned int inputTime = FPS*param_->chargeTime_;
-	static bool chargeMotionFlg = false;
 	if (0 < attackCount_ && attackCount_ <= inputTime)
 	{
 		atkNo_ = normalAtk;
@@ -118,10 +116,10 @@ void Bomber::Attack()
 	{
 		atkNo_ = charge;
 		moveAbleFlg_ = false;
-		if (!chargeMotionFlg && motionNo_ != motion_->GetMotion("charge1")->id_)
+		if (!chargeMotionFlg_ && motionNo_ != motion_->GetMotion("charge1")->id_)
 		{
 			motionChange_ = false;
-			chargeMotionFlg = true;
+			chargeMotionFlg_ = true;
 			//motionNo_ = motion_->GetMotion("charge")->id_;
 			//m_pD3dxMesh->ChangeAnimSet(motionNo_);
 			//timeEnd_ = motion_->GetMotion("attack")->frame_;
@@ -131,7 +129,7 @@ void Bomber::Attack()
 			Sound::getInstance().SE_play("B_CHARGE");
 			Effect::getInstance().Effect_Play("charge1",m_Pos);
 		}
-		else if (++motionCount_>motionFrame_ && chargeMotionFlg &&  motionNo_ != motion_->GetMotion("charge2")->id_)
+		else if (++motionCount_>motionFrame_ && chargeMotionFlg_ &&  motionNo_ != motion_->GetMotion("charge2")->id_)
 		{
 			ChangeMotion(motion_, "charge2");
 		}
@@ -139,7 +137,7 @@ void Bomber::Attack()
 
 	if (atkNo_ == specialAtk)
 	{
-		chargeMotionFlg = false;
+		chargeMotionFlg_ = false;
 		Effect::getInstance().Effect_Stop("charge1");
 		Special_Attack();
 	}
@@ -169,10 +167,10 @@ void Bomber::Normal_Attack()
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack");
 	}
+
 	float range = param_->attackRange_;
 	float atk = param_->normalAtk_;
-	InstanceWeapon(atk,range);
-
+	InstanceWeapon(atk, range);
 
 	//atkNo_ = noAtk;
 }
@@ -211,10 +209,8 @@ void Bomber::InstanceWeapon(float atk, float range)
 	{
 		effectPos_.clear();
 	}
-	if (++motionCount_>motionFrame_ )
+	if (motionCount_ == 0)
 	{
-		Sound::getInstance().SE_play("B_SPECIAL");
-		motionChange_ = true;
 		if (bombList_.empty() || bombList_.size() < size)
 		{
 			WeaponBall* bomb = new WeaponBall;
@@ -222,14 +218,22 @@ void Bomber::InstanceWeapon(float atk, float range)
 			bomb->SetScale(param_->weaponScale_);
 			bomb->SetAttack(atk);
 			//bomb->SetDamageList(allCharaList_, charaType_,2);
-			bomb->SetKnockBack(range, kDist, kSpeed, charaType_,Enemy);
+			bomb->SetKnockBack(range, kDist, kSpeed, charaType_, Enemy);
 			bomb->SetHitSound("B_DAMAGE_HIT");
 			bombList_.push_back(bomb);
 			effectPos_.push_back(m_Pos);
 		}
+	}
+	if (++motionCount_>motionFrame_ )
+	{
+		Sound::getInstance().SE_play("B_SPECIAL");
+		motionChange_ = true;
+		
 		atkNo_ = noAtk;
 		moveAbleFlg_ = true;
+		Sound::getInstance().SE_stop("B_CHARGE");
 	}
+	
 }
 
 //
@@ -247,7 +251,7 @@ void Bomber::WeaponUpdate()
 		}
 		if (/*b != nullptr &&*/ bombList_[0]->GetDelFlg())
 		{
-			Effect::getInstance().Effect_Play("explosion", effectPos_[0]);
+			Effect::getInstance().Effect_Play("n_explosion", effectPos_[0]);
 			effectPos_.erase(effectPos_.begin());
 			bombList_.erase(bombList_.begin());
 			Sound::getInstance().SE_play("B_NORMALATK");
@@ -280,6 +284,8 @@ void Bomber::CharaRender()
 	anim->AdvanceTime(motionSpeed_, NULL);
 	//再生地点の更新
 	motionPlayPos_ += motionSpeed_;
+
+	
 
 	//モデル描画
 	bool drawFlg = true;

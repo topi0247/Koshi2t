@@ -17,9 +17,8 @@ class Bomber :public JobManager
 private:
 	CD3DXMESH* bomb_;
 
+	bool chargeMotionFlg_;
 	bool bombFlg_;	//”š’e‚ª”­“®’†‚©‚Ç‚¤‚©
-	bool invinsibleFlg_;	//–³“G’†‚©‚Ç‚¤‚©
-	int invisibleCount_;
 	int bombCount_;
 	float bombScale_;
 	//WeaponBall** bomb_;

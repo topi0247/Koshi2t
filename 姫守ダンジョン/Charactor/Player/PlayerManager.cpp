@@ -213,29 +213,32 @@ void PlayerManager::Princess_Call()
 	}
 
 	//ƒ‚[ƒVƒ‡ƒ“‘JˆÚ
-	if (0 < callCount_ && callCount_ < motion_->GetMotion("call1")->frame_)
+	if (callFlg_)
 	{
-		if (motionNo_ != motion_->GetMotion("call1")->id_)
+		if (0 < callCount_ && callCount_ < motion_->GetMotion("call1")->frame_)
 		{
-			ChangeMotion(motion_, "call1");
+			if (motionNo_ != motion_->GetMotion("call1")->id_)
+			{
+				ChangeMotion(motion_, "call1");
+			}
 		}
-	}
-	else if (motion_->GetMotion("call1")->frame_ < callCount_)
-	{
-		if (motionNo_ != motion_->GetMotion("call2")->id_)
+		else if (motion_->GetMotion("call1")->frame_ <= callCount_)
 		{
-			ChangeMotion(motion_, "call2");
+			if (motionNo_ != motion_->GetMotion("call2")->id_)
+			{
+				ChangeMotion(motion_, "call2");
+			}
 		}
-	}
 
-	if (motionNo_ == motion_->GetMotion("call3")->id_)
-	{
-		if (++motionCount_ > motionFrame_)
+		if (motionNo_ == motion_->GetMotion("call3")->id_)
 		{
-			ChangeMotion(motion_, "wait");
-			motionChange_ = true;
-			moveAbleFlg_ = true;
-			callFlg_ = false;
+			if (++motionCount_ >= motionFrame_)
+			{
+				ChangeMotion(motion_, "wait");
+				motionChange_ = true;
+				moveAbleFlg_ = true;
+				callFlg_ = false;
+			}
 		}
 	}
 

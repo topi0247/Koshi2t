@@ -178,18 +178,24 @@ void Effect::EffectSet()
 	effect_["spwner2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/spawn.efk");	//—vC³
 
 	//Œ•m
-	effect_["s_Atk"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash3.efk");
+	effect_["s_Atk1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash2.efk");
+	effect_["s_Atk2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash1.efk");
+	effect_["s_Atk3"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash4.efk");
+	effect_["s_Atk4"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash3.efk");
+	effect_["s_Atk5"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash5.efk");
+	effect_["s_Atk6"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash6.efk");
 
 	//‚m
 	effect_["smork"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‚m/smork.efk");
 
 	//”š’em
-	effect_["explosion"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/”š’em/explosion.efk");
+	effect_["n_explosion"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/”š’em/explosion.efk");
+	effect_["s_explision"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/”š’em/s_explosion.efk");
 
 	//–‚“±m
 	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/beam1.efk");
 	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
-	effect_["aroow"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/aroow.efk");
+	effect_["arrow"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
 
 	//•P
 	effect_["Res"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/resuscitation.efk");

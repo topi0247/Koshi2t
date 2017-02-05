@@ -39,7 +39,7 @@ public:
 
 	//static void LoadModel();
 
-	void LoadData();
+	static void LoadData();
 	static void LoadXFileName();
 	static void Destroy();
 	CD3DXSKINMESH* LoadChara(char* name);

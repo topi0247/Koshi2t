@@ -631,7 +631,7 @@ CD3DXSKINMESH::~CD3DXSKINMESH()
 	SAFE_RELEASE(m_pVertexBuffer);
 	for (int i = 0; i < m_dwNumMaterial; i++)
 	{
-		//SAFE_RELEASE(m_ppIndexBuffer[i]);
+		SAFE_RELEASE(m_ppIndexBuffer[i]);
 	}
 	delete[] m_ppIndexBuffer;
 }
@@ -952,7 +952,7 @@ HRESULT CD3DXSKINMESH::CreateFromX(CHAR* szFileName)
 			//strcpy(m_pMaterial[i].szTextureName,name);
 		}
 		//テクスチャーを作成
-		if (m_pMaterial[i].szTextureName[0] != 0 && FAILED(D3DX11CreateShaderResourceViewFromFileA(m_pDevice, m_pMaterial[i].szTextureName, NULL, NULL, &m_pMaterial[i].pTexture, NULL)))//絶対パスファイル名は、まず失敗すると思うが、、、
+		if (m_pMaterial[i].szTextureName[0] != 0 && FAILED(D3DX11CreateShaderResourceViewFromFileA(m_pDevice, m_pMaterial[i].szTextureName, NULL, NULL, &m_pMaterial[i].pTexture, NULL)))
 		{
 			MessageBox(0, L"スキンメッシュテクスチャー読み込み失敗", NULL, MB_OK);
 			return E_FAIL;

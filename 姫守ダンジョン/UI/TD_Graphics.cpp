@@ -27,7 +27,8 @@ TD_Graphics::TD_Graphics()
 //=======================================================
 TD_Graphics::~TD_Graphics()
 {
-
+	SAFE_RELEASE(m_pVertexBuffer);
+	SAFE_RELEASE(m_RectBuffer);
 	SAFE_RELEASE(m_pAsciiTexture);
 }
 

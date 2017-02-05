@@ -22,7 +22,7 @@ CharactorManager::CharactorManager()
 	, motionCount_(0)
 	, motionFrame_(0)
 	, damageCount_(0)
-	,motionPlayPos_(0)
+	, motionPlayPos_(0)
 {
 	collision_ = new Collision;
 	aliveFlg_ = true;
@@ -65,7 +65,7 @@ void CharactorManager::CharaInit(char* name)
 //	@brief	解放
 void CharactorManager::Destroy()
 {
-	if (mesh_!=NULL)
+	if (mesh_ != NULL)
 	{
 		SAFE_DELETE(mesh_);
 	}
@@ -202,7 +202,7 @@ void CharactorManager::AroundCharaCheck()
 
 	for (auto c : aroundCharaList_)
 	{
-		if (!(collision_->CheckSpaceNo(spaceNo_, c->spaceNo_,1,2) && c->GetAliveFlg()))
+		if (!(collision_->CheckSpaceNo(spaceNo_, c->spaceNo_, 1, 2) && c->GetAliveFlg()))
 		{
 			delList.push_back(c);
 		}
@@ -220,7 +220,7 @@ void CharactorManager::AroundCharaCheck()
 void CharactorManager::MoveCharaHit()
 {
 	float dist = -1;
-	//float degree = D3DXToDegree(m_Yaw);
+	float degree = D3DXToDegree(m_Yaw);
 	D3DXVECTOR3 pos(sinf(m_Yaw)*dist, 0, cosf(m_Yaw) * dist);
 	pos += m_Pos;
 	int no = collision_->SetSpaceNo(pos, 1);
@@ -232,24 +232,26 @@ void CharactorManager::MoveCharaHit()
 	for (auto c : aroundCharaList_)
 	{
 		int cNo = collision_->SetSpaceNo(c->m_Pos, 1);
-		if (cNo == no)
+		/*if (cNo == no)
 		{
 			opponentWeight_ = 0;
 			return;
+		}*/
+		dist = 1;
+		if (collision_->CheckSpaceNo(cNo, no,1,1) && collision_->CharaNear(m_Pos, c->m_Pos, dist))
+		{
+			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
+			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
+			angle = D3DXToDegree(angle);
+			float hitAngle = 90 / 2;
+			if (fabsf(degree - angle) <= hitAngle)
+			{
+				/*opponentWeight_ = c->ownWeight_;*/
+				opponentWeight_ = 0;
+				return;
+				//opp = c;
+			}
 		}
-		//if (collision_->CharaNear(m_Pos, c->m_Pos, dist))
-		//{
-		//	D3DXVECTOR3 vec = c->m_Pos - m_Pos;
-		//	float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
-		//	angle = D3DXToDegree(angle);
-		//	float hitAngle = 90 / 2;
-		//	if (fabsf(degree - angle) <= hitAngle)
-		//	{
-		//		/*opponentWeight_ = c->ownWeight_;*/
-		//		opponentWeight_ = 0;
-		//		opp = c;
-		//	}
-		//}
 	}
 	opponentWeight_ = 1;
 }
@@ -285,7 +287,7 @@ void CharactorManager::ChangeMotion(Motion* motion, char* name)
 	motionPlayPos_ = 0;
 	motionNo_ = motion->GetMotion(name)->id_;
 	motionFrame_ = motion->GetMotion(name)->frame_;
-	motionSpeed_ = 1 / (float)motionFrame_;
+	motionSpeed_ = 1 / ((float)motionFrame_*2);
 	motionCount_ = 0;
 }
 
@@ -300,9 +302,17 @@ int CharactorManager::GetSpaceNo()
 //	@brief			描画
 void CharactorManager::CharaRender()
 {
-	bool drawFlg = true;
-	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
+	//モーション番号セット
+	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
+	//再生地点をセット
+	LPD3DXANIMATIONCONTROLLER anim = mesh_->m_pD3dxMesh->m_pAnimController;
+	anim->SetTrackPosition(0, motionPlayPos_);
+	//再生
+	anim->AdvanceTime(motionSpeed_, NULL);
+	//再生地点の更新
+	motionPlayPos_ += motionSpeed_;
 
+	bool drawFlg = true;
 	if (damageFlg_)
 	{
 		if (++damageCount_ % 5 == 0)

@@ -33,6 +33,7 @@ public:
 	IXAudio2* m_pXAudio2;
 	IXAudio2MasteringVoice* m_pMasteringVoice;
 	IXAudio2SourceVoice* m_pSourceVoice[MAX_WAV];
+	XAUDIO2_BUFFER buffer[MAX_WAV];
 	BYTE* m_pWavBuffer[MAX_WAV];					//波形データ（フォーマット等を含まない、純粋に波形データのみ）
 	DWORD m_dwWavSize[MAX_WAV];						//波形データのサイズ
 	int m1_iSoundIndex[10];							//今回読み込む音の番号

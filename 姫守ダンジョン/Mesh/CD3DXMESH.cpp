@@ -36,6 +36,14 @@ CD3DXMESH::CD3DXMESH()
 CD3DXMESH::~CD3DXMESH()
 {
 	SAFE_RELEASE(m_pMesh);
+	SAFE_RELEASE(m_pVertexBuffer);
+	SAFE_RELEASE(m_pSampleLinear);
+	//SAFE_DELETE(m_pMaterial);
+	SAFE_DELETE(pMeshMaterials);
+	for (int i = 0; i < m_dwNumMaterial; i++)
+	{
+		SAFE_RELEASE(m_ppIndexBuffer[i]);
+	}
 	//SAFE_RELEASE(m_pDevice9);
 	//SAFE_RELEASE(m_pD3d9);
 }

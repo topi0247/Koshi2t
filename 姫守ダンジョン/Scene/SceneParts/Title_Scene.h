@@ -14,13 +14,12 @@
 #include "./Main_Scene.h"
 #endif //_DEBUG
 
-#define enemyInsRange 50
-#define oneEnemyMax 10
+#define enemyInsRange 35
+#define oneEnemyMax 5
 #define enemyMax oneEnemyMax*3
 class Title_Scene :public Scene
 {
 private:
-	float alfa_;
 
 	std::map<std::string, TD_Graphics*> title_UI;
 	CD3DXSKINMESH* mesh_sword_;
@@ -30,14 +29,15 @@ private:
 	CD3DXSKINMESH* mesh_princess_;
 	CD3DXSKINMESH* mesh_slime_;
 	CD3DXSKINMESH* mesh_goblin_;
-	CD3DXSKINMESH* mesh_skelton_;
-	std::vector<CD3DXSKINMESH*> mesh_enemyList_;
+	//CD3DXSKINMESH* mesh_skelton_;
+	//std::vector<CD3DXSKINMESH*> mesh_enemyList_;
 	CD3DXMESH* mesh_stage_;
 
 	Camera* camera_;
 	CharactorCreator* creator_;
 	D3DXVECTOR3 enemyPos_[enemyMax];
 	float enemyRot_[enemyMax];
+	float charRot_[5];
 	void DebugSetJob();
 public:
 	Title_Scene();
