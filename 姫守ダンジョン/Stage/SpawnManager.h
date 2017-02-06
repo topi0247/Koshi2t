@@ -17,35 +17,33 @@
 class SpawnManager
 {
 private:
-	TD_Graphics* seal_UI;
-	CharactorCreator* creator_;
-	CD3DXMESH* spawnMesh_;
-	SpawnGateRead* spawnGateRead_;
-	SpawnGate* spawnGate_;
-
-	int timeCount_;
-	bool uiDrawFlg_;
-
-	//char stageTye[30];					//現在のステージタイプ
-	std::vector<Spawn*> spawnList_;			//現在存在しているスポーンゲートリスト
-	std::vector<Spawn*> functionList_;		//機能しているスポーンゲートリスト
-	std::vector<Spawn*> renderList_;		//描画するスポーンゲートリストリスト
+	TD_Graphics* seal_UI;						//封印時のUI
+	CharactorCreator* creator_;					//モデル読み込み用クラス
+	CD3DXMESH* spawnMesh_;						//スポーンゲートのメッシュ
+	SpawnGateRead* spawnGateRead_;				//スポーンゲート情報読み込みクラス
+	SpawnGate* spawnGate_;						//スポーンゲート情報
+	Spawn* sealSpawn_;							//封印されるスポーンゲート
+	std::vector<Spawn*> spawnList_;				//現在存在しているスポーンゲートリスト
+	std::vector<Spawn*> functionList_;			//機能しているスポーンゲートリスト
+	std::vector<Spawn*> renderList_;			//描画するスポーンゲートリストリスト
 	std::vector<CD3DXSKINMESH*> enemyMesh_List;	//描画されるエネミーメッシュリスト
-	Spawn* sealSpawn_;						//封印されるスポーンゲート
-	
+
+	int timeCount_;		//時間カウント
+	bool uiDrawFlg_;	//封印時のUI描画フラグ
+
 	void SpawnSet();	//スポーンゲートの準備
 
 public:
 	SpawnManager();
 	~SpawnManager();
 
-	void Init(char* name);
-	void Reset();
-	void Update(/*ParameterRead* param, */CharactorManager* target);
-	void SealSpawn(Spawn* spawn);
-	void Render();
-	CD3DXMESH* GetMesh()const { return spawnMesh_; };
-	std::vector<EnemyJobManager*> OutEnemy();
-	std::vector<Spawn*> GetSpawnList() { return spawnList_; };
+	void Init(char* name);										//初期化
+	void Reset();												//リセット
+	void Update(CharactorManager* target);						//更新
+	void SealSpawn(Spawn* spawn);								//封印
+	void Render();												//描画
+	CD3DXMESH* GetMesh()const { return spawnMesh_; };			//スポーンゲートのメッシュ情報取得
+	std::vector<EnemyJobManager*> OutEnemy();					//生成されるエネミー
+	std::vector<Spawn*> GetSpawnList() { return spawnList_; };	//スポーンゲートの情報リスト
 
 };

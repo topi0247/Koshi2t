@@ -20,12 +20,17 @@ public:
 	~Collision();
 	Collision();
 
-
-	int SetSpaceNo(D3DXVECTOR3 pos,int slide);	//空間番号の取得
-	bool CheckSpaceNo(int ownNo, int oppNo, int no, int slide);	//空間番号による衝突判定
-	bool CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance);	//距離による衝突判定
-	bool RayIntersect(D3DXVECTOR3 pos, D3DXVECTOR3 dir, CD3DXMESH* Mesh_b, float* pfDistance, D3DXVECTOR3* pvNormal);	//レイによる衝突判定
-	D3DXVECTOR3 Slip(D3DXVECTOR3 L, D3DXVECTOR3 N);	//滑りベクトル取得
-	HRESULT FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXVECTOR3* pvVertices); //レイの衝突地点のポリゴン頂点の発見
+	//空間番号の取得
+	int SetSpaceNo(D3DXVECTOR3 pos,int slide);	
+	//空間番号による衝突判定
+	bool CheckSpaceNo(int ownNo, int oppNo, int no, int slide);	
+	//距離による衝突判定
+	bool CharaNear(D3DXVECTOR3 posA, D3DXVECTOR3 posB, float distance);	
+	//レイによる衝突判定
+	bool RayIntersect(D3DXVECTOR3 pos, D3DXVECTOR3 dir, CD3DXMESH* Mesh_b, float* pfDistance, D3DXVECTOR3* pvNormal);	
+	//滑りベクトル取得
+	D3DXVECTOR3 Slip(D3DXVECTOR3 L, D3DXVECTOR3 N);	
+	//レイの衝突地点のポリゴン頂点の発見
+	HRESULT FindVerticesOnPoly(LPD3DXMESH pMesh, DWORD dwPolyIndex, D3DXVECTOR3* pvVertices); 
 };
 

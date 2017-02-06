@@ -11,31 +11,15 @@
 #include "./../Read/XFileRead.h"
 #include "./../Charactor/CharactorCreator.h"
 
-//struct StageMesh
-//{
-//	CD3DXMESH* stageMesh_;
-//	D3DXVECTOR3 pos_;
-//	char stageName[10];
-//	bool drawFlg_;
-//	int stageNo_;
-//};
-
 class Stage
 {
-	CharactorCreator* creator_;
-	//std::vector<StageMesh*> stage_;
-	static CD3DXMESH* stage_;
-	//CD3DXMESH* skyMesh_;
-	CD3DXMESH* gate_;
-	CD3DXMESH* abyssGround_;
-	//D3DXVECTOR3 m_Pos;
+	CharactorCreator* creator_;		//モデル読み込み
+	static CD3DXMESH* stage_;		//ステージメッシュ
 public:
 	Stage();
 	~Stage();
 
-	//void Read(std::vector<XFile*> xfile,char* name);	//初期化
-	void Init(char* stageName);
-	void Render();				//描画
-	//void Destroy();
-	static CD3DXMESH* GetMeshInfo();		//メッシュの取得
+	void Init(char* stageName);		//初期化
+	void Render();					//描画
+	static CD3DXMESH* GetMeshInfo();//メッシュの取得
 };

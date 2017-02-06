@@ -87,12 +87,6 @@ void Camera::Main_Game_Update()
 	static float x = movePow_.x;
 	movePow_.x = gazePoint_.x;
 	movePow_.z = gazePoint_.z - mainDist_;
-	float y = x - movePow_.x;
-	movePow_.y += y;
-	if (movePow_.y < 33)
-	{
-		movePow_.y -= y;
-	}
 	x = movePow_.x;
 }
 
@@ -148,14 +142,12 @@ void Camera::DebugMove()
 
 	//ƒŠƒZƒbƒg
 #if _DEBUG
-
 	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		movePow_ = D3DXVECTOR3(0, 0, 0); /*D3DXVECTOR3(0, 48, -40);*/
 		Yaw = 0;
 		Roll = -11;
 	}
-
 #endif
 
 }

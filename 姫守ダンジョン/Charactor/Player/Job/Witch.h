@@ -32,7 +32,7 @@ private:
 	virtual void Special_Attack();
 	virtual void DeadSound();
 	virtual void DamageSound();
-
+	virtual void Move(float speed);		//ˆÚ“®ˆ—
 	//map<string, TD_Graphics*> Witch_UI;
 
 public:

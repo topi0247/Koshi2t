@@ -27,8 +27,6 @@ SpawnManager::~SpawnManager()
 
 	delete creator_;
 	creator_ = nullptr;
-	//delete spawnGate_;
-	//spawnGate_ = nullptr;
 
 	SAFE_DELETE(spawnMesh_);
 	spawnList_.clear();
@@ -36,28 +34,14 @@ SpawnManager::~SpawnManager()
 }
 
 //
-//	@brief	初期化
+//	@brief			初期化
+//	@param(name)	スポーンゲート名
 void SpawnManager::Init(char* name)
 {
 	spawnMesh_ = creator_->LoadStage(name);
-	//delete creator;
-	//creator = nullptr;
 	SpawnSet();
-	/*spawnMesh_ = new CD3DXMESH;
-
-	char FileName[80];
-	memset(FileName, 0, sizeof(FileName));
-	strcpy_s(FileName, sizeof(FileName), "./Model/XFiles/Stage/");
-	strcat_s(FileName, sizeof(FileName), name);
-	if (FAILED(spawnMesh_->LoadXMesh(FileName)))
-	{
-		return;
-	}
-
-	SpawnSet();*/
-
 	uiDrawFlg_ = false;
-	seal_UI->Init(L"./UI/UI_Tex/success_font.png", /*0, */D3DXVECTOR2(0, 0), D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	seal_UI->Init(L"./UI/UI_Tex/success_font.png", D3DXVECTOR2(1920, 1080), D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //
@@ -75,11 +59,8 @@ void SpawnManager::SpawnSet()
 		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
 		temp->SpawnInit(tempAttr[i], mesh);
 		spawnList_.push_back(temp);
-		//functionList_.push_back(temp);
-		//renderList_.push_back(temp);
 	}
 
-	/*	要修正の必要あり　*/
 	Effect::getInstance().Effect_Play("spwner1", tempAttr[0]->pos_);
 	Effect::getInstance().Effect_Play("spwner2", tempAttr[1]->pos_);
 }
@@ -104,21 +85,19 @@ void SpawnManager::Reset()
 		CD3DXSKINMESH* mesh = creator_->LoadChara(tempAttr[i]->enemyName_);
 		temp->SpawnInit(tempAttr[i], mesh);
 		spawnList_.push_back(temp);
-		//functionList_.push_back(temp);
-		//renderList_.push_back(temp);
 	}
 }
 
 //
-//	@brief	更新処理
-void SpawnManager::Update(/*ParameterRead* param, */CharactorManager* target)
+//	@brief			更新処理
+//	@param(target)	一番最初のターゲットキャラクター
+void SpawnManager::Update(CharactorManager* target)
 {
 	if (!spawnList_.empty())
 	{
 		for (auto s : spawnList_)
 		{
 			s->ListSet(target);
-			//Effect::getInstance().Update("spwner", D3DXVECTOR3(s->GetPos().x, 0, s->GetPos().z));
 		}
 	}
 }
@@ -154,7 +133,6 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 	sealSpawn_ = spawn;
 	if (sealSpawn_ != nullptr)
 	{
-		/*-要修正------------------------------------------------*/
 		if (sealSpawn_->GetSpawnGateAttr()->id_ == 0)
 		{
 			Effect::getInstance().Effect_Stop("spwner1");
@@ -163,16 +141,10 @@ void SpawnManager::SealSpawn(Spawn* spawn)
 		{
 			Effect::getInstance().Effect_Stop("spwner2");
 		}
-		/*-----------------------------------------------------*/
 		uiDrawFlg_ = true;
 		auto elS = std::find(spawnList_.begin(), spawnList_.end(), sealSpawn_);
-
-		//auto elF = std::find(functionList_.begin(), functionList_.end(), sealSpawn_);
-		//auto elR = std::find(renderList_.begin(), renderList_.end(), sealSpawn_);
 		delete(*elS);
 		spawnList_.erase(elS);
-		//functionList_.erase(elF);
-		//renderList_.erase(elR);
 	}
 }
 
@@ -188,7 +160,6 @@ void SpawnManager::Render()
 		}
 	}
 
-	//uiDrawFlg_ = true;
 	if (uiDrawFlg_)
 	{
 		static int count = 1;

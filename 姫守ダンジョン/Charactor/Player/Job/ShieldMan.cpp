@@ -20,7 +20,7 @@ ShieldMan::ShieldMan(CharaType charaType) :JobManager(charaType)
 	jobMarkUI_ = new TD_Graphics;
 	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
 	D3DXVECTOR2 scale(136.5, 148);
-	jobMarkUI_->Init(L"./UI/UI_Tex/icon_knight.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	jobMarkUI_->Init(L"./UI/UI_Tex/icon_knight.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 }
 
@@ -202,6 +202,10 @@ void ShieldMan::Attack_Collision(float atk, float hitAngle)
 	if (atkNo_ == normalAtk)
 	{
 		backDist = param_->knockbackDist_;
+	}
+	else
+	{
+		backDist = 0.8;
 	}
 
 
@@ -447,6 +451,6 @@ void ShieldMan::CharaRender()
 		shield_->Render(pos, D3DXVECTOR3(0, yaw, 0), scale);
 	}
 
-	//UI•`‰æ
-	UIRender();
+	////UI•`‰æ
+	//UIRender();
 }

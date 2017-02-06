@@ -26,73 +26,67 @@
 #define UI_TIME 12 //時間表示に使用するUIの数
 #define SEMICOLON 10
 #define ENEMY_MAX 50
+#define FAILED_CHOICE_POSY 700
 
 class Main_Scene :public Scene
 {
 private:
-	bool failedFlg_;
-	bool startCameraMovefirstFlg_;
-	bool startCameraMoveSecFlg_;
-
 	TD_Graphics* uiStart_;
-	//TD_Graphics* uiClear_;
-	//TD_Graphics* uiFailed_;
-	TD_Graphics* uiTime_[UI_TIME]; //0~9 ; ,
-	//TD_Graphics* uiDebug_;
-	
+	TD_Graphics* uiFailed_;
+	TD_Graphics* uiRetry_;
+	TD_Graphics* uiBack_;
+	TD_Graphics* uiHand_;
+	TD_Graphics* uiTime_[UI_TIME]; //0~9 :
+
+	Stage* stage_;						//ステージ情報
+	Princess* princess_;				//姫
+	CharactorCreator* creator_;			//モデル・キャラデータ読み込みクラス
+	Collision* ray_;					//当たり判定クラス
+	Camera* camera_;					//カメラクラス
+	SpawnManager* spawnManager_;
+	std::vector<JobManager*> player_;	//プレイヤー
+	std::vector<CharactorManager*> charList_;	//ステージ上に存在するキャラクター
+	std::vector<CharactorManager*> killList_;	//死亡エネミーリスト
+
 	enum scene
 	{
-		StartS=0,
+		StartS = 0,
 		MainS,
 		EndS,
 		NextS,
 	};
 	scene scene_;
 
-	Stage* stage_;						//ステージ情報
-	std::vector<JobManager*> player_;	//プレイヤー
-	Princess* princess_;				//姫
-	CharactorCreator* creator_;			//モデル・キャラデータ読み込みクラス
-	Collision* ray_;					//当たり判定クラス
-	Camera* camera_;					//カメラクラス
-
-
+	bool failedFlg_;
+	bool retryFlg_;
+	bool nextSceneFlg_;
+	bool princessVoiceFlg_;
+	bool startCameraMovefirstFlg_;
+	bool startCameraMoveSecFlg_;
 	int spawnAmount_;					//スポーンゲートの数
-	SpawnManager* spawnManager_;
-
-	void CollisionControl();			//衝突判定管理
-
-	std::vector<CharactorManager*> charList_;	//ステージ上に存在するキャラクター
-	//std::vector<EnemyJobManager*> enemyList_;	//ステージ上に存在するエネミー
-	std::vector<CharactorManager*> killList_;	//死亡エネミーリスト
 	int enemyCount_;
 	unsigned int time_;
+	float handXPos_; 
+	float inputX;
+	float failedUIPosY_;
+	float reUIPosY_;
 
 	void GameStart();	//ゲーム開始導入部分
 	void GameMain();	//ゲームメイン
 	void GameEnd();		//ゲーム終了
+	void NextScene();
+	void GameOverChoice();
 
+	void CollisionControl();			//衝突判定管理
 	void EnemyDestroy();	//エネミー死亡処理
 	JobManager* SetCharaJob(char* name, CharaType type);
 
-	//エフェクト	
-	//D3D11_SPRITE* uisword_;
-	//D3D11_SPRITE* uiseeld_;
-	//D3D11_SPRITE* uimagic_;
-	//D3D11_SPRITE* uibom_;
-	//D3D11_SPRITE* uititle_;
-
-
 	//デバック
 	D3D11_TEXT* debugText_;
-	double insTime_,pushTime_;
+	double insTime_, pushTime_;
 	bool spawnFlg_;
-
 	void PlayerDebug();
 	//void EnemyDebug();
-
-	//map<string, TD_Graphics*> Title_UI;
-
 public:
 	Main_Scene();
 	virtual ~Main_Scene();
@@ -110,5 +104,5 @@ public:
 
 
 	//デバッグ用
-	DWORD start1, start2, end1, end2,result1,result2;
+	DWORD start1, start2, end1, end2, result1, result2;
 };

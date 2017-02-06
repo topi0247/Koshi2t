@@ -30,7 +30,6 @@ protected:
 	int attackCount_;			//攻撃ボタンカウント
 	Collision* col_;
 
-	void UIRender();
 	virtual void WeaponUpdate() {};
 public:
 	JobManager(CharaType charaType);
@@ -42,6 +41,7 @@ public:
 	//PlayerParameter GetParam()const;
 
 	int GetAtkCnt() { return attackCount_; };
+	void UIRender();
 
 	//デバック用
 	PlayerParameter* GetParam()const { return param_; };

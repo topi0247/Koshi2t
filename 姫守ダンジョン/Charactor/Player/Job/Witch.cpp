@@ -23,7 +23,7 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	jobMarkUI_ = new TD_Graphics;
 	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
 	D3DXVECTOR2 scale(136.5, 148);
-	jobMarkUI_->Init(L"./UI/UI_Tex/icon_witch.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	jobMarkUI_->Init(L"./UI/UI_Tex/icon_witch.png",scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	//Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
@@ -59,6 +59,83 @@ void Witch::Reset()
 	m_Pos = D3DXVECTOR3(-2.25 + charaType_*1.5, 0, -10);
 }
 
+
+//
+//	@brief			à⁄ìÆèàóù
+//	@param (speed)	à⁄ìÆë¨ìx
+void Witch::Move(float speed)
+{
+	if (damageFlg_)
+	{
+		damageDrawTime_ = FPS * 0.5;
+		if (damageCount_ >= damageDrawTime_)
+		{
+			moveAbleFlg_ = true;
+			damageFlg_ = false;
+			damageCount_ = 0;
+		}
+	}
+
+	if (knockBackFlg_ == true)
+	{
+		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
+		if (motionNo_ != motion_->GetMotion("wait")->id_)
+		{
+			ChangeMotion(motion_, "wait");
+		}
+		return;
+	}
+
+	//ÉXÉeÉBÉbÉNÇÃåXÇ´éÊìæ
+	D3DXVECTOR3 inputStick;
+	inputStick.x = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_X);
+	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
+
+	//âÒì]èàóù
+	const float rotEpsilon = 0.3;
+	if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
+	{
+		Rotation(inputStick);
+	}
+
+	if (!moveAbleFlg_)
+	{
+		return;
+	}
+
+	//à⁄ìÆ
+	const float moveEpsilon = 0.2;	//åÎçÏñhé~óp
+	float sp = 0;
+	if (fabsf(inputStick.x) > moveEpsilon || fabsf(inputStick.z) > moveEpsilon)
+	{
+		sp = speed;
+
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("walk")->id_)
+		{
+			ChangeMotion(motion_, "walk");
+		}
+	}
+	else
+	{
+		if (motionChange_ == true && motionNo_ != motion_->GetMotion("wait")->id_)
+		{
+			ChangeMotion(motion_, "wait");
+		}
+	}
+
+	//opponentWeight_ = 1;
+
+	MoveCharaHit();
+
+	m_Dir = D3DXVECTOR3(inputStick.x*sp * opponentWeight_, 0, inputStick.z*sp * opponentWeight_);
+	//m_vPos += D3DXVECTOR3(inputStick.x*sp - opponentWeight_, 0, inputStick.z*sp - opponentWeight_);
+
+	GamePad::update();
+
+	//m_Dir = D3DXVECTOR3(m_AxisX.x, m_AxisY.y, m_AxisZ.z);
+	//m_Dir = D3DXVECTOR3(m_Move.x, 0, m_Move.z);
+
+}
 
 //
 //	@brief	çUåÇ
@@ -125,7 +202,7 @@ void Witch::Attack()
 	{
 		ballFlg_ = false;
 		arrowFlg_ = false;
-		moveAbleFlg_ = true;
+		//moveAbleFlg_ = true;
 	}
 }
 
@@ -243,7 +320,7 @@ void Witch::WeaponUpdate()
 			delete magicBall_;
 			magicBall_ = nullptr;
 			//Effect::getInstance().Effect_Stop("magicball");
-
+			moveAbleFlg_ = true;
 		}
 	}
 
@@ -324,6 +401,6 @@ void Witch::CharaRender()
 
 	//Effect::getInstance().Draw();
 
-	//UIï`âÊ
-	UIRender();
+	////UIï`âÊ
+	//UIRender();
 }

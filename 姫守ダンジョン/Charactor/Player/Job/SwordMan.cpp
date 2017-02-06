@@ -32,7 +32,7 @@ SwordMan::SwordMan(CharaType charaType) :JobManager(charaType)
 	jobMarkUI_ = new TD_Graphics;
 	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
 	D3DXVECTOR2 scale(136.5, 148);
-	jobMarkUI_->Init(L"./UI/UI_Tex/icon_soldier.png", jobUIPos_, scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	jobMarkUI_->Init(L"./UI/UI_Tex/icon_soldier.png",scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 }
 
@@ -163,7 +163,7 @@ void SwordMan::Normal_Attack()
 
 		motionChange_ = false;
 		ChangeMotion(motion_, atkMotion_[chainCount_%ChainAmount]);
-		//motionSpeed_ *= 0.01f;
+		motionSpeed_ = 1 / ((float)motionFrame_*2);
 		Normal_Attack_Collision();
 
 		float speed = -0.1;
@@ -267,6 +267,6 @@ void SwordMan::CharaRender()
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
 
-	//UI•`‰æ
-	UIRender();
+	////UI•`‰æ
+	//UIRender();
 }

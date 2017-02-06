@@ -243,7 +243,7 @@ void CharactorManager::MoveCharaHit()
 			D3DXVECTOR3 vec = c->m_Pos - m_Pos;
 			float angle = (atan2(vec.z, vec.x)*-1) - (D3DX_PI / 2.0f);
 			angle = D3DXToDegree(angle);
-			float hitAngle = 90 / 2;
+			float hitAngle = 90 / 3;
 			if (fabsf(degree - angle) <= hitAngle)
 			{
 				/*opponentWeight_ = c->ownWeight_;*/
@@ -287,7 +287,7 @@ void CharactorManager::ChangeMotion(Motion* motion, char* name)
 	motionPlayPos_ = 0;
 	motionNo_ = motion->GetMotion(name)->id_;
 	motionFrame_ = motion->GetMotion(name)->frame_;
-	motionSpeed_ = 1 / ((float)motionFrame_*2);
+	motionSpeed_ = 1 / ((float)motionFrame_);
 	motionCount_ = 0;
 }
 

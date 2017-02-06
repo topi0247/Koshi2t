@@ -6,7 +6,6 @@
 //グローバル変数
 MAIN* g_pMain = NULL;
 
-
 //関数プロトタイプの宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -15,9 +14,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 //アプリケーションのエントリー関数 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 {
-	// メモリリーク検出
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
 	g_pMain = new MAIN;
 	if (g_pMain != NULL)
 	{
@@ -113,7 +109,7 @@ void MAIN::Loop()
 	//サウンド
 	Sound::getInstance().Run();
 	//エフェクト
-	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext/*,m_pSwapChain, m_pBackBuffer_TexRTV, m_pBackBuffer_DSTexDSV, m_pBackBuffer_DSTex*/);
+	Effect::getInstance().EffectInit(m_hWnd, m_pDevice, m_pDeviceContext);
 	//Xファイル情報の読み込み
 	CharactorCreator::LoadXFileName();
 	//伽クター情報の読み込み
@@ -239,8 +235,6 @@ HRESULT MAIN::InitD3D()
 	//初期化
 	D3DXVECTOR4 vColor(1, 1, 1, 1);
 	D3D11_TEXT::Init(m_pDeviceContext, WINDOW_WIDTH, WINDOW_HEIGHT, 100, vColor);
-	//mainScene_ = new Main_Scene;
-	//mainScene_->DebugInit(m_pDeviceContext);
 	return S_OK;
 }
 //
@@ -248,8 +242,6 @@ HRESULT MAIN::InitD3D()
 //
 void MAIN::DestroyD3D()
 {
-	//delete camera_;
-	//camera_ = nullptr;
 	CharactorCreator::Destroy();
 	root_->Destroy();
 	SAFE_RELEASE(m_pSwapChain);

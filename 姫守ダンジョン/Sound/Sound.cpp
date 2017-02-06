@@ -1,15 +1,13 @@
+//
+//	@file	Sound.cpp
+//	@brief	サウンド管理クラス
+//	@date	4月、1月修正
+//	@author	吉越大騎
+//	@note	既に用意されていたクラスを大幅に変更
+
 #include "Sound.h"
 
-
 map<string, int> SE_iSoundIndex;//SE保管庫
-//map<string, int> Normal_ATK;
-//map<string, int> Special_ATK;
-//map<string, int> Damage;
-//map<string, int> Damage_HIT;
-//map<string, int> Dead;
-//map<string, int> bgms;
-//map<string, int> over_SE;
-//map<string, int> decision_SE;
 
 //=======================================================
 //	コンストラクタ
@@ -33,45 +31,44 @@ Sound::~Sound()
 	SAFE_RELEASE(m_pXAudio2);
 }
 
+//
+//	@brief				BGM再生
+//	@param(BGM_mode)	再生するBGM名
 void Sound::BGM_play(string BGM_mode)
 {
-	//PlaySound(bgms[BGM_mode]);//タイトルBGM
 	PlaySound(SE_iSoundIndex[BGM_mode],true);
 }
 
+//
+//	@brief				BGM停止
+//	@param(BGM_mode)	停止するBGM名
 void Sound::BGM_stop(string BGM_mode)
 {
 	m_pSourceVoice[SE_iSoundIndex[BGM_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
 }
 
+//
+//	@brief				SE再生
+//	@param(BGM_mode)	再生するSE名
 void Sound::SE_play(string SE_mode)
 {
 	PlaySound(SE_iSoundIndex[SE_mode],false);
-	//PlaySound(Normal_ATK[SE_mode]);//通常攻撃
-	//PlaySound(Special_ATK[SE_mode]);//特殊攻撃
-	//PlaySound(Damage[SE_mode]);//ダメージ
-	//PlaySound(Damage_HIT[SE_mode]);//ダメージヒット
-	//PlaySound(Dead[SE_mode]);//死んだとき
-	//PlaySound(decision_SE[SE_mode]);//決定
 }
 
-void Sound::SE_stop(/*int gamescene, */string SE_mode)
+//
+//	@brief				SE停止
+//	@param(BGM_mode)	停止するSE名
+void Sound::SE_stop(string SE_mode)
 {
 	m_pSourceVoice[SE_iSoundIndex[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	/*m_pSourceVoice[Normal_ATK[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	m_pSourceVoice[Special_ATK[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	m_pSourceVoice[Damage[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	m_pSourceVoice[Damage_HIT[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	m_pSourceVoice[Dead[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);
-	m_pSourceVoice[decision_SE[SE_mode]]->Stop(0, XAUDIO2_COMMIT_NOW);*/
 }
 
 void Sound::Run()
 {
-	//m_iSoundCurrentIndex = 0;
 	//サウンド関連（XAudio2）の初期化
 	InitSound();
 
+	//BGM//
 	SE_iSoundIndex["TITLE"] = LoadSound("Sound/SE/all_sound/Title.wav");
 	SE_iSoundIndex["CHARACTERSELECT"] = LoadSound("Sound/SE/all_sound/select.wav");
 	SE_iSoundIndex["SENTOU"] = LoadSound("Sound/SE/all_sound/game_Main.wav");
@@ -192,134 +189,11 @@ void Sound::Run()
 
 	//ステージクリア
 	SE_iSoundIndex["P_STEGECLEAR"] = LoadSound("Sound/SE/princess_sound/game_Clear.wav");
-
-#if 0
-	// BGM
-	bgms["TITLE"] = LoadSound("Sound/SE/all_sound/Title.wav");
-	bgms["CHARACTERSELECT"] = LoadSound("Sound/SE/all_sound/select.wav");
-	bgms["SENTOU"] = LoadSound("Sound/SE/all_sound/dew21.wav");
-	
-
-	decision_SE["DECISION_SE"] = LoadSound("Sound/SE/test/decision.wav");
-	m_pSourceVoice[decision_SE["DECISION_SE"]]->SetVolume(3.0f, 0);
-	//SE//
-
-	//============剣士============//
-	//通常攻撃
-	Normal_ATK["S_NORMALATK"] = LoadSound("Sound/SE/sword_sound/s_normal.wav");
-	m_pSourceVoice[Normal_ATK["S_NORMALATK"]]->SetVolume(3.0f, 0);
-
-	//特殊攻撃
-	Special_ATK["S_SPECIAL"] = LoadSound("Sound/SE/sword_sound/s_specialATK.wav");
-	m_pSourceVoice[Special_ATK["S_SPECIAL"]]->SetVolume(3.0f, 0);
-
-	//ダメージ
-	Damage["S_DAMAGE"] = LoadSound("Sound/SE/sword_sound/sword_damagevoice.wav");
-	m_pSourceVoice[Damage["S_DAMAGE"]]->SetVolume(3.0f, 0);
-
-	//ダメージヒット
-	Damage_HIT["S_DAMAGE_HIT"] = LoadSound("Sound/SE/sword_sound/sword_hit.wav");
-	m_pSourceVoice[Damage_HIT["S_DAMAGE_HIT"]]->SetVolume(3.0f, 0);
-
-	//死亡
-	Dead["S_DEAD"] = LoadSound("Sound/SE/sword_sound/sword_dethvoice.wav");
-	m_pSourceVoice[Dead["S_DEAD"]]->SetVolume(3.0f, 0);
-	
-	//============盾士============//
-	//通常攻撃
-	Normal_ATK["Sh_NORMALATK"] = LoadSound("Sound/SE/shiled_sound/shield_attack.wav");
-	m_pSourceVoice[Normal_ATK["Sh_NORMALATK"]]->SetVolume(2.0f, 0);
-
-	//特殊攻撃
-	Special_ATK["Sh_SPECIAL"] = LoadSound("Sound/SE/shiled_sound/shiled_SPwalk.wav");
-	m_pSourceVoice[Special_ATK["Sh_SPECIAL"]]->SetVolume(5.0f, 0);
-
-	//ダメージ
-	Damage["Sh_DAMAGE"] = LoadSound("Sound/SE/shiled_sound/shield_damagevoice.wav");
-	m_pSourceVoice[Damage["Sh_DAMAGE"]]->SetVolume(5.0f, 0);
-
-	//ダメージヒット
-	Damage_HIT["Sh_DAMAGE_HIT"] = LoadSound("Sound/SE/shiled_sound/shiled_hit.wav");
-	m_pSourceVoice[Damage_HIT["Sh_DAMAGE_HIT"]]->SetVolume(1.0f, 0);
-
-	//死亡
-	Dead["Sh_DEAD"] = LoadSound("Sound/SE/shiled_sound/shiled_dethvoice.wav");
-	m_pSourceVoice[Dead["Sh_DEAD"]]->SetVolume(3.0f, 0);
-
-	//============魔導士============//
-	//通常攻撃
-	Normal_ATK["M_NORMALATK"] = LoadSound("Sound/SE/magic_sound/magic_attack.wav");
-	m_pSourceVoice[Normal_ATK["M_NORMALATK"]]->SetVolume(2.0f, 0);
-
-	//特殊攻撃
-	Special_ATK["M_SPECIAL"] = LoadSound("Sound/SE/magic_sound/magic_charge.wav");
-	m_pSourceVoice[Special_ATK["M_SPECIAL"]]->SetVolume(5.0f, 0);
-
-	//ダメージ
-	Damage["M_DAMAGE"] = LoadSound("Sound/SE/magic_sound/magic_damagevoice.wav");
-	m_pSourceVoice[Damage["M_DAMAGE"]]->SetVolume(3.0f, 0);
-
-	//ダメージヒット
-	Damage_HIT["M_DAMAGE_HIT"] = LoadSound("Sound/SE/magic_sound/magic_hit.wav");
-	m_pSourceVoice[Damage_HIT["M_DAMAGE_HIT"]]->SetVolume(3.0f, 0);
-
-	//死亡
-	Dead["M_DEAD"] = LoadSound("Sound/SE/magic_sound/magic_hit.wav");
-	m_pSourceVoice[Dead["M_DEAD"]]->SetVolume(3.0f, 0);
-
-	//============爆弾士============//
-	//通常攻撃
-	Normal_ATK["B_NORMALATK"] = LoadSound("Sound/SE/bomb_sound/bomb_hit.wav");
-	m_pSourceVoice[Normal_ATK["B_NORMALATK"]]->SetVolume(2.0f, 0);
-
-	//特殊攻撃
-	Special_ATK["B_SPECIAL"] = LoadSound("Sound/SE/bomb_sound/pui.wav");
-	m_pSourceVoice[Special_ATK["B_SPECIAL"]]->SetVolume(0.5f, 0);
-
-	//ダメージ
-	Damage["B_DAMAGE"] = LoadSound("Sound/SE/bomb_sound/bomb_damage.wav");
-	m_pSourceVoice[Damage["B_DAMAGE"]]->SetVolume(3.0f, 0);
-
-	//ダメージヒット
-	Damage_HIT["B_DAMAGE_HIT"] = LoadSound("Sound/SE/bomb_sound/bomb_hit.wav");
-	m_pSourceVoice[Damage_HIT["B_DAMAGE_HIT"]]->SetVolume(3.0f, 0);
-
-	//死亡
-	Dead["B_DEAD"] = LoadSound("Sound/SE/bomb_sound/bomb_deth.wav");
-	m_pSourceVoice[Dead["B_DEAD"]]->SetVolume(3.0f, 0);
-
-	/*Special_ATK["B_SPECIAL"] = LoadSound("SoundEffect/SE/bomb_sound/onara.wav");
-	m_pSourceVoice[Special_ATK["B_SPECIAL"]]->SetVolume(5.0f, 0);*/
-
-
-	//bgms["PLAY"] = LoadSound("SoundEffect\\BGM\\9V.wav");
-	// SE
-	// タイトル
-	//SE_iSoundIndex["TIPE"] = LoadSound("SoundEffect\\SE\\key.wav");
-	//SE_iSoundIndex["ENTER"] = LoadSound("SoundEffect\\SE\\Enter.wav");
-	//SE_iSoundIndex["CURSOR"] = LoadSound("SoundEffect\\SE\\cursor.wav");
-	// プレイ中
-	/*main_SE["COIN"] = LoadSound("SoundEffect\\SE\\coin2.wav");
-	m_pSourceVoice[main_SE["COIN"]]->SetVolume(0.3f, 0);
-	main_SE["JUMP"] = LoadSound("SoundEffect\\SE\\Jump.wav");
-	m_pSourceVoice[main_SE["JUMP"]]->SetVolume(2.0f, 0);
-	main_SE["LAND"] = LoadSound("SoundEffect\\SE\\landing.wav");
-	m_pSourceVoice[main_SE["LAND"]]->SetVolume(2.0f, 0);
-	main_SE["CHECK"] = LoadSound("SoundEffect\\SE\\checkpoint.wav");
-	m_pSourceVoice[main_SE["CHECK"]]->SetVolume(5.0f, 0);
-	main_SE["SPIN"] = LoadSound("SoundEffect\\SE\\roll1.wav");*/
-	//main_SE["DESTROY_ERROR"]=LoadSound("SoundEffect\\SE\\erorrend.wav");
-	//m_pSourceVoice[main_SE["DESTROY_ERROR"]]->SetVolume(2.0f, 0);
-	//// ゲームオーバー
-	//over_SE["ERROR"] = LoadSound("SoundEffect\\SE\\cancel2.wav");
-	//m_pSourceVoice[over_SE["ERROR"]]->SetVolume(2.0f, 0);
-	//over_SE["MAINERROR"] = LoadSound("SoundEffect\\SE\\cancel1.wav");
-	//m_pSourceVoice[over_SE["MAINERROR"]]->SetVolume(2.0f, 0);
-
-#endif
-	////アプリケーションの終了
 }
 
+//
+//	@brief				音の読み込み
+//	@param(szFileName)	パス
 int Sound::LoadSound(char* szFileName)
 {
 	static int iIndex = -1;
@@ -358,20 +232,13 @@ int Sound::LoadSound(char* szFileName)
 		return E_FAIL;
 	}
 	m_dwWavSize[iIndex] = dwWavSize;
-
-	////サブミット
-	//buffer[iIndex] = { 0 };
-	//buffer[iIndex].pAudioData = m_pWavBuffer[iIndex];
-	//buffer[iIndex].Flags = XAUDIO2_END_OF_STREAM;
-	//buffer[iIndex].AudioBytes = m_dwWavSize[iIndex];
-	//if (FAILED(m_pSourceVoice[iIndex]->SubmitSourceBuffer(&buffer[iIndex])))
-	//{
-	//	MessageBox(0, L"ソースボイスにサブミット失敗", 0, MB_OK);
-	//	//return;
-	//}
 	return iIndex;
 }
 
+//
+//	@brief				再生
+//	@param(iSoundIndex)	再生する番号
+//	@param(loopflg)		ループフラグ
 void  Sound::PlaySound(int iSoundIndex, bool loopflg)
 {
 	m_pSourceVoice[iSoundIndex]->Stop(0, 1);
@@ -392,6 +259,8 @@ void  Sound::PlaySound(int iSoundIndex, bool loopflg)
 	m_pSourceVoice[iSoundIndex]->Start(0, XAUDIO2_COMMIT_NOW);
 }
 
+//
+//	@brief	初期化
 HRESULT Sound::InitSound()
 {
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);

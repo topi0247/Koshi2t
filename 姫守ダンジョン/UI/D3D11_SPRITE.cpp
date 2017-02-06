@@ -1,11 +1,9 @@
 #include "D3D11_SPRITE.h"
 ID3D11Device* D3D11_SPRITE::m_pDevice = nullptr;
 ID3D11DeviceContext* D3D11_SPRITE::m_pDeviceContext = nullptr;
-//ID3D11SamplerState* D3D11_SPRITE::m_pSampleLinear = nullptr;
 ID3D11VertexShader* D3D11_SPRITE::m_pVertexShader = nullptr;
 ID3D11PixelShader* D3D11_SPRITE::m_pPixelShader = nullptr;
 ID3D11InputLayout* D3D11_SPRITE::m_pVertexLayout = nullptr;
-//ID3D11Buffer* D3D11_SPRITE::m_pVertexBuffer = nullptr;
 ID3D11Buffer* D3D11_SPRITE::m_pConstantBuffer = nullptr;
 ID3D11BlendState* D3D11_SPRITE::m_pBlendState = nullptr;
 DWORD D3D11_SPRITE::m_dwWindowWidth;
@@ -263,88 +261,3 @@ void D3D11_SPRITE::SetCamera(D3DXMATRIX view, D3DXMATRIX proj)
 	m_View = view;
 	m_Proj = proj;
 }
-
-////
-////
-////
-//void D3D11_SPRITE::RenderSprite(D3DXMATRIX mView, D3DXMATRIX mProj, float x, float y)
-//{
-//	//トポロジー
-//	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-//	//頂点インプットレイアウトをセット
-//	m_pDeviceContext->IASetInputLayout(m_pVertexLayout);
-//
-//	//使用するシェーダーの登録
-//	m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
-//	m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
-//
-//	//このコンスタントバッファーを使うシェーダーの登録
-//	m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-//	m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-//
-//	//テクスチャーをシェーダーに渡す
-//	m_pDeviceContext->PSSetSamplers(0, 1, &m_pSampleLinear);
-//	m_pDeviceContext->PSSetShaderResources(0, 1, &m_pAsciiTexture);
-//
-//	//ワールド変換
-//	D3DXMATRIX mWorld, Rot, Scale;
-//	D3DXMatrixIdentity(&mWorld);
-//	D3DXMatrixTranslation(&mWorld, x, y, 0);
-//
-//	//ワールドトランスフォーム（絶対座標変換）
-//	D3DXMatrixRotationX(&Rot, m_fYaw);//単純にyaw回転させる
-//	D3DXMatrixScaling(&Scale, m_fScale, m_fScale, m_fScale);
-//	mWorld = Scale * mWorld * Rot;
-//
-//	//シェーダーのコンスタントバッファーに各種データを渡す	
-//	D3D11_MAPPED_SUBRESOURCE pData;
-//	SPRITE_CONSTANT_BUFFER cb;
-//	if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-//	{
-//		//ワールド、カメラ、射影行列を渡す
-//		D3DXMATRIX m = mWorld*mView*mProj;
-//		D3DXMatrixTranspose(&m, &m);
-//		cb.mWVP = m;
-//		//カラーを渡す
-//		cb.vColor = m_vColor;
-//		//透明度を渡す
-//		cb.fAlpha.x = m_fAlpha;
-//
-//		//テクスチャースクロールの増分を渡す
-//		static D3DXVECTOR2 TexScroll(0, 0);
-//		static int count = 0;
-//		if (count < m_iAnimSpeed) count++;
-//		if (count >= m_iAnimSpeed)
-//		{
-//			TexScroll.x += 1.0f / m_vSize.x;
-//			count = 0;
-//			m_iAnimCount++;
-//			if ((m_iAnimCount % (int)m_vSize.x) == 0)
-//			{
-//				TexScroll.y += 1.0f / m_vSize.y;
-//				TexScroll.x = 0.0f;
-//			}
-//			if ((m_iAnimCount % (int)(m_vSize.x * m_vSize.y)) == 0)
-//			{
-//				m_isActive = false;
-//				m_iAnimCount = 0;
-//				TexScroll.x = 0.0f;
-//				TexScroll.y = 0.0f;
-//			}
-//		}
-//		cb.TexScroll = D3DXVECTOR4(TexScroll.x, TexScroll.y, 0, 0);
-//
-//		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-//		m_pDeviceContext->Unmap(m_pConstantBuffer, 0);
-//	}
-//	//バーテックスバッファーをセット
-//	UINT stride = sizeof(TextVertex);
-//	UINT offset = 0;
-//	m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-//
-//	//抜け色
-//	UINT ColorKey = 0xffffffff;
-//	m_pDeviceContext->OMSetBlendState(m_pBlendState, NULL, ColorKey);
-//	m_pDeviceContext->Draw(4, 0);
-//	m_pDeviceContext->OMSetBlendState(0, NULL, ColorKey);
-//}

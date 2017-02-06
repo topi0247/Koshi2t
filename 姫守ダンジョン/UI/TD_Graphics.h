@@ -1,7 +1,13 @@
+//
+//	@file	TD_Graphics.h
+//	@brief	UI描画クラス
+//	@date	4月作成、1月大幅変更
+//	@author	吉越大騎(用意)
+//	@note	既に用意されていたクラスを大幅に変更(仁科香苗)
+
 #pragma once
 #include "../Origin.h"
 #include "D3D11_SPRITE.h"
-//#include "../MAIN.h"
 
 struct SIMPLESHADER_CONSTANT_BUFFER
 {
@@ -46,13 +52,11 @@ public:
 
 
 	// @param (textname)	textureパス
-	// @param (drawpos)		描画座標
 	// @param (texsize)     画像サイズ
 	// @param (vColor)		色
 	// @param (_Rect)		レクト
-	HRESULT Init(LPCWSTR texname,/* int texnum, */D3DXVECTOR2 drawpos, D3DXVECTOR2 texsize, D3DXVECTOR4 vColor, GrapRect _Rect);
+	HRESULT Init(LPCWSTR texname,D3DXVECTOR2 texsize, D3DXVECTOR4 vColor, GrapRect _Rect);
 
-	HRESULT AnimInit(D3DXVECTOR4 vColor, bool flg_alpha, WCHAR *filepass, D3DXVECTOR2 size, int animSpeed);
 
 	// @param (pos)		表示座標
 	// @param (scale)	拡大倍率

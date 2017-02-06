@@ -109,13 +109,10 @@ void Princess::Move(float speed)
 void Princess::DamageCalc(unsigned int atk)
 {
 	aliveFlg_ = false;
-	//if (motionNo_ != motion_->GetMotion("dead1")->id_)
-	//{
 	moveAbleFlg_ = false;
 	ChangeMotion(motion_, "dead1");
 	motionCount_ = 0;
 	Sound::getInstance().SE_play("P_DEAD");
-	//}
 }
 
 //

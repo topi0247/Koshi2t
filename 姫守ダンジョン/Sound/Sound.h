@@ -1,3 +1,9 @@
+//
+//	@file	Sound.h
+//	@brief	サウンド管理クラス
+//	@date	4月、1月修正
+//	@author	吉越大騎
+//	@note	既に用意されていたクラスを大幅に変更
 #pragma once
 #include <xaudio2.h>
 #include <map>
@@ -37,7 +43,6 @@ public:
 	BYTE* m_pWavBuffer[MAX_WAV];					//波形データ（フォーマット等を含まない、純粋に波形データのみ）
 	DWORD m_dwWavSize[MAX_WAV];						//波形データのサイズ
 	int m1_iSoundIndex[10];							//今回読み込む音の番号
-	//int m_iSoundCurrentIndex;						//音の現在の再生番号
 	bool bgm_flg;									//BGMがなってるか
 	
 	void SE_play(string SE_mode);		// SE再生

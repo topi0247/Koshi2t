@@ -30,7 +30,7 @@ enum CharaType
 };
 
 
-class CharactorManager:public CD3DXSKINMESH
+class CharactorManager//:public CD3DXSKINMESH
 {
 protected:
 	CD3DXSKINMESH* mesh_;
@@ -79,6 +79,11 @@ protected:
 	virtual void DamageSound() {};						//ダメージサウンド
 	virtual void SetParameter(char* name)=0;
 public:
+	D3DXVECTOR3 m_Pos;
+	D3DXVECTOR3 m_Dir;
+	float m_Yaw;
+	D3DXVECTOR3 m_Scale;
+
 	CharactorManager();
 	virtual ~CharactorManager();
 	

@@ -55,6 +55,10 @@ void PlayerManager::SetParameter(char* name)
 //	@param (speed)	ˆÚ“®‘¬“x
 void PlayerManager::Move(float speed)
 {
+	if (!moveAbleFlg_ )
+	{
+		return;
+	}
 	if (damageFlg_)
 	{
 		damageDrawTime_ = FPS * 0.5;

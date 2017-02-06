@@ -23,22 +23,22 @@ JobManager::JobManager(CharaType charaType)
 	switch (charaType)
 	{
 	case Player1:
-		backUI_->Init(L"./UI/UI_Tex/hp1.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp1.png", backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player2:
-		backUI_->Init(L"./UI/UI_Tex/hp2.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp2.png",backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player3:
-		backUI_->Init(L"./UI/UI_Tex/hp3.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp3.png",backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	case Player4:
-		backUI_->Init(L"./UI/UI_Tex/hp4.png", backUIPos_, backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+		backUI_->Init(L"./UI/UI_Tex/hp4.png", backScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 		break;
 	}
 	hpGageUI_ = new TD_Graphics;
 	hpGazePos_ = D3DXVECTOR2(130 + charaType*UI_INTERVAL + UI_SPACE, 995);
 	D3DXVECTOR2 hpScale(290, 60);
-	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png", hpGazePos_, hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	hpGageUI_->Init(L"./UI/UI_Tex/HP_gage.png",hpScale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 }
 
@@ -67,7 +67,7 @@ JobManager::~JobManager()
 void JobManager::CharaUpdate()
 {
 	//空間番号の更新
-	spaceNo_ = collision_->SetSpaceNo(m_Pos,2);
+	spaceNo_ = collision_->SetSpaceNo(m_Pos, 2);
 
 	//周辺にいるキャラチェック
 	AroundCharaCheck();
@@ -81,20 +81,22 @@ void JobManager::CharaUpdate()
 	if (aliveFlg_ == true)
 	{
 		//移動
-		if (moveAbleFlg_ == true)
-		{
-			float speed = param_->moveSpeed_;
-			Move(speed);
-		}
+		//if (moveAbleFlg_ == true)
+		//{
+		float speed = param_->moveSpeed_;
+		Move(speed);
+		//}
 
 		//攻撃
-		Attack();
-
+		if (!callFlg_)
+		{
+			Attack();
+		}
 		//姫呼び
 		Princess_Call();
 	}
 	//死亡
-	else if(!revivalFlg_)
+	else if (!revivalFlg_)
 	{
 		Dead();
 	}
