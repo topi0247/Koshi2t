@@ -16,8 +16,11 @@ Main_Scene::Main_Scene()
 	debugText_ = new D3D11_TEXT;
 	creator_ = new CharactorCreator;
 	uiStart_ = new TD_Graphics;
-	uiRetry_ = new TD_Graphics;
-	uiBack_ = new TD_Graphics;
+	for (int i = 0; i < 2; i++)
+	{
+		uiRetry_[i] = new TD_Graphics;
+		uiBack_[i] = new TD_Graphics;
+	}
 	uiHand_ = new TD_Graphics;
 	uiFailed_ = new TD_Graphics;
 	for (int i = 0; i < UI_TIME; i++)
@@ -38,10 +41,13 @@ Main_Scene::~Main_Scene()
 	uiStart_ = nullptr;
 	delete uiFailed_;
 	uiFailed_ = nullptr;
-	delete uiRetry_;
-	uiRetry_ = nullptr;
-	delete uiBack_;
-	uiBack_ = nullptr;
+	for (int i = 0; i < 2; i++)
+	{
+		delete uiRetry_[i];
+		uiRetry_[i] = nullptr;
+		delete uiBack_[i];
+		uiBack_[i] = nullptr;
+	}
 	delete uiHand_;
 	uiHand_ = nullptr;
 	for (int i = 0; i < UI_TIME; i++)
@@ -103,19 +109,21 @@ void Main_Scene::Init()
 		uiTime_[i]->Init(L"./UI/UI_Tex/number.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f + i*rect, rect + i*rect));
 	}
 
-	D3DXVECTOR2 ui_scale(1623, 600);
+	D3DXVECTOR2 ui_scale(1217.25, 450);
 	uiFailed_->Init(L"./UI/UI_Tex/failure_font.png", ui_scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 
 	scale = D3DXVECTOR2(640, 116.5);
-	uiRetry_->Init(L"./UI/UI_Tex/retry.png",scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiRetry_[isColor]->Init(L"./UI/UI_Tex/retry2.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiRetry_[noneColor]->Init(L"./UI/UI_Tex/retry1.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	scale = D3DXVECTOR2(360, 120);
-	uiBack_->Init(L"./UI/UI_Tex/back.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiBack_[isColor]->Init(L"./UI/UI_Tex/back2.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+	uiBack_[noneColor]->Init(L"./UI/UI_Tex/back1.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
 	scale = D3DXVECTOR2(150, 150);
 	uiHand_->Init(L"./UI/UI_Tex/choice_hand.png", scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
-	
 	retryFlg_ = true;
 	nextSceneFlg_ = false;
 	failedFlg_ = false;
+	failedChoiceFlg_ = false;
 	princessVoiceFlg_ = true;
 	startCameraMovefirstFlg_ = true;
 	startCameraMoveSecFlg_ = false;
@@ -440,13 +448,17 @@ void Main_Scene::GameEnd()
 void Main_Scene::NextScene()
 {
 	D3DXVECTOR3 vec(0, 0, 0);
-	if (failedUIPosY_ < 0)
+	if (failedUIPosY_ < FAILED_UI_POSY)
 	{
 		failedUIPosY_ += 10;
 	}
 	if (reUIPosY_ > FAILED_CHOICE_POSY)
 	{
 		reUIPosY_ -= 10;
+	}
+	else
+	{
+		failedChoiceFlg_ = true;
 	}
 	vec = D3DXVECTOR3(sinf(princess_->m_Yaw)*-1, 3, cosf(princess_->m_Yaw)*-1);
 	camera_->movePow_ = princess_->m_Pos + vec;
@@ -459,10 +471,19 @@ void Main_Scene::GameOverChoice()
 	if (princessVoiceFlg_)
 	{
 		Sound::getInstance().SE_play("P_FAILED");
-		Sound::getInstance().BGM_play("FAILED");
+		Sound::getInstance().SE_play("FAILED");
 		princessVoiceFlg_ = false;
 	}
-	float inputX = GamePad::getAnalogValue(Player1, GamePad::AnalogName::AnalogName_LeftStick_X);
+
+	float inputX=0;
+	//for (int i = 0; i < 4; i++)
+	//{
+		inputX = GamePad::getAnalogValue(Player1, GamePad::AnalogName::AnalogName_LeftStick_X);
+		if (failedChoiceFlg_&&GamePad::checkInput(Player1, GamePad::A))
+		{
+			nextSceneFlg_ = true;
+		}
+	//}
 
 	if (inputX > 0.3)
 	{
@@ -474,11 +495,7 @@ void Main_Scene::GameOverChoice()
 		handXPos_ = 620;
 		retryFlg_ = true;
 	}
-	if (GamePad::checkInput(Player1, GamePad::A))
-	{
-		nextSceneFlg_ = true;
-	}
-
+	
 	GamePad::update();
 
 }
@@ -625,16 +642,24 @@ void Main_Scene::Render()
 	}
 	else if (scene_ == NextS && failedFlg_)
 	{
-		uiFailed_->Render(D3DXVECTOR2(148.5, failedUIPosY_), D3DXVECTOR2(1, 1), true);
-		uiHand_->Render(D3DXVECTOR2(handXPos_, reUIPosY_+50), D3DXVECTOR2(1, 1), true);
-		uiRetry_->Render(D3DXVECTOR2(300, reUIPosY_), D3DXVECTOR2(1, 1), true);
-		uiBack_->Render(D3DXVECTOR2(1150, reUIPosY_), D3DXVECTOR2(1, 1), true);
+		uiFailed_->Render(D3DXVECTOR2(350, failedUIPosY_), D3DXVECTOR2(1, 1), true);
+		//uiHand_->Render(D3DXVECTOR2(handXPos_, reUIPosY_ + 100), D3DXVECTOR2(1, 1), true);
+		if (retryFlg_)
+		{
+			uiRetry_[isColor]->Render(D3DXVECTOR2(300, reUIPosY_), D3DXVECTOR2(1, 1), true);
+			uiBack_[noneColor]->Render(D3DXVECTOR2(1150, reUIPosY_), D3DXVECTOR2(1, 1), true);
+		}
+		else
+		{
+			uiRetry_[noneColor]->Render(D3DXVECTOR2(300, reUIPosY_), D3DXVECTOR2(1, 1), true);
+			uiBack_[isColor]->Render(D3DXVECTOR2(1150, reUIPosY_), D3DXVECTOR2(1, 1), true);
+		}
 	}
 
-//#ifdef _DEBUG
-	//PlayerDebug();
-	//EnemyDebug();
-//#endif // _DEBUG
+	//#ifdef _DEBUG
+		//PlayerDebug();
+		//EnemyDebug();
+	//#endif // _DEBUG
 
 	camera_->Render();
 }

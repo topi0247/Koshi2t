@@ -26,15 +26,16 @@
 #define UI_TIME 12 //éûä‘ï\é¶Ç…égópÇ∑ÇÈUIÇÃêî
 #define SEMICOLON 10
 #define ENEMY_MAX 50
-#define FAILED_CHOICE_POSY 700
+#define FAILED_UI_POSY 350
+#define FAILED_CHOICE_POSY 850
 
 class Main_Scene :public Scene
 {
 private:
 	TD_Graphics* uiStart_;
 	TD_Graphics* uiFailed_;
-	TD_Graphics* uiRetry_;
-	TD_Graphics* uiBack_;
+	TD_Graphics* uiRetry_[2];
+	TD_Graphics* uiBack_[2];
 	TD_Graphics* uiHand_;
 	TD_Graphics* uiTime_[UI_TIME]; //0~9 :
 
@@ -57,9 +58,16 @@ private:
 	};
 	scene scene_;
 
+	enum colored
+	{
+		isColor=0,
+		noneColor,
+	};
+
 	bool failedFlg_;
 	bool retryFlg_;
 	bool nextSceneFlg_;
+	bool failedChoiceFlg_;
 	bool princessVoiceFlg_;
 	bool startCameraMovefirstFlg_;
 	bool startCameraMoveSecFlg_;
