@@ -575,17 +575,20 @@ void Main_Scene::CollisionControl()
 void Main_Scene::Render()
 {
 
+
+
 	//ステージの描画
 	stage_->Render();
+	//スポーンゲートの描画
+	spawnManager_->Render();
 
 	//キャラ描画
 	for (auto chara : charList_)
 	{
 		chara->CharaRender();
+
 	}
 
-	//スポーンゲートの描画
-	spawnManager_->Render();
 
 	//エフェクトの更新と描画
 	Effect::getInstance().SetCamera(camera_->movePow_, camera_->gazePoint_);

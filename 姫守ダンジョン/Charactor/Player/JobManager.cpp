@@ -119,6 +119,7 @@ void JobManager::CharaUpdate()
 	{
 		Revival();
 	}
+
 }
 
 //

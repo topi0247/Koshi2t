@@ -19,8 +19,8 @@ private:
 	std::string hitSoundName_;
 	unsigned int spaceNo_;
 	Collision* col_;
-	CD3DXMESH* weaponBall_;
-	CharactorCreator* creator_;
+	//CD3DXMESH* weaponBall_;
+	//CharactorCreator* creator_;
 	CharaType damageChara_;
 	CharaType user_;
 	std::vector<CharactorManager*> damageList_;				//被弾する可能性のあるキャラクターリスト
@@ -35,6 +35,7 @@ private:
 	float dist_;
 	float kDist_;
 	float kSpeed_;
+	float scale_;
 	D3DXVECTOR3 startPos_;
 	D3DXVECTOR3 dir_;
 	D3DXVECTOR3 pos_;

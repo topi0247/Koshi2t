@@ -174,8 +174,8 @@ void Effect::EffectSet()
 	//‘S‘Ì
 	effect_["charge1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/charge1.efk");
 	effect_["charge2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/charge2.efk");
-	effect_["spwner1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/spawn.efk"); //—vC³
-	effect_["spwner2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/spawn.efk");	//—vC³
+	effect_["spwner1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/spawn.efk");
+	effect_["spwner2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/spawn.efk");
 
 	//Œ•m
 	effect_["s_Atk1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/Œ•m/slash2.efk");
@@ -193,9 +193,14 @@ void Effect::EffectSet()
 	effect_["s_explision"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/”š’em/s_explosion.efk");
 
 	//–‚“±m
-	//effect_["beam1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/beam1.efk");
-	effect_["magicball"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
-	effect_["arrow"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
+	effect_["magicball0"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
+	effect_["magicball1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
+	effect_["magicball2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
+	effect_["magicball3"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/magicball4.efk");
+	effect_["arrow0"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
+	effect_["arrow1"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
+	effect_["arrow2"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
+	effect_["arrow3"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/–‚“±m/arrow.efk");
 
 	//•P
 	effect_["Res"] = LoadEffect((const EFK_CHAR*)L"Effekseer/Effects/‘S‘Ì/resuscitation.efk");
@@ -207,7 +212,7 @@ void Effect::EffectSet()
 //	@brief	ƒGƒtƒFƒNƒg‚Ìƒ[ƒh
 int Effect::LoadEffect(const EFK_CHAR* path)
 {
-	assert(Effekseer::Effect::Create(g_manager, path) != NULL);
+	//assert(Effekseer::Effect::Create(g_manager, path) != NULL);
 	static int no = -1;
 	++no;
 	g_effect[no] = Effekseer::Effect::Create(g_manager, path);

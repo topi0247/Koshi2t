@@ -150,10 +150,10 @@ void Princess::Seal()
 {
 	float dist = 7;
 
-	/*if (GetKeyState(VK_SPACE) & 0x80)
+	if (GetKeyState(VK_SPACE) & 0x80)
 	{
 		dist = 100;
-	}*/
+	}
 	if (!spawnPosList_.empty())
 	{
 		for (auto spawn : spawnPosList_)
@@ -265,4 +265,6 @@ void Princess::CharaUpdate()
 	//モーションスピード
 	mesh_->m_pD3dxMesh->m_pAnimController->AdvanceTime(motionSpeed_, NULL);
 
+	Effect::getInstance().Update();
+	Effect::getInstance().Draw();
 }

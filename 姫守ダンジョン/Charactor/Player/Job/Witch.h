@@ -15,14 +15,15 @@
 class Witch :public JobManager
 {
 private:
-
+	std::string ballEfcName_;
+	std::string arrowEfcName_;
 	bool magicFlg_;	//‹Z‚ª”­“®’†‚©‚Ç‚¤‚©
 	bool ballFlg_;
 	bool arrowFlg_;
 	bool chargeMotionFlg_;
 	int magicBallCount_;
 	float magicSpeed_;
-	CD3DXMESH* magic_;
+	//CD3DXMESH* magic_;
 	WeaponBall* magicBall_;
 
 	void InstanceMagicBall(float range,float atk,bool flg);

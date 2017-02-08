@@ -15,26 +15,46 @@ Witch::Witch(CharaType charaType) :JobManager(charaType)
 	chargeMotionFlg_ = false;
 	atkNo_ = noAtk;
 	attackCount_ = 0;
-	magic_ = new CD3DXMESH;
+	//magic_ = new CD3DXMESH;
 	magicSpeed_ = 3.0f;
-	magic_ = creator_->LoadStage("–‚–@‹…");
+	//magic_ = creator_->LoadStage("–‚–@‹…");
 
 	//UI
 	jobMarkUI_ = new TD_Graphics;
 	jobUIPos_ = D3DXVECTOR2(0 + charaType*UI_INTERVAL + UI_SPACE, 910);
 	D3DXVECTOR2 scale(136.5, 148);
 	jobMarkUI_->Init(L"./UI/UI_Tex/icon_witch.png",scale, D3DXVECTOR4(1.0, 1.0, 1.0, 1.0), GrapRect(0.0f, 1.0f, 0.0f, 1.0f));
+
+	switch (charaType)
+	{
+	case Player1:
+		ballEfcName_ = "magicball0";
+		arrowEfcName_ = "arrow0";
+		break;
+	case Player2:
+		ballEfcName_ = "magicball1";
+		arrowEfcName_ = "arrow1";
+		break;
+	case Player3:
+		ballEfcName_ = "magicball2";
+		arrowEfcName_ = "arrow2";
+		break;
+	case Player4:
+		ballEfcName_ = "magicball3";
+		arrowEfcName_ = "arrow3";
+		break;
+	}
 	//Witch_UI["WITCH_UI"] = new TD_Graphics;
 }
 
 Witch::~Witch()
 {
-	delete magic_;
-	magic_ = nullptr;
+	//delete magic_;
+	//magic_ = nullptr;
 	delete jobMarkUI_;
 	jobMarkUI_ = nullptr;
 	//delete Witch_UI["WITCH_UI"];
-	//magic_ = nullptr;
+	magicBall_ = nullptr;
 }
 
 
@@ -149,11 +169,13 @@ void Witch::Attack()
 	else if (atkNo_ == normalAtk)
 	{
 		attackCount_ = 0;
+		ballFlg_ = true;
 		Normal_Attack();
 	}
 	else if (atkNo_ == charge)
 	{
 		attackCount_ = 0;
+		arrowFlg_ = true;
 		atkNo_ = specialAtk;
 	}
 	//unsigned int inputTime = playerParam_.chargeTime_;
@@ -197,6 +219,14 @@ void Witch::Attack()
 	}
 	if (!magicFlg_)
 	{
+		if (ballFlg_)
+		{
+			Effect::getInstance().Effect_Stop(ballEfcName_);
+		}
+		else if (arrowFlg_)
+		{
+			Effect::getInstance().Effect_Stop(arrowEfcName_);
+		}
 		ballFlg_ = false;
 		arrowFlg_ = false;
 		//moveAbleFlg_ = true;
@@ -219,8 +249,8 @@ void Witch::Normal_Attack()
 		ChangeMotion(motion_, "attack1");
 		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, true);
 		ballFlg_ = true;
-		Effect::getInstance().Effect_Play("magicball", magicBall_->GetPosition());
-		Effect::getInstance().SetScale("magicball", 0.2);
+		Effect::getInstance().Effect_Play(ballEfcName_, m_Pos);
+		Effect::getInstance().SetScale(ballEfcName_, 0.2);
 	}
 
 	if (++motionCount_ >= motionFrame_)
@@ -248,8 +278,8 @@ void Witch::Special_Attack()
 		ChangeMotion(motion_, "attack1");
 		InstanceMagicBall(param_->attackRange_, param_->normalAtk_, false);
 		arrowFlg_ = true;
-		Effect::getInstance().Effect_Play("arrow", magicBall_->GetPosition());
-		Effect::getInstance().SetRotation("arrow", D3DXVECTOR3(0, m_Yaw, 0));
+		Effect::getInstance().Effect_Play(arrowEfcName_, m_Pos);
+		Effect::getInstance().SetRotation(arrowEfcName_, D3DXVECTOR3(0, m_Yaw, 0));
 	}
 
 	if (++motionCount_ > motionFrame_)
@@ -306,28 +336,28 @@ void Witch::WeaponUpdate()
 		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
 		if (ballFlg_)
 		{
-			Effect::getInstance().Update("magicball", magicBall_->GetPosition());
+			Effect::getInstance().Update(ballEfcName_, magicBall_->GetPosition());
 		}
 		else if (arrowFlg_)
 		{
-			Effect::getInstance().Update("arrow", magicBall_->GetPosition());
+			Effect::getInstance().Update(arrowEfcName_, magicBall_->GetPosition());
 		}
 		if (magicBall_->GetDelFlg())
 		{
 			magicFlg_ = false;
 			delete magicBall_;
-			magicBall_ = nullptr;
+			//magicBall_ = nullptr;
 			moveAbleFlg_ = true;
-			if (ballFlg_)
+			/*if (ballFlg_)
 			{
 				Effect::getInstance().Effect_Stop("magicball");
 			}
 			else if (arrowFlg_)
 			{
 				Effect::getInstance().Effect_Stop("arrow");
-			}
-			ballFlg_ = false;
-			arrowFlg_ = false;
+			}*/
+			//ballFlg_ = false;
+			//arrowFlg_ = false;
 		}
 	}
 
@@ -376,11 +406,11 @@ void Witch::CharaRender()
 		float scale = 0.2f;
 		mesh_->Render(m_Pos, m_Yaw, D3DXVECTOR3(scale, scale, scale));
 	}
-	//–‚–@•`‰æ
-	if (magicFlg_)
-	{
-		magic_->Render(magicBall_->GetPosition(), D3DXVECTOR3(0, 0, 0), magicBall_->GetScale());
-	}
+	////–‚–@•`‰æ
+	//if (magicFlg_)
+	//{
+	//	magic_->Render(magicBall_->GetPosition(), D3DXVECTOR3(0, 0, 0), magicBall_->GetScale());
+	//}
 
 	//Effect::getInstance().Draw();
 

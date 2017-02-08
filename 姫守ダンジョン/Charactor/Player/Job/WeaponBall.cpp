@@ -13,33 +13,33 @@
 WeaponBall::WeaponBall()
 	:delCount_(0)
 {
-	weaponBall_ = new CD3DXMESH;
-	creator_ = new CharactorCreator;
-	weaponBall_->m_fScale = 0.5;
+	//weaponBall_ = new CD3DXMESH;
+	//creator_ = new CharactorCreator;
+	//weaponBall_->m_fScale = 0.5;
 	delFlg_ = false;
 	col_ = new Collision;
 	effectflg_ = false;
 	//w_ball = false;
-	pos_ = weaponBall_->m_vPos;
+	//pos_ = weaponBall_->m_vPos;
 }
 
 //
 //	@brief	飛び道具デストラクタ
 WeaponBall::~WeaponBall()
 {
-	delete weaponBall_;
-	weaponBall_ = nullptr;
+	//delete weaponBall_;
+	//weaponBall_ = nullptr;
 	delete col_;
 	col_ = nullptr;
-	delete creator_;
-	creator_ = nullptr;
+	//delete creator_;
+	//creator_ = nullptr;
 }
 
 //
 //	@brief	読み込み
 void WeaponBall::Init(char* name)
 {
-	weaponBall_ = creator_->LoadStage(name);
+	//weaponBall_ = creator_->LoadStage(name);
 	/*char FileName[80] = "./Model/XFiles/Player/";
 	strcat(FileName, name);
 	if (FAILED(weaponBall_->LoadXMesh(FileName)))
@@ -61,7 +61,7 @@ void WeaponBall::SetDir(D3DXVECTOR3 dir)
 //	@param (scale) 変更するサイズ
 void WeaponBall::SetScale(float scale)
 {
-	weaponBall_->m_fScale = scale;
+	scale_ = scale;
 }
 
 //
@@ -69,7 +69,7 @@ void WeaponBall::SetScale(float scale)
 void WeaponBall::SetStartPos(D3DXVECTOR3 pos)
 {
 	startPos_ = pos;
-	weaponBall_->m_vPos = pos;
+	pos_ = pos;
 	spaceNo_ = col_->SetSpaceNo(startPos_, 2);
 
 	//Effect::getInstance().Update("beam2", startPos_);
@@ -94,18 +94,18 @@ void WeaponBall::Move_Weapon(float speed)
 	//{
 	float fDistance = 0;
 	D3DXVECTOR3 vNormal;
-	if (col_->RayIntersect(weaponBall_->m_vPos, dir_, Stage::GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
+	if (col_->RayIntersect(pos_, dir_, Stage::GetMeshInfo(), &fDistance, &vNormal) && fDistance <= 0.3)
 	{
 		delFlg_ = true;
 	}
-	weaponBall_->m_vPos += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
+	pos_ += D3DXVECTOR3(dir_.x*speed, 0, dir_.z*speed);
 	//}
 	//else
 	//{
 		//delFlg_ = true;
 	//}
 
-	spaceNo_ = col_->SetSpaceNo(weaponBall_->m_vPos, 2);
+	spaceNo_ = col_->SetSpaceNo(pos_, 2);
 
 	Hit();
 }
@@ -126,31 +126,6 @@ void WeaponBall::Time_Del_Weapon(int frame)
 	}
 }
 
-////
-////	@brief			被弾する可能性のあるキャラクターリスト
-////	@param (chara)	ダメージを食らうキャラ
-//void WeaponBall::SetDamageList(std::vector<CharactorManager*> chara, CharaType cType,int no)
-//{
-//	for (auto c : chara)
-//	{
-//		if (c->GetCharaType() == Enemy)
-//		{			
-//			if (col_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), no, 2))
-//			{
-//				damageList_.push_back(c);
-//			}
-//		}
-//	}
-//}
-//
-////
-////	@brief	被弾するキャラ更新
-////	@param (chara)	被弾するキャラ
-//void WeaponBall::SetDamageChara(CharactorManager* chara)
-//{
-//	damageList_.push_back(chara);
-//}
-
 //
 //	@brief 弾が消えるかどうか
 bool WeaponBall::GetDelFlg()const
@@ -162,14 +137,14 @@ bool WeaponBall::GetDelFlg()const
 //	@brief	座標取得
 D3DXVECTOR3 WeaponBall::GetPosition()const
 {
-	return weaponBall_->m_vPos;
+	return pos_;
 }
 
 //
 //	@brief	スケール取得
 float WeaponBall::GetScale()const
 {
-	return weaponBall_->m_fScale;
+	return scale_;
 }
 
 //
@@ -193,9 +168,9 @@ void WeaponBall::Hit()
 	{
 		for (auto d : damageList_)
 		{
-			if (!d->GetDamageFlg() && col_->CharaNear(weaponBall_->m_vPos, d->m_Pos, dist_))
+			if (!d->GetDamageFlg() && col_->CharaNear(pos_, d->m_Pos, dist_))
 			{
-				d->SetKnockBack(weaponBall_->m_vPos, kDist_, kSpeed_, user_);
+				d->SetKnockBack(pos_, kDist_, kSpeed_, user_);
 				if (hitDel_)
 				{
 					delFlg_ = true;
@@ -264,7 +239,7 @@ void WeaponBall::SetHitDelFlg(bool flg)
 //	@brief	描画
 void WeaponBall::Render(D3DXVECTOR3 pos)
 {
-	weaponBall_->Render(pos, D3DXVECTOR3(0, 0, 0), weaponBall_->m_fScale);
+	//weaponBall_->Render(pos, D3DXVECTOR3(0, 0, 0), weaponBall_->m_fScale);
 
 	//if (effectflg_)
 	//{
