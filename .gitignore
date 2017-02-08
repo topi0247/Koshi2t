@@ -32,3 +32,6 @@ JobParameterData.xlsx
 *.lib
 *.gif
 *.mp3
+*.res
+*.aps
+*.ico

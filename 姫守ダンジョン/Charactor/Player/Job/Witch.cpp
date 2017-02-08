@@ -76,13 +76,10 @@ void Witch::Move(float speed)
 		}
 	}
 
-	if (knockBackFlg_ == true)
+	if (knockBackFlg_)
 	{
 		KnockBack(knockBackPos_, knockBackDis_, knockBackSpeed_);
-		if (motionNo_ != motion_->GetMotion("wait")->id_)
-		{
-			ChangeMotion(motion_, "wait");
-		}
+	
 		return;
 	}
 
@@ -226,12 +223,13 @@ void Witch::Normal_Attack()
 		Effect::getInstance().SetScale("magicball", 0.2);
 	}
 
-	if (++motionCount_ > motionFrame_)
+	if (++motionCount_ >= motionFrame_)
 	{
 		Sound::getInstance().SE_play("M_NORMALATK");
 		atkNo_ = noAtk;
 		motionChange_ = true;
-		//moveAbleFlg_ = true;
+		ChangeMotion(motion_, "wait");
+		moveAbleFlg_ = true;
 	}
 }
 
@@ -319,37 +317,21 @@ void Witch::WeaponUpdate()
 			magicFlg_ = false;
 			delete magicBall_;
 			magicBall_ = nullptr;
-			//Effect::getInstance().Effect_Stop("magicball");
 			moveAbleFlg_ = true;
+			if (ballFlg_)
+			{
+				Effect::getInstance().Effect_Stop("magicball");
+			}
+			else if (arrowFlg_)
+			{
+				Effect::getInstance().Effect_Stop("arrow");
+			}
+			ballFlg_ = false;
+			arrowFlg_ = false;
 		}
 	}
 
 }
-
-////
-////	@brief	レーザービーム
-//void Witch::RazorBeam()
-//{
-//	magicSpeed_ = 1.0f;
-//	float kRange = param_->weaponHitReach_;
-//	float kDist = param_->knockbackDist_;
-//	float kSpeed = param_->knockbackSpeed_;
-//	if (!magicFlg_)
-//	{
-//		magicBall_ = new WeaponBall;
-//		D3DXVECTOR3 vec(sinf(m_Yaw)*-0.1, 0, cosf(m_Yaw)*-0.1);
-//		magicBall_->SetDir(vec);
-//		magicBall_->SetScale(0);
-//		magicBall_->SetStartPos(D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z));
-//		//magicBall_->SetDamageList(allCharaList_, charaType_, 1);
-//		magicBall_->SetKnockBack(kRange, kDist, kSpeed, charaType_,Enemy);
-//		magicBall_->SetAttack(param_->specialAtk_);
-//		magicBall_->SetHitSound("M_DAMAGE_HIT");
-//		magicBall_->SetHitDelFlg(false);
-//
-//		magicFlg_ = true;
-//	}
-//}
 
 //
 //	@brief	被ダメ時のSE再生
@@ -363,6 +345,7 @@ void Witch::DamageSound()
 void Witch::DeadSound()
 {
 	Sound::getInstance().SE_play("M_DEAD");
+	Effect::getInstance().Effect_Stop("charge2");
 }
 
 //

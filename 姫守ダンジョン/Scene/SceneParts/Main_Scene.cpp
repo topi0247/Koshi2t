@@ -643,7 +643,7 @@ void Main_Scene::Render()
 	else if (scene_ == NextS && failedFlg_)
 	{
 		uiFailed_->Render(D3DXVECTOR2(350, failedUIPosY_), D3DXVECTOR2(1, 1), true);
-		//uiHand_->Render(D3DXVECTOR2(handXPos_, reUIPosY_ + 100), D3DXVECTOR2(1, 1), true);
+		uiHand_->Render(D3DXVECTOR2(handXPos_, reUIPosY_ + 100), D3DXVECTOR2(1, 1), true);
 		if (retryFlg_)
 		{
 			uiRetry_[isColor]->Render(D3DXVECTOR2(300, reUIPosY_), D3DXVECTOR2(1, 1), true);

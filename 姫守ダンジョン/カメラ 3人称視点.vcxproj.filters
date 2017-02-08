@@ -226,6 +226,7 @@
     <ClInclude Include="Scene\SceneParts\Load_Scene.h">
       <Filter>Scene\SceneParts</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mesh">
@@ -273,5 +274,11 @@
     <Filter Include="Scene\SceneManager">
       <UniqueIdentifier>{a15ad059-dd9f-44e1-bc89-042d990f5d48}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="姫守ダンジョン.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="UI\UI_Tex\appli_icon.png.ico" />
   </ItemGroup>
 </Project>

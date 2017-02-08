@@ -27,7 +27,7 @@
 #define SEMICOLON 10
 #define ENEMY_MAX 50
 #define FAILED_UI_POSY 350
-#define FAILED_CHOICE_POSY 850
+#define FAILED_CHOICE_POSY 830
 
 class Main_Scene :public Scene
 {

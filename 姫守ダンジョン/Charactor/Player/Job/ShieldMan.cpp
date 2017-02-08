@@ -67,15 +67,15 @@ void ShieldMan::Attack()
 	{
 		attackCount_ = 0;
 		Normal_Attack();
-		if (++motionCount_ > motionFrame_)
-		{
-			atkNo_ = noAtk;
-			//attackCount_ = 0;
-			motionCount_ = 0;
-			motionChange_ = true;
-			moveAbleFlg_ = true;
-			ChangeMotion(motion_, "wait");
-		}
+		//if (++motionCount_ > motionFrame_)
+		//{
+		//	atkNo_ = noAtk;
+		//	//attackCount_ = 0;
+		//	motionCount_ = 0;
+		//	motionChange_ = true;
+		//	moveAbleFlg_ = true;
+		//	ChangeMotion(motion_, "wait");
+		//}
 
 	}
 	else
@@ -107,13 +107,22 @@ void ShieldMan::Attack()
 		spMoveFlg_ = true;
 	}
 
-
-
-	if (atkNo_ == specialAtk)
-	{
-		moveAbleFlg_ = true;
-		Special_Attack();
-	}
+	/*
+		if (atkNo_ == normalAtk)
+		{
+			if (++motionCount_ >= motionFrame_)
+			{
+				atkNo_ = noAtk;
+				motionChange_ = true;
+				moveAbleFlg_ = true;
+				motionCount_ = 0;
+			}
+		}
+		else */if (atkNo_ == specialAtk)
+		{
+			moveAbleFlg_ = true;
+			Special_Attack();
+		}
 }
 
 //
@@ -123,7 +132,7 @@ void ShieldMan::Normal_Attack()
 	float hitAngle = param_->attackRange_;
 	float atk = param_->normalAtk_;
 	//Normal_Attack_Collision();
-	if (motionChange_ == true && motionNo_ != motion_->GetMotion("attack1")->id_)
+	if (motionChange_ && motionNo_ != motion_->GetMotion("attack1")->id_)
 	{
 		Sound::getInstance().SE_play("Sh_NORMALATK");
 
@@ -135,17 +144,17 @@ void ShieldMan::Normal_Attack()
 		//motionCount_ = 0;
 		ChangeMotion(motion_, "attack1");
 
-		Attack_Collision(atk,hitAngle);
+		Attack_Collision(atk, hitAngle);
 
 	}
 
-	//if (++motionCount_ > motionFrame_)
-	//{
-	//	atkNo_ = noAtk;
-	//	//attackCount_ = 0;
-	//	motionChange_ = true;
-	//	moveAbleFlg_ = true;
-	//}
+	if (++motionCount_ >= motionFrame_)
+	{
+		atkNo_ = noAtk;
+		//attackCount_ = 0;
+		motionChange_ = true;
+		moveAbleFlg_ = true;
+	}
 }
 
 //
@@ -156,7 +165,7 @@ void ShieldMan::Special_Attack()
 	//Special_Attack_Collision();
 	float hitAngle = param_->specialAtkRange_;
 	float atk = param_->specialAtk_;
-	Attack_Collision(atk,hitAngle);
+	Attack_Collision(atk, hitAngle);
 	if (spMoveFlg_ == false)
 	{
 		if (motionNo_ != motion_->GetMotion("special")->id_)
@@ -274,7 +283,7 @@ void ShieldMan::DamageCalc(unsigned int atk)
 //	@param (speed)	移動速度
 void ShieldMan::Move(float speed)
 {
-	if (damageFlg_ )
+	if (damageFlg_)
 	{
 		damageDrawTime_ = FPS * 0.5;
 		if (damageCount_ >= damageDrawTime_)
@@ -303,7 +312,7 @@ void ShieldMan::Move(float speed)
 	inputStick.z = GamePad::getAnalogValue(charaType_, GamePad::AnalogName::AnalogName_LeftStick_Y);
 
 	//回転処理
-	if (atkNo_!= specialAtk)
+	if (atkNo_ != specialAtk)
 	{
 		const float rotEpsilon = 0.3;
 		if (fabsf(inputStick.x) > rotEpsilon || fabsf(inputStick.z) > rotEpsilon)
@@ -342,31 +351,31 @@ void ShieldMan::Move(float speed)
 				Sound::getInstance().SE_play("Sh_SPECIAL");
 				if (!effectFlg_)
 				{
-					Effect::getInstance().Effect_Play("smork", m_Pos+m_Dir);
-					Effect::getInstance().SetRotation("smork",D3DXVECTOR3(0,m_Yaw,0));
+					Effect::getInstance().Effect_Play("smork", m_Pos + m_Dir);
+					Effect::getInstance().SetRotation("smork", D3DXVECTOR3(0, m_Yaw, 0));
 					effectFlg_ = true;
 				}
 			}
 		}
-		if (effectFlg_ && ++motionCount_ % 10==0)
+		if (effectFlg_ && ++motionCount_ % 10 == 0)
 		{
 			effectFlg_ = false;
 		}
 	}
 	else
 	{
-		//if (motionChange_ == true)
-		//{
-		if (atkNo_ != specialAtk&& motionNo_ != motion_->GetMotion("wait")->id_)
+		if (motionChange_ == true)
 		{
-			ChangeMotion(motion_, "wait");
-			effectFlg_ = false;
+			if (atkNo_ != specialAtk&& motionNo_ != motion_->GetMotion("wait")->id_)
+			{
+				ChangeMotion(motion_, "wait");
+				effectFlg_ = false;
+			}
+			else if (atkNo_ == specialAtk&&motionNo_ != motion_->GetMotion("specialwait")->id_)
+			{
+				ChangeMotion(motion_, "specialwait");
+			}
 		}
-		else if (atkNo_==specialAtk&&motionNo_!=motion_->GetMotion("specialwait")->id_)
-		{
-			ChangeMotion(motion_, "specialwait");
-		}
-		//}
 	}
 
 
@@ -408,7 +417,7 @@ void ShieldMan::DeadSound()
 //
 //	@brief	描画
 void ShieldMan::CharaRender()
-{	
+{
 	//モーション番号セット
 	mesh_->m_pD3dxMesh->ChangeAnimSet(motionNo_);
 	//再生地点をセット

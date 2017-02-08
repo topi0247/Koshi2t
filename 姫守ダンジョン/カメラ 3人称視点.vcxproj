@@ -165,6 +165,7 @@
     <ClInclude Include="Read\SpawnGateRead.h" />
     <ClInclude Include="Read\tinyxml2.h" />
     <ClInclude Include="Read\XFileRead.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\Bass\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager\SceneRoot.h" />
     <ClInclude Include="Scene\SceneParts\CharactorSelection_Scene.h" />
@@ -179,6 +180,12 @@
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="UI\D3D11_SPRITE.h" />
     <ClInclude Include="UI\TD_Graphics.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="姫守ダンジョン.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="UI\UI_Tex\appli_icon.png.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

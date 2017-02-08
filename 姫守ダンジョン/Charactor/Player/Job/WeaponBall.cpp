@@ -181,7 +181,7 @@ void WeaponBall::Hit()
 	//{
 	for (auto c : CharactorManager::allCharaList_)
 	{
-		if (c->GetCharaType() != user_ && col_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1, 2))
+		if (c->GetCharaType() == damageChara_&& col_->CheckSpaceNo(spaceNo_, c->GetSpaceNo(), 1, 2))
 		{
 			damageList_.push_back(c);
 		}
